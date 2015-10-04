@@ -18,7 +18,6 @@ class Tabs extends React.Component {
     const defaultState = this._tabStateFromProps(this.props);
     defaultState.selectedTab = this.props.selectedTab ? this.props.selectedTab :
                                                         this.props.tabs ? this.props.tabs[0].key : '';
-    defaultState.closedTabs = [];
     this.state = defaultState;
 
     // Dom positons
@@ -43,10 +42,6 @@ class Tabs extends React.Component {
     return { tabs };
   }
 
-  _isClosed(key) {
-    return this.state.closedTabs.indexOf(key) > -1;
-  }
-
   _getIndexOfTabByKey(key) {
     return _.findIndex(this.state.tabs, (tab) => {
       return tab.key === key;
@@ -64,9 +59,6 @@ class Tabs extends React.Component {
     const current = this._getIndexOfTabByKey(key);
     if (current + 1 < this.state.tabs.length) {
       nextKey = this.state.tabs[current + 1].key;
-      if (this._isClosed(nextKey)) {
-        nextKey = this._getNextTabKey(nextKey);
-      }
     }
     return nextKey;
   }
@@ -76,21 +68,8 @@ class Tabs extends React.Component {
     const current = this._getIndexOfTabByKey(key);
     if (current > 0) {
       prevKey = this.state.tabs[current - 1].key;
-      if (this._isClosed(prevKey)) {
-        prevKey = this._getPrevTabKey(prevKey);
-      }
     }
     return prevKey;
-  }
-
-  _getCurrentOpenTabs() {
-    return this._getOpenTabs(this.state.tabs);
-  }
-
-  _getOpenTabs(tabs) {
-    return _.filter(tabs, (tab) => {
-      return !this._isClosed(tab.key);
-    });
   }
 
   _moveTabPosition(key1, key2) {
@@ -139,7 +118,6 @@ class Tabs extends React.Component {
       newState.selectedTab = nextProps.selectedTab;
     }
     // reset closedTabs, respect props from application
-    newState.closedTabs = [];
     this.setState(newState);
   }
 
@@ -224,7 +202,7 @@ class Tabs extends React.Component {
     newState.selectedTab = key;
     this.setState(newState, () => {
       if(swapedTabs) {
-        this.props.onTabPositionChange(e, key, this._getOpenTabs(nextTabs));
+        this.props.onTabPositionChange(e, key, this.state.tabs);
       }
     });
   }
@@ -235,7 +213,7 @@ class Tabs extends React.Component {
       e = this._cancelEventSafety(e);
     } else {
       this.setState({ selectedTab: key }, () => {
-        this.props.onTabSelect(e, key, this._getCurrentOpenTabs());
+        this.props.onTabSelect(e, key, this.state.tabs);
       });
     }
   }
@@ -255,19 +233,17 @@ class Tabs extends React.Component {
 
     const shoudBeNotifyTabChange = this.state.selectedTab !== nextSelected;
     this.setState({
-      closedTabs: this.state.closedTabs.concat([key]),
       selectedTab: nextSelected
     }, () => {
-      const currentOpenTabs = this._getCurrentOpenTabs();
-      this.props.onTabClose(e, key, currentOpenTabs);
+      this.props.onTabClose(e, key);
       if (shoudBeNotifyTabChange) {
-        this.props.onTabSelect(e, nextSelected, currentOpenTabs);
+        this.props.onTabSelect(e, nextSelected);
       }
     });
   }
 
   handleAddButtonClick(e) {
-    this.props.onTabAddButtonClick(e, this._getCurrentOpenTabs());
+    this.props.onTabAddButtonClick(e);
   }
 
   moveRight(e) {
@@ -277,7 +253,7 @@ class Tabs extends React.Component {
     }
     if (nextSelected !== this.state.selectedTab) {
       this.setState({ selectedTab: nextSelected }, () => {
-        this.props.onTabSelect(e, nextSelected, this._getCurrentOpenTabs());
+        this.props.onTabSelect(e, nextSelected);
       });
     }
   }
@@ -289,7 +265,7 @@ class Tabs extends React.Component {
     }
     if (nextSelected !== this.state.selectedTab) {
       this.setState({ selectedTab: nextSelected }, () => {
-        this.props.onTabSelect(e, nextSelected, this._getCurrentOpenTabs());
+        this.props.onTabSelect(e, nextSelected);
       });
     }
   }
@@ -310,10 +286,6 @@ class Tabs extends React.Component {
   render() {
     const content = [];
     const tabs = _.map(this.state.tabs, (tab) => {
-
-      if (this.state.closedTabs.indexOf(tab.key) > -1) {
-        return '';
-      }
 
       if (this.state.selectedTab === tab.key) {
         content.push(<TabTemplate key={'tabTemplate#' + tab.key} selected={true}>{tab}</TabTemplate>);
@@ -356,7 +328,7 @@ class Tabs extends React.Component {
             {this.props.tabAddButton}
           </li>
         </ul>
-        <div class="main">
+        <div className="main">
           {content}
         </div>
       </div>

@@ -1,5 +1,9 @@
 'use strict';
 
-export function addInstance(config) {
-  return { type: 'ADD_INSTANCE', config };
+export function addInstance(data) {
+  return { type: 'ADD_INSTANCE', data };
+}
+
+export function delInstance(data) {
+  return { type: 'DEL_INSTANCE', data };
 }
