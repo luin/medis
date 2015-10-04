@@ -1,4 +1,7 @@
 .instance-tabs {
+  * {
+    -webkit-user-select: none;
+  }
   display: flex;
 
   li {
