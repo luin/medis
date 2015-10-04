@@ -1,0 +1,64 @@
+.instance-tabs {
+  display: flex;
+
+  li {
+    position: relative;
+    flex-grow: 1;
+    background: #bebebe;
+    color: #424242;
+    border: 1px solid #a0a0a0;
+    border-right: none;
+    text-align: center;
+    line-height: 22px;
+    cursor: default;
+
+    &:first-child {
+      border-left: none;
+    }
+
+    &.is-active,
+    &.is-active:hover {
+      background: #d3d3d3;
+      color: #000000;
+      border-top-color: #d3d3d3;
+
+      .rdTabCloseIcon:hover {
+        background: #c0c0c0;
+        color: #6c6c6c;
+      }
+    }
+
+    &:hover {
+      background: #b2b2b2;
+      color: #3e3e3e;
+      .rdTabCloseIcon {
+        display: block;
+      }
+    }
+  }
+}
+
+.instance-tabs__add {
+  flex-grow: 0 !important;
+  flex-basis: 24px;
+  &:hover {
+    background: #bebebe !important;
+    color: #424242 !important;
+  }
+}
+
+.rdTabCloseIcon {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  display: none;
+  border-radius: 2px;
+  line-height: 1em;
+  width: 14px;
+  height: 14px;
+
+  &:hover {
+    color: #5b5b5b;
+    background: #a2a2a2;
+  }
+}
