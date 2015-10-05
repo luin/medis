@@ -1,10 +1,18 @@
 'use strict';
 
-const Immutable = require('immutable');
-const id = require('./id');
+import Immutable from 'immutable';
+import id from './id';
+import remote from 'remote';
+import { createStore } from 'redux';
 
 const handlers = {
   ADD_INSTANCE(data) {
+    if (!data) {
+      data = {
+        key: id('instance'),
+        host: 'localhost'
+      };
+    }
     return this.withMutations(map => {
       map.update('instances', list => list.push(data)).set('activeInstance', data);
     });
@@ -13,6 +21,10 @@ const handlers = {
     return this.set('activeInstance', this.get('instances').find(instance => instance.key === data));
   },
   DEL_INSTANCE(data) {
+    if (!data) {
+      data = this.get('activeInstance').key;
+    }
+    console.log(data);
     return this.withMutations(map => {
       let deletedIndex;
       map.update('instances', list => list.filterNot((tab, index) => {
@@ -30,6 +42,7 @@ const handlers = {
         }
         if (!item) {
           console.log('TODO: close window');
+          remote.getCurrentWindow().close();
           return;
         }
         map.set('activeInstance', item);
@@ -38,7 +51,7 @@ const handlers = {
   }
 };
 
-export default function (state, action) {
+export default createStore(function (state, action) {
   if (!state) {
     const emptyInstance = { key: id('instance'), host: 'localhost' };
     state = Immutable.Map({ instances: Immutable.List.of(emptyInstance), activeInstance: emptyInstance });
@@ -47,4 +60,4 @@ export default function (state, action) {
     return handlers[action.type].call(state, action.data);
   }
   return state;
-}
+});

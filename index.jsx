@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import App from './components/App';
 import Redis from 'ioredis';
@@ -11,9 +10,12 @@ window.redis = redis;
 
 require('./styles/global.scss');
 
-const store = createStore(reducer);
+require('ipc').on('action', function (type, data) {
+  reducer.dispatch({ type, data });
+});
+
 React.render(
-  <Provider store={store}>
+  <Provider store={reducer}>
     {() => <App />}
   </Provider>,
   document.getElementById('content')

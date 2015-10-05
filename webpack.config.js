@@ -19,7 +19,11 @@ module.exports = {
     }]
   },
   externals: {
-    'ioredis': 'require("ioredis")'
+    'ioredis': 'require("ioredis")',
+    'remote': 'require("remote")',
+    'shell': 'require("shell")',
+    'app': 'require("app")',
+    'ipc': 'require("ipc")'
   },
   resolve: {
     extensions: ['', '.js', '.jsx']

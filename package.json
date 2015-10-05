@@ -1,5 +1,6 @@
 {
   "name": "redis-pro",
+  "productName": "Redis Pro",
   "version": "0.0.1",
   "main": "main.js",
   "scripts": {

@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { addInstance, delInstance, selectInstance } from '../actions';
 import { Tab, Tabs } from './draggable-tab';
-const id = require('../id');
+import id from '../id';
 
 class App extends React.Component {
   constructor(props) {
