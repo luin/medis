@@ -3,20 +3,20 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import App from './components/App';
+import store from './store';
 import Redis from 'ioredis';
-import reducer from './reducer';
 const redis = new Redis();
 window.redis = redis;
 
 require('./styles/global.scss');
 
 require('ipc').on('action', function (type, data) {
-  reducer.dispatch({ type, data });
+  store.dispatch({ type, data });
 });
 
 React.render(
-  <Provider store={reducer}>
+  <Provider store={store}>
     {() => <App />}
   </Provider>,
-  document.getElementById('content')
+  document.body
 );

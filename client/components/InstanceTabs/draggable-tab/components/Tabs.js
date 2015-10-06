@@ -2,13 +2,7 @@
 
 import _ from 'lodash';
 import React from 'react/addons';
-import invariant from 'react/lib/invariant';
 import Draggable from 'react-draggable';
-
-import TabTemplate from './TabTemplate';
-import CloseIcon from './CloseIcon';
-
-import { slideArray } from '../helpers/utils';
 
 class Tabs extends React.Component {
   constructor(props) {
@@ -62,12 +56,6 @@ class Tabs extends React.Component {
       prevKey = this.state.tabs[current - 1].key;
     }
     return prevKey;
-  }
-
-  _moveTabPosition(key1, key2) {
-    const t1 = this._getIndexOfTabByKey(key1);
-    const t2 = this._getIndexOfTabByKey(key2);
-    return slideArray(this.state.tabs, t1, t2);
   }
 
   _saveStartPositions() {
@@ -136,7 +124,6 @@ class Tabs extends React.Component {
       el.style.transform = 'translate(0px, 0px)';
     }
     if (from && to) {
-      console.log('swap', from, to);
       this.props.onTabPositionChange(from, to);
     }
   }
@@ -169,17 +156,8 @@ class Tabs extends React.Component {
   }
 
   render() {
-    const content = [];
     const tabs = _.map(this.state.tabs, (tab) => {
-
-      if (this.state.selectedTab === tab.key) {
-        content.push(<TabTemplate key={'tabTemplate#' + tab.key} selected={true}>{tab}</TabTemplate>);
-      } else {
-        content.push(<TabTemplate key={'tabTemplate#' + tab.key} selected={false}>{tab}</TabTemplate>);
-      }
-
       const tabTitle = tab.props.title;
-      const closeButton = this.getCloseButton(tab);
 
       return (
         <Draggable
@@ -199,25 +177,19 @@ class Tabs extends React.Component {
               className={this.state.selectedTab === tab.key ? 'tab-item active' : 'tab-item' }
               ref={tab.key}>
             {tabTitle}
-            <span className="icon icon-cancel icon-close-tab" onClick={this.handleCloseButtonClick.bind(this, tab.key)}></span>
+            <span className="icon icon-cancel icon-close-tab"
+              onClick={this.handleCloseButtonClick.bind(this, tab.key)}></span>
           </div>
         </Draggable>
       );
     });
 
-    return (
-      <div>
-        <div className="tab-group">
-          {tabs}
-          <div className='tab-item tab-item-btn' onClick={this.handleAddButtonClick.bind(this)}>
-            {this.props.tabAddButton}
-          </div>
-        </div>
-        <div className="main">
-          {content}
-        </div>
+    return <div className="tab-group">
+      {tabs}
+      <div className='tab-item tab-item-btn' onClick={this.handleAddButtonClick.bind(this)}>
+        {this.props.tabAddButton}
       </div>
-    );
+    </div>;
   }
 }
 

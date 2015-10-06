@@ -1,7 +1,7 @@
 'use strict';
 
 const app = require('app');
-const BrowserWindow = require('browser-window');
+const windowManager = require('./windowManager');
 const Menu = require('menu');
 
 const menu = Menu.buildFromTemplate([{
@@ -40,24 +40,30 @@ const menu = Menu.buildFromTemplate([{
 }, {
   label: 'File',
   submenu: [{
-    label: 'Add Tab',
+    label: 'New Connection Window',
+    accelerator: 'CmdOrCtrl+N',
+    click() {
+      windowManager.create();
+    }
+  }, {
+    label: 'New Connection Tab',
     accelerator: 'CmdOrCtrl+T',
     click() {
-      let currentWindow = BrowserWindow.getFocusedWindow();
-      if (!currentWindow) {
-        currentWindow = new BrowserWindow({ width: 800, height: 600 });
-        currentWindow.loadUrl('file://' + __dirname + '/../index.html');
-      }
-      currentWindow.webContents.send('action', 'ADD_INSTANCE');
+      windowManager.current.webContents.send('action', 'addInstance');
+    }
+  }, {
+    type: 'separator'
+  }, {
+    label: 'Close Window',
+    accelerator: 'Shift+CmdOrCtrl+W',
+    click() {
+      windowManager.current.close();
     }
   }, {
     label: 'Close Tab',
     accelerator: 'CmdOrCtrl+W',
     click() {
-      const currentWindow = BrowserWindow.getFocusedWindow();
-      if (currentWindow) {
-        currentWindow.webContents.send('action', 'DEL_INSTANCE');
-      }
+      windowManager.current.webContents.send('action', 'delInstance');
     }
   }]
 }, {
@@ -148,5 +154,15 @@ const menu = Menu.buildFromTemplate([{
     }
   }]
 }]);
+
+windowManager.on('blur', function () {
+  menu.items[1].submenu.items[3].enabled = false;
+  menu.items[1].submenu.items[4].enabled = false;
+});
+
+windowManager.on('focus', function () {
+  menu.items[1].submenu.items[3].enabled = true;
+  menu.items[1].submenu.items[4].enabled = true;
+});
 
 module.exports = menu;
