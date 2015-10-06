@@ -4,6 +4,7 @@ import React from 'react';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 import ConnectionSelector from '../ConnectionSelector';
+import Database from '../Database';
 
 class MainContent extends React.Component {
   render() {
@@ -18,8 +19,12 @@ const selector = createSelector(
     return {
       contents: instances.map(function (instance) {
         return <div
-          style={ { display: instance.key === activeInstance.key ? 'block' : 'none' } }>
-          <ConnectionSelector key={instance.key} title={instance.host} />
+          style={ { display: instance.get('key') === activeInstance.get('key') ? 'block' : 'none' } }>
+          {
+            instance.get('redis') ?
+              <Database redis={instance.get('redis')} /> :
+              <ConnectionSelector key={instance.get('key')} title={instance.get('host')} />
+          }
         </div>;
       })
     };

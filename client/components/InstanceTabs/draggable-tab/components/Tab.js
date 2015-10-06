@@ -15,7 +15,7 @@ class Tab extends React.Component {
 }
 
 Tab.defaultProps = {
-  title: 'untitled',
+  title: 'Quick Connect',
   disableClose: false
 };
 

@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import remote from 'remote';
 
 class TitleBar extends React.Component {
   componentDidMount() {
@@ -8,7 +9,7 @@ class TitleBar extends React.Component {
 
   render() {
     return <header className="toolbar toolbar-header">
-      <h1 className="title">Photon</h1>
+      <h1 className="title">{ remote.require('app').getName() }</h1>
     </header>;
   }
 

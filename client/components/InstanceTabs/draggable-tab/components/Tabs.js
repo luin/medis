@@ -34,30 +34,6 @@ class Tabs extends React.Component {
     });
   }
 
-  _getTabByKey(key) {
-    return _.where(this.state.tabs, (tab) => {
-      return tab.key === key;
-    });
-  }
-
-  _getNextTabKey(key) {
-    let nextKey;
-    const current = this._getIndexOfTabByKey(key);
-    if (current + 1 < this.state.tabs.length) {
-      nextKey = this.state.tabs[current + 1].key;
-    }
-    return nextKey;
-  }
-
-  _getPrevTabKey(key) {
-    let prevKey;
-    const current = this._getIndexOfTabByKey(key);
-    if (current > 0) {
-      prevKey = this.state.tabs[current - 1].key;
-    }
-    return prevKey;
-  }
-
   _saveStartPositions() {
     const positions = _.map(this.state.tabs, (tab) => {
       const el = React.findDOMNode(this.refs[tab.key]);
@@ -81,16 +57,9 @@ class Tabs extends React.Component {
     this.setState(newState);
   }
 
-  componentWillUpdate() {
-  }
-
   componentDidUpdate() {
     this._saveStartPositions();
   }
-
-  handleMouseDown() {}
-
-  handleDragStart() {}
 
   handleDrag(key, e) {
     const deltaX = (e.pageX || e.clientX);
@@ -149,12 +118,6 @@ class Tabs extends React.Component {
     return (<CloseIcon onClick={this.handleCloseButtonClick.bind(this, tab.key)}>&times;</CloseIcon>);
   }
 
-  doubleClickHandlerWithKey(key) {
-    return e => {
-      this.props.onTabDoubleClick(e, key);
-    };
-  }
-
   render() {
     const tabs = _.map(this.state.tabs, (tab) => {
       const tabTitle = tab.props.title;
@@ -168,12 +131,10 @@ class Tabs extends React.Component {
           moveOnStartChange={true}
           zIndex={100}
           bounds='parent'
-          onStart={this.handleDragStart.bind(this, tab.key)}
           onDrag={this.handleDrag.bind(this, tab.key)}
           onStop={this.handleDragStop.bind(this, tab.key)}>
           <div
               onClick={this.handleTabClick.bind(this, tab.key)}
-              onMouseDown={this.handleMouseDown.bind(this, tab.key)}
               className={this.state.selectedTab === tab.key ? 'tab-item active' : 'tab-item' }
               ref={tab.key}>
             {tabTitle}
@@ -194,25 +155,11 @@ class Tabs extends React.Component {
 }
 
 Tabs.defaultProps = {
-  tabsClassNames: {
-    tabBar: '',
-    tabBarAfter: '',
-    tab: '',
-    tabBefore: '',
-    tabAfter: '',
-    tabBeforeTitle: '',
-    tabTitle: '',
-    tabAfterTitle: '',
-    tabCloseIcon: '',
-    tabActive: ''
-  },
-  tabsStyles: {},
   tabAddButton: (<span>{'+'}</span>),
   onTabSelect: () => {},
   onTabClose: () => {},
   onTabAddButtonClick: () => {},
-  onTabPositionChange: () => {},
-  onTabDoubleClick: () => {}
+  onTabPositionChange: () => {}
 };
 
 Tabs.propTypes = {
@@ -223,8 +170,7 @@ Tabs.propTypes = {
   onTabSelect: React.PropTypes.func,
   onTabClose: React.PropTypes.func,
   onTabAddButtonClick: React.PropTypes.func,
-  onTabPositionChange: React.PropTypes.func,
-  onTabDoubleClick: React.PropTypes.func
+  onTabPositionChange: React.PropTypes.func
 
 };
 

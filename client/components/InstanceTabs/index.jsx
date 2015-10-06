@@ -5,13 +5,12 @@ import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 import action from '../../actions';
 import { Tab, Tabs } from './draggable-tab';
-import id from '../../id';
 
 class InstanceTabs extends React.Component {
   render() {
     return <Tabs
       onTabAddButtonClick={() =>
-        this.props.dispatch(action('addInstance', { key: id('instance'), host: 'localhost' }))
+        this.props.dispatch(action('addInstance'))
       }
       onTabSelect={(key) =>
         this.props.dispatch(action('selectInstance', key))
@@ -22,7 +21,7 @@ class InstanceTabs extends React.Component {
       onTabPositionChange={(from, to) =>
         this.props.dispatch(action('moveInstance', { from, to }))
       }
-      selectedTab={ this.props.activeInstance.key }
+      selectedTab={ this.props.activeInstanceKey }
       tabs={this.props.tabs}
     />;
   }
@@ -30,13 +29,13 @@ class InstanceTabs extends React.Component {
 
 const selector = createSelector(
   state => state.get('instances'),
-    state => state.get('activeInstance'),
-    (instances, activeInstance) => {
+  state => state.get('activeInstance').get('key'),
+  (instances, activeInstanceKey) => {
     return {
       tabs: instances.map(function (instance) {
-        return (<Tab key={instance.key} title={instance.host} ></Tab>);
+        return (<Tab key={instance.get('key')} title={instance.get('host')} ></Tab>);
       }),
-      activeInstance
+      activeInstanceKey
     };
   }
 );

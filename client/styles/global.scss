@@ -1,5 +1,14 @@
 @import "photon";
 
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  transition: all 0.2s;
+}
+
 .sidebar {
   background: #f5f5f4;
 }
