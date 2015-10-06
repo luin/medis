@@ -3,8 +3,10 @@
 import React from 'react';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { addInstance, delInstance, selectInstance } from '../actions';
+import { addInstance, delInstance, moveInstance, selectInstance } from '../actions';
 import { Tab, Tabs } from './draggable-tab';
+import ConnectionSelector from './connection-selector/ConnectionSelector';
+import TitleBar from './TitleBar';
 import id from '../id';
 
 class App extends React.Component {
@@ -14,6 +16,7 @@ class App extends React.Component {
 
   render() {
     return <div>
+      <TitleBar />
       <Tabs
         onTabAddButtonClick={() =>
           this.props.dispatch(addInstance({ key: id('instance'), host: 'localhost' }))
@@ -24,8 +27,11 @@ class App extends React.Component {
         onTabClose={(key) =>
           this.props.dispatch(delInstance(key))
         }
+        onTabPositionChange={(from, to) =>
+          this.props.dispatch(moveInstance({ from, to }))
+        }
         selectedTab={ this.props.activeInstance.key }
-        tabs={this.props.tabs.toJS()}
+        tabs={this.props.tabs}
       />
     </div>;
   }
@@ -38,8 +44,9 @@ const selector = createSelector(
     return {
       tabs: instances.map(function (instance) {
         return (<Tab key={instance.key} title={instance.host} >
-          <div>
-            <h1>This tab cannot close</h1>
+          <div style={ { display: instance.key === activeInstance.key ? 'block' : 'none' } }>
+            <ConnectionSelector
+            />
           </div>
         </Tab>);
       }),

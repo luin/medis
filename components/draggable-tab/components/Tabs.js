@@ -8,7 +8,7 @@ import Draggable from 'react-draggable';
 import TabTemplate from './TabTemplate';
 import CloseIcon from './CloseIcon';
 
-import Utils from '../helpers/utils';
+import { slideArray } from '../helpers/utils';
 
 class Tabs extends React.Component {
   constructor(props) {
@@ -67,7 +67,7 @@ class Tabs extends React.Component {
   _moveTabPosition(key1, key2) {
     const t1 = this._getIndexOfTabByKey(key1);
     const t2 = this._getIndexOfTabByKey(key2);
-    return Utils.slideArray(this.state.tabs, t1, t2);
+    return slideArray(this.state.tabs, t1, t2);
   }
 
   _saveStartPositions() {
@@ -123,25 +123,22 @@ class Tabs extends React.Component {
 
   handleDragStop(key, e) {
     const deltaX = (e.pageX || e.clientX);
-    let swapedTabs;
-    const newState = {};
-    _.each(this.startPositions, (pos) => {
-      const shoudBeSwap = key !== pos.key && pos.pos.left < deltaX && deltaX < pos.pos.right;
-      if (shoudBeSwap) {
-        swapedTabs = this._moveTabPosition(key, pos.key);
+    let from;
+    let to;
+    for (let i = 0; i < this.startPositions.length; i++) {
+      const pos = this.startPositions[i];
+      const needSwap = key !== pos.key && pos.pos.left < deltaX && deltaX < pos.pos.right;
+      if (needSwap) {
+        from = key;
+        to = pos.key;
       }
       const el = React.findDOMNode(this.refs[pos.key]);
       el.style.transform = 'translate(0px, 0px)';
-    });
-    const nextTabs = swapedTabs || this.state.tabs;
-
-    newState.tabs = nextTabs;
-    newState.selectedTab = key;
-    this.setState(newState, () => {
-      if(swapedTabs) {
-        this.props.onTabPositionChange(e, key, this.state.tabs);
-      }
-    });
+    }
+    if (from && to) {
+      console.log('swap', from, to);
+      this.props.onTabPositionChange(from, to);
+    }
   }
 
   handleTabClick(key) {
@@ -196,26 +193,26 @@ class Tabs extends React.Component {
           onStart={this.handleDragStart.bind(this, tab.key)}
           onDrag={this.handleDrag.bind(this, tab.key)}
           onStop={this.handleDragStop.bind(this, tab.key)}>
-          <li
+          <div
               onClick={this.handleTabClick.bind(this, tab.key)}
               onMouseDown={this.handleMouseDown.bind(this, tab.key)}
-              className={this.state.selectedTab === tab.key ? 'is-active' : '' }
+              className={this.state.selectedTab === tab.key ? 'tab-item active' : 'tab-item' }
               ref={tab.key}>
-            <p onDoubleClick={this.doubleClickHandlerWithKey(tab.key)}>{tabTitle}</p>
-            {closeButton}
-          </li>
+            {tabTitle}
+            <span className="icon icon-cancel icon-close-tab" onClick={this.handleCloseButtonClick.bind(this, tab.key)}></span>
+          </div>
         </Draggable>
       );
     });
 
     return (
       <div>
-        <ul className="instance-tabs" tabIndex='-1'>
+        <div className="tab-group">
           {tabs}
-          <li className='instance-tabs__add' onClick={this.handleAddButtonClick.bind(this)}>
+          <div className='tab-item tab-item-btn' onClick={this.handleAddButtonClick.bind(this)}>
             {this.props.tabAddButton}
-          </li>
-        </ul>
+          </div>
+        </div>
         <div className="main">
           {content}
         </div>

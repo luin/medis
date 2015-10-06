@@ -8,10 +8,7 @@ import { createStore } from 'redux';
 const handlers = {
   ADD_INSTANCE(data) {
     if (!data) {
-      data = {
-        key: id('instance'),
-        host: 'localhost'
-      };
+      data = { key: id('instance') };
     }
     return this.withMutations(map => {
       map.update('instances', list => list.push(data)).set('activeInstance', data);
@@ -20,11 +17,18 @@ const handlers = {
   SELECT_INSTANCE(data) {
     return this.set('activeInstance', this.get('instances').find(instance => instance.key === data));
   },
+  MOVE_INSTANCE({ from, to }) {
+    const [fromIndex, instance] = this.get('instances').findEntry(v => v.key === from);
+    const toIndex = this.get('instances').findIndex(v => v.key === to);
+    return this
+      .update('instances', list => list.splice(fromIndex, 1)
+      .splice(toIndex, 0, instance))
+      .set('activeInstance', instance);
+  },
   DEL_INSTANCE(data) {
     if (!data) {
       data = this.get('activeInstance').key;
     }
-    console.log(data);
     return this.withMutations(map => {
       let deletedIndex;
       map.update('instances', list => list.filterNot((tab, index) => {
@@ -34,14 +38,11 @@ const handlers = {
         }
       }));
       if (data === map.get('activeInstance').key) {
-        console.log('try', deletedIndex);
         let item = map.get('instances').get(deletedIndex);
         if (!item) {
-          console.log('try2', deletedIndex - 1);
           item = map.get('instances').get(deletedIndex - 1);
         }
         if (!item) {
-          console.log('TODO: close window');
           remote.getCurrentWindow().close();
           return;
         }

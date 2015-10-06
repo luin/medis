@@ -11,3 +11,7 @@ export function delInstance(data) {
 export function selectInstance(data) {
   return { type: 'SELECT_INSTANCE', data };
 }
+
+export function moveInstance(data) {
+  return { type: 'MOVE_INSTANCE', data };
+}
