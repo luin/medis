@@ -22,7 +22,11 @@ class InstanceTabs extends React.Component {
         this.props.dispatch(action('moveInstance', { from, to }))
       }
       selectedTab={ this.props.activeInstanceKey }
-      tabs={this.props.tabs}
+      tabs={
+        this.props.instances.map(instance => {
+          return (<Tab key={instance.get('key')} title={instance.get('host')} ></Tab>);
+        }).toJS()
+      }
     />;
   }
 }
@@ -31,12 +35,7 @@ const selector = createSelector(
   state => state.get('instances'),
   state => state.get('activeInstance').get('key'),
   (instances, activeInstanceKey) => {
-    return {
-      tabs: instances.map(function (instance) {
-        return (<Tab key={instance.get('key')} title={instance.get('host')} ></Tab>);
-      }),
-      activeInstanceKey
-    };
+    return { instances, activeInstanceKey };
   }
 );
 

@@ -20,7 +20,10 @@ class Favourite extends React.Component {
       <DraggableList>
       {
         this.props.favourites.map(favourite => {
-          return <a className="nav-group-item active">
+          return <a
+            key={favourite.name}
+            className="nav-group-item active"
+          >
             <span className="icon icon-home"></span>
             {favourite.name}
           </a>;
