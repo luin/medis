@@ -16,6 +16,9 @@ class ConnectionSelector extends React.Component {
         <Provider store={store}>
           {() => <Favourite />}
         </Provider>
+        <footer className="toolbar toolbar-footer">
+          <h1 className="title">Footer</h1>
+        </footer>
       </aside>
       <div className="pane">
         <button onClick={() =>

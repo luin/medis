@@ -16,7 +16,7 @@ class App extends React.Component {
 
   render() {
     return <div className="window">
-      <TitleBar />
+      <TitleBar style={ { display: 'none' } } />
       <Provider store={store}>
         {() => <InstanceTabs />}
       </Provider>
@@ -28,10 +28,10 @@ class App extends React.Component {
 }
 
 const selector = createSelector(
-  state => state.get('activeInstance'),
-  (activeInstance) => {
+  state => state.get('instances'),
+  (instances) => {
     return {
-      activeInstance
+      instances
     };
   }
 );

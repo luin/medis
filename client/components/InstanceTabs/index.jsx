@@ -8,7 +8,7 @@ import { Tab, Tabs } from './draggable-tab';
 
 class InstanceTabs extends React.Component {
   render() {
-    return <Tabs
+    return <Tabs style={ { display: this.props.instances.count() === 1 ? 'none' : 'block' } }
       onTabAddButtonClick={() =>
         this.props.dispatch(action('addInstance'))
       }

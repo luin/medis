@@ -7,6 +7,7 @@ import DraggableList from '../common/DraggableList';
 
 class Favourite extends React.Component {
   componentDidMount() {
+    $(React.findDOMNode(this)).sortable();
   }
 
   render() {
@@ -17,19 +18,17 @@ class Favourite extends React.Component {
         QUICK CONNECT
       </a>
       <h5 className="nav-group-title">FAVORITES</h5>
-      <DraggableList>
       {
         this.props.favourites.map(favourite => {
           return <a
             key={favourite.name}
-            className="nav-group-item active"
+            className="nav-group-item"
           >
             <span className="icon icon-home"></span>
             {favourite.name}
           </a>;
         })
       }
-      </DraggableList>
     </nav>;
   }
 
