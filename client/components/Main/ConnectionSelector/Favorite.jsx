@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-class Favourite extends React.Component {
+class Favorite extends React.Component {
   componentDidMount() {
     $(React.findDOMNode(this)).sortable();
   }
@@ -16,13 +16,13 @@ class Favourite extends React.Component {
       </a>
       <h5 className="nav-group-title">FAVORITES</h5>
       {
-        this.props.favourites.map(favourite => {
+        this.props.favorites.map(favorite => {
           return <a
-            key={favourite.name}
+            key={favorite.name}
             className="nav-group-item"
           >
             <span className="icon icon-home"></span>
-            {favourite.name}
+            {favorite.name}
           </a>;
         })
       }
@@ -33,4 +33,4 @@ class Favourite extends React.Component {
   }
 }
 
-export default Favourite;
+export default Favorite;

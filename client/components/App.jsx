@@ -13,7 +13,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { instances, activeInstance, favourites } = this.props;
+    const { instances, activeInstance, favorites } = this.props;
 
     return <div className="window">
       <TitleBar />
@@ -24,7 +24,7 @@ class App extends React.Component {
       <Main
         instances={instances}
         activeInstanceKey={activeInstance.get('key')}
-        favourites={favourites}
+        favorites={favorites}
       />
     </div>;
   }
@@ -33,13 +33,13 @@ class App extends React.Component {
 const selector = createSelector(
   state => state.get('instances'),
   state => state.get('activeInstanceKey'),
-  state => state.get('favourites'),
-  (instances, activeInstanceKey, favourites) => {
+  state => state.get('favorites'),
+  (instances, activeInstanceKey, favorites) => {
     const activeInstance = instances.find(instance => instance.get('key') === activeInstanceKey);
     return {
       instances,
       activeInstance,
-      favourites
+      favorites
     };
   }
 );

@@ -8,7 +8,7 @@ import id from './id';
 
 const emptyInstance = Immutable.Map({ key: id('instance') });
 let state = Immutable.Map({ instances: Immutable.List.of(emptyInstance), activeInstanceKey: emptyInstance.get('key') });
-const favourites = localStorage.getItem('favourites');
-state = state.set('favourites', Immutable.List.of(favourites ? JSON.parse(favourites) : []));
+const favorites = localStorage.getItem('favorites');
+state = state.set('favorites', Immutable.List.of(favorites ? JSON.parse(favorites) : []));
 
 export default createStore(reducers, state);
