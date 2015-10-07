@@ -1,4 +1,7 @@
 'use strict';
 
-export function addFavorite() {
+import * as Favorite from '../backend/favorite';
+
+export function addFavorite(data) {
+  return this.set('favorites', Favorite.addFavorite(data));
 }
