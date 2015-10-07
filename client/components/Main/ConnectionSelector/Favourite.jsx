@@ -1,9 +1,6 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import DraggableList from '../common/DraggableList';
 
 class Favourite extends React.Component {
   componentDidMount() {
@@ -34,20 +31,6 @@ class Favourite extends React.Component {
 
   componentWillUnmount() {
   }
-
 }
 
-const selector = createSelector(
-  state => state.get('favourites'),
-  (favourites) => {
-    return {
-      favourites: [
-        { name: 'item1' },
-        { name: 'item2' },
-        { name: 'item3' },
-      ]
-    };
-  }
-);
-
-export default connect(selector)(Favourite);
+export default Favourite;

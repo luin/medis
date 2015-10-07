@@ -1,8 +1,8 @@
 'use strict';
 
 import React from 'react';
-import store from '../../store';
-import action from '../../actions';
+import store from '../../../store';
+import action from '../../../actions';
 
 class Database extends React.Component {
   constructor() {
