@@ -11,6 +11,9 @@
   "ecmaFeatures": {
     "jsx": true
   },
+  "globals": {
+    "$": true
+  },
   "rules": {
     "no-var": 1,
     "no-const-assign": 2,

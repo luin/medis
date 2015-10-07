@@ -8,6 +8,8 @@ class Favorite extends React.Component {
   }
 
   render() {
+    console.log(this.props.favorites);
+
     return <nav className="nav-group">
       <h5 className="nav-group-title"></h5>
       <a className="nav-group-item active">
