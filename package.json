@@ -1,0 +1,32 @@
+{
+  "name": "redis-pro",
+  "version": "0.0.1",
+  "main": "main.js",
+  "scripts": {
+    "start": "npm run dev && electron .",
+    "dev": "webpack-dev-server --progress --colors --port 8090"
+  },
+  "dependencies": {
+    "immutable": "^3.7.5",
+    "ioredis": "^1.9.1",
+    "lodash": "^3.10.1",
+    "mousetrap": "^1.5.3",
+    "react": "^0.13.0",
+    "react-draggable": "^0.8.2",
+    "react-draggable-tab": "^0.3.3",
+    "react-redux": "^3.1.0",
+    "redux": "^3.0.2",
+    "reselect": "^2.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^5.8.25",
+    "babel-loader": "^5.3.2",
+    "css-loader": "^0.19.0",
+    "jsx-loader": "^0.13.2",
+    "node-sass": "^3.3.3",
+    "sass-loader": "^3.0.0",
+    "style-loader": "^0.12.4",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.12.0"
+  }
+}
