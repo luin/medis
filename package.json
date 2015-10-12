@@ -10,7 +10,6 @@
     "immutable": "^3.7.5",
     "ioredis": "^1.9.1",
     "lodash": "^3.10.1",
-    "mousetrap": "^1.5.3",
     "react": "^0.13.0",
     "react-draggable": "^0.8.2",
     "react-draggable-tab": "^0.3.3",

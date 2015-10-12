@@ -6,11 +6,35 @@ const id = require('./id');
 const handlers = {
   ADD_INSTANCE(data) {
     return this.withMutations(map => {
-      return map.updateIn(['instances'], list => list.push(data)).setIn(['activeInstance'], data);
+      map.update('instances', list => list.push(data)).set('activeInstance', data);
     });
   },
+  SELECT_INSTANCE(data) {
+    return this.set('activeInstance', this.get('instances').find(instance => instance.key === data));
+  },
   DEL_INSTANCE(data) {
-    return this.updateIn(['instances'], list => list.filterNot(tab => tab.key === data));
+    return this.withMutations(map => {
+      let deletedIndex;
+      map.update('instances', list => list.filterNot((tab, index) => {
+        if (tab.key === data) {
+          deletedIndex = index;
+          return true;
+        }
+      }));
+      if (data === map.get('activeInstance').key) {
+        console.log('try', deletedIndex);
+        let item = map.get('instances').get(deletedIndex);
+        if (!item) {
+          console.log('try2', deletedIndex - 1);
+          item = map.get('instances').get(deletedIndex - 1);
+        }
+        if (!item) {
+          console.log('TODO: close window');
+          return;
+        }
+        map.set('activeInstance', item);
+      }
+    });
   }
 };
 

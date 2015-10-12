@@ -7,3 +7,7 @@ export function addInstance(data) {
 export function delInstance(data) {
   return { type: 'DEL_INSTANCE', data };
 }
+
+export function selectInstance(data) {
+  return { type: 'SELECT_INSTANCE', data };
+}

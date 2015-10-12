@@ -3,7 +3,7 @@
 import React from 'react';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { addInstance, delInstance } from '../actions';
+import { addInstance, delInstance, selectInstance } from '../actions';
 import { Tab, Tabs } from './draggable-tab';
 const id = require('../id');
 
@@ -18,7 +18,10 @@ class App extends React.Component {
         onTabAddButtonClick={() =>
           this.props.dispatch(addInstance({ key: id('instance'), host: 'localhost' }))
         }
-        onTabClose={(_, key) =>
+        onTabSelect={(key) =>
+          this.props.dispatch(selectInstance(key))
+        }
+        onTabClose={(key) =>
           this.props.dispatch(delInstance(key))
         }
         selectedTab={ this.props.activeInstance.key }
