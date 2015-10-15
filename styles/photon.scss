@@ -1,0 +1,12 @@
+.toolbar-header {
+  -webkit-app-region: drag;
+
+  * {
+    -webkit-app-region: no-drag;
+  }
+}
+
+.tab-item-btn {
+  width: 30px;
+  flex: none;
+}

@@ -10,6 +10,7 @@
   "dependencies": {
     "immutable": "^3.7.5",
     "ioredis": "^1.9.1",
+    "jstree": "^3.2.1",
     "lodash": "^3.10.1",
     "react": "^0.13.0",
     "react-draggable": "^0.8.2",
