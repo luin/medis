@@ -1,21 +1,34 @@
 'use strict';
 
 import React from 'react';
-import Favourite from './Favourite';
 import store from '../../store';
-import { Provider } from 'react-redux';
 import action from '../../actions';
 
-class ConnectionSelector extends React.Component {
+class Database extends React.Component {
+  constructor() {
+    super();
+    this.state = { keys: [] };
+  }
+
   componentDidMount() {
+    const redis = this.props.redis;
+
+    redis.scan('0', 'MATCH', 'fh:*', 'COUNT', '50', (err, res) => {
+      console.log(err, res);
+      this.setState({
+        keys: res[1]
+      });
+    });
   }
 
   render() {
     return <div className="pane-group">
       <aside className="pane pane-sm sidebar">
-        <Provider store={store}>
-          {() => <Favourite />}
-        </Provider>
+        {
+          this.state.keys.map(key => {
+            return <p>{key}</p>;
+          })
+        }
       </aside>
       <div className="pane">
         <button onClick={() =>
@@ -30,4 +43,4 @@ class ConnectionSelector extends React.Component {
 
 }
 
-export default ConnectionSelector;
+export default Database;
