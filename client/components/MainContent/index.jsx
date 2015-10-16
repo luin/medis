@@ -19,6 +19,7 @@ const selector = createSelector(
     return {
       contents: instances.map(function (instance) {
         return <div
+          key={instance.get('key')}
           style={ { display: instance.get('key') === activeInstance.get('key') ? 'block' : 'none' } }>
           {
             instance.get('redis') ?

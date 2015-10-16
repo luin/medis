@@ -13,18 +13,19 @@ class DraggableList extends React.Component {
   }
 
   dragOver(e) {
-    const ele = e.currentTarget;
+    const ele = e.target;
+    console.log(ele);
     this.dragged.style.opacity = '0.5';
     this.over = ele;
     ele.parentNode.insertBefore(this.dragged, ele);
-    e.preventDefault();
+    // e.preventDefault();
   }
 
   render() {
-    return <ul>
+    return <div onDragOver={this.dragOver.bind(this)}>
       {
         this.props.children.map((item, index) => {
-          return <li
+          return <div
             onDragStart={this.dragStart.bind(this)}
             onDragEnd={this.dragEnd.bind(this)}
             onDragOver={this.dragOver.bind(this)}
@@ -32,10 +33,10 @@ class DraggableList extends React.Component {
             key={index}
           >
             {item}
-          </li>;
+          </div>;
         })
       }
-    </ul>;
+    </div>;
   }
 
   componentWillUnmount() {
