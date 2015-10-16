@@ -2,7 +2,7 @@
   "name": "redis-pro",
   "productName": "Redis Pro",
   "version": "0.0.1",
-  "main": "main.js",
+  "main": "server/main.js",
   "scripts": {
     "start": "npm run dev && electron .",
     "dev": "webpack-dev-server --progress --colors --port 8090"
