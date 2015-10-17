@@ -1,9 +1,11 @@
 'use strict';
 
 import * as instance from './instance';
+import * as favorite from './favorite';
 
 const handlers = {};
 Object.assign(handlers, instance);
+Object.assign(handlers, favorite);
 
 export default function (state, action) {
   if (handlers[action.type]) {
