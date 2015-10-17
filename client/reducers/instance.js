@@ -1,14 +1,10 @@
 'use strict';
 
-import id from '../id';
+import * as Instance from '../backend/instance';
 import remote from 'remote';
-import Immutable from 'immutable';
 
 export function addInstance(data) {
-  if (!data) {
-    data = { key: id('instance') };
-  }
-  const instance = Immutable.Map(data);
+  const instance = Instance.addInstance(data);
   return this.update('instances', list => list.push(instance)).set('activeInstanceKey', instance.get('key'));
 }
 
