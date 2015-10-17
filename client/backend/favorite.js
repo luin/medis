@@ -4,17 +4,17 @@ import Immutable from 'immutable';
 import id from './id';
 
 export function addFavorite(data) {
-  const favorite = Object.assign({}, { key: id('favorite') }, data || {});
-  console.log('get list', getFavorites().toJSON());
-  console.log('item', favorite);
+  const favorite = Immutable.Map(Object.assign({}, { key: id('favorite'), name: 'New Favorite' }, data || {}));
   const favorites = getFavorites().push(favorite);
-  console.log('push', favorites.toJSON());
-  localStorage.setItem('favorites', JSON.stringify(favorites.toJSON()));
+  saveFavorites(favorites);
 
   return favorites;
 }
 
 export function getFavorites() {
-  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-  return Immutable.List.of.apply(Immutable.List, favorites);
+  return Immutable.fromJS(JSON.parse(localStorage.getItem('favorites')) || []);
+}
+
+export function saveFavorites(favorites) {
+  localStorage.setItem('favorites', JSON.stringify(favorites.toJSON()));
 }
