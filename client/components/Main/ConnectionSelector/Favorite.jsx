@@ -13,7 +13,7 @@ class Favorite extends React.Component {
     super();
     this.state = {
       editable: Immutable.List(),
-      activeIndex: null
+      activeKey: null
     };
     this._updateSortableKey();
   }
@@ -46,15 +46,20 @@ class Favorite extends React.Component {
     this._bindSortable();
   }
 
-  onClick(activeIndex, evt) {
+  onClick(index, evt) {
     evt.preventDefault();
-    this.setState({ activeIndex });
+    this.setState({
+      activeKey: index === -1 ? null : this.props.favorites.getIn([index, 'key'])
+    });
   }
 
   render() {
     return <nav className="nav-group">
       <h5 className="nav-group-title"></h5>
-      <a className="nav-group-item active">
+      <a
+        className={'nav-group-item' + (this.state.activeKey ? '' : ' active')}
+        onClick={this.onClick.bind(this, -1)}
+      >
         <span className="icon icon-flash"></span>
         QUICK CONNECT
       </a>
@@ -64,7 +69,7 @@ class Favorite extends React.Component {
         this.props.favorites.map((favorite, index) => {
           return <a
             key={favorite.get('key')}
-            className={'nav-group-item' + (index === this.state.activeIndex ? ' active' : '')}
+            className={'nav-group-item' + (favorite.get('key') === this.state.activeKey ? ' active' : '')}
             onClick={this.onClick.bind(this, index)}
           >
             <span className="icon icon-home"></span>
