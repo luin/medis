@@ -2,20 +2,14 @@
 
 import React from 'react';
 import Favourite from './Favourite';
-import store from '../../store';
-import { Provider } from 'react-redux';
-import action from '../../actions';
+import store from '../../../store';
+import action from '../../../actions';
 
 class ConnectionSelector extends React.Component {
-  componentDidMount() {
-  }
-
   render() {
     return <div className="pane-group">
       <aside className="pane pane-sm sidebar">
-        <Provider store={store}>
-          {() => <Favourite />}
-        </Provider>
+        <Favourite favourites={this.props.favourites} />
         <footer className="toolbar toolbar-footer">
           <h1 className="title">Footer</h1>
         </footer>
@@ -27,10 +21,6 @@ class ConnectionSelector extends React.Component {
       </div>
     </div>;
   }
-
-  componentWillUnmount() {
-  }
-
 }
 
 export default ConnectionSelector;

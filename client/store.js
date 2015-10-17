@@ -7,7 +7,7 @@ import Immutable from 'immutable';
 import id from './id';
 
 const emptyInstance = Immutable.Map({ key: id('instance') });
-let state = Immutable.Map({ instances: Immutable.List.of(emptyInstance), activeInstance: emptyInstance });
+let state = Immutable.Map({ instances: Immutable.List.of(emptyInstance), activeInstanceKey: emptyInstance.get('key') });
 const favourites = localStorage.getItem('favourites');
 state = state.set('favourites', Immutable.List.of(favourites ? JSON.parse(favourites) : []));
 

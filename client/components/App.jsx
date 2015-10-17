@@ -1,13 +1,11 @@
 'use strict';
 
 import React from 'react';
-import { Provider } from 'react-redux';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 import TitleBar from './TitleBar';
 import InstanceTabs from './InstanceTabs';
-import MainContent from './MainContent';
-import store from '../store';
+import Main from './Main';
 
 class App extends React.Component {
   constructor(props) {
@@ -15,23 +13,33 @@ class App extends React.Component {
   }
 
   render() {
+    const { instances, activeInstance, favourites } = this.props;
+
     return <div className="window">
-      <TitleBar style={ { display: 'none' } } />
-      <Provider store={store}>
-        {() => <InstanceTabs />}
-      </Provider>
-      <Provider store={store}>
-        {() => <MainContent />}
-      </Provider>
+      <TitleBar />
+      <InstanceTabs
+        instances={instances}
+        activeInstanceKey={activeInstance.get('key')}
+      />
+      <Main
+        instances={instances}
+        activeInstanceKey={activeInstance.get('key')}
+        favourites={favourites}
+      />
     </div>;
   }
 }
 
 const selector = createSelector(
   state => state.get('instances'),
-  (instances) => {
+  state => state.get('activeInstanceKey'),
+  state => state.get('favourites'),
+  (instances, activeInstanceKey, favourites) => {
+    const activeInstance = instances.find(instance => instance.get('key') === activeInstanceKey);
     return {
-      instances
+      instances,
+      activeInstance,
+      favourites
     };
   }
 );

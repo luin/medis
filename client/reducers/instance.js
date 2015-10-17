@@ -9,11 +9,11 @@ export function addInstance(data) {
     data = { key: id('instance') };
   }
   const instance = Immutable.Map(data);
-  return this.update('instances', list => list.push(instance)).set('activeInstance', instance);
+  return this.update('instances', list => list.push(instance)).set('activeInstanceKey', instance.get('key'));
 }
 
 export function selectInstance(data) {
-  return this.set('activeInstance', this.get('instances').find(instance => instance.get('key') === data));
+  return this.set('activeInstanceKey', data);
 }
 
 export function moveInstance({ from, to }) {
@@ -22,12 +22,13 @@ export function moveInstance({ from, to }) {
   return this
     .update('instances', list => list.splice(fromIndex, 1)
     .splice(toIndex, 0, instance))
-    .set('activeInstance', instance);
+    .set('activeInstanceKey', instance.get('key'));
 }
 
 export function delInstance(data) {
+  const activeInstanceKey = this.get('activeInstanceKey');
   if (!data) {
-    data = this.get('activeInstance').get('key');
+    data = activeInstanceKey;
   }
   return this.withMutations(map => {
     let deletedIndex;
@@ -37,7 +38,7 @@ export function delInstance(data) {
         return true;
       }
     }));
-    if (data === map.get('activeInstance').get('key')) {
+    if (data === activeInstanceKey) {
       let item = map.get('instances').get(deletedIndex);
       if (!item) {
         item = map.get('instances').get(deletedIndex - 1);
@@ -46,7 +47,7 @@ export function delInstance(data) {
         remote.getCurrentWindow().close();
         return;
       }
-      map.set('activeInstance', item);
+      map.set('activeInstanceKey', item.get('key'));
     }
   });
 }
@@ -54,11 +55,10 @@ export function delInstance(data) {
 import Redis from 'ioredis';
 export function connect() {
   const redis = new Redis();
-  const key = this.get('activeInstance').get('key');
+  const activeInstanceKey = this.get('activeInstanceKey');
   return this
-    .update('activeInstance', activeInstance => activeInstance.set('redis', redis))
     .update('instances', list => list.map(instance => {
-      if (instance.get('key') === key) {
+      if (instance.get('key') === activeInstanceKey) {
         return instance.set('redis', redis);
       }
       return instance;
