@@ -1,7 +1,7 @@
 'use strict';
 
 import _ from 'lodash';
-import React from 'react/addons';
+import React from 'react';
 import Draggable from 'react-draggable';
 
 class Tabs extends React.Component {
@@ -36,7 +36,7 @@ class Tabs extends React.Component {
 
   _saveStartPositions() {
     const positions = _.map(this.state.tabs, (tab) => {
-      const el = React.findDOMNode(this.refs[tab.key]);
+      const el = this.refs[tab.key];
       const pos = el ? el.getBoundingClientRect() : {};
       return { key: tab.key, pos };
     });
@@ -67,7 +67,7 @@ class Tabs extends React.Component {
       const tempMoved = pos.moved || 0;
       const shoudBeSwap = key !== pos.key && pos.pos.left + tempMoved < deltaX && deltaX < pos.pos.right + tempMoved;
       if (shoudBeSwap) {
-        const el = React.findDOMNode(this.refs[pos.key]);
+        const el = this.refs[pos.key];
         const idx1 = this._getIndexOfTabByKey(key);
         const idx2 = this._getIndexOfTabByKey(pos.key);
         const minus = idx1 > idx2 ? 1 : -1;
@@ -89,7 +89,7 @@ class Tabs extends React.Component {
         from = key;
         to = pos.key;
       }
-      const el = React.findDOMNode(this.refs[pos.key]);
+      const el = this.refs[pos.key];
       el.style.transform = 'translate(0px, 0px)';
     }
     if (from && to) {

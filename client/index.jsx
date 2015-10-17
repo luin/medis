@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './components/App';
 import store from './store';
@@ -14,9 +15,9 @@ require('ipc').on('action', function (type, data) {
   store.dispatch({ type, data });
 });
 
-React.render(
+ReactDOM.render(
   <Provider store={store}>
-    {() => <App />}
+    <App />
   </Provider>,
   document.body
 );
