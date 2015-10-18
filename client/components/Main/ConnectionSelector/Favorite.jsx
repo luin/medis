@@ -48,9 +48,18 @@ class Favorite extends React.Component {
 
   onClick(index, evt) {
     evt.preventDefault();
-    this.setState({
-      activeKey: index === -1 ? null : this.props.favorites.getIn([index, 'key'])
-    });
+    this.select(index);
+  }
+
+  select(index) {
+    if (index === -1) {
+      this.setState({ activeKey: null });
+      this.props.onSelect(null);
+      return;
+    }
+    const selectedFavorite = this.props.favorites.get(index);
+    this.setState({ activeKey: selectedFavorite.get('key') });
+    this.props.onSelect(selectedFavorite);
   }
 
   render() {
