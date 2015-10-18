@@ -35,7 +35,7 @@ class Favorite extends React.Component {
   }
 
   componentDidMount() {
-    this.sortable = Sortable.create(React.findDOMNode(this.refs.sortable), {
+    this.sortable = Sortable.create(this.refs.sortable, {
       // animation: 150,
       onStart: evt => {
         this.nextSibling = evt.item.nextElementSibling;
