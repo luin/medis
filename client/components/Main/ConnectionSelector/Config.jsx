@@ -5,14 +5,10 @@ import store from '../../../store';
 import actions from '../../../actions';
 
 import {
-  Window,
-  TitleBar,
   PushButton,
   TextField,
-  Toolbar,
   Box,
   SegmentedControl,
-  IndeterminateCircularProgressIndicator,
   Form,
   Label
 } from 'react-desktop';
@@ -22,7 +18,7 @@ class Config extends React.Component {
     super();
     this.state = {
       favorite: null,
-      selectedTab: 'login'
+      selectedTab: 'standard'
     };
   }
 
@@ -35,25 +31,57 @@ class Config extends React.Component {
   }
 
   render() {
+    const name = this.getProp('name');
     return <div>
       <p>{this.getProp('key')}</p>
-      <button onClick={() =>
-        store.dispatch(actions('connect'))
-      }>Connect</button>
-    <Box>
+    <Box style={ { width: 500, margin: '120px auto 0' } }>
       <SegmentedControl>
         <SegmentedControl.Item
-          title="Login"
-          selected={this.state.selectedTab === 'login'}
+          title="Standard"
+          selected={this.state.selectedTab === 'standard'}
           onPress={() => {
-            this.setState({ selectedTab: 'login' });
+            this.setState({ selectedTab: 'standard' });
           } }
           >
           <Form onSubmit={() => {
-            alert('submit');
+            store.dispatch(actions('connect'));
           }}>
-            <Label color="red">Error</Label>
+            <div style={ { display: this.props.favorite ? 'block' : 'none' } }>
+              <Form.Row>
+                <Label>Name</Label>
+                <TextField defaultValue={name} value={name} placeholder="Bookmark name"/>
+              </Form.Row>
+            </div>
+            <Form.Row>
+              <Label>Redis Host</Label>
+              <TextField defaultValue="" placeholder="localhost"/>
+            </Form.Row>
+            <Form.Row>
+              <Label>Port</Label>
+              <TextField defaultValue="" placeholder="6379"/>
+            </Form.Row>
+            <Form.Row>
+              <Label>Password</Label>
+              <TextField defaultValue="" placeholder=""/>
+            </Form.Row>
 
+            <Form.Row>
+              <PushButton onPress={() => {
+              }}>Save Changes</PushButton>
+            <PushButton onPress="submit" color="blue">Save and Connect</PushButton>
+            </Form.Row>
+          </Form>
+        </SegmentedControl.Item>
+        <SegmentedControl.Item
+          title="SSH"
+          selected={this.state.selectedTab === 'ssh'}
+          onPress={() => {
+            this.setState({ selectedTab: 'ssh' });
+          } }
+          >
+          <Form onSubmit={() => {
+            store.dispatch(actions('connect'));
+          }}>
             <Form.Row>
               <Label>Username</Label>
               <TextField defaultValue="" placeholder="Username"/>
@@ -61,11 +89,8 @@ class Config extends React.Component {
 
             <Form.Row>
               <PushButton onPress={() => {
-                alert('cancel');
               }}>Cancel</PushButton>
               <PushButton onPress="submit" color="blue">Submit</PushButton>
-
-              <IndeterminateCircularProgressIndicator visible absolute/>
             </Form.Row>
           </Form>
         </SegmentedControl.Item>

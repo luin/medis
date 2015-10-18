@@ -3,12 +3,13 @@
 import * as Favorite from '../backend/favorite';
 import Immutable from 'immutable';
 
-export function addFavorite(data) {
+export function addFavorite(data, callback) {
   const favorite = Immutable.Map(Object.assign({}, {
     key: `favorite-${Math.round(Math.random() * 100000)}`,
     name: 'New Favorite'
   }, data || {}));
   const favorites = this.get('favorites').push(favorite);
+  callback(favorite);
   return this.set('favorites', Favorite.saveFavorites(favorites));
 }
 

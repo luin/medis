@@ -10,7 +10,9 @@ Object.assign(handlers, favorite);
 export default function (state, action) {
   console.log(`* ACTION ${action.type}`);
   if (handlers[action.type]) {
-    return handlers[action.type].call(state, action.data);
+    return handlers[action.type].call(state, action.data, action.callback || noop);
   }
   return state;
 }
+
+function noop() {}
