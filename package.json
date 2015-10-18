@@ -14,13 +14,15 @@
     "jstree": "^3.2.1",
     "lodash": "^3.10.1",
     "react": "^0.14.0",
+    "react-desktop": "^0.1.31",
     "react-dom": "^0.14.0",
     "react-draggable": "^0.8.2",
     "react-draggable-tab": "^0.3.3",
     "react-redux": "^3.1.0",
     "redux": "^3.0.2",
     "reselect": "^2.0.0",
-    "sortablejs": "^1.4.1"
+    "sortablejs": "^1.4.1",
+    "ssh2": "^0.4.11"
   },
   "devDependencies": {
     "babel-core": "^5.8.25",

@@ -17,7 +17,7 @@ class WindowManager extends EventEmitter {
   }
 
   create() {
-    const newWindow = new BrowserWindow({ width: 800, height: 600, 'title-bar-style': 'hidden' });
+    const newWindow = new BrowserWindow({ width: 800, height: 600 });
     newWindow.loadUrl(`file://${__dirname}/../index.html`);
 
     this._register(newWindow);

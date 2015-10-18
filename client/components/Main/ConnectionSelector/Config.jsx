@@ -4,11 +4,25 @@ import React from 'react';
 import store from '../../../store';
 import actions from '../../../actions';
 
+import {
+  Window,
+  TitleBar,
+  PushButton,
+  TextField,
+  Toolbar,
+  Box,
+  SegmentedControl,
+  IndeterminateCircularProgressIndicator,
+  Form,
+  Label
+} from 'react-desktop';
+
 class Config extends React.Component {
   constructor() {
     super();
     this.state = {
-      favorite: null
+      favorite: null,
+      selectedTab: 'login'
     };
   }
 
@@ -26,7 +40,38 @@ class Config extends React.Component {
       <button onClick={() =>
         store.dispatch(actions('connect'))
       }>Connect</button>
-    </div>;
+    <Box>
+      <SegmentedControl>
+        <SegmentedControl.Item
+          title="Login"
+          selected={this.state.selectedTab === 'login'}
+          onPress={() => {
+            this.setState({ selectedTab: 'login' });
+          } }
+          >
+          <Form onSubmit={() => {
+            alert('submit');
+          }}>
+            <Label color="red">Error</Label>
+
+            <Form.Row>
+              <Label>Username</Label>
+              <TextField defaultValue="" placeholder="Username"/>
+            </Form.Row>
+
+            <Form.Row>
+              <PushButton onPress={() => {
+                alert('cancel');
+              }}>Cancel</PushButton>
+              <PushButton onPress="submit" color="blue">Submit</PushButton>
+
+              <IndeterminateCircularProgressIndicator visible absolute/>
+            </Form.Row>
+          </Form>
+        </SegmentedControl.Item>
+      </SegmentedControl>
+    </Box>
+  </div>;
   }
 }
 

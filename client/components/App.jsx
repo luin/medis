@@ -3,7 +3,6 @@
 import React from 'react';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
-import TitleBar from './TitleBar';
 import InstanceTabs from './InstanceTabs';
 import Main from './Main';
 
@@ -16,7 +15,6 @@ class App extends React.Component {
     const { instances, activeInstance, favorites } = this.props;
 
     return <div className="window">
-      <TitleBar />
       <InstanceTabs
         instances={instances}
         activeInstanceKey={activeInstance.get('key')}
