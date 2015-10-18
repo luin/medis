@@ -14,3 +14,15 @@
 .tab-group {
   background: #b3b1b3;
 }
+
+.nav-group-item:active {
+  background-color: transparent !important;
+}
+
+.nav-group-item.sortable-ghost {
+  opacity: 0;
+}
+
+.nav-group-item.active:active {
+  background-color: #dcdfe1 !important;
+}
