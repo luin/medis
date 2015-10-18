@@ -7,5 +7,5 @@ export default function (item) {
     ids[item] = 0;
   }
 
-  return `${item}-${++ids[item]}`;
+  return `${item}-${++ids[item] + (Math.random() * 100000 | 0)}`;
 }
