@@ -3,29 +3,15 @@
 import React from 'react';
 import Favorite from './Favorite';
 import Config from './Config';
-import Immutable from 'immutable';
 
 class ConnectionSelector extends React.Component {
   constructor() {
     super();
-    this.state = {
-      favorite: null,
-      favoriteOverrides: Immutable.Map()
-    };
-  }
-
-  getOverride() {
-    if (this.state.favorite) {
-      return this.state.favoriteOverrides.get(this.state.favorite.get('key'));
-    }
+    this.state = { favorite: null };
   }
 
   handleSelectFavorite(favorite) {
     this.setState({ favorite });
-  }
-
-  handleStoreOverride(key, data) {
-    this.state.favoriteOverrides.set(key, data);
   }
 
   render() {
@@ -42,8 +28,6 @@ class ConnectionSelector extends React.Component {
       <div className="pane">
         <Config
           favorite={this.state.favorite}
-          override={this.getOverride()}
-          onStoreOverride={this.handleStoreOverride.bind(this)}
         />
       </div>
     </div>;
