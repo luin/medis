@@ -21,9 +21,6 @@ class ConnectionSelector extends React.Component {
           favorites={this.props.favorites}
           onSelect={this.handleSelectFavorite.bind(this)}
         />
-        <footer className="toolbar toolbar-footer">
-          <h1 className="title">Footer</h1>
-        </footer>
       </aside>
       <div className="pane">
         <Config

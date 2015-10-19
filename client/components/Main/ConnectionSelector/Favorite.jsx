@@ -48,46 +48,59 @@ class Favorite extends React.Component {
 
   onClick(index, evt) {
     evt.preventDefault();
-    this.select(index);
+    this.selectIndex(index);
   }
 
-  select(index) {
-    if (index === -1) {
-      this.setState({ activeKey: null });
-      this.props.onSelect(null);
-      return;
-    }
-    const selectedFavorite = this.props.favorites.get(index);
-    this.setState({ activeKey: selectedFavorite.get('key') });
-    this.props.onSelect(selectedFavorite);
+  selectIndex(index) {
+    this.select(index === -1 ? null : this.props.favorites.get(index));
+  }
+
+  select(favorite) {
+    this.setState({ activeKey: favorite ? favorite.get('key') : null });
+    this.props.onSelect(favorite);
   }
 
   render() {
-    return <nav className="nav-group">
-      <h5 className="nav-group-title"></h5>
-      <a
-        className={'nav-group-item' + (this.state.activeKey ? '' : ' active')}
-        onClick={this.onClick.bind(this, -1)}
-      >
-        <span className="icon icon-flash"></span>
-        QUICK CONNECT
-      </a>
-      <h5 className="nav-group-title" onClick={store.dispatch.bind(null, actions('addFavorite'))}>FAVORITES</h5>
-      <div ref="sortable" key={this.sortableKey}>
-      {
-        this.props.favorites.map((favorite, index) => {
-          return <a
-            key={favorite.get('key')}
-            className={'nav-group-item' + (favorite.get('key') === this.state.activeKey ? ' active' : '')}
-            onClick={this.onClick.bind(this, index)}
-          >
-            <span className="icon icon-home"></span>
-            <span>{favorite.get('key')}</span>
-          </a>;
-        })
-      }
-    </div>
-    </nav>;
+    return <div style={ { flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'hidden' } }>
+      <nav className="nav-group">
+        <h5 className="nav-group-title"></h5>
+        <a className={'nav-group-item' + (this.state.activeKey ? '' : ' active')} onClick={this.onClick.bind(this, -1)}>
+          <span className="icon icon-flash"></span>
+          QUICK CONNECT
+        </a>
+        <h5 className="nav-group-title">FAVORITES</h5>
+        <div ref="sortable" key={this.sortableKey}>{
+          this.props.favorites.map((favorite, index) => {
+            return <a
+              key={favorite.get('key')}
+              className={'nav-group-item' + (favorite.get('key') === this.state.activeKey ? ' active' : '')}
+              onClick={this.onClick.bind(this, index)}
+            >
+              <span className="icon icon-home"></span>
+              <span>{favorite.get('name')}</span>
+            </a>;
+          })
+        }</div>
+      </nav>
+      <footer className="toolbar toolbar-footer">
+        <button onClick={
+          store.dispatch.bind(null, actions('addFavorite', favorite => {
+            this.select(favorite);
+          }))
+        }>+</button>
+        <button onClick={
+          () => {
+            const key = this.state.activeKey;
+            if (!key) {
+              return;
+            }
+            const index = this.props.favorites.findIndex(favorite => key === favorite.get('key'));
+            store.dispatch(actions('removeFavorite', { key }));
+            this.selectIndex(index - 1);
+          }
+        }>-</button>
+      </footer>
+    </div>;
   }
 
   componentWillUnmount() {
