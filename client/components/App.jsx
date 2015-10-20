@@ -12,7 +12,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { instances, activeInstance, favorites } = this.props;
+    const { instances, activeInstance, favorites, patternStore } = this.props;
 
     return <div className="window">
       <InstanceTabs
@@ -23,6 +23,7 @@ class App extends React.Component {
         instances={instances}
         activeInstanceKey={activeInstance.get('key')}
         favorites={favorites}
+        patternStore={patternStore}
       />
     </div>;
   }
@@ -32,12 +33,14 @@ const selector = createSelector(
   state => state.get('instances'),
   state => state.get('activeInstanceKey'),
   state => state.get('favorites'),
-  (instances, activeInstanceKey, favorites) => {
+  state => state.get('patternStore'),
+  (instances, activeInstanceKey, favorites, patternStore) => {
     const activeInstance = instances.find(instance => instance.get('key') === activeInstanceKey);
     return {
       instances,
       activeInstance,
-      favorites
+      favorites,
+      patternStore
     };
   }
 );
