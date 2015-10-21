@@ -23,12 +23,17 @@ class Database extends React.Component {
     });
   }
 
+  handleSelectPattern() {
+    console.log(arguments);
+  }
+
   render() {
     return <div className="pane-group">
       <aside className="pane pane-sm sidebar">
         <KeySelector
-          patterns={this.props.keypatterns}
-          onSelect={this.handleSelectFavorite.bind(this)}
+          patterns={this.props.patterns}
+          connectionKey={this.props.connectionKey}
+          onSelect={this.handleSelectPattern.bind(this)}
         />
       </aside>
       <aside className="pane pane-sm sidebar">

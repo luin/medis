@@ -3,10 +3,11 @@
 import React from 'react';
 import ConnectionSelector from './ConnectionSelector';
 import Database from './Database';
+import Immutable from 'immutable';
 
 class Main extends React.Component {
   render() {
-    const { instances, activeInstanceKey, favorites, keyPatternStore } = this.props;
+    const { instances, activeInstanceKey, favorites, patternStore } = this.props;
     const contents = instances.map(instance => {
       return <div
         key={instance.get('key')}
@@ -15,7 +16,8 @@ class Main extends React.Component {
           instance.get('redis') ?
             <Database
               redis={instance.get('redis')}
-              patterns={keyPatternStore.get(instance.get('connectionKey'))}
+              patterns={patternStore.get(instance.get('connectionKey')) || Immutable.List()}
+              connectionKey={instance.get('connectionKey')}
             /> :
             <ConnectionSelector
               key={instance.get('key')}
