@@ -4,14 +4,11 @@ import * as PatternStore from '../backend/patternStore.js';
 import Immutable from 'immutable';
 
 export function addPattern({ store, data }, callback) {
-  console.log('====');
   const pattern = Immutable.Map(Object.assign({}, {
     key: `pattern-${Math.round(Math.random() * 100000)}`,
     value: '*'
   }, data || {}));
-  console.log('pattern', pattern);
   const patterns = (this.get('patternStore').get(store) || Immutable.List()).push(pattern);
-  console.log('patterns', patterns);
   callback(pattern);
   return this.setIn(['patternStore', store], PatternStore.savePatternStore(store, patterns));
 }

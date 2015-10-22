@@ -55,7 +55,7 @@ export function connect() {
   return this
     .update('instances', list => list.map(instance => {
       if (instance.get('key') === activeInstanceKey) {
-        return instance.set('redis', redis);
+        return instance.set('connectionKey', 'localhost:6379').set('redis', redis);
       }
       return instance;
     }));

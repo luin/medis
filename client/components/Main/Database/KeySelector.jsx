@@ -63,14 +63,14 @@ class KeySelector extends React.Component {
   }
 
   render() {
+    console.log('render', this.props.patterns.toJS());
     return <div style={ { flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'hidden' } }>
       <nav className="nav-group">
         <h5 className="nav-group-title"></h5>
         <a className={'nav-group-item' + (this.state.activeKey ? '' : ' active')} onClick={this.onClick.bind(this, -1)}>
-          <span className="icon icon-flash"></span>
           ALL KEYS
         </a>
-        <h5 className="nav-group-title">PATTERNS</h5>
+        <h5 className="nav-group-title">FILTERS</h5>
         <div ref="sortable" key={this.sortableKey}>{
           this.props.patterns.map((patterns, index) => {
             return <a
@@ -78,10 +78,10 @@ class KeySelector extends React.Component {
               className={'nav-group-item' + (patterns.get('key') === this.state.activeKey ? ' active' : '')}
               onClick={this.onClick.bind(this, index)}
             >
-              <span className="icon icon-home"></span>
-              <span>{patterns.get('name')}</span>
+              <span className="icon icon-tag"></span>
+              <span>{patterns.get('value')}</span>
             </a>;
-          })
+          }).toJS()
         }</div>
       </nav>
       <footer className="toolbar toolbar-footer">

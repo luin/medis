@@ -7,8 +7,8 @@ export function getPatternStore() {
 }
 
 export function savePatternStore(store, patterns) {
-  const patternStore = getPatternStore();
-  patternStore.set(store, patterns);
+  console.log('go', store, patterns.toJSON());
+  const patternStore = getPatternStore().set(store, patterns);
   localStorage.setItem('patternStore', JSON.stringify(patternStore.toJSON()));
-  return patternStore;
+  return patterns;
 }
