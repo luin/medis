@@ -31,3 +31,27 @@ li {
     height: 26px;
   }
 }
+
+.public_fixedDataTableCell_cellContent {
+  line-height: 1em;
+}
+
+.pattern-input {
+  position: relative;
+  padding: 6px;
+  .icon {
+    position: absolute;
+    left: 14px;
+    top: 12px;
+    opacity: 0.5;
+  }
+
+  input {
+    padding-left: 22px;
+  }
+}
+
+.public_fixedDataTable_main {
+  border-right: none;
+  border-left-color: transparent;
+}
