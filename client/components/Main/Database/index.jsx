@@ -65,6 +65,8 @@ class Database extends React.Component {
             />
           </Table>
         </div>
+        <footer className="toolbar toolbar-footer">
+        </footer>
       </div>
       <div className="pane ">
       </div>
