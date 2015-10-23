@@ -3,6 +3,7 @@
 import React from 'react';
 import store from '../../../store';
 import action from '../../../actions';
+import KeySelector from './KeySelector';
 
 class Database extends React.Component {
   constructor() {
@@ -12,6 +13,7 @@ class Database extends React.Component {
 
   componentDidMount() {
     const redis = this.props.redis;
+    console.log(redis);
 
     redis.scan('0', 'MATCH', 'fh:*', 'COUNT', '50', (err, res) => {
       console.log(err, res);
@@ -23,6 +25,12 @@ class Database extends React.Component {
 
   render() {
     return <div className="pane-group">
+      <aside className="pane pane-sm sidebar">
+        <KeySelector
+          patterns={this.props.keypatterns}
+          onSelect={this.handleSelectFavorite.bind(this)}
+        />
+      </aside>
       <aside className="pane pane-sm sidebar">
         {
           this.state.keys.map(key => {

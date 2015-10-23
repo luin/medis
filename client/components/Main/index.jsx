@@ -6,7 +6,7 @@ import Database from './Database';
 
 class Main extends React.Component {
   render() {
-    const { instances, activeInstanceKey } = this.props;
+    const { instances, activeInstanceKey, favorites, keyPatternStore } = this.props;
     const contents = instances.map(instance => {
       return <div
         key={instance.get('key')}
@@ -15,11 +15,12 @@ class Main extends React.Component {
           instance.get('redis') ?
             <Database
               redis={instance.get('redis')}
+              patterns={keyPatternStore.get(instance.get('connectionKey'))}
             /> :
             <ConnectionSelector
               key={instance.get('key')}
               title={instance.get('host')}
-              favorites={this.props.favorites}
+              favorites={favorites}
             />
         }
       </div>;
