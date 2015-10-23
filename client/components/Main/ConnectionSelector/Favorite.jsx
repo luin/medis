@@ -5,14 +5,12 @@ import store from '../../../store';
 window.store = store;
 import actions from '../../../actions';
 window.actions = actions;
-import Immutable from 'immutable';
 import Sortable from 'sortablejs';
 
 class Favorite extends React.Component {
   constructor() {
     super();
     this.state = {
-      editable: Immutable.List(),
       activeKey: null
     };
     this._updateSortableKey();

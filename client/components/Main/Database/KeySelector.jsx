@@ -5,14 +5,12 @@ import store from '../../../store';
 window.store = store;
 import actions from '../../../actions';
 window.actions = actions;
-import Immutable from 'immutable';
 import Sortable from 'sortablejs';
 
 class KeySelector extends React.Component {
   constructor() {
     super();
     this.state = {
-      editable: Immutable.List(),
       activeKey: null
     };
     this._updateSortableKey();
@@ -33,7 +31,11 @@ class KeySelector extends React.Component {
       },
       onUpdate: evt => {
         this._updateSortableKey();
-        store.dispatch(actions('reorderKeySelectors', { from: evt.oldIndex, to: evt.newIndex }));
+        store.dispatch(actions('reorderPatternStores', {
+          store: this.props.connectionKey,
+          from: evt.oldIndex,
+          to: evt.newIndex
+        }));
       }
     });
   }
@@ -52,12 +54,12 @@ class KeySelector extends React.Component {
   }
 
   selectIndex(index) {
-    this.select(index === -1 ? null : this.props.favorites.get(index));
+    this.select(index === -1 ? null : this.props.patterns.get(index));
   }
 
-  select(favorite) {
-    this.setState({ activeKey: favorite ? favorite.get('key') : null });
-    this.props.onSelect(favorite);
+  select(patterns) {
+    this.setState({ activeKey: patterns ? patterns.get('key') : null });
+    this.props.onSelect(patterns);
   }
 
   render() {
@@ -66,26 +68,26 @@ class KeySelector extends React.Component {
         <h5 className="nav-group-title"></h5>
         <a className={'nav-group-item' + (this.state.activeKey ? '' : ' active')} onClick={this.onClick.bind(this, -1)}>
           <span className="icon icon-flash"></span>
-          QUICK CONNECT
+          ALL KEYS
         </a>
-        <h5 className="nav-group-title">FAVORITES</h5>
+        <h5 className="nav-group-title">PATTERNS</h5>
         <div ref="sortable" key={this.sortableKey}>{
-          this.props.favorites.map((favorite, index) => {
+          this.props.patterns.map((patterns, index) => {
             return <a
-              key={favorite.get('key')}
-              className={'nav-group-item' + (favorite.get('key') === this.state.activeKey ? ' active' : '')}
+              key={patterns.get('key')}
+              className={'nav-group-item' + (patterns.get('key') === this.state.activeKey ? ' active' : '')}
               onClick={this.onClick.bind(this, index)}
             >
               <span className="icon icon-home"></span>
-              <span>{favorite.get('name')}</span>
+              <span>{patterns.get('name')}</span>
             </a>;
           })
         }</div>
       </nav>
       <footer className="toolbar toolbar-footer">
         <button onClick={
-          store.dispatch.bind(null, actions('addKeySelector', favorite => {
-            this.select(favorite);
+          store.dispatch.bind(null, actions('addPattern', { store: this.props.connectionKey }, pattern => {
+            this.select(pattern);
           }))
         }>+</button>
         <button onClick={
@@ -94,8 +96,8 @@ class KeySelector extends React.Component {
             if (!key) {
               return;
             }
-            const index = this.props.favorites.findIndex(favorite => key === favorite.get('key'));
-            store.dispatch(actions('removeKeySelector', { key }));
+            const index = this.props.patterns.findIndex(patterns => key === patterns.get('key'));
+            store.dispatch(actions('removePatternStore', { key, store: this.props.connectionKey }));
             this.selectIndex(index - 1);
           }
         }>-</button>

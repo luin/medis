@@ -1,35 +1,32 @@
 'use strict';
 
-import * as Favorite from '../backend/favorite';
+import * as PatternStore from '../backend/patternStore.js';
 import Immutable from 'immutable';
 
-export function addFavorite(data, callback) {
-  const favorite = Immutable.Map(Object.assign({}, {
-    key: `favorite-${Math.round(Math.random() * 100000)}`,
-    name: 'New Favorite'
+export function addPattern({ store, data }, callback) {
+  console.log('====');
+  const pattern = Immutable.Map(Object.assign({}, {
+    key: `pattern-${Math.round(Math.random() * 100000)}`,
+    value: '*'
   }, data || {}));
-  const favorites = this.get('favorites').push(favorite);
-  callback(favorite);
-  return this.set('favorites', Favorite.saveFavorites(favorites));
+  console.log('pattern', pattern);
+  const patterns = (this.get('patternStore').get(store) || Immutable.List()).push(pattern);
+  console.log('patterns', patterns);
+  callback(pattern);
+  return this.setIn(['patternStore', store], PatternStore.savePatternStore(store, patterns));
 }
 
-export function removeFavorite({ key }) {
-  const favorites = this.get('favorites').filterNot(item => item.get('key') === key);
-  return this.set('favorites', Favorite.saveFavorites(favorites));
-}
-
-export function updateFavorite({ index, name }) {
-  return this.update('favorites', favorites => {
-    const updatedFavorites = favorites.update(index, item => item.set('name', name));
-    Favorite.saveFavorites(updatedFavorites);
-    return updatedFavorites;
+export function removePatternStore({ store, key }) {
+  return this.updateIn(['patternStore', store], patterns => {
+    const updatedPatterns = patterns.filterNot(item => item.get('key') === key);
+    return PatternStore.savePatternStore(store, updatedPatterns);
   });
 }
 
-export function reorderFavorites({ from, to }) {
-  const favorites = Favorite.getFavorites();
-  const source = favorites.get(from);
-  const updatedFavorites = favorites.splice(from, 1).splice(to, 0, source);
-  Favorite.saveFavorites(updatedFavorites);
-  return this.set('favorites', updatedFavorites);
+export function reorderPatternStores({ store, from, to }) {
+  return this.updateIn(['patternStore', store], patterns => {
+    const source = patterns.get(from);
+    const updatedPatterns = patterns.splice(from, 1).splice(to, 0, source);
+    return PatternStore.savePatternStore(store, updatedPatterns);
+  });
 }

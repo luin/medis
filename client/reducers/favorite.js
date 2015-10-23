@@ -18,18 +18,18 @@ export function removeFavorite({ key }) {
   return this.set('favorites', Favorite.saveFavorites(favorites));
 }
 
-export function updateFavorite({ index, name }) {
+export function updateFavorite({ index, data }) {
   return this.update('favorites', favorites => {
-    const updatedFavorites = favorites.update(index, item => item.set('name', name));
+    const updatedFavorites = favorites.update(index, item => item.merge(data));
     Favorite.saveFavorites(updatedFavorites);
     return updatedFavorites;
   });
 }
 
 export function reorderFavorites({ from, to }) {
-  const favorites = Favorite.getFavorites();
-  const source = favorites.get(from);
-  const updatedFavorites = favorites.splice(from, 1).splice(to, 0, source);
-  Favorite.saveFavorites(updatedFavorites);
-  return this.set('favorites', updatedFavorites);
+  return this.update('favorites', favorites => {
+    const source = favorites.get(from);
+    const updatedFavorites = favorites.splice(from, 1).splice(to, 0, source);
+    return Favorite.saveFavorites(updatedFavorites);
+  });
 }
