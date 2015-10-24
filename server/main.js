@@ -10,6 +10,10 @@ ipc.on('create pattern-manager', function (event, arg) {
   windowManager.create('pattern-manager', arg);
 });
 
+ipc.on('dispatch', function (event, action, arg) {
+  windowManager.dispatch(action, arg);
+});
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {

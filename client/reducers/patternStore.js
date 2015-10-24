@@ -35,3 +35,7 @@ export function reorderPatternStores({ store, from, to }) {
     return PatternStore.savePatternStore(store, updatedPatterns);
   });
 }
+
+export function reloadPatternStore() {
+  return this.set('patternStore', PatternStore.getPatternStore());
+}

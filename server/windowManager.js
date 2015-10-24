@@ -51,6 +51,15 @@ class WindowManager extends EventEmitter {
     });
     this.emit('focus');
   }
+
+  dispatch(action, args) {
+    console.log('dispatching', action, args);
+    this.windows.forEach(win => {
+      if (win && win.webContents) {
+        win.webContents.send('action', action, args);
+      }
+    });
+  }
 }
 
 module.exports = new WindowManager();
