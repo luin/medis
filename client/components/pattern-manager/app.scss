@@ -1,0 +1,48 @@
+.patternList {
+  background: #fff;
+  border: 1px solid #c5c5c5;
+  width: 210px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  height: 236px;
+
+  footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 208px;
+    height: 19px;
+    background: #fafafa;
+    border-top: 1px solid #b4b4b4;
+    button {
+      width: 23px;
+      height: 18px;
+      border-radius: 0;
+      padding: 0;
+      border-left: 1px solid #b4b4b4;
+      border-right: 1px solid #b4b4b4;
+      margin-left: -1px;
+      border-top: 0;
+      border-bottom: 0;
+      background: #fafafa;
+    }
+  }
+}
+
+.nav-group-item {
+  padding: 0 5px;
+
+  &.is-active {
+    background: #116cd6;
+    color: #fff;
+  }
+}
+
+.form {
+  position: absolute !important;
+  right: 20px;
+  top: 20px;
+  width: 328px;
+  height: 236px;
+}

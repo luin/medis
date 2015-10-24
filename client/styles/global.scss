@@ -39,10 +39,15 @@ ul {
   }
   .icon-down-open {
     position: absolute;
-    right: 14px;
-    top: 12px;
+    right: 0;
+    top: 0;
     opacity: 0.5;
     transition: 0.1s;
+    display: inline-block;
+    width: 40px;
+    text-align: center;
+    height: 42px;
+    line-height: 42px;
 
     &.is-active {
       transform: rotate(180deg);
@@ -154,7 +159,7 @@ ul {
   }
 
   ul {
-    height: 300px;
+    height: 100%;
     overflow: auto;
   }
 
@@ -168,5 +173,12 @@ ul {
       background: #116cd6;
       color: #fff;
     }
+  }
+}
+.manage-pattern-button {
+  color: #116cd6;
+
+  span.icon {
+    margin-right: 5px;
   }
 }

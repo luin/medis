@@ -1,9 +1,12 @@
 'use strict';
 
 module.exports = {
-  entry: './client/index.jsx',
+  entry: {
+    main: './client/main.jsx',
+    'pattern-manager': './client/pattern-manager.jsx'
+  },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     publicPath: 'http://localhost:8090/assets'
   },
   module: {

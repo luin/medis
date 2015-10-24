@@ -4,6 +4,11 @@ const app = require('app');
 const windowManager = require('./windowManager');
 const menu = require('./menu');
 const Menu = require('menu');
+const ipc = require('ipc');
+
+ipc.on('create pattern-manager', function (event, arg) {
+  windowManager.create('pattern-manager', arg);
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {

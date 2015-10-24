@@ -16,9 +16,25 @@ class WindowManager extends EventEmitter {
     return BrowserWindow.getFocusedWindow() || this.create();
   }
 
-  create() {
-    const newWindow = new BrowserWindow({ width: 800, height: 600 });
-    newWindow.loadUrl(`file://${__dirname}/../index.html`);
+  create(type, arg) {
+    if (!type) {
+      type = 'main';
+    }
+    const option = {};
+    if (type === 'main') {
+      option.width = 800;
+      option.height = 600;
+      option.show = false;
+    } else if (type === 'pattern-manager') {
+      option.width = 600;
+      option.height = 300;
+      option.title = 'Manage Patterns';
+      option.resizable = false;
+      option.fullscreen = false;
+    }
+
+    const newWindow = new BrowserWindow(option);
+    newWindow.loadUrl(`file://${__dirname}/windows/${type}.html${arg ? '?arg=' + arg : ''}`);
 
     this._register(newWindow);
 
