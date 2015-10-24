@@ -9,10 +9,12 @@ import remote from 'remote';
 
 require('./styles/global.scss');
 
-require('ipc').on('action', function (type) {
+require('ipc').on('action', function (type, data) {
   if (type === 'delInstance') {
     remote.getCurrentWindow().close();
+    return;
   }
+  store.dispatch({ type, data });
 });
 
 ReactDOM.render(
