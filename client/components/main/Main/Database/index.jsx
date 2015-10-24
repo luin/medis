@@ -80,18 +80,11 @@ class Database extends React.Component {
           ></span>
           <div className="js-pattern-dropdown pattern-dropdown">
             <ul>
-              <li>users:*</li>
-              <li>fh:*</li>
-              <li>file-history:*</li>
-              <li>logs:*</li>
-              <li>users:*</li>
-              <li>users:*</li>
-              <li>fh:*</li>
-              <li>file-history:*</li>
-              <li>logs:*</li>
-              <li>fh:*</li>
-              <li>file-history:*</li>
-              <li>logs:*</li>
+              {
+                this.props.patterns.map(pattern => {
+                  return <li>{pattern.get('name')}</li>;
+                })
+              }
               <li
                 className="manage-pattern-button"
                 onClick={() => {
