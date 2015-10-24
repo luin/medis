@@ -54,7 +54,6 @@ class Database extends React.Component {
   }
 
   render() {
-    console.log('render', this.state.patternDropdown);
     function rowGetter(rowIndex) {
       return this.state.keys[rowIndex];
     }
@@ -104,7 +103,14 @@ class Database extends React.Component {
             rowsCount={this.state.keys.length}
             width={this.state.sidebarWidth}
             height={this.state.windowHeight - 66}
-            headerHeight={30}>
+            headerHeight={30}
+            footerDataGetter={
+              () => {
+                return <p>Load more...</p>;
+              }
+            }
+            footerHeight={20}
+          >
             <Column
               label="type"
               width={50}

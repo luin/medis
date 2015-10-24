@@ -7,18 +7,6 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import actions from '../../actions';
 import Sortable from 'sortablejs';
-import {
-  Window,
-  TitleBar,
-  PushButton,
-  TextField,
-  Toolbar,
-  Box,
-  SegmentedControl,
-  IndeterminateCircularProgressIndicator,
-  Form,
-  Label
-} from 'react-desktop';
 
 require('./app.scss');
 

@@ -4,15 +4,6 @@ import React from 'react';
 import store from '../../../../store';
 import actions from '../../../../actions';
 
-import {
-  PushButton,
-  TextField,
-  Box,
-  SegmentedControl,
-  Form,
-  Label
-} from 'react-desktop';
-
 class Config extends React.Component {
   constructor() {
     super();
@@ -31,72 +22,38 @@ class Config extends React.Component {
   }
 
   render() {
-    const name = this.getProp('name');
     return <div>
-      <p>{this.getProp('key')}</p>
-    <Box style={ { width: 500, margin: '120px auto 0' } }>
-      <SegmentedControl>
-        <SegmentedControl.Item
-          title="Standard"
-          selected={this.state.selectedTab === 'standard'}
-          onPress={() => {
-            this.setState({ selectedTab: 'standard' });
-          } }
-          >
-          <Form onSubmit={() => {
-            store.dispatch(actions('connect'));
-          }}>
-            <div style={ { display: this.props.favorite ? 'block' : 'none' } }>
-              <Form.Row>
-                <Label>Name</Label>
-                <TextField defaultValue={name} value={name} placeholder="Bookmark name"/>
-              </Form.Row>
-            </div>
-            <Form.Row>
-              <Label>Redis Host</Label>
-              <TextField defaultValue="" placeholder="localhost"/>
-            </Form.Row>
-            <Form.Row>
-              <Label>Port</Label>
-              <TextField defaultValue="" placeholder="6379"/>
-            </Form.Row>
-            <Form.Row>
-              <Label>Password</Label>
-              <TextField defaultValue="" placeholder=""/>
-            </Form.Row>
-
-            <Form.Row>
-              <PushButton onPress={() => {
-              }}>Save Changes</PushButton>
-            <PushButton onPress="submit" color="blue">Save and Connect</PushButton>
-            </Form.Row>
-          </Form>
-        </SegmentedControl.Item>
-        <SegmentedControl.Item
-          title="SSH"
-          selected={this.state.selectedTab === 'ssh'}
-          onPress={() => {
-            this.setState({ selectedTab: 'ssh' });
-          } }
-          >
-          <Form onSubmit={() => {
-            store.dispatch(actions('connect'));
-          }}>
-            <Form.Row>
-              <Label>Username</Label>
-              <TextField defaultValue="" placeholder="Username"/>
-            </Form.Row>
-
-            <Form.Row>
-              <PushButton onPress={() => {
-              }}>Cancel</PushButton>
-              <PushButton onPress="submit" color="blue">Submit</PushButton>
-            </Form.Row>
-          </Form>
-        </SegmentedControl.Item>
-      </SegmentedControl>
-    </Box>
-  </div>;
+      <form onSubmit={
+        (evt) => {
+          evt.preventDefault();
+          store.dispatch(actions('connect'));
+        }
+      } className="nt-form" style={ { width: 500, margin: '60px auto 0' } }>
+        <div className="nt-form__row" style={ { display: this.props.favorite ? 'block' : 'none' } }>
+          <label htmlFor="name">Name</label>
+          <input type="text" id="name" value={this.getProp('name')} placeholder="Bookmark name" />
+        </div>
+        <div className="nt-form__row">
+          <label htmlFor="host">Redis Host</label>
+          <input type="text" id="host" value={this.getProp('host')} placeholder="localhost" />
+        </div>
+        <div className="nt-form__row">
+          <label htmlFor="port">Port</label>
+          <input type="text" id="port" value={this.getProp('port')} placeholder="6379" />
+        </div>
+        <div className="nt-form__row">
+          <label htmlFor="password">Password</label>
+          <input type="password" id="password" value={this.getProp('password')} />
+        </div>
+        <div className="nt-form__row">
+          <label htmlFor="ssh">SSH Tunnel</label>
+          <input type="checkbox" id="ssh" value={this.getProp('ssh')} />
+        </div>
+        <button onPress={() => {
+        }}>Save Changes</button>
+        <button onPress="submit" color="blue">Save and Connect</button>
+      </form>
+    </div>;
   }
 }
 
