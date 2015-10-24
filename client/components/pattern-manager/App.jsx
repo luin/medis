@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 import store from '../../store';
@@ -27,7 +28,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeKey: this.props.patterns[0] ? this.props.patterns[0].key : null
+      activeKey: this.props.patterns[0] ? this.props.patterns[0].key : null,
+      indexKey: 'init'
     };
     this._updateSortableKey();
   }
@@ -47,7 +49,7 @@ class App extends React.Component {
       },
       onUpdate: evt => {
         this._updateSortableKey();
-        store.dispatch(actions('reorderFavorites', { from: evt.oldIndex, to: evt.newIndex }));
+        store.dispatch(actions('reorderPatternStores', { store: connectionKey, from: evt.oldIndex, to: evt.newIndex }));
       }
     });
   }
@@ -62,7 +64,14 @@ class App extends React.Component {
 
   onClick(index, evt) {
     evt.preventDefault();
-    this.setState({ activeKey: this.props.patterns[index].key });
+    this.select(this.props.patterns[index]);
+  }
+
+  select(pattern) {
+    this.setState({
+      activeKey: pattern && pattern.key,
+      indexKey: 'index' + Math.round(Math.random() * 1000)
+    });
   }
 
   render() {
@@ -86,7 +95,7 @@ class App extends React.Component {
               className={'nav-group-item' + (pattern.key === this.state.activeKey ? ' is-active' : '')}
               onClick={this.onClick.bind(this, index)}
             >
-              <span>{pattern.value}</span>
+              <span>{pattern.name}</span>
             </a>;
           })
         }</div>
@@ -94,7 +103,7 @@ class App extends React.Component {
           <button
             onClick={() => {
               store.dispatch(actions('addPattern', { store: connectionKey }, pattern => {
-                this.setState({ activeKey: pattern.get('key') });
+                this.select(pattern.toJS());
               }));
             }}
           >+</button>
@@ -104,11 +113,11 @@ class App extends React.Component {
               if (activePattern) {
                 store.dispatch(actions('removePatternStore', { store: connectionKey, key: activePattern.key }));
                 if (activeIndex >= 1) {
-                  this.setState({ activeKey: this.props.patterns[activeIndex - 1].key });
+                  this.select(this.props.patterns[activeIndex - 1]);
                 } else if (this.props.patterns.length > 1) {
-                  this.setState({ activeKey: this.props.patterns[1].key });
+                  this.select(this.props.patterns[1]);
                 } else {
-                  this.setState({ activeKey: null });
+                  this.select(null);
                 }
               }
             }}
@@ -117,14 +126,31 @@ class App extends React.Component {
       </div>
       <div className="form" style={ { display: activePattern ? 'block' : 'none' } }>
         <Box>
-          <Form onSubmit={() => {}}>
+          <Form key={this.state.indexKey} onSubmit={() => {
+            const name = ReactDOM.findDOMNode(this.refs.name).value;
+            const value = ReactDOM.findDOMNode(this.refs.value).value;
+            store.dispatch(actions('updatePattern', {
+              store: connectionKey,
+              index: activeIndex,
+              data: { name, value }
+            }));
+            alert('Save Successfully');
+          }}>
             <Form.Row>
               <Label>Name</Label>
-              <TextField defaultValue={activePattern && activePattern.name} placeholder=""/>
+              <TextField
+                defaultValue={activePattern && activePattern.name}
+                placeholder=""
+                ref="name"
+              />
             </Form.Row>
             <Form.Row>
               <Label>Pattern</Label>
-              <TextField defaultValue={activePattern && activePattern.value} placeholder=""/>
+              <TextField
+                defaultValue={activePattern && activePattern.value}
+                placeholder=""
+                ref="value"
+              />
             </Form.Row>
             <Form.Row>
               <PushButton onPress="submit" color="blue">Save</PushButton>

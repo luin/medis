@@ -173,6 +173,10 @@ ul {
       background: #116cd6;
       color: #fff;
     }
+
+    &:last-child {
+      font-family: system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
+    }
   }
 }
 .manage-pattern-button {
