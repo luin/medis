@@ -17,6 +17,10 @@ require('ipc').on('action', function (type, data) {
   store.dispatch({ type, data });
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+  remote.getCurrentWindow().show();
+});
+
 ReactDOM.render(
   <Provider store={store}>
     <App />

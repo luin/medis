@@ -31,6 +31,7 @@ class WindowManager extends EventEmitter {
       option.title = 'Manage Patterns';
       option.resizable = false;
       option.fullscreen = false;
+      option.show = false;
     }
 
     const newWindow = new BrowserWindow(option);
