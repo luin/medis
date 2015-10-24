@@ -26,6 +26,10 @@
       border-top: 0;
       border-bottom: 0;
       background: #fafafa;
+
+      &.is-disabled {
+        color: #bfbfbf;
+      }
     }
   }
 }

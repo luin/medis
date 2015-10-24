@@ -33,11 +33,12 @@
     font-size: 18px;
     line-height: 19px;
     opacity: 0.8;
-    &:focus {
-      outline:0;
-    }
     &:active {
       background-color: #dcdfe1;
     }
   }
+}
+
+button:focus {
+  outline:0;
 }

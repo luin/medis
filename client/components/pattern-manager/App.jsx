@@ -68,9 +68,11 @@ class App extends React.Component {
   render() {
     const { patterns } = this.props;
     let activePattern;
+    let activeIndex;
     for (let i = 0; i < patterns.length; i++) {
       if (patterns[i].key === this.state.activeKey) {
         activePattern = patterns[i];
+        activeIndex = i;
         break;
       }
     }
@@ -89,30 +91,50 @@ class App extends React.Component {
           })
         }</div>
         <footer>
-          <button>+</button>
-          <button>-</button>
+          <button
+            onClick={() => {
+              store.dispatch(actions('addPattern', { store: connectionKey }, pattern => {
+                this.setState({ activeKey: pattern.get('key') });
+              }));
+            }}
+          >+</button>
+          <button
+            className={activePattern ? '' : 'is-disabled'}
+            onClick={() => {
+              if (activePattern) {
+                store.dispatch(actions('removePatternStore', { store: connectionKey, key: activePattern.key }));
+                if (activeIndex >= 1) {
+                  this.setState({ activeKey: this.props.patterns[activeIndex - 1].key });
+                } else if (this.props.patterns.length > 1) {
+                  this.setState({ activeKey: this.props.patterns[1].key });
+                } else {
+                  this.setState({ activeKey: null });
+                }
+              }
+            }}
+          >-</button>
         </footer>
       </div>
-      <Box className="form">
-        <Form onSubmit={() => { alert('submit'); }}>
-          <Form.Row>
-            <Label>Name</Label>
-            <TextField defaultValue={activePattern && activePattern.name} placeholder=""/>
-          </Form.Row>
-          <Form.Row>
-            <Label>Pattern</Label>
-            <TextField defaultValue={activePattern && activePattern.value} placeholder=""/>
-          </Form.Row>
-          <Form.Row>
-            <PushButton onPress="submit" color="blue">Save</PushButton>
-          </Form.Row>
-        </Form>
-      </Box>
+      <div className="form" style={ { display: activePattern ? 'block' : 'none' } }>
+        <Box>
+          <Form onSubmit={() => {}}>
+            <Form.Row>
+              <Label>Name</Label>
+              <TextField defaultValue={activePattern && activePattern.name} placeholder=""/>
+            </Form.Row>
+            <Form.Row>
+              <Label>Pattern</Label>
+              <TextField defaultValue={activePattern && activePattern.value} placeholder=""/>
+            </Form.Row>
+            <Form.Row>
+              <PushButton onPress="submit" color="blue">Save</PushButton>
+            </Form.Row>
+          </Form>
+        </Box>
+      </div>
     </div>;
   }
 }
-
-console.log(location.href);
 
 const selector = createSelector(
   state => state.get('patternStore'),
