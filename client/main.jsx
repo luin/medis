@@ -3,16 +3,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import App from './components/App';
+import App from './components/main/App';
 import store from './store';
-import Redis from 'ioredis';
-const redis = new Redis();
-window.redis = redis;
+import remote from 'remote';
 
 require('./styles/global.scss');
 
 require('ipc').on('action', function (type, data) {
   store.dispatch({ type, data });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  remote.getCurrentWindow().show();
 });
 
 ReactDOM.render(

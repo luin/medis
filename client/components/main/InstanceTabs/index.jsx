@@ -1,8 +1,8 @@
 'use strict';
 
 import React from 'react';
-import action from '../../actions';
-import store from '../../store';
+import action from '../../../actions';
+import store from '../../../store';
 import { Tab, Tabs } from './draggable-tab';
 
 class InstanceTabs extends React.Component {

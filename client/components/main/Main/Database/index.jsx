@@ -1,9 +1,10 @@
 'use strict';
 
+import ipc from 'ipc';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import store from '../../../store';
-import action from '../../../actions';
+import store from '../../../../store';
+import action from '../../../../actions';
 // import KeySelector from './KeySelector';
 import { Table, Column } from 'fixed-data-table';
 import SplitPane from 'react-split-pane';
@@ -44,6 +45,8 @@ class Database extends React.Component {
       windowWidth: node.clientWidth,
       windowHeight: node.clientHeight
     });
+
+    $('.js-pattern-dropdown.pattern-dropdown').height(node.clientHeight - 66);
   }
 
   handleSelectPattern() {
@@ -70,10 +73,12 @@ class Database extends React.Component {
           <span className="icon icon-search"></span>
           <input type="search" className="form-control" placeholder="Key name or patterns" />
           <span
-            className={`icon icon-down-open${this.state.patternDropdown ? ' is-active' : ''}`}
-            onClick={() => this.setState({ patternDropdown: !this.state.patternDropdown }) }
+            className="js-pattern-dropdown icon icon-down-open"
+            onClick={() => {
+              $('.js-pattern-dropdown').toggleClass('is-active');
+            }}
           ></span>
-          <div className={`pattern-dropdown${this.state.patternDropdown ? ' is-active' : ''}`}>
+          <div className="js-pattern-dropdown pattern-dropdown">
             <ul>
               <li>users:*</li>
               <li>fh:*</li>
@@ -87,6 +92,15 @@ class Database extends React.Component {
               <li>fh:*</li>
               <li>file-history:*</li>
               <li>logs:*</li>
+              <li
+                className="manage-pattern-button"
+                onClick={() => {
+                  ipc.send('create pattern-manager', this.props.connectionKey);
+                }}
+              >
+                <span className="icon icon-cog"></span>
+                Manage Patterns...
+              </li>
             </ul>
           </div>
         </div>

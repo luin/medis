@@ -1,8 +1,8 @@
 'use strict';
 
 import React from 'react';
-import store from '../../../store';
-import actions from '../../../actions';
+import store from '../../../../store';
+import actions from '../../../../actions';
 
 import {
   PushButton,
