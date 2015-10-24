@@ -37,6 +37,15 @@
 .nav-group-item {
   padding: 0 5px;
 
+  &.sortable-chosen {
+    color: #000;
+
+    &.is-active {
+      background: #116cd6 !important;
+      color: #fff;
+    }
+  }
+
   &.is-active {
     background: #116cd6;
     color: #fff;
