@@ -108,6 +108,10 @@ class Config extends React.Component {
               }}
             ></button>
           </div>
+          <div className="nt-form-row" style={{ display: this.getProp('sshKey') && this.getProp('sshKey').indexOf('ENCRYPTED') > -1 ? 'block' : 'none' }}>
+            <label htmlFor="sshKeyPassphrase">SSH Key Passphrase:</label>
+            <input type="password" id="sshKeyPassphrase" onChange={this.handleChange.bind(this, 'sshKeyPassphrase')} value={this.getProp('sshKeyPassphrase')} />
+          </div>
           <div className="nt-form-row">
             <label htmlFor="sshPort">SSH Port:</label>
             <input type="text" id="sshPort" onChange={this.handleChange.bind(this, 'sshPort')} value={this.getProp('sshPort')} />
@@ -119,8 +123,10 @@ class Config extends React.Component {
           this.save();
         }}>Save Changes</button>
         <button className="nt-button nt-button--primary" onClick={() => {
+          const data = this.state.data;
+          const connection = this.props.favorite ? this.props.favorite.merge(data).toJS() : data.toJS();
           this.save();
-          store.dispatch(actions('connect'));
+          store.dispatch(actions('connect', connection));
         }}>{ this.state.changed ? 'Save and Connect' : 'Connect' }</button>
       </div>
     </div>;

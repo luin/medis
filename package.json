@@ -23,7 +23,7 @@
     "redux": "^3.0.2",
     "reselect": "^2.0.0",
     "sortablejs": "^1.4.1",
-    "ssh2": "^0.4.11",
+    "ssh2": "^0.4.12",
     "tunnel-ssh": "^2.0.0"
   },
   "devDependencies": {
