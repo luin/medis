@@ -26,7 +26,6 @@ class Database extends React.Component {
       Promise.all(res[1].map(key => {
         return Promise.all([key, redis.type(key)]);
       })).then(keys => {
-        console.log(keys);
         this.setState({
           keys
         });
@@ -50,7 +49,6 @@ class Database extends React.Component {
   }
 
   handleSelectPattern() {
-    console.log(arguments);
   }
 
   render() {

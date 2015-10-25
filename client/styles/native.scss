@@ -1,4 +1,4 @@
-.nt-form {
+.nt-box {
   box-sizing: border-box;
   position: relative;
   cursor: default;
@@ -13,7 +13,7 @@
   padding: 23px 18px 22px 18px;
 }
 
-.nt-form__row {
+.nt-form-row {
   overflow: hidden;
   padding: 5px 0;
   $label-width: 140px;
@@ -27,11 +27,6 @@
   }
   input[type="text"], input[type="password"] {
     width: 250px;
-  }
-}
-
-.nt-form {
-  input[type="text"], input[type="password"] {
     -webkit-user-select: text;
     border-width: 1px;
     border-style: solid;
@@ -90,6 +85,11 @@
     border-right-color: #125eed;
     color: rgba(255, 255, 255, .9);
   }
+
+  margin-right: 10px;
+  &:last-child {
+    margin-right: 0;
+  }
 }
 
 .nt-button--primary {
@@ -107,5 +107,13 @@
     border-left-color: #125eed;
     border-right-color: #125eed;
     color: rgba(255, 255, 255, .9);
+  }
+}
+
+.nt-button-group {
+  text-align: center;
+
+  .nt-button {
+    display: inline-block;
   }
 }

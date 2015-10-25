@@ -18,11 +18,15 @@ export function removeFavorite({ key }) {
   return this.set('favorites', Favorite.saveFavorites(favorites));
 }
 
-export function updateFavorite({ index, data }) {
+export function updateFavorite({ key, data }) {
   return this.update('favorites', favorites => {
-    const updatedFavorites = favorites.update(index, item => item.merge(data));
-    Favorite.saveFavorites(updatedFavorites);
-    return updatedFavorites;
+    const updatedFavorites = favorites.map((item) => {
+      if (item.get('key') === key) {
+        return item.merge(data);
+      }
+      return item;
+    });
+    return Favorite.saveFavorites(updatedFavorites);
   });
 }
 
@@ -32,4 +36,8 @@ export function reorderFavorites({ from, to }) {
     const updatedFavorites = favorites.splice(from, 1).splice(to, 0, source);
     return Favorite.saveFavorites(updatedFavorites);
   });
+}
+
+export function reloadFavorites() {
+  return this.set('favorites', Favorite.getFavorites());
 }
