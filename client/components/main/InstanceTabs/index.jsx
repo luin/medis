@@ -24,7 +24,7 @@ class InstanceTabs extends React.Component {
         selectedTab={ this.props.activeInstanceKey }
         tabs={
           this.props.instances.map(instance => {
-            return (<Tab key={instance.get('key')} title={instance.get('host')} ></Tab>);
+            return (<Tab key={instance.get('key')} title={instance.get('title')} ></Tab>);
           }).toJS()
         }
       />

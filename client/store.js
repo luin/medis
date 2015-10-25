@@ -1,6 +1,7 @@
 'use strict';
 
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk'
 import reducers from './reducers';
 
 import Immutable from 'immutable';
@@ -16,4 +17,4 @@ const state = Immutable.Map({
   patternStore: getPatternStore()
 });
 
-export default createStore(reducers, state);
+export default applyMiddleware(thunkMiddleware)(createStore)(reducers, state);
