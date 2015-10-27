@@ -1,0 +1,64 @@
+.nt-form {
+  box-sizing: border-box;
+  position: relative;
+  cursor: default;
+  background-color: rgba(0, 0, 0, .04);
+  border-width: 1px;
+  border-style: solid;
+  border-top-color: rgba(0, 0, 0, .07);
+  border-left-color: rgba(0, 0, 0, .037);
+  border-right-color: rgba(0, 0, 0, .037);
+  border-bottom-color: rgba(0, 0, 0, .026);
+  border-radius: 4px;
+  padding: 23px 18px 22px 18px;
+}
+
+.nt-form__row {
+  overflow: hidden;
+  padding: 5px 0;
+  $label-width: 140px;
+  label {
+    float: left;
+    width: $label-width;
+    text-align: right;
+  }
+  input, textarea {
+    margin-left: 20px;
+  }
+  input[type="text"], input[type="password"] {
+    width: 250px;
+  }
+}
+
+.nt-form {
+  input[type="text"], input[type="password"] {
+    -webkit-user-select: text;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #b0b0b0;
+    border-left-color: #b1b1b1;
+    border-right-color: #b1b1b1;
+    box-shadow: inset 0 0 0 1px #f0f0f0;
+    padding-top: 4px;
+    padding-bottom: 1px;
+    padding-left: 3.5px;
+    padding-right: 3.5px;
+    line-height: 14px;
+    font-family: "San Francisco", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
+    font-size: 13px;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3.5px #93c2f3;
+    }
+
+    &:placeholder {
+      color: #c0c0c0;
+    }
+  }
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    line-height: normal;
+  }
+}
