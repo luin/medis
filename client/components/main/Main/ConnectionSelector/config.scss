@@ -1,0 +1,28 @@
+#sshPassword {
+  padding-right: 32px;
+}
+
+.ssh-key {
+  height: 20px;
+  line-height: 20px;
+  padding: 0;
+  text-align: center;
+  width: 30px;
+  position: relative;
+  top: -1px;
+  left: -30px;
+  border-top: 0;
+  border-bottom: 0;
+  border-right: 1px solid #b1b1b1;
+  border-left: 1px solid #b1b1b1;
+  background: linear-gradient(to bottom, #fafafa 0%, #f5f5f5 100%);
+
+  &.is-active {
+    color: #388af8;
+  }
+
+  &:active {
+    background: linear-gradient(to bottom, #c2c2c2 0%, #b6b5b6 100%);
+    color: #388af8;
+  }
+}

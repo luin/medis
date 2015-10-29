@@ -8,5 +8,7 @@ export function getFavorites() {
 
 export function saveFavorites(favorites) {
   localStorage.setItem('favorites', JSON.stringify(favorites.toJSON()));
+
+  require('ipc').send('dispatch', 'reloadFavorites');
   return favorites;
 }

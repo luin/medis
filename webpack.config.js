@@ -26,7 +26,8 @@ module.exports = {
     'remote': 'require("remote")',
     'shell': 'require("shell")',
     'app': 'require("app")',
-    'ipc': 'require("ipc")'
+    'ipc': 'require("ipc")',
+    'fs': 'require("fs")'
   },
   resolve: {
     extensions: ['', '.js', '.jsx']

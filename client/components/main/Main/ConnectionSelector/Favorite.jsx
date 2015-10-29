@@ -52,8 +52,9 @@ class Favorite extends React.Component {
   }
 
   select(favorite) {
-    this.setState({ activeKey: favorite ? favorite.get('key') : null });
-    this.props.onSelect(favorite);
+    const activeKey = favorite ? favorite.get('key') : null;
+    this.setState({ activeKey });
+    this.props.onSelect(activeKey);
   }
 
   render() {

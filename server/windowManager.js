@@ -23,7 +23,7 @@ class WindowManager extends EventEmitter {
     const option = {};
     if (type === 'main') {
       option.width = 800;
-      option.height = 600;
+      option.height = 500;
       option.show = false;
     } else if (type === 'pattern-manager') {
       option.width = 600;
