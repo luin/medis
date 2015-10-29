@@ -47,16 +47,3 @@ export function delInstance(data) {
     }
   });
 }
-
-import Redis from 'ioredis';
-export function connect() {
-  const redis = new Redis();
-  const activeInstanceKey = this.get('activeInstanceKey');
-  return this
-    .update('instances', list => list.map(instance => {
-      if (instance.get('key') === activeInstanceKey) {
-        return instance.set('connectionKey', 'localhost:6379').set('redis', redis);
-      }
-      return instance;
-    }));
-}

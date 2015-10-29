@@ -23,6 +23,8 @@ module.exports = {
   },
   externals: {
     'ioredis': 'require("ioredis")',
+    'ssh2': 'require("ssh2")',
+    'net': 'require("net")',
     'remote': 'require("remote")',
     'shell': 'require("shell")',
     'app': 'require("app")',
