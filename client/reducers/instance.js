@@ -9,7 +9,6 @@ export function addInstance(data) {
 }
 
 export function selectInstance(data) {
-  const activeInstance = this.get('instances').find(v => v.get('key') === data);
   return this.set('activeInstanceKey', data);
 }
 
