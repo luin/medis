@@ -125,8 +125,11 @@ class Config extends React.Component {
         <button className="nt-button nt-button--primary" onClick={() => {
           const data = this.state.data;
           const connection = this.props.favorite ? this.props.favorite.merge(data).toJS() : data.toJS();
-          this.save();
+          connection.host = connection.host || 'localhost';
+          connection.port = connection.port || '6379';
+          connection.sshPort = connection.sshPort || '22';
           store.dispatch(actions('connect', connection));
+          this.save();
         }}>{ this.state.changed ? 'Save and Connect' : 'Connect' }</button>
       </div>
     </div>;

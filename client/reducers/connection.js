@@ -1,44 +1,23 @@
 'use strict';
 
 import Redis from 'ioredis';
-import { Client } from 'ssh2';
-import net from 'net';
+import _ from 'lodash';
 
-export function connect(config) {
-  if (config.ssh) {
-    const conn = new Client();
-    conn.on('ready', () => {
-      net.createServer(function(sock) {
-        conn.forwardOut(sock.remoteAddress, sock.remotePort, '127.0.0.1', 6379, function(err, stream) {
-          console.log(err, stream);
-          if (err) return sock.end();
-          sock.pipe(stream).pipe(sock);
-        });
-      }).listen(16120, function() {
-        console.log('Listening on 3306 for connections to forward');
-      });
-    }).connect({
-      host: config.sshHost,
-      port: config.sshPort || 22,
-      username: config.sshUser,
-      privateKey: config.sshKey,
-      passphrase: config.sshKeyPassphrase
-    });
-  }
-
-  config.port = 16120;
-  config.host = '127.0.0.1';
-
-  return connectRedis.call(this, config);
-}
-
-function connectRedis(redisConfig) {
-  const redis = new Redis(redisConfig);
+export function connect({ config, override }) {
+  console.log(config);
+  const redis = new Redis(_.assign({}, config, override));
   const activeInstanceKey = this.get('activeInstanceKey');
-  return this
-  .update('instances', list => list.map(instance => {
+  return this.update('instances', list => list.map(instance => {
     if (instance.get('key') === activeInstanceKey) {
-      return instance.set('connectionKey', 'localhost:6379').set('redis', redis);
+      const remote = config.name ? `${config.name}/` : (config.sshHost ? `${config.sshHost}/` : '');
+      const address = `${config.host}:${config.port}`;
+      const title = `${remote}${address}`;
+      document.title = title;
+      return instance
+        .set('connectionKey', `${config.sshHost || ''}|${config.host}|${config.port}`)
+        .set('config', config)
+        .set('title', title)
+        .set('redis', redis);
     }
     return instance;
   }));
