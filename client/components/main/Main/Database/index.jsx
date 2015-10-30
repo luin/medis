@@ -22,7 +22,7 @@ class Database extends React.Component {
   componentDidMount() {
     const redis = this.props.redis;
 
-    redis.scan('0', 'MATCH', 'fh:*', 'COUNT', '200', (_, res) => {
+    redis.scan('0', 'MATCH', '*', 'COUNT', '20000', (_, res) => {
       Promise.all(res[1].map(key => {
         return Promise.all([key, redis.type(key)]);
       })).then(keys => {
@@ -102,12 +102,6 @@ class Database extends React.Component {
             width={this.state.sidebarWidth}
             height={this.state.windowHeight - 66}
             headerHeight={30}
-            footerDataGetter={
-              () => {
-                return <p>Load more...</p>;
-              }
-            }
-            footerHeight={20}
           >
             <Column
               label="type"

@@ -130,6 +130,10 @@ ul {
   &.set { background: #239ff2; }
 }
 
+.public_fixedDataTable_header .public_fixedDataTableCell_cellContent {
+  font-family: system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif !important;
+}
+
 .public_fixedDataTableCell_cellContent {
   font-family: monospace;
   line-height: 1em;
