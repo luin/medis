@@ -12,7 +12,6 @@ export function connect({ config, override }) {
       const remote = config.name ? `${config.name}/` : (config.sshHost ? `${config.sshHost}/` : '');
       const address = `${config.host}:${config.port}`;
       const title = `${remote}${address}`;
-      document.title = title;
       return instance
         .set('connectionKey', `${config.sshHost || ''}|${config.host}|${config.port}`)
         .set('config', config)

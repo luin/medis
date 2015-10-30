@@ -5,19 +5,16 @@ import remote from 'remote';
 
 export function addInstance(data) {
   const instance = Instance.addInstance(data);
-  updateTitle(instance);
   return this.update('instances', list => list.push(instance)).set('activeInstanceKey', instance.get('key'));
 }
 
 export function selectInstance(data) {
   const activeInstance = this.get('instances').find(v => v.get('key') === data);
-  updateTitle(activeInstance);
   return this.set('activeInstanceKey', data);
 }
 
 export function moveInstance({ from, to }) {
   const [fromIndex, instance] = this.get('instances').findEntry(v => v.get('key') === from);
-  updateTitle(instance);
   const toIndex = this.get('instances').findIndex(v => v.get('key') === to);
   return this.update('instances', list => list.splice(fromIndex, 1).splice(toIndex, 0, instance))
     .set('activeInstanceKey', instance.get('key'));
@@ -45,12 +42,7 @@ export function delInstance(data) {
         remote.getCurrentWindow().close();
         return;
       }
-      updateTitle(item);
       map.set('activeInstanceKey', item.get('key'));
     }
   });
-}
-
-function updateTitle(instance) {
-  document.title = instance.get('title');
 }

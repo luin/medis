@@ -15,6 +15,7 @@
     "jstree": "^3.2.1",
     "lodash": "^3.10.1",
     "react": "^0.14.0",
+    "react-document-title": "^2.0.1",
     "react-dom": "^0.14.0",
     "react-draggable": "^0.8.2",
     "react-draggable-tab": "^0.3.3",
