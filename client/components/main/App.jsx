@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 import InstanceTabs from './InstanceTabs';
 import Main from './Main';
+import DocumentTitle from 'react-document-title';
 
 class App extends React.Component {
   constructor(props) {
@@ -14,18 +15,20 @@ class App extends React.Component {
   render() {
     const { instances, activeInstance, favorites, patternStore } = this.props;
 
-    return <div className="window">
-      <InstanceTabs
-        instances={instances}
-        activeInstanceKey={activeInstance.get('key')}
-      />
-      <Main
-        instances={instances}
-        activeInstanceKey={activeInstance.get('key')}
-        favorites={favorites}
-        patternStore={patternStore}
-      />
-    </div>;
+    return <DocumentTitle title={activeInstance.get('title')}>
+      <div className="window">
+        <InstanceTabs
+          instances={instances}
+          activeInstanceKey={activeInstance.get('key')}
+        />
+        <Main
+          instances={instances}
+          activeInstanceKey={activeInstance.get('key')}
+          favorites={favorites}
+          patternStore={patternStore}
+        />
+      </div>
+    </DocumentTitle>;
   }
 }
 
