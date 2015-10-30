@@ -53,7 +53,10 @@ class Database extends React.Component {
 
   render() {
     function rowGetter(rowIndex) {
-      return this.state.keys[rowIndex];
+      if (this.state.keys[rowIndex]) {
+        return this.state.keys[rowIndex];
+      }
+      return ['Load More...'];
     }
     return <SplitPane
         className="pane-group"
@@ -98,7 +101,7 @@ class Database extends React.Component {
           <Table
             rowHeight={30}
             rowGetter={rowGetter.bind(this)}
-            rowsCount={this.state.keys.length}
+            rowsCount={this.state.keys.length + 1}
             width={this.state.sidebarWidth}
             height={this.state.windowHeight - 66}
             headerHeight={30}
@@ -109,6 +112,9 @@ class Database extends React.Component {
               dataKey={1}
               cellRenderer={
                 cellData => {
+                  if (!cellData) {
+                    return '';
+                  }
                   const type = cellData === 'string' ? 'str' : cellData;
                   return <span className={`key-type ${type}`}>{type}</span>;
                 }
