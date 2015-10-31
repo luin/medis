@@ -27,7 +27,7 @@ class Config extends React.Component {
   setProp(property, value) {
     this.setState({
       data: typeof property === 'string' ? this.state.data.set(property, value) : this.state.data.merge(property),
-      changed: true
+      changed: this.props.favorite ? true : false
     });
   }
 
@@ -40,8 +40,10 @@ class Config extends React.Component {
   }
 
   save() {
-    this.props.onSave(this.state.data.toJS());
-    this.setState({ changed: false, data: new Immutable.Map() });
+    if (this.props.favorite) {
+      this.props.onSave(this.state.data.toJS());
+      this.setState({ changed: false, data: new Immutable.Map() });
+    }
   }
 
   render() {
