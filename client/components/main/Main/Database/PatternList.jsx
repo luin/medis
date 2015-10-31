@@ -2,6 +2,7 @@
 
 import ipc from 'ipc';
 import React from 'react';
+require('./PatternList.scss');
 
 class PatternList extends React.Component {
   constructor() {
