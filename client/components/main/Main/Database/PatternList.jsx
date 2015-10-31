@@ -19,7 +19,7 @@ class PatternList extends React.Component {
       <input
         type="search"
         className="form-control"
-        placeholder="Key name or patterns"
+        placeholder="Key name or patterns (e.g. user:*)"
         value={this.state.pattern}
         onChange={evt => {
           const value = evt.target.value;
@@ -41,8 +41,9 @@ class PatternList extends React.Component {
           {
             this.props.patterns.map(pattern => {
               return <li onClick={() => {
-                // this.props.onChange(pattern);
-                this.setState({ patternDropdown: false, pattern });
+                const value = pattern.get('value');
+                this.props.onChange(value);
+                this.setState({ patternDropdown: false, pattern: value });
               }}>{pattern.get('name')}</li>;
             })
           }
