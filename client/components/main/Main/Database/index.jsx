@@ -1,12 +1,12 @@
 'use strict';
 
-import ipc from 'ipc';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import store from '../../../../store';
 import action from '../../../../actions';
 import { Table, Column } from 'fixed-data-table';
 import SplitPane from 'react-split-pane';
+import PatternList from './PatternList';
 
 class Database extends React.Component {
   constructor() {
@@ -15,8 +15,7 @@ class Database extends React.Component {
       keys: [],
       selectedKey: null,
       sidebarWidth: 300,
-      cursor: 0,
-      patternDropdown: false
+      cursor: 0
     };
   }
 
@@ -46,7 +45,7 @@ class Database extends React.Component {
       windowHeight: node.clientHeight
     });
 
-    $('.js-pattern-dropdown.pattern-dropdown').height(node.clientHeight - 66);
+    this.setState({ dropdownHeight: node.clientHeight - 66 });
   }
 
   handleSelectPattern() {
@@ -67,34 +66,10 @@ class Database extends React.Component {
         }}
       >
       <div className="pane sidebar">
-        <div className="pattern-input">
-          <span className="icon icon-search"></span>
-          <input type="search" className="form-control" placeholder="Key name or patterns" />
-          <span
-            className="js-pattern-dropdown icon icon-down-open"
-            onClick={() => {
-              $('.js-pattern-dropdown').toggleClass('is-active');
-            }}
-          ></span>
-          <div className="js-pattern-dropdown pattern-dropdown">
-            <ul>
-              {
-                this.props.patterns.map(pattern => {
-                  return <li>{pattern.get('name')}</li>;
-                })
-              }
-              <li
-                className="manage-pattern-button"
-                onClick={() => {
-                  ipc.send('create pattern-manager', this.props.connectionKey);
-                }}
-              >
-                <span className="icon icon-cog"></span>
-                Manage Patterns...
-              </li>
-            </ul>
-          </div>
-        </div>
+        <PatternList
+          patterns={ this.props.patterns }
+          height={ this.dropdownHeight }
+        />
         <div className="pattern-table">
           <Table
             rowHeight={24}
@@ -159,10 +134,6 @@ class Database extends React.Component {
       </div>
   </SplitPane>;
   }
-
-  componentWillUnmount() {
-  }
-
 }
 
 export default Database;
