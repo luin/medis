@@ -49,8 +49,8 @@ class Database extends React.Component {
         <PatternList
           patterns={ this.props.patterns }
           height={ this.state.clientHeight }
+          connectionKey={ this.props.connectionKey }
           onChange={pattern => {
-            console.log('pattern', pattern);
             this.setState({ pattern });
           }}
         />
