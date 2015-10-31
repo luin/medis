@@ -5,7 +5,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import store from '../../../../store';
 import action from '../../../../actions';
-// import KeySelector from './KeySelector';
 import { Table, Column } from 'fixed-data-table';
 import SplitPane from 'react-split-pane';
 
@@ -14,7 +13,9 @@ class Database extends React.Component {
     super();
     this.state = {
       keys: [],
+      selectedKey: null,
       sidebarWidth: 300,
+      cursor: 0,
       patternDropdown: false
     };
   }
@@ -53,10 +54,7 @@ class Database extends React.Component {
 
   render() {
     function rowGetter(rowIndex) {
-      if (this.state.keys[rowIndex]) {
-        return this.state.keys[rowIndex];
-      }
-      return ['Load More...'];
+      return this.state.keys[rowIndex] || [];
     }
     return <SplitPane
         className="pane-group"
@@ -99,16 +97,32 @@ class Database extends React.Component {
         </div>
         <div className="pattern-table">
           <Table
-            rowHeight={30}
+            rowHeight={24}
             rowGetter={rowGetter.bind(this)}
             rowsCount={this.state.keys.length + 1}
+            rowClassNameGetter={index => {
+              const item = this.state.keys[index];
+              if (!item) {
+                return 'is-loading';
+              }
+              if (item[0] === this.state.selectedKey) {
+                return 'is-selected';
+              }
+              return '';
+            }}
+            onRowClick={(evt, index) => {
+              const item = this.state.keys[index];
+              if (item && item[0]) {
+                this.setState({ selectedKey: item[0] });
+              }
+            }}
             width={this.state.sidebarWidth}
             height={this.state.windowHeight - 66}
-            headerHeight={30}
+            headerHeight={24}
           >
             <Column
               label="type"
-              width={50}
+              width={40}
               dataKey={1}
               cellRenderer={
                 cellData => {
@@ -124,6 +138,14 @@ class Database extends React.Component {
               label="name"
               width={this.state.sidebarWidth - 50}
               dataKey={0}
+              cellRenderer={
+                cellData => {
+                  if (!cellData) {
+                    return 'Scanning...';
+                  }
+                  return cellData;
+                }
+              }
             />
           </Table>
         </div>
