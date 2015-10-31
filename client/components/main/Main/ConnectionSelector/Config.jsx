@@ -7,7 +7,7 @@ import Immutable from 'immutable';
 import remote from 'remote';
 import fs from 'fs';
 
-require('./config.scss');
+require('./Config.scss');
 
 class Config extends React.Component {
   constructor() {
@@ -87,7 +87,7 @@ class Config extends React.Component {
               placeholder=""
             />
             <button
-              className={"icon icon-key ssh-key" + (this.getProp('sshKey') ? ' is-active' : '')}
+              className={'icon icon-key ssh-key' + (this.getProp('sshKey') ? ' is-active' : '')}
               onClick={() => {
                 if (this.getProp('sshKey')) {
                   this.setProp({
