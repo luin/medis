@@ -16,7 +16,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeKey: this.props.patterns[0] ? this.props.patterns[0].key : null,
       indexKey: 'init'
     };
     this._updateSortableKey();
@@ -42,8 +41,15 @@ class App extends React.Component {
     });
   }
 
+  handleChange(property, e) {
+    this.setState({ [property]: e.target.value });
+  }
+
   componentDidMount() {
     this._bindSortable();
+    if (this.props.patterns.length) {
+      this.select(this.props.patterns[0]);
+    }
   }
 
   componentDidUpdate() {
@@ -58,26 +64,33 @@ class App extends React.Component {
   select(pattern) {
     this.setState({
       activeKey: pattern && pattern.key,
-      indexKey: 'index' + Math.round(Math.random() * 1000)
+      indexKey: 'index' + Math.round(Math.random() * 1000),
+      name: pattern && pattern.name,
+      value: pattern && pattern.value
     });
   }
 
-  render() {
-    const { patterns } = this.props;
+  getActivePattern() {
     let activePattern;
     let activeIndex;
-    for (let i = 0; i < patterns.length; i++) {
-      if (patterns[i].key === this.state.activeKey) {
-        activePattern = patterns[i];
+    for (let i = 0; i < this.props.patterns.length; i++) {
+      if (this.props.patterns[i].key === this.state.activeKey) {
+        activePattern = this.props.patterns[i];
         activeIndex = i;
         break;
       }
     }
 
+    return [activeIndex, activePattern];
+  }
+
+  render() {
+    const [activeIndex, activePattern] = this.getActivePattern();
+
     return <div className="window">
       <div className="patternList">
         <div ref="sortable" key={this.sortableKey}>{
-          patterns.map((pattern, index) => {
+          this.props.patterns.map((pattern, index) => {
             return <a
               key={pattern.key}
               className={'nav-group-item' + (pattern.key === this.state.activeKey ? ' is-active' : '')}
@@ -112,39 +125,42 @@ class App extends React.Component {
           >-</button>
         </footer>
       </div>
-      <div className="form" style={ { display: activePattern ? 'block' : 'none' } }>
-        <Box>
-          <Form key={this.state.indexKey} onSubmit={() => {
-            const name = ReactDOM.findDOMNode(this.refs.name).value;
-            const value = ReactDOM.findDOMNode(this.refs.value).value;
-            store.dispatch(actions('updatePattern', {
-              store: connectionKey,
-              index: activeIndex,
-              data: { name, value }
-            }));
-            alert('Save Successfully');
-          }}>
-            <Form.Row>
-              <Label>Name</Label>
-              <TextField
-                defaultValue={activePattern && activePattern.name}
-                placeholder=""
-                ref="name"
-              />
-            </Form.Row>
-            <Form.Row>
-              <Label>Pattern</Label>
-              <TextField
-                defaultValue={activePattern && activePattern.value}
-                placeholder=""
-                ref="value"
-              />
-            </Form.Row>
-            <Form.Row>
-              <PushButton onPress="submit" color="blue">Save</PushButton>
-            </Form.Row>
-          </Form>
-        </Box>
+      <div
+        key={this.state.indexKey}
+        className="form nt-box"
+        style={ { display: activePattern ? 'block' : 'none' } }
+      >
+        <div className="nt-form-row nt-form-row--vertical">
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text" id="name"
+            readOnly={activePattern ? false : true }
+            value={this.state.name}
+            onChange={this.handleChange.bind(this, 'name')}
+          />
+        </div>
+        <div className="nt-form-row nt-form-row--vertical">
+          <label htmlFor="value">Pattern:</label>
+          <input
+            type="text" id="value"
+            readOnly={activePattern ? false : true }
+            value={this.state.value}
+            onChange={this.handleChange.bind(this, 'value')}
+          />
+        </div>
+        <div className="nt-button-group nt-button-group--pull-right" style={ { margin: '10px auto 0' } }>
+          <button
+            className="nt-button nt-button--primary"
+            onClick={() => {
+              store.dispatch(actions('updatePattern', {
+                store: connectionKey,
+                index: activeIndex,
+                data: { name: this.state.name, value: this.state.value }
+              }));
+              alert('Save Successfully');
+            }}
+          >Save</button>
+        </div>
       </div>
     </div>;
   }

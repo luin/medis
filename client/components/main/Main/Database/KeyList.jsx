@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Table, Column } from 'fixed-data-table';
 require('./KeyList.scss');
 
@@ -16,10 +15,17 @@ class KeyList extends React.Component {
     };
   }
 
+  componentWillReceiveProps() {
+    this.setState({
+      cursor: 0
+    });
+  }
+
   componentDidMount() {
     const redis = this.props.redis;
 
-    redis.scan('0', 'MATCH', '*', 'COUNT', '20000', (_, res) => {
+    redis.scan('0', 'MATCH', this.props.pattern, 'COUNT', '500', (_, res) => {
+      console.log(res);
       Promise.all(res[1].map(key => {
         return Promise.all([key, redis.type(key)]);
       })).then(keys => {
@@ -28,34 +34,20 @@ class KeyList extends React.Component {
         });
       });
     });
-
-    window.addEventListener('resize', this._update.bind(this), false);
-    this._update();
-  }
-
-  _update() {
-    const node = ReactDOM.findDOMNode(this);
-
-    window.node = node;
-    this.setState({
-      windowWidth: node.clientWidth,
-      windowHeight: node.clientHeight
-    });
-
-    this.setState({ dropdownHeight: node.clientHeight - 66 });
   }
 
   handleSelectPattern() {
   }
 
+  getRow(index) {
+    return this.state.keys[index] || [];
+  }
+
   render() {
-    function rowGetter(rowIndex) {
-      return this.state.keys[rowIndex] || [];
-    }
     return <div className="pattern-table">
       <Table
         rowHeight={24}
-        rowGetter={rowGetter.bind(this)}
+        rowGetter={this.getRow.bind(this)}
         rowsCount={this.state.keys.length + 1}
         rowClassNameGetter={index => {
           const item = this.state.keys[index];
@@ -71,10 +63,11 @@ class KeyList extends React.Component {
           const item = this.state.keys[index];
           if (item && item[0]) {
             this.setState({ selectedKey: item[0] });
+            this.props.onSelect(item[0]);
           }
         }}
-        width={this.state.sidebarWidth}
-        height={this.state.windowHeight - 66}
+        width={this.props.width}
+        height={this.props.height}
         headerHeight={24}
         >
         <Column
@@ -93,7 +86,7 @@ class KeyList extends React.Component {
         />
         <Column
           label="name"
-          width={this.state.sidebarWidth - 50}
+          width={this.props.width - 40}
           dataKey={0}
           cellRenderer={
             cellData => {

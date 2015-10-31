@@ -8,14 +8,25 @@ class PatternList extends React.Component {
   constructor() {
     super();
     this.state = {
-      patternDropdown: false
+      patternDropdown: false,
+      pattern: ''
     };
   }
 
   render() {
     return <div className="pattern-input">
       <span className="icon icon-search"></span>
-      <input type="search" className="form-control" placeholder="Key name or patterns" />
+      <input
+        type="search"
+        className="form-control"
+        placeholder="Key name or patterns"
+        value={this.state.pattern}
+        onChange={evt => {
+          const value = evt.target.value;
+          this.setState({ pattern: value });
+          this.props.onChange(value);
+        }}
+      />
       <span
         className={'js-pattern-dropdown icon icon-down-open' + (this.state.patternDropdown ? ' is-active' : '')}
         onClick={() => {
@@ -29,7 +40,10 @@ class PatternList extends React.Component {
         <ul>
           {
             this.props.patterns.map(pattern => {
-              return <li>{pattern.get('name')}</li>;
+              return <li onClick={() => {
+                // this.props.onChange(pattern);
+                this.setState({ patternDropdown: false, pattern });
+              }}>{pattern.get('name')}</li>;
             })
           }
           <li
