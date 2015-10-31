@@ -56,6 +56,19 @@
   input[type="checkbox"] {
     line-height: normal;
   }
+
+  &.nt-form-row--vertical {
+    overflow: visible;
+    label {
+      float: none;
+      display: block;
+      text-align: left;
+    }
+    input[type="text"], input[type="password"], textarea {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
 }
 
 .nt-button {
@@ -115,5 +128,8 @@
 
   .nt-button {
     display: inline-block;
+  }
+  &.nt-button-group--pull-right {
+    text-align: right;
   }
 }
