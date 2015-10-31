@@ -111,14 +111,14 @@ ul {
 }
 
 .key-type {
-  margin: 2px 0 0 8px;
-  padding: 0;
+  margin: 0 0 0 8px;
+  padding: 0 !important;
   text-transform: uppercase;
   width: 32px;
   height: 16px;
+  font-size: 11px !important;
   line-height: 16px !important;
   display: block;
-  font-size: 12px;
   text-align: center;
   background: #60d4ca;
   color: #fff;
@@ -130,17 +130,30 @@ ul {
   &.set { background: #239ff2; }
 }
 
-.public_fixedDataTable_header .public_fixedDataTableCell_cellContent {
-  font-family: system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif !important;
+.public_fixedDataTable_header, .public_fixedDataTableRow_main.is-loading {
+  .public_fixedDataTableCell_cellContent {
+    font-family: system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif !important;
+  }
 }
 
 .public_fixedDataTableCell_cellContent {
   font-family: monospace;
-  line-height: 1em;
+  font-size: 12px;
+  line-height: 24px;
+  padding: 0 8px;
 }
 
-.fixedDataTableRowLayout_rowWrapper:hover .public_fixedDataTableCell_main {
-  background-color: yellow;
+.public_fixedDataTableRow_main.is-selected {
+  background: #116cd6;
+  color: #fff;
+
+  .public_fixedDataTableCell_main {
+    background: transparent;
+  }
+}
+
+.public_fixedDataTableCell_main {
+  border: none;
 }
 
 .pattern-dropdown {
