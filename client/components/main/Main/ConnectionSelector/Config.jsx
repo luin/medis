@@ -130,7 +130,6 @@ class Config extends React.Component {
           config.host = config.host || 'localhost';
           config.port = config.port || '6379';
           config.sshPort = config.sshPort || '22';
-
           store.dispatch(actions('connect', config));
           this.save();
         }}>{ this.props.connectStatus || (this.state.changed ? 'Save and Connect' : 'Connect') }</button>
