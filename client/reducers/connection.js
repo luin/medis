@@ -1,11 +1,6 @@
 'use strict';
 
-import Redis from 'ioredis';
-import _ from 'lodash';
-
-export function connect({ config, override }) {
-  console.log(config);
-  const redis = new Redis(_.assign({}, config, override));
+export function connect({ redis, config }) {
   const activeInstanceKey = this.get('activeInstanceKey');
   return this.update('instances', list => list.map(instance => {
     if (instance.get('key') === activeInstanceKey) {
@@ -17,6 +12,16 @@ export function connect({ config, override }) {
         .set('config', config)
         .set('title', title)
         .set('redis', redis);
+    }
+    return instance;
+  }));
+}
+
+export function updateConnectStatus(status) {
+  const activeInstanceKey = this.get('activeInstanceKey');
+  return this.update('instances', list => list.map(instance => {
+    if (instance.get('key') === activeInstanceKey) {
+      return instance.set('connectStatus', status);
     }
     return instance;
   }));

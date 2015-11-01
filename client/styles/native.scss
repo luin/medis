@@ -123,6 +123,12 @@
   }
 }
 
+.nt-button[disabled], .nt-button--disabled {
+  background: #f1f1f1;
+  border-color: #d0d0d0;
+  color: #b1b1b1;
+}
+
 .nt-button-group {
   text-align: center;
 

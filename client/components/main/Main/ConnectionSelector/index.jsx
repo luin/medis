@@ -28,6 +28,7 @@ class ConnectionSelector extends React.Component {
       <div className="pane">
         <Config
           favorite={selectedFavorite}
+          connectStatus={this.props.connectStatus}
           onSave={(data) => {
             store.dispatch(actions('updateFavorite', { key: selectedFavorite.get('key'), data }));
           }}

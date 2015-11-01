@@ -40,7 +40,7 @@ class Config extends React.Component {
   }
 
   save() {
-    if (this.props.favorite) {
+    if (this.props.favorite && this.state.changed) {
       this.props.onSave(this.state.data.toJS());
       this.setState({ changed: false, data: new Immutable.Map() });
     }
@@ -120,19 +120,20 @@ class Config extends React.Component {
           </div>
         </div>
       </div>
-      <div className="nt-button-group" style={ { width: 500, margin: '10px auto 0' } }>
+      <div className="nt-button-group nt-button-group--pull-right" style={ { width: 500, margin: '10px auto 0' } }>
         <button className="nt-button" style={ { display: this.state.changed ? 'inline-block' : 'none' } } onClick={() => {
           this.save();
         }}>Save Changes</button>
-        <button className="nt-button nt-button--primary" onClick={() => {
+        <button disabled={this.props.connectStatus ? true : false } ref="connectButton" className="nt-button nt-button--primary" onClick={() => {
           const data = this.state.data;
-          const connection = this.props.favorite ? this.props.favorite.merge(data).toJS() : data.toJS();
-          connection.host = connection.host || 'localhost';
-          connection.port = connection.port || '6379';
-          connection.sshPort = connection.sshPort || '22';
-          store.dispatch(actions('connect', connection));
+          const config = this.props.favorite ? this.props.favorite.merge(data).toJS() : data.toJS();
+          config.host = config.host || 'localhost';
+          config.port = config.port || '6379';
+          config.sshPort = config.sshPort || '22';
+
+          store.dispatch(actions('connect', config));
           this.save();
-        }}>{ this.state.changed ? 'Save and Connect' : 'Connect' }</button>
+        }}>{ this.props.connectStatus || (this.state.changed ? 'Save and Connect' : 'Connect') }</button>
       </div>
     </div>;
   }

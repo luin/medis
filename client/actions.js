@@ -2,11 +2,14 @@
 
 import { Client } from 'ssh2';
 import net from 'net';
+import Redis from 'ioredis';
+import _ from 'lodash';
 
 const actions = {
   connect(config) {
     return dispatch => {
       if (config.ssh) {
+        dispatch({ type: 'updateConnectStatus', data: 'SSH connecting...' });
         const conn = new Client();
         conn.on('ready', () => {
           const server = net.createServer(function (sock) {
@@ -17,10 +20,7 @@ const actions = {
               sock.pipe(stream).pipe(sock);
             });
           }).listen(0, function () {
-            dispatch({
-              type: 'connect',
-              data: { config, override: { host: '127.0.0.1', port: server.address().port } }
-            });
+            handleRedis(config, { host: '127.0.0.1', port: server.address().port });
           });
         }).connect({
           host: config.sshHost,
@@ -30,9 +30,22 @@ const actions = {
           passphrase: config.sshKeyPassphrase
         });
       } else {
-        dispatch({ type: 'connect', data: { config } });
+        handleRedis(config);
       }
 
+      function handleRedis(config, override) {
+        dispatch({ type: 'updateConnectStatus', data: 'Redis connecting...' });
+        const redis = new Redis(_.assign({}, config, override));
+        redis.on('ready', function () {
+          dispatch({ type: 'connect', data: { redis, config } });
+        });
+        redis.on('error', function (err) {
+          console.log('err', err);
+        });
+        redis.on('end', function () {
+          console.log('end');
+        });
+      }
     };
   }
 };
