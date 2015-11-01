@@ -40,7 +40,7 @@ class PatternList extends React.Component {
         <ul>
           {
             this.props.patterns.map(pattern => {
-              return <li onClick={() => {
+              return <li key={pattern.get('key')} onClick={() => {
                 const value = pattern.get('value');
                 this.props.onChange(value);
                 this.setState({ patternDropdown: false, pattern: value });
