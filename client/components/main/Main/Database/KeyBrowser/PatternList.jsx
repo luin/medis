@@ -15,8 +15,13 @@ class PatternList extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.db !== this.props.db) {
-      this.setState({ pattern: '' });
+      this.updatePattern('');
     }
+  }
+
+  updatePattern(value) {
+    this.setState({ pattern: value });
+    this.props.onChange(value);
   }
 
   render() {
@@ -28,9 +33,7 @@ class PatternList extends React.Component {
         placeholder="Key name or patterns (e.g. user:*)"
         value={this.state.pattern}
         onChange={evt => {
-          const value = evt.target.value;
-          this.setState({ pattern: value });
-          this.props.onChange(value);
+          this.updatePattern(evt.target.value);
         }}
       />
       <span
@@ -41,7 +44,7 @@ class PatternList extends React.Component {
       ></span>
       <div
         className={'js-pattern-dropdown pattern-dropdown' + (this.state.patternDropdown ? ' is-active' : '')}
-        style={{ height: this.props.height }}
+        style={{ maxHeight: this.props.height }}
       >
         <ul>
           {

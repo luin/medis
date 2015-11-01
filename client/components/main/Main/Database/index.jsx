@@ -6,40 +6,31 @@ import Immutable from 'immutable';
 import store from '../../../../store';
 import action from '../../../../actions';
 import SplitPane from 'react-split-pane';
-import PatternList from './PatternList';
-import KeyList from './KeyList';
-import Footer from './Footer';
+import KeyBrowser from './KeyBrowser';
 require('./index.scss');
 
 class Database extends React.Component {
   constructor() {
     super();
     this.footerHeight = 66;
+    this.$window = $(window);
 
     this.state = {
       sidebarWidth: 300,
-      clientHeight: $(window).height() - this.footerHeight,
-      pattern: '',
-      db: 0
+      clientHeight: this.$window.height()
     };
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this._update.bind(this), false);
-    this._update();
+    window.addEventListener('resize', this.updateLayout.bind(this), false);
+    this.updateLayout();
   }
 
-  _update() {
-    const node = ReactDOM.findDOMNode(this);
-    this.setState({ clientHeight: node.clientHeight - this.footerHeight });
-  }
-
-  handleSelectPattern() {
+  updateLayout() {
+    this.setState({ clientHeight: this.$window.height() });
   }
 
   render() {
-    const { patternStore, connectionKey } = this.props;
-    const patterns = patternStore.get(`${connectionKey}|${this.state.db}`) || Immutable.List();
     return <SplitPane
         className="pane-group"
         minSize="250"
@@ -50,33 +41,16 @@ class Database extends React.Component {
           this.setState({ sidebarWidth: size });
         }}
       >
-      <div className="pane sidebar">
-        <PatternList
-          patterns={ patterns }
-          height={ this.state.clientHeight }
-          connectionKey={ this.props.connectionKey }
-          db={ this.state.db }
-          onChange={pattern => {
-            this.setState({ pattern });
-          }}
-        />
-        <KeyList
-          height={ this.state.clientHeight }
-          width= { this.state.sidebarWidth }
-          db={ this.state.db }
-          pattern={ this.state.pattern || '*' }
-          redis={ this.props.redis }
-          onSelect={key => {
-            console.log(`Select ${key}`);
-          }}
-        />
-        <Footer
-          onDatabaseChange={newDB => {
-            this.setState({ db: newDB });
-          }}
-          redis={ this.props.redis }
-        />
-      </div>
+      <KeyBrowser
+        patternStore={ this.props.patternStore }
+        height={ this.state.clientHeight }
+        width= { this.state.sidebarWidth }
+        redis={ this.props.redis }
+        connectionKey={ this.props.connectionKey }
+        onSelectKey={ key => {
+          console.log('=', key);
+        }}
+      />
       <div className="pane">
         <button onClick={() =>
           store.dispatch(action('connect'))
