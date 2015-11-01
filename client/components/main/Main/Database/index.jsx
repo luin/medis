@@ -37,7 +37,7 @@ class Database extends React.Component {
   render() {
     return <SplitPane
         className="pane-group"
-        minSize="100"
+        minSize="250"
         split="vertical"
         defaultSize={300}
         ref="node"
@@ -65,6 +65,29 @@ class Database extends React.Component {
           }}
         />
         <footer className="toolbar toolbar-footer">
+          <span style={ { marginLeft: 6 } }>Keys: 273828</span>
+          <div style={ { float: 'right' } }>
+            <span>DB:</span>
+            <select className="form-control" style={ {
+              width: 50,
+              marginTop: 2,
+              marginRight: 2,
+              marginLeft: 3,
+              fontSize: 10,
+              float: 'right'
+            } }>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+            </select>
+          </div>
         </footer>
       </div>
       <div className="pane">
