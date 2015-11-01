@@ -11,9 +11,10 @@ const actions = {
       if (config.ssh) {
         dispatch({ type: 'updateConnectStatus', data: 'SSH connecting...' });
         const conn = new Client();
-        conn.on('ready', () => {
+        conn
+        .on('ready', () => {
           const server = net.createServer(function (sock) {
-            conn.forwardOut(sock.remoteAddress, sock.remotePort, '127.0.0.1', 6379, function (err, stream) {
+            conn.forwardOut(sock.remoteAddress, sock.remotePort, config.host, config.port, function (err, stream) {
               if (err) {
                 return sock.end();
               }
@@ -22,28 +23,41 @@ const actions = {
           }).listen(0, function () {
             handleRedis(config, { host: '127.0.0.1', port: server.address().port });
           });
-        }).connect({
-          host: config.sshHost,
-          port: config.sshPort || 22,
-          username: config.sshUser,
-          privateKey: config.sshKey,
-          passphrase: config.sshKeyPassphrase
+        })
+        .on('error', err => {
+          alert(`SSH Error: ${err.message}`);
+          dispatch({ type: 'updateConnectStatus', data: null });
         });
+
+        try {
+          conn.connect({
+            host: config.sshHost,
+            port: config.sshPort || 22,
+            username: config.sshUser,
+            privateKey: config.sshKey,
+            passphrase: config.sshKeyPassphrase
+          });
+        } catch (err) {
+          alert(`SSH Error: ${err.message}`);
+          dispatch({ type: 'updateConnectStatus', data: null });
+        }
       } else {
         handleRedis(config);
       }
 
       function handleRedis(config, override) {
         dispatch({ type: 'updateConnectStatus', data: 'Redis connecting...' });
-        const redis = new Redis(_.assign({}, config, override));
+        const redis = new Redis(_.assign({}, config, override, {
+          retryStrategy() {
+            return false;
+          }
+        }));
         redis.on('ready', function () {
           dispatch({ type: 'connect', data: { redis, config } });
         });
-        redis.on('error', function (err) {
-          console.log('err', err);
-        });
         redis.on('end', function () {
-          console.log('end');
+          alert('Redis Error: Connection failed');
+          dispatch({ type: 'updateConnectStatus', data: null });
         });
       }
     };
