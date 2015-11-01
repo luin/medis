@@ -22,6 +22,7 @@ class Main extends React.Component {
             <ConnectionSelector
               key={instance.get('key')}
               title={instance.get('host')}
+              connectStatus={instance.get('connectStatus')}
               favorites={favorites}
             />
         }
