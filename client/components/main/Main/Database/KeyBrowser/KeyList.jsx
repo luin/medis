@@ -178,7 +178,7 @@ class KeyList extends React.Component {
             cellData => {
               if (!cellData) {
                 if (this.state.scanning) {
-                  return <span style={ { color: '#ccc' }}>Scanning...(cursor {this.state.cursor})</span>
+                  return <span style={ { color: '#ccc' }}>Scanning...(cursor {this.state.cursor})</span>;
                 }
                 return <a href="#" onClick={(evt) => {
                   evt.preventDefault();

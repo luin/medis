@@ -52,9 +52,6 @@ class Database extends React.Component {
         }}
       />
       <div className="pane">
-        <button onClick={() =>
-          store.dispatch(action('connect'))
-        }>Connect</button>
       </div>
   </SplitPane>;
   }
