@@ -43,7 +43,22 @@ class KeyList extends React.Component {
     let count = 0;
     let cursor = this.state.cursor;
 
-    iter.call(this, 500, 1);
+    let filterKey;
+
+    // Plain key
+    if (targetPattern !== pattern) {
+      redis.type(targetPattern, (err, type) => {
+        if (type !== 'none') {
+          filterKey = targetPattern;
+          this.setState({
+            keys: this.state.keys.concat([[targetPattern, type]])
+          });
+        }
+        iter.call(this, 500, 1);
+      });
+    } else {
+      iter.call(this, 500, 1);
+    }
 
     function iter(fetchCount, times) {
       redis.scan(cursor, 'MATCH', pattern, 'COUNT', fetchCount, (err, res) => {
@@ -52,9 +67,13 @@ class KeyList extends React.Component {
           setTimeout(this.scan.bind(this), 0);
           return;
         }
-        const [newCursor, fetchedKeys] = res;
+        const newCursor = res[0];
+        let fetchedKeys = res[1];
         let promise;
         if (fetchedKeys.length) {
+          if (filterKey) {
+            fetchedKeys = fetchedKeys.filter(key => key !== filterKey);
+          }
           count += fetchedKeys.length;
           const pipeline = redis.pipeline();
           fetchedKeys.forEach(key => pipeline.type(key));
