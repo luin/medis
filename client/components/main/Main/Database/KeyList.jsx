@@ -16,7 +16,10 @@ class KeyList extends React.Component {
     };
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.db !== this.props.db) {
+      this.props.redis.select(nextProps.db);
+    }
     this.setState({
       cursor: '0',
       keys: []
