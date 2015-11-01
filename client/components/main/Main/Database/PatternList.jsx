@@ -13,6 +13,12 @@ class PatternList extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.db !== this.props.db) {
+      this.setState({ pattern: '' });
+    }
+  }
+
   render() {
     return <div className="pattern-input">
       <span className="icon icon-search"></span>
@@ -50,7 +56,7 @@ class PatternList extends React.Component {
           <li
             className="manage-pattern-button"
             onClick={() => {
-              ipc.send('create pattern-manager', this.props.connectionKey);
+              ipc.send('create pattern-manager', `${this.props.connectionKey}|${this.props.db}`);
             }}
             >
             <span className="icon icon-cog"></span>

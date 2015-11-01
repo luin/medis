@@ -3,7 +3,6 @@
 import React from 'react';
 import ConnectionSelector from './ConnectionSelector';
 import Database from './Database';
-import Immutable from 'immutable';
 
 class Main extends React.Component {
   render() {
@@ -16,7 +15,7 @@ class Main extends React.Component {
           instance.get('redis') ?
             <Database
               redis={instance.get('redis')}
-              patterns={patternStore.get(instance.get('connectionKey')) || Immutable.List()}
+              patternStore={patternStore}
               connectionKey={instance.get('connectionKey')}
             /> :
             <ConnectionSelector

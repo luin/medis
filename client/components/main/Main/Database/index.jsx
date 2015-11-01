@@ -2,11 +2,13 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Immutable from 'immutable';
 import store from '../../../../store';
 import action from '../../../../actions';
 import SplitPane from 'react-split-pane';
 import PatternList from './PatternList';
 import KeyList from './KeyList';
+import Footer from './Footer';
 require('./index.scss');
 
 class Database extends React.Component {
@@ -17,7 +19,8 @@ class Database extends React.Component {
     this.state = {
       sidebarWidth: 300,
       clientHeight: $(window).height() - this.footerHeight,
-      pattern: ''
+      pattern: '',
+      db: 0
     };
   }
 
@@ -35,6 +38,8 @@ class Database extends React.Component {
   }
 
   render() {
+    const { patternStore, connectionKey } = this.props;
+    const patterns = patternStore.get(`${connectionKey}|${this.state.db}`) || Immutable.List();
     return <SplitPane
         className="pane-group"
         minSize="250"
@@ -47,9 +52,10 @@ class Database extends React.Component {
       >
       <div className="pane sidebar">
         <PatternList
-          patterns={ this.props.patterns }
+          patterns={ patterns }
           height={ this.state.clientHeight }
           connectionKey={ this.props.connectionKey }
+          db={ this.state.db }
           onChange={pattern => {
             this.setState({ pattern });
           }}
@@ -57,38 +63,19 @@ class Database extends React.Component {
         <KeyList
           height={ this.state.clientHeight }
           width= { this.state.sidebarWidth }
-          db={ 0 }
+          db={ this.state.db }
           pattern={ this.state.pattern || '*' }
           redis={ this.props.redis }
           onSelect={key => {
             console.log(`Select ${key}`);
           }}
         />
-        <footer className="toolbar toolbar-footer">
-          <span style={ { marginLeft: 6 } }>Keys: 273828</span>
-          <div style={ { float: 'right' } }>
-            <span>DB:</span>
-            <select className="form-control" style={ {
-              width: 50,
-              marginTop: 2,
-              marginRight: 2,
-              marginLeft: 3,
-              fontSize: 10,
-              float: 'right'
-            } }>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>10</option>
-            </select>
-          </div>
-        </footer>
+        <Footer
+          onDatabaseChange={newDB => {
+            this.setState({ db: newDB });
+          }}
+          redis={ this.props.redis }
+        />
       </div>
       <div className="pane">
         <button onClick={() =>
