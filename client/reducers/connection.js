@@ -9,9 +9,26 @@ export function connect({ redis, config }) {
       const title = `${remote}${address}`;
       return instance
         .set('connectionKey', `${config.sshHost || ''}|${config.host}|${config.port}`)
+        .remove('connectStatus')
         .set('config', config)
         .set('title', title)
+        .set('version', redis.serverInfo && redis.serverInfo.redis_version)
         .set('redis', redis);
+    }
+    return instance;
+  }));
+}
+
+export function disconnect() {
+  const activeInstanceKey = this.get('activeInstanceKey');
+  return this.update('instances', list => list.map(instance => {
+    if (instance.get('key') === activeInstanceKey) {
+      return instance
+        .remove('connectStatus')
+        .remove('redis')
+        .remove('config')
+        .remove('version')
+        .set('title', 'Redis Pro');
     }
     return instance;
   }));

@@ -15,7 +15,8 @@ class App extends React.Component {
   render() {
     const { instances, activeInstance, favorites, patternStore } = this.props;
 
-    return <DocumentTitle title={activeInstance.get('title')}>
+    const version = activeInstance.get('version') ? `(Redis ${activeInstance.get('version')}) ` : '';
+    return <DocumentTitle title={version + activeInstance.get('title')}>
       <div className="window">
         <InstanceTabs
           instances={instances}

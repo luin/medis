@@ -26,7 +26,7 @@ const actions = {
         })
         .on('error', err => {
           alert(`SSH Error: ${err.message}`);
-          dispatch({ type: 'updateConnectStatus', data: null });
+          dispatch({ type: 'disconnect' });
         });
 
         try {
@@ -39,7 +39,7 @@ const actions = {
           });
         } catch (err) {
           alert(`SSH Error: ${err.message}`);
-          dispatch({ type: 'updateConnectStatus', data: null });
+          dispatch({ type: 'disconnect' });
         }
       } else {
         handleRedis(config);
@@ -52,12 +52,12 @@ const actions = {
             return false;
           }
         }));
-        redis.on('ready', function () {
+        redis.once('ready', function () {
           dispatch({ type: 'connect', data: { redis, config } });
         });
-        redis.on('end', function () {
+        redis.once('end', function () {
           alert('Redis Error: Connection failed');
-          dispatch({ type: 'updateConnectStatus', data: null });
+          dispatch({ type: 'disconnect' });
         });
       }
     };
