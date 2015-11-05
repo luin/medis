@@ -1,12 +1,11 @@
 'use strict';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Immutable from 'immutable';
 import store from '../../../../store';
 import action from '../../../../actions';
 import SplitPane from 'react-split-pane';
 import KeyBrowser from './KeyBrowser';
+import Content from './Content';
 require('./index.scss');
 
 class Database extends React.Component {
@@ -51,8 +50,8 @@ class Database extends React.Component {
           console.log('=', key);
         }}
       />
-      <div className="pane">
-      </div>
+      <Content
+      />
   </SplitPane>;
   }
 }

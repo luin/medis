@@ -31,6 +31,22 @@ class Config extends React.Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.connect && nextProps.connect) {
+      this.connect();
+    }
+  }
+
+  connect() {
+    const data = this.state.data;
+    const config = this.props.favorite ? this.props.favorite.merge(data).toJS() : data.toJS();
+    config.host = config.host || 'localhost';
+    config.port = config.port || '6379';
+    config.sshPort = config.sshPort || '22';
+    store.dispatch(actions('connect', config));
+    this.save();
+  }
+
   handleChange(property, e) {
     let value = e.target.value;
     if (property === 'ssh') {
@@ -125,13 +141,7 @@ class Config extends React.Component {
           this.save();
         }}>Save Changes</button>
         <button disabled={this.props.connectStatus ? true : false } ref="connectButton" className="nt-button nt-button--primary" onClick={() => {
-          const data = this.state.data;
-          const config = this.props.favorite ? this.props.favorite.merge(data).toJS() : data.toJS();
-          config.host = config.host || 'localhost';
-          config.port = config.port || '6379';
-          config.sshPort = config.sshPort || '22';
-          store.dispatch(actions('connect', config));
-          this.save();
+          this.connect();
         }}>{ this.props.connectStatus || (this.state.changed ? 'Save and Connect' : 'Connect') }</button>
       </div>
     </div>;

@@ -47,14 +47,23 @@ class Favorite extends React.Component {
     this.selectIndex(index);
   }
 
-  selectIndex(index) {
-    this.select(index === -1 ? null : this.props.favorites.get(index));
+  onDoubleClick(index, evt) {
+    evt.preventDefault();
+    this.selectIndex(index, true);
   }
 
-  select(favorite) {
+  selectIndex(index, connect) {
+    this.select(index === -1 ? null : this.props.favorites.get(index), connect);
+  }
+
+  select(favorite, connect) {
     const activeKey = favorite ? favorite.get('key') : null;
     this.setState({ activeKey });
-    this.props.onSelect(activeKey);
+    if (connect && activeKey) {
+      this.props.onRequireConnecting(activeKey);
+    } else {
+      this.props.onSelect(activeKey);
+    }
   }
 
   render() {
@@ -72,6 +81,7 @@ class Favorite extends React.Component {
               key={favorite.get('key')}
               className={'nav-group-item' + (favorite.get('key') === this.state.activeKey ? ' active' : '')}
               onClick={this.onClick.bind(this, index)}
+              onDoubleClick={this.onDoubleClick.bind(this, index)}
             >
               <span className="icon icon-home"></span>
               <span>{favorite.get('name')}</span>

@@ -48,7 +48,6 @@ class Footer extends React.Component {
   }
 
   render() {
-    console.log('!', this.state);
     const currentDB = `db${this.state.currentDB}`;
     let keys = 0;
     if (this.state[currentDB]) {
