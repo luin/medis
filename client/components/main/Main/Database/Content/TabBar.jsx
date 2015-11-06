@@ -2,17 +2,36 @@
 
 import React from 'react';
 
+require('./TabBar.scss');
+
 class Content extends React.Component {
   constructor() {
     super();
-  }
 
-  handleSelectPattern() {
+    this.tabs = [
+      'Content',
+      'Terminal',
+      'Info',
+      'Config'
+    ];
+
+    this.state = { activeTab: 'Content' };
   }
 
   render() {
-    return <div>
-      hi
+    return <div className="TabBar">
+      {
+        this.tabs.map(tab => {
+          return <div
+            className={ 'item' + (tab === this.state.activeTab ? ' is-active' : '' )}
+            key={tab}
+            onClick={ () => {
+              this.setState({ activeTab: tab });
+              this.props.onSelectTab(tab);
+            } }
+            >{tab}</div>
+        })
+      }
     </div>;
   }
 }

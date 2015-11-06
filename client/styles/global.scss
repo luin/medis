@@ -28,3 +28,9 @@ ul {
     height: 26px;
   }
 }
+
+textarea {
+  &:focus {
+    outline: none;
+  }
+}

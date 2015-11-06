@@ -20,12 +20,19 @@ class KeyList extends React.Component {
     if (nextProps.db !== this.props.db) {
       this.props.redis.select(nextProps.db);
     }
-    this.setState({
-      cursor: '0',
-      keys: []
-    }, () => {
-      this.scan();
-    });
+
+    var needRefresh = nextProps.db !== this.props.db ||
+      nextProps.pattern !== this.props.pattern ||
+      nextProps.redis !== this.props.redis;
+
+    if (needRefresh) {
+      this.setState({
+        cursor: '0',
+        keys: []
+      }, () => {
+        this.scan();
+      });
+    }
   }
 
   scan() {
