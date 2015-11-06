@@ -9,11 +9,11 @@ import actions from '../../../../actions';
 class ConnectionSelector extends React.Component {
   constructor() {
     super();
-    this.state = { key: null };
+    this.state = { connect: false, key: null };
   }
 
-  handleSelectFavorite(key) {
-    this.setState({ key });
+  handleSelectFavorite(connect, key) {
+    this.setState({ connect, key });
   }
 
   render() {
@@ -22,13 +22,15 @@ class ConnectionSelector extends React.Component {
       <aside className="pane pane-sm sidebar">
         <Favorite
           favorites={this.props.favorites}
-          onSelect={this.handleSelectFavorite.bind(this)}
+          onSelect={this.handleSelectFavorite.bind(this, false)}
+          onRequireConnecting={this.handleSelectFavorite.bind(this, true)}
         />
       </aside>
       <div className="pane">
         <Config
           favorite={selectedFavorite}
           connectStatus={this.props.connectStatus}
+          connect={this.state.connect}
           onSave={(data) => {
             store.dispatch(actions('updateFavorite', { key: selectedFavorite.get('key'), data }));
           }}
