@@ -51,8 +51,8 @@ class Footer extends React.Component {
 
     pipeline.exec((err, [[err1, pttl], [err2, encoding], res3]) => {
       this.setState({
-        encoding,
-        ttl: pttl >= 0 ? humanFormat(pttl, { scale: timeScale }).replace(' ', '') : null,
+        encoding: `Encoding: ${encoding}`,
+        ttl: pttl >= 0 ? `TTL: ${humanFormat(pttl, { scale: timeScale }).replace(' ', '')}` : null,
         size: res3 ? `${sizeUnit}: ${res3[1]}` : null
       });
     });
@@ -69,18 +69,17 @@ class Footer extends React.Component {
   }
 
   render() {
-    const desc = [];
-    if (typeof this.state.size === 'string') {
-      desc.push(`${this.state.size}`);
-    }
-    if (typeof this.state.encoding === 'string') {
-      desc.push(`Encoding: ${this.state.encoding}`);
-    }
-    if (typeof this.state.ttl === 'string') {
-      desc.push(`TTL: ${this.state.ttl}`);
-    }
+    const desc = ['size', 'encoding', 'ttl']
+    .map(key => ({ key, value: this.state[key]}))
+    .filter(item => typeof item.value === 'string');
+    console.log(desc);
     return <footer className="toolbar toolbar-footer">
-      { desc.map(item => <span style={ { margin: '0 5px' } }>{item}</span> ) }
+      {
+        desc.map(({ key, value }) => <span
+          key={key}
+          style={ { margin: '0 5px' } }
+        >{value}</span> )
+      }
     </footer>;
   }
 }
