@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "fixed-data-table": "^0.5.0",
+    "human-format": "^0.5.0",
     "immutable": "^3.7.5",
     "ioredis": "^1.9.1",
     "jquery": "^2.1.4",
