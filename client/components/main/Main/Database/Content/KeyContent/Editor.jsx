@@ -22,6 +22,7 @@ class Editor extends React.Component {
     this.state = {
       currentMode: null,
       wrapping: true,
+      changed: false,
       modes: {
         raw: false,
         json: false,
@@ -44,7 +45,17 @@ class Editor extends React.Component {
     this.state.modes.raw = content;
     this.state.modes.json = tryFormatJSON(content);
     const currentMode = typeof this.state.modes.json === 'string' ? 'json' : 'raw';
-    this.setState({ currentMode });
+    this.setState({ currentMode, changed: false });
+  }
+
+  save() {
+    this.props.onSave(this.state.modes.raw, err => {
+      if (err) {
+        alert(`Redis save failed: ${err.message}`);
+      } else {
+        this.setState({ changed: false });
+      }
+    });
   }
 
   updateContent(mode, content) {
@@ -60,7 +71,9 @@ class Editor extends React.Component {
         raw = this.state.modes.raw;
       }
     }
-    this.setState({ modes: { json, raw } });
+    if (this.state.modes.raw !== raw) {
+      this.setState({ modes: { json, raw }, changed: true });
+    }
   }
 
   updateMode(evt) {
@@ -106,7 +119,7 @@ class Editor extends React.Component {
     } else {
       viewer = <div></div>;
     }
-    return <div style={{ height: this.props.height }} className="Editor">
+    return <div style={ { flex: 1, display: 'flex' } } className="Editor">
       <label className="wrap-selector">
         <input
           type="checkbox"
@@ -124,7 +137,11 @@ class Editor extends React.Component {
         <option value="json" disabled={typeof this.state.modes.json !== 'string'}>JSON</option>
         <option disabled>MessagePack</option>
       </select>
-      <button className="nt-button">Save Changes</button>
+      <button
+        className="nt-button"
+        disabled={!this.state.changed}
+        onClick={this.save.bind(this)}
+      >Save Changes</button>
       { viewer }
     </div>;
   }

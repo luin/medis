@@ -7,19 +7,28 @@ import Editor from './Editor';
 class StringContent extends BaseContent {
   constructor() {
     super();
-    this.state = { content: null };
+    this.state = { keyName: null, content: null };
   }
 
   init(keyName) {
-    this.setState({ content: '' });
+    this.setState({ keyName: null, content: null });
     this.props.redis.get(keyName, (err, content) => {
-      this.setState({ content });
+      this.setState({ keyName, content });
     });
+  }
+
+  save(value, callback) {
+    if (this.state.keyName) {
+      this.props.redis.set(this.state.keyName, value, callback);
+    } else {
+      alert('Please wait for data been loaded before saving.');
+    }
   }
 
   render() {
     return <Editor style={{ height: this.props.height }}
       content={this.state.content}
+      onSave={this.save.bind(this)}
     />
   }
 }
