@@ -19,6 +19,9 @@ module.exports = {
     }, {
       test: /\.scss$/,
       loader: 'style!css!sass'
+    }, {
+      test: /\.css$/,
+      loader: 'style!css'
     }]
   },
   externals: {
@@ -29,7 +32,9 @@ module.exports = {
     'shell': 'require("shell")',
     'app': 'require("app")',
     'ipc': 'require("ipc")',
-    'fs': 'require("fs")'
+    'fs': 'require("fs")',
+    'system': '{}',
+    'file': '{}'
   },
   resolve: {
     extensions: ['', '.js', '.jsx']

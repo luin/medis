@@ -17,9 +17,6 @@ class KeyBrowser extends React.Component {
     };
   }
 
-  handleSelectPattern() {
-  }
-
   render() {
     const { patternStore, connectionKey } = this.props;
     const patterns = patternStore.get(`${connectionKey}|${this.state.db}`) || Immutable.List();

@@ -11,11 +11,11 @@ require('./index.scss');
 class Database extends React.Component {
   constructor() {
     super();
-    this.footerHeight = 66;
     this.$window = $(window);
 
     this.state = {
       sidebarWidth: 300,
+      key: null,
       clientHeight: this.$window.height()
     };
   }
@@ -46,11 +46,12 @@ class Database extends React.Component {
         width= { this.state.sidebarWidth }
         redis={ this.props.redis }
         connectionKey={ this.props.connectionKey }
-        onSelectKey={ key => {
-          console.log('=', key);
-        }}
+        onSelectKey={ key => this.setState({ key }) }
       />
       <Content
+        keyName={ this.state.key }
+        height={ this.state.clientHeight }
+        redis={ this.props.redis }
       />
   </SplitPane>;
   }
