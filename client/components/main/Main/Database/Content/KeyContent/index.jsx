@@ -9,26 +9,9 @@ class KeyContent extends React.Component {
     this.state = {};
   }
 
-  init(keyName) {
-    this.props.redis.type(keyName, (err, type) => {
-      console.log(type);
-      this.setState({ type });
-    });
-  }
-
-  componentDidMount() {
-    this.init(this.props.keyName);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.keyName !== this.props.keyName) {
-      this.init(nextProps.keyName);
-    }
-  }
-
   render() {
     let view;
-    switch (this.state.type) {
+    switch (this.props.keyType) {
     case 'string':
       view = <StringContent
         height={this.props.height}
