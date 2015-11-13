@@ -72,7 +72,6 @@ class Footer extends React.Component {
     const desc = ['size', 'encoding', 'ttl']
     .map(key => ({ key, value: this.state[key]}))
     .filter(item => typeof item.value === 'string');
-    console.log(desc);
     return <footer className="toolbar toolbar-footer">
       {
         desc.map(({ key, value }) => <span

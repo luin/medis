@@ -21,26 +21,24 @@ class Database extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.updateLayout.bind(this), false);
+    $(window).on('resize', this.updateLayout.bind(this));
     this.updateLayout();
   }
 
   updateLayout() {
-    if (this.refs.node) {
-      this.setState({ clientHeight: $(this.refs.node.getDOMNode()).height() });
-    }
+    this.setState({ clientHeight: $(window).height() - $('.tab-group').height() - 2 });
   }
 
   render() {
     return <SplitPane
-        className="pane-group"
-        minSize="250"
-        split="vertical"
-        defaultSize={300}
-        ref="node"
-        onChange={size => {
-          this.setState({ sidebarWidth: size });
-        }}
+      className="pane-group"
+      minSize="250"
+      split="vertical"
+      defaultSize={300}
+      ref="node"
+      onChange={size => {
+        this.setState({ sidebarWidth: size });
+      }}
       >
       <KeyBrowser
         patternStore={ this.props.patternStore }
@@ -51,10 +49,11 @@ class Database extends React.Component {
         onSelectKey={ key => this.setState({ key }) }
       />
       <Content
+        height={ this.state.clientHeight }
         keyName={ this.state.key }
         redis={ this.props.redis }
       />
-  </SplitPane>;
+    </SplitPane>;
   }
 }
 

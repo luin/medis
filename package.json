@@ -17,6 +17,8 @@
     "jsonlint": "^1.6.2",
     "jstree": "^3.2.1",
     "lodash": "^3.10.1",
+    "msgpack-js": "^0.3.0",
+    "msgpack5": "^3.3.0",
     "react": "^0.14.0",
     "react-codemirror": "^0.2.0",
     "react-document-title": "^2.0.1",

@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import BaseContent from './BaseContent';
 import Codemirror from 'react-codemirror';
 require('react-codemirror/node_modules/codemirror/mode/javascript/javascript');
 require('react-codemirror/node_modules/codemirror/addon/lint/json-lint');
@@ -13,6 +12,7 @@ import jsonlint from 'jsonlint';
 window.jsonlint = jsonlint.parser;
 require('react-codemirror/node_modules/codemirror/lib/codemirror.css');
 require('react-codemirror/node_modules/codemirror/addon/lint/lint.css');
+const msgpack = require('msgpack-js');
 
 require('./Editor.scss');
 
@@ -32,18 +32,24 @@ class Editor extends React.Component {
   }
 
   componentDidMount() {
-    this.init(this.props.content);
+    this.init(this.props.buffer);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.content !== this.props.content) {
-      this.init(nextProps.content);
+    if (nextProps.buffer !== this.props.buffer) {
+      this.init(nextProps.buffer);
     }
   }
 
-  init(content) {
+  init(buffer) {
+    if (!buffer) {
+      this.setState({ currentMode: null, changed: false });
+      return;
+    }
+    const content = buffer.toString();
     this.state.modes.raw = content;
     this.state.modes.json = tryFormatJSON(content);
+    this.state.modes.messagepack = JSON.stringify(msgpack.decode(buffer));
     const currentMode = typeof this.state.modes.json === 'string' ? 'json' : 'raw';
     this.setState({ currentMode, changed: false });
   }
@@ -59,7 +65,8 @@ class Editor extends React.Component {
   }
 
   updateContent(mode, content) {
-    let json, raw;
+    let json;
+    let raw;
     if (mode === 'raw') {
       raw = content;
       json = tryFormatJSON(content);
@@ -83,6 +90,7 @@ class Editor extends React.Component {
 
   render() {
     let viewer;
+    console.log(this.state);
     if (this.state.currentMode === 'raw') {
       viewer = <Codemirror
         key="raw"
@@ -110,12 +118,33 @@ class Editor extends React.Component {
           styleActiveLine: true,
           lineNumbers: true,
           lineWrapping: this.state.wrapping,
-          gutters: ["CodeMirror-lint-markers"],
+          gutters: ['CodeMirror-lint-markers'],
           autoCloseBrackets: true,
           matchTags: true,
           lint: !!this.state.modes.raw
         }}
-      />
+      />;
+    } else if (this.state.currentMode === 'messagepack') {
+      viewer = <Codemirror
+        key="messagepack"
+        value={this.state.modes.messagepack}
+        onChange={this.updateContent.bind(this, 'messagepack')}
+        options={{
+          mode: {
+            name: 'javascript',
+            json: true
+          },
+          tabSize: 2,
+          indentWithTabs: true,
+          styleActiveLine: true,
+          lineNumbers: true,
+          lineWrapping: this.state.wrapping,
+          gutters: ['CodeMirror-lint-markers'],
+          autoCloseBrackets: true,
+          matchTags: true,
+          lint: !!this.state.modes.raw
+        }}
+      />;
     } else {
       viewer = <div></div>;
     }
@@ -135,7 +164,7 @@ class Editor extends React.Component {
       >
         <option value="raw" disabled={typeof this.state.modes.raw !== 'string'}>Raw</option>
         <option value="json" disabled={typeof this.state.modes.json !== 'string'}>JSON</option>
-        <option disabled>MessagePack</option>
+        <option value="messagepack" disabled={typeof this.state.modes.messagepack !== 'string'}>MessagePack</option>
       </select>
       <button
         className="nt-button"
@@ -152,11 +181,10 @@ export default Editor;
 function tryFormatJSON(jsonString) {
   try {
     const o = JSON.parse(jsonString);
-    if (o && typeof o === "object" && o !== null) {
+    if (o && typeof o === 'object' && o !== null) {
       return JSON.stringify(o, null, '\t');
     }
-  }
-  catch (e) { }
+  } catch (e) { /**/ }
 
   return false;
 }

@@ -2,18 +2,26 @@
 
 import React from 'react';
 import BaseContent from './BaseContent';
+import SplitPane from 'react-split-pane';
 import { Table, Column } from 'fixed-data-table';
 import Editor from './Editor';
+
+require('./ListContent.scss');
 
 class ListContent extends BaseContent {
   constructor() {
     super();
-    this.state = { keyName: null, length: 0 };
+    this.state = {
+      keyName: null,
+      length: 0,
+      sidebarWidth: 200,
+      members: []
+    };
   }
 
   init(keyName) {
     this.setState({ keyName: null, content: null });
-    this.props.redis.llen(keyName, (err, length) => {
+    this.props.redis.llen(keyName, (_, length) => {
       this.setState({ keyName, length });
     });
   }
@@ -26,80 +34,91 @@ class ListContent extends BaseContent {
     }
   }
 
+  load(from, length) {
+    const to = from + length;
+    const members = this.state.members;
+    for (let i = from; i <= to; i++) {
+      members[i] = null;
+    }
+    this.props.redis.lrange(this.state.keyName, from, to, (_, results) => {
+      console.log('from', from, 'to', to, results);
+      const members = this.state.members;
+      for (let i = from; i <= to; i++) {
+        members[i] = results[i - from];
+      }
+      this.setState({ members });
+    });
+  }
+
+  getRow(index) {
+    if (typeof this.state.members[index] === 'undefined') {
+      this.load(Math.floor(index / 100) * 100, 100);
+    }
+    return [this.state.members[index]];
+  }
+
   render() {
-    return <SplitPane
-      className="pane-group"
-      minSize="250"
-      split="vertical"
-      defaultSize={300}
-      ref="node"
-      onChange={size => {
-        this.setState({ sidebarWidth: size });
-      }}
-    >
-      <Table
-        rowHeight={24}
-        rowGetter={this.getRow.bind(this)}
-        rowsCount={this.state.length}
-        rowClassNameGetter={index => {
-          const item = this.state.keys[index];
-          if (!item) {
-            return 'is-loading';
-          }
-          if (item[0] === this.state.selectedKey) {
-            return 'is-selected';
-          }
-          return '';
+    return <div className="ListContent">
+      <SplitPane
+        className="pane-group"
+        minSize="80"
+        split="vertical"
+        defaultSize={200}
+        ref="node"
+        onChange={size => {
+          this.setState({ sidebarWidth: size });
         }}
-        onRowClick={(evt, index) => {
-          const item = this.state.keys[index];
-          if (item && item[0]) {
-            this.setState({ selectedKey: item[0] });
-            this.props.onSelect(item[0]);
-          }
-        }}
-        width={this.props.width}
-        height={this.props.height}
-        headerHeight={24}
         >
-        <Column
-          label="members"
-          width={this.props.width - 40}
-          dataKey={0}
-          cellRenderer={
-            cellData => {
-              if (!cellData) {
-                if (this.state.scanning) {
-                  return <span style={ { color: '#ccc' }}>Scanning...(cursor {this.state.cursor})</span>;
+        <div style={ { 'margin-top': -1 } }>
+          <Table
+            rowHeight={24}
+            rowGetter={this.getRow.bind(this)}
+            rowsCount={this.state.length}
+            rowClassNameGetter={
+              index => {
+                const item = this.state.members[index];
+                if (!item) {
+                  return 'type-list is-loading';
                 }
-                return <a href="#" onClick={(evt) => {
-                  evt.preventDefault();
-                  this.scan();
-                }}>Scan more</a>;
+                if (index === this.state.selectIndex) {
+                  return 'type-list is-selected';
+                }
+                return 'type-list';
               }
-              return cellData;
             }
-          }
-        />
-      </Table>
-      <Editor style={{ height: this.props.height }}
-        content={this.state.content}
-        onSave={this.save.bind(this)}
-      />
-    </SplitPane>;
+            onRowClick={(evt, index) => {
+              const item = this.state.members[index];
+              if (item && item[0]) {
+                this.setState({ selectIndex: index });
+                this.props.onSelect(item[0]);
+              }
+            }}
+            width={this.state.sidebarWidth}
+            height={this.props.height + 1}
+            headerHeight={24}
+            >
+            <Column
+              label="members"
+              width={this.state.sidebarWidth}
+              dataKey={0}
+              cellRenderer={
+                (cellData, cellDataKey, rowData, rowIndex) => {
+                  if (cellData === null) {
+                    cellData = 'Loading...';
+                  }
+                  return <div style={ { width: this.state.sidebarWidth, display: 'flex' } }><div className="index-label">{rowIndex}</div><div className="list-preview">{cellData}</div></div>;
+                }
+              }
+            />
+          </Table>
+          </div>
+          <Editor
+            content={this.state.content}
+            onSave={this.save.bind(this)}
+          />
+        </SplitPane>
+      </div>;
   }
 }
 
 export default ListContent;
-
-function tryFormatJSON(jsonString) {
-  try {
-    const o = JSON.parse(jsonString);
-    if (o && typeof o === "object" && o !== null) {
-      return JSON.stringify(o, null, '\t');
-    }
-  }
-  catch (e) { }
-
-  return false;
-}

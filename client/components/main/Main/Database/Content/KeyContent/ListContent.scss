@@ -1,0 +1,27 @@
+.ListContent {
+  flex: 1;
+  position: relative;
+
+  .type-list {
+    .index-label {
+      background: #ccc;
+      margin: 4px 4px 0 0;
+      font-family: monospace !important;
+      padding: 0 4px !important;
+      height: 16px;
+      font-size: 11px !important;
+      line-height: 16px !important;
+      display: block;
+      text-align: center;
+      color: #fff;
+    }
+  }
+
+  .list-preview {
+    flex: 1;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
