@@ -27,7 +27,6 @@ class Database extends React.Component {
 
   updateLayout() {
     if (this.refs.node) {
-      window.$4 = $(this.refs.node.getDOMNode());
       this.setState({ clientHeight: $(this.refs.node.getDOMNode()).height() });
     }
   }
