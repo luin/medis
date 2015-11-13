@@ -7,11 +7,28 @@
   }
 
   .CodeMirror {
-    height: 100%;
+    height: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   .ReactCodeMirror {
-    height: 100%;
+    position: relative;
+    flex: 1;
+    display: flex;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 45px;
+      z-index: 1;
+      background: #f7f7f7;
+      border-right: 1px solid #ddd;
+      height: 100%;
+    }
   }
 
   .mode-selector {

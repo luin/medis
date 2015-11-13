@@ -27,7 +27,8 @@ class Database extends React.Component {
 
   updateLayout() {
     if (this.refs.node) {
-      this.setState({ clientHeight: $(window).height() });
+      window.$4 = $(this.refs.node.getDOMNode());
+      this.setState({ clientHeight: $(this.refs.node.getDOMNode()).height() });
     }
   }
 
@@ -52,7 +53,6 @@ class Database extends React.Component {
       />
       <Content
         keyName={ this.state.key }
-        height={ this.state.clientHeight }
         redis={ this.props.redis }
       />
   </SplitPane>;

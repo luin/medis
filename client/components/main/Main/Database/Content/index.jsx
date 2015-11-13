@@ -34,7 +34,7 @@ class Content extends React.Component {
   }
 
   render() {
-    return <div className="pane sidebar">
+    return <div className="pane sidebar" style={{height: '100%'}}>
       <TabBar
         onSelectTab={this.handleTabChange.bind(this)}
       />
