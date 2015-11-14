@@ -12,7 +12,7 @@ import jsonlint from 'jsonlint';
 window.jsonlint = jsonlint.parser;
 require('react-codemirror/node_modules/codemirror/lib/codemirror.css');
 require('react-codemirror/node_modules/codemirror/addon/lint/lint.css');
-const msgpack = require('msgpack-js');
+const msgpack = require('msgpack5')();
 
 require('./Editor.scss');
 
@@ -47,40 +47,48 @@ class Editor extends React.Component {
       return;
     }
     const content = buffer.toString();
-    this.state.modes.raw = content;
-    this.state.modes.json = tryFormatJSON(content);
-    this.state.modes.messagepack = JSON.stringify(msgpack.decode(buffer));
-    const currentMode = typeof this.state.modes.json === 'string' ? 'json' : 'raw';
-    this.setState({ currentMode, changed: false });
+    const modes = {};
+    modes.raw = content;
+    modes.json = tryFormatJSON(content, true);
+    modes.messagepack = modes.json ? false : tryFormatMessagepack(buffer, true);
+    let currentMode = 'raw';
+    if (modes.messagepack) {
+      currentMode = 'messagepack';
+    } else if (modes.json) {
+      currentMode = 'json';
+    }
+    console.log(modes);
+    this.setState({ modes, currentMode, changed: false });
   }
 
   save() {
-    this.props.onSave(this.state.modes.raw, err => {
+    let content = this.state.modes.raw;
+    if (this.state.currentMode === 'json') {
+      content = tryFormatJSON(this.state.modes.json);
+      if (!content) {
+        alert('The json is invalid. Please check again.');
+        return;
+      }
+    } else if (this.state.currentMode === 'messagepack') {
+      content = tryFormatMessagepack(this.state.modes.messagepack);
+      if (!content) {
+        alert('The json is invalid. Please check again.');
+        return;
+      }
+      content = msgpack.encode(JSON.parse(content));
+    }
+    this.props.onSave(content, err => {
       if (err) {
         alert(`Redis save failed: ${err.message}`);
       } else {
-        this.setState({ changed: false });
+        this.init(typeof content === 'string' ? new Buffer(content) : content);
       }
     });
   }
 
   updateContent(mode, content) {
-    let json;
-    let raw;
-    if (mode === 'raw') {
-      raw = content;
-      json = tryFormatJSON(content);
-    } else if (mode === 'json') {
-      json = content;
-      try {
-        raw = JSON.stringify(JSON.parse(json));
-      } catch (e) {
-        raw = this.state.modes.raw;
-      }
-    }
-    if (this.state.modes.raw !== raw) {
-      this.setState({ modes: { json, raw }, changed: true });
-    }
+    this.state.modes[mode] = content
+    this.setState({ modes: this.state.modes, changed: true });
   }
 
   updateMode(evt) {
@@ -100,6 +108,7 @@ class Editor extends React.Component {
           mode: 'none',
           styleActiveLine: true,
           lineWrapping: this.state.wrapping,
+          gutters: ['CodeMirror-lint-markers'],
           lineNumbers: true
         }}
       />;
@@ -178,11 +187,33 @@ class Editor extends React.Component {
 
 export default Editor;
 
-function tryFormatJSON(jsonString) {
+function tryFormatJSON(jsonString, beautify) {
   try {
     const o = JSON.parse(jsonString);
     if (o && typeof o === 'object' && o !== null) {
-      return JSON.stringify(o, null, '\t');
+      if (beautify) {
+        return JSON.stringify(o, null, '\t');
+      }
+      return JSON.stringify(o);
+    }
+  } catch (e) { /**/ }
+
+  return false;
+}
+
+function tryFormatMessagepack(buffer, beautify) {
+  try {
+    let o;
+    if (typeof buffer === 'string') {
+      o = JSON.parse(buffer);
+    } else {
+      o = msgpack.decode(buffer);
+    }
+    if (o && typeof o === 'object' && o !== null) {
+      if (beautify) {
+        return JSON.stringify(o, null, '\t');
+      }
+      return JSON.stringify(o);
     }
   } catch (e) { /**/ }
 

@@ -35,7 +35,7 @@ class ListContent extends BaseContent {
   }
 
   load(from, length) {
-    const to = from + length;
+    const to = from + length - 1;
     const members = this.state.members;
     for (let i = from; i <= to; i++) {
       members[i] = null;
