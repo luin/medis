@@ -52,6 +52,10 @@ const actions = {
             return false;
           }
         }));
+        redis.defineCommand('setKeepTTL', {
+          numberOfKeys: 1,
+          lua: 'local ttl = redis.call("pttl", KEYS[1]) if ttl > 0 then return redis.call("SET", KEYS[1], ARGV[1], "PX", ttl) else return redis.call("SET", KEYS[1], ARGV[1]) end'
+        });
         redis.once('ready', function () {
           dispatch({ type: 'connect', data: { redis, config } });
         });

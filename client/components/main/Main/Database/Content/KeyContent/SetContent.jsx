@@ -8,7 +8,7 @@ import Editor from './Editor';
 
 require('./ListContent.scss');
 
-class ListContent extends BaseContent {
+class SetContent extends BaseContent {
   constructor() {
     super();
     this.state = {
@@ -17,49 +17,57 @@ class ListContent extends BaseContent {
       sidebarWidth: 200,
       members: []
     };
+    this.cursor = 0;
+    this.maxRow = 0;
   }
 
   init(keyName) {
     this.setState({ keyName: null, content: null });
-    this.props.redis.llen(keyName, (_, length) => {
+    this.props.redis.scard(keyName, (_, length) => {
       this.setState({ keyName, length });
     });
   }
 
   save(value, callback) {
     if (typeof this.state.selectIndex === 'number') {
+      const oldValue = this.state.members[this.state.selectIndex];
       this.state.members[this.state.selectIndex] = value.toString();
       this.setState({ members: this.state.members });
-      this.props.redis.lset(this.state.keyName, this.state.selectIndex, value, callback);
+      this.props.redis.multi().srem(this.state.keyName, oldValue).sadd(this.state.keyName, value).exec(callback);
     } else {
       alert('Please wait for data been loaded before saving.');
     }
   }
 
-  load(from, length) {
-    const to = from + length - 1;
-    const members = this.state.members;
-    for (let i = from; i <= to; i++) {
-      members[i] = null;
+  load() {
+    if (this.isLoading) {
+      return;
     }
-    this.props.redis.lrange(this.state.keyName, from, to, (_, results) => {
-      const members = this.state.members;
-      for (let i = from; i <= to; i++) {
-        members[i] = results[i - from];
+    this.isLoading = true;
+    const count = Number(this.cursor) ? 10000 : 500;
+    this.props.redis.sscan(this.state.keyName, this.cursor, 'MATCH', '*', 'COUNT', count, (_, [cursor, result]) => {
+      this.isLoading = false;
+      result.forEach(item => this.state.members.push(item));
+      this.cursor = cursor;
+      this.setState({ members: this.state.members });
+      if (this.state.members.length - 1 < this.maxRow && Number(cursor)) {
+        this.load();
       }
-      this.setState({ members });
     });
   }
 
   getRow(index) {
     if (typeof this.state.members[index] === 'undefined') {
-      this.load(Math.floor(index / 100) * 100, 100);
+      if (index > this.maxRow) {
+        this.maxRow = index;
+      }
+      this.load();
     }
     return [this.state.members[index]];
   }
 
   render() {
-    return <div className="ListContent">
+    return <div className="SetContent">
       <SplitPane
         className="pane-group"
         minSize="80"
@@ -101,12 +109,13 @@ class ListContent extends BaseContent {
               label="members"
               width={this.state.sidebarWidth}
               dataKey={0}
+              allowCellsRecycling={true}
               cellRenderer={
                 (cellData, cellDataKey, rowData, rowIndex) => {
                   if (cellData === null) {
                     cellData = 'Loading...';
                   }
-                  return <div style={ { width: this.state.sidebarWidth, display: 'flex' } }><div className="index-label">{rowIndex}</div><div className="list-preview">{cellData}</div></div>;
+                  return <div style={ { width: this.state.sidebarWidth, display: 'flex' } }><div className="list-preview">{cellData}</div></div>;
                 }
               }
             />
@@ -122,4 +131,4 @@ class ListContent extends BaseContent {
   }
 }
 
-export default ListContent;
+export default SetContent;
