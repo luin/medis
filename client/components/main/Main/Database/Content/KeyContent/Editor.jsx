@@ -87,7 +87,7 @@ class Editor extends React.Component {
   }
 
   updateContent(mode, content) {
-    this.state.modes[mode] = content
+    this.state.modes[mode] = content;
     this.setState({ modes: this.state.modes, changed: true });
   }
 

@@ -27,8 +27,10 @@ class ListContent extends BaseContent {
   }
 
   save(value, callback) {
-    if (this.state.keyName) {
-      this.props.redis.set(this.state.keyName, value, callback);
+    if (typeof this.state.selectIndex === 'number') {
+      this.state.members[this.state.selectIndex] = value.toString();
+      this.setState({ members: this.state.members });
+      this.props.redis.lset(this.state.keyName, this.state.selectIndex, value, callback);
     } else {
       alert('Please wait for data been loaded before saving.');
     }
@@ -58,6 +60,7 @@ class ListContent extends BaseContent {
   }
 
   render() {
+    console.log('content', this.state.content);
     return <div className="ListContent">
       <SplitPane
         className="pane-group"
@@ -89,8 +92,7 @@ class ListContent extends BaseContent {
             onRowClick={(evt, index) => {
               const item = this.state.members[index];
               if (item && item[0]) {
-                this.setState({ selectIndex: index });
-                this.props.onSelect(item[0]);
+                this.setState({ selectIndex: index, content: item });
               }
             }}
             width={this.state.sidebarWidth}
@@ -113,7 +115,8 @@ class ListContent extends BaseContent {
           </Table>
           </div>
           <Editor
-            content={this.state.content}
+            style={{ height: this.props.height }}
+            buffer={this.state.content && new Buffer(this.state.content)}
             onSave={this.save.bind(this)}
           />
         </SplitPane>
