@@ -57,7 +57,6 @@ class Editor extends React.Component {
     } else if (modes.json) {
       currentMode = 'json';
     }
-    console.log(modes);
     this.setState({ modes, currentMode, changed: false });
   }
 
@@ -98,7 +97,6 @@ class Editor extends React.Component {
 
   render() {
     let viewer;
-    console.log(this.state);
     if (this.state.currentMode === 'raw') {
       viewer = <Codemirror
         key="raw"

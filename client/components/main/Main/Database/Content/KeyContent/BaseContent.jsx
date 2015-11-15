@@ -17,9 +17,13 @@ class BaseContent extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.keyName !== this.props.keyName) {
+    if (nextProps.keyName !== this.props.keyName && nextProps.keyName) {
       this.init(nextProps.keyName);
     }
+  }
+
+  componentWillUnmount() {
+    this.setState = function () {}
   }
 }
 
