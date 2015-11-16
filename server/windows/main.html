@@ -8,7 +8,10 @@
   </head>
   <body>
     <div class="window" id="content"></div>
-    <script> window.$ = window.jQuery = require('jquery'); </script>
+    <script>
+      window.$ = window.jQuery = require('jquery');
+      window.Buffer = GLOBAL.Buffer;
+    </script>
     <script src="http://localhost:8090/webpack-dev-server.js"></script>
     <script src="http://localhost:8090/assets/main.js"></script>
   </body>

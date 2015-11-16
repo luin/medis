@@ -15,7 +15,7 @@ class Content extends React.Component {
   }
 
   init(keyName) {
-    this.props.redis.type(keyName, (err, keyType) => {
+    this.props.redis.type(keyName, (_, keyType) => {
       this.setState({ keyType });
     });
   }
@@ -34,7 +34,7 @@ class Content extends React.Component {
   }
 
   render() {
-    return <div className="pane sidebar" style={{height: '100%'}}>
+    return <div className="pane sidebar" style={ { height: '100%' } }>
       <TabBar
         onSelectTab={this.handleTabChange.bind(this)}
       />

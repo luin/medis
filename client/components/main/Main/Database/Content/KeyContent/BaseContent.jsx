@@ -8,7 +8,7 @@ class BaseContent extends React.Component {
     this.state = {};
   }
 
-  init(keyName) {
+  init() {
     throw new Error('should be overrided');
   }
 

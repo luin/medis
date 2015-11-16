@@ -7,7 +7,6 @@ const Menu = require('menu');
 const ipc = require('ipc');
 
 ipc.on('create pattern-manager', function (event, arg) {
-  console.log('===', event, arg);
   windowManager.create('pattern-manager', arg);
 });
 

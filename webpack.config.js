@@ -5,6 +5,10 @@ module.exports = {
     main: './client/main.jsx',
     'pattern-manager': './client/pattern-manager.jsx'
   },
+  node: {
+    Buffer: false,
+    buffer: false
+  },
   output: {
     filename: '[name].js',
     publicPath: 'http://localhost:8090/assets'
@@ -12,10 +16,12 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.jsx$/,
-      loader: 'jsx-loader?harmony!babel-loader'
+      exclude: /node_modules/,
+      loader: 'jsx-loader?harmony!babel?stage=0&ignore=buffer'
     }, {
       test: /\.js$/,
-      loader: 'babel-loader'
+      exclude: /node_modules/,
+      loader: 'babel?stage=0&ignore=buffer'
     }, {
       test: /\.scss$/,
       loader: 'style!css!sass'
