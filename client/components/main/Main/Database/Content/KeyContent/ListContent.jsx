@@ -43,7 +43,6 @@ class ListContent extends BaseContent {
       members[i] = null;
     }
     this.props.redis.lrange(this.state.keyName, from, to, (_, results) => {
-      console.log('from', from, 'to', to, results);
       const members = this.state.members;
       for (let i = from; i <= to; i++) {
         members[i] = results[i - from];
@@ -60,7 +59,6 @@ class ListContent extends BaseContent {
   }
 
   render() {
-    console.log('content', this.state.content);
     return <div className="ListContent">
       <SplitPane
         className="pane-group"
@@ -72,7 +70,7 @@ class ListContent extends BaseContent {
           this.setState({ sidebarWidth: size });
         }}
         >
-        <div style={ { 'margin-top': -1 } }>
+        <div style={ { 'marginTop': -1 } }>
           <Table
             rowHeight={24}
             rowGetter={this.getRow.bind(this)}
