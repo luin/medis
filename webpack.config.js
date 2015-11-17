@@ -39,6 +39,7 @@ module.exports = {
     'app': 'require("app")',
     'ipc': 'require("ipc")',
     'fs': 'require("fs")',
+    'buffer': 'require("buffer")',
     'system': '{}',
     'file': '{}'
   },
