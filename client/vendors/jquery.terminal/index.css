@@ -80,18 +80,18 @@
 }
 .terminal .terminal-output div div, .cmd .prompt {
     display: block;
-    line-height: 14px;
+    line-height: 18px;
     height: auto;
 }
 .cmd .prompt {
     float: left;
 }
 .terminal, .cmd {
-    font-family: FreeMono, monospace;
-    color: #aaa;
-    background-color: #000;
+    font-family: monospace;
+    color: #eed1b3;
+    background-color: #202020;
     font-size: 14px;
-    line-height: 14px;
+    line-height: 18px;
 }
 .terminal-output > div {
     /*padding-top: 3px;*/

@@ -1,0 +1,15 @@
+.Terminal {
+  .number {
+    color: #78CF8A;
+  }
+
+  .list {
+    color: #8f9d6a;
+    span {
+      color: #3d3d3d;
+      min-width: 28px;
+      text-align: right;
+      margin-right: 10px;
+    }
+  }
+}
