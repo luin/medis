@@ -16,9 +16,9 @@ class ZSetContent extends BaseContent {
   }
 
   save(value, callback) {
-    if (typeof this.state.selectIndex === 'number') {
-      const oldValue = this.state.members[this.state.selectIndex];
-      this.state.members[this.state.selectIndex] = value.toString();
+    if (typeof this.state.selectedIndex === 'number') {
+      const oldValue = this.state.members[this.state.selectedIndex];
+      this.state.members[this.state.selectedIndex] = value.toString();
       this.setState({ members: this.state.members });
       this.props.redis.multi().srem(this.state.keyName, oldValue).sadd(this.state.keyName, value).exec(callback);
     } else {
@@ -68,10 +68,10 @@ class ZSetContent extends BaseContent {
             rowHeight={24}
             rowsCount={this.state.length}
             rowClassNameGetter={this.rowClassGetter.bind(this)}
-            onRowClick={(evt, selectIndex) => {
-              const item = this.state.members[selectIndex];
+            onRowClick={(evt, selectedIndex) => {
+              const item = this.state.members[this.state.desc ? this.state.length - 1 - selectedIndex : selectedIndex];
               if (item && item[0]) {
-                this.setState({ selectIndex, content: item[0] });
+                this.setState({ selectedIndex, content: item[0] });
               }
             }}
             isColumnResizing={false}
@@ -85,8 +85,11 @@ class ZSetContent extends BaseContent {
             <Column
               header={
                 <SortHeaderCell
-                  title="index"
-                  onOrderChange={desc => this.sestState({ desc })}
+                  title="score"
+                  onOrderChange={desc => this.setState({
+                    desc,
+                    selectedIndex: typeof this.state.selectedIndex === 'number' ? this.state.length - 1 - this.state.selectedIndex : null
+                  })}
                   desc={this.state.desc}
                 />
               }

@@ -202,7 +202,7 @@ class KeyList extends React.Component {
                 this.scan();
               }}>Scan more</a>;
             }
-            return cellData;
+            return <div className="overflow-wrapper"><span>{cellData}</span></div>;
           } }
         />
       </Table>

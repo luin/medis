@@ -27,3 +27,17 @@
   cursor: col-resize;
   height: 100%;
 }
+
+.overflow-wrapper {
+  display: flex;
+  width: 100%;
+
+  span {
+    display: block;
+    flex: 1;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

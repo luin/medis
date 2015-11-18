@@ -16,10 +16,10 @@ class ListContent extends BaseContent {
   }
 
   save(value, callback) {
-    if (typeof this.state.selectIndex === 'number') {
-      this.state.members[this.state.selectIndex] = value.toString();
+    if (typeof this.state.selectedIndex === 'number') {
+      this.state.members[this.state.selectedIndex] = value.toString();
       this.setState({ members: this.state.members });
-      this.props.redis.lset(this.state.keyName, this.state.selectIndex, value, callback);
+      this.props.redis.lset(this.state.keyName, this.state.selectedIndex, value, callback);
     } else {
       alert('Please wait for data been loaded before saving.');
     }
@@ -67,10 +67,10 @@ class ListContent extends BaseContent {
             rowHeight={24}
             rowsCount={this.state.length}
             rowClassNameGetter={this.rowClassGetter.bind(this)}
-            onRowClick={(evt, selectIndex) => {
-              const content = this.state.members[selectIndex];
+            onRowClick={(evt, selectedIndex) => {
+              const content = this.state.members[this.state.desc ? this.state.length - 1 - selectedIndex : selectedIndex];
               if (content) {
-                this.setState({ selectIndex, content });
+                this.setState({ selectedIndex, content });
               }
             }}
             isColumnResizing={false}
@@ -85,7 +85,10 @@ class ListContent extends BaseContent {
               header={
                 <SortHeaderCell
                   title="index"
-                  onOrderChange={desc => this.sestState({ desc })}
+                  onOrderChange={desc => this.setState({
+                    desc,
+                    selectedIndex: typeof this.state.selectedIndex === 'number' ? this.state.length - 1 - this.state.selectedIndex : null
+                  })}
                   desc={this.state.desc}
                 />
               }
