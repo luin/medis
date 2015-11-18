@@ -42,53 +42,51 @@ class SetContent extends BaseContent {
   }
 
   render() {
-    return <div className="SetContent">
-      <SplitPane
-        className="pane-group"
-        minSize="80"
-        split="vertical"
-        defaultSize={200}
-        ref="node"
-        onChange={size => {
-          this.setState({ sidebarWidth: size });
-        }}
-        >
-        <div style={ { 'marginTop': -1 } }>
-          <Table
-            rowHeight={24}
-            rowsCount={this.state.length}
-            rowClassNameGetter={this.rowClassGetter.bind(this)}
-            onRowClick={(evt, selectedIndex) => {
-              const content = this.state.members[selectedIndex];
-              if (content) {
-                this.setState({ selectedIndex, content });
-              }
-            }}
+    return <SplitPane
+      className="pane-group"
+      minSize="80"
+      split="vertical"
+      defaultSize={200}
+      ref="node"
+      onChange={size => {
+        this.setState({ sidebarWidth: size });
+      }}
+      >
+      <div style={ { 'marginTop': -1 } }>
+        <Table
+          rowHeight={24}
+          rowsCount={this.state.length}
+          rowClassNameGetter={this.rowClassGetter.bind(this)}
+          onRowClick={(evt, selectedIndex) => {
+            const content = this.state.members[selectedIndex];
+            if (content) {
+              this.setState({ selectedIndex, content });
+            }
+          }}
+          width={this.state.sidebarWidth}
+          height={this.props.height + 1}
+          headerHeight={24}
+          >
+          <Column
+            header="member"
             width={this.state.sidebarWidth}
-            height={this.props.height + 1}
-            headerHeight={24}
-            >
-            <Column
-              header="member"
-              width={this.state.sidebarWidth}
-              cell={ ({ rowIndex }) => {
-                const member = this.state.members[rowIndex];
-                if (!member) {
-                  this.load(rowIndex);
-                  return 'Loading...';
-                }
-                return <div className="overflow-wrapper"><span>{member}</span></div>;
-              } }
-            />
-          </Table>
-          </div>
-          <Editor
-            style={{ height: this.props.height }}
-            buffer={this.state.content && new Buffer(this.state.content)}
-            onSave={this.save.bind(this)}
+            cell={ ({ rowIndex }) => {
+              const member = this.state.members[rowIndex];
+              if (!member) {
+                this.load(rowIndex);
+                return 'Loading...';
+              }
+              return <div className="overflow-wrapper"><span>{member}</span></div>;
+            } }
           />
-        </SplitPane>
-      </div>;
+        </Table>
+        </div>
+        <Editor
+          style={{ height: this.props.height }}
+          buffer={this.state.content && new Buffer(this.state.content)}
+          onSave={this.save.bind(this)}
+        />
+      </SplitPane>;
   }
 }
 

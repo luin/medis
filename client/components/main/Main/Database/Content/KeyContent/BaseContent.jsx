@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+require('./BaseContent.scss');
+
 const getDefaultState = function () {
   return {
     keyName: null,

@@ -52,78 +52,76 @@ class ZSetContent extends BaseContent {
   }
 
   render() {
-    return <div className="ZSetContent">
-      <SplitPane
-        className="pane-group"
-        minSize="80"
-        split="vertical"
-        defaultSize={200}
-        ref="node"
-        onChange={size => {
-          this.setState({ sidebarWidth: size });
-        }}
-        >
-        <div style={ { 'marginTop': -1 } }>
-          <Table
-            rowHeight={24}
-            rowsCount={this.state.length}
-            rowClassNameGetter={this.rowClassGetter.bind(this)}
-            onRowClick={(evt, selectedIndex) => {
-              const item = this.state.members[this.state.desc ? this.state.length - 1 - selectedIndex : selectedIndex];
-              if (item && item[0]) {
-                this.setState({ selectedIndex, content: item[0] });
+    return <SplitPane
+      className="pane-group"
+      minSize="80"
+      split="vertical"
+      defaultSize={200}
+      ref="node"
+      onChange={size => {
+        this.setState({ sidebarWidth: size });
+      }}
+      >
+      <div style={ { 'marginTop': -1 } }>
+        <Table
+          rowHeight={24}
+          rowsCount={this.state.length}
+          rowClassNameGetter={this.rowClassGetter.bind(this)}
+          onRowClick={(evt, selectedIndex) => {
+            const item = this.state.members[this.state.desc ? this.state.length - 1 - selectedIndex : selectedIndex];
+            if (item && item[0]) {
+              this.setState({ selectedIndex, content: item[0] });
+            }
+          }}
+          isColumnResizing={false}
+          onColumnResizeEndCallback={ scoreWidth => {
+            this.setState({ scoreWidth });
+          }}
+          width={this.state.sidebarWidth}
+          height={this.props.height + 1}
+          headerHeight={24}
+          >
+          <Column
+            header={
+              <SortHeaderCell
+                title="score"
+                onOrderChange={desc => this.setState({
+                  desc,
+                  selectedIndex: typeof this.state.selectedIndex === 'number' ? this.state.length - 1 - this.state.selectedIndex : null
+                })}
+                desc={this.state.desc}
+              />
+            }
+            width={this.state.scoreWidth}
+            isResizable={true}
+            cell={ ({ rowIndex }) => {
+              const member = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex];
+              if (!member) {
+                return '';
               }
-            }}
-            isColumnResizing={false}
-            onColumnResizeEndCallback={ scoreWidth => {
-              this.setState({ scoreWidth });
-            }}
-            width={this.state.sidebarWidth}
-            height={this.props.height + 1}
-            headerHeight={24}
-            >
-            <Column
-              header={
-                <SortHeaderCell
-                  title="score"
-                  onOrderChange={desc => this.setState({
-                    desc,
-                    selectedIndex: typeof this.state.selectedIndex === 'number' ? this.state.length - 1 - this.state.selectedIndex : null
-                  })}
-                  desc={this.state.desc}
-                />
-              }
-              width={this.state.scoreWidth}
-              isResizable={true}
-              cell={ ({ rowIndex }) => {
-                const member = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex];
-                if (!member) {
-                  return '';
-                }
-                return <div className="overflow-wrapper"><span>{member[1]}</span></div>;
-              } }
-            />
-            <Column
-              header="member"
-              width={this.state.sidebarWidth - this.state.scoreWidth}
-              cell={ ({ rowIndex }) => {
-                const member = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex];
-                if (!member) {
-                  this.load(rowIndex);
-                  return 'Loading...';
-                }
-                return <div className="overflow-wrapper"><span>{member[0]}</span></div>;
-              } }
-            />
-          </Table>
-          </div>
-          <Editor
-            style={{ height: this.props.height }}
-            buffer={this.state.content && new Buffer(this.state.content)}
-            onSave={this.save.bind(this)}
+              return <div className="overflow-wrapper"><span>{member[1]}</span></div>;
+            } }
           />
-        </SplitPane>
-      </div>;
+          <Column
+            header="member"
+            width={this.state.sidebarWidth - this.state.scoreWidth}
+            cell={ ({ rowIndex }) => {
+              const member = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex];
+              if (!member) {
+                this.load(rowIndex);
+                return 'Loading...';
+              }
+              return <div className="overflow-wrapper"><span>{member[0]}</span></div>;
+            } }
+          />
+        </Table>
+        </div>
+        <Editor
+          style={{ height: this.props.height }}
+          buffer={this.state.content && new Buffer(this.state.content)}
+          onSave={this.save.bind(this)}
+        />
+      </SplitPane>;
   }
 }
 
