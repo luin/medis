@@ -10,7 +10,8 @@ class Content extends React.Component {
     super();
     this.state = {
       pattern: '',
-      db: 0
+      db: 0,
+      tab: 'Content'
     };
   }
 
@@ -30,7 +31,9 @@ class Content extends React.Component {
     }
   }
 
-  handleTabChange() {
+  handleTabChange(tab) {
+    console.log(tab);
+    this.setState({ tab });
   }
 
   render() {
@@ -39,6 +42,7 @@ class Content extends React.Component {
         onSelectTab={this.handleTabChange.bind(this)}
       />
       <KeyContent
+        style={{ display: this.state.tab === 'Content' ? 'block' : 'none' }}
         keyName={this.props.keyName}
         keyType={this.state.keyType}
         height={this.props.height - 67}

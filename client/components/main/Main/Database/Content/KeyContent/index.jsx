@@ -14,56 +14,15 @@ class KeyContent extends React.Component {
   }
 
   render() {
-    let view;
+    const props = { key: this.props.keyName, ...this.props };
     switch (this.props.keyType) {
-    case 'string':
-      view = <StringContent
-        key={this.props.keyName}
-        redis={this.props.redis}
-        keyType={this.props.keyType}
-        keyName={this.props.keyName}
-      />;
-      break;
-    case 'list':
-      view = <ListContent
-        key={this.props.keyName}
-        height={this.props.height}
-        redis={this.props.redis}
-        keyType={this.props.keyType}
-        keyName={this.props.keyName}
-      />;
-      break;
-    case 'set':
-      view = <SetContent
-        key={this.props.keyName}
-        height={this.props.height}
-        redis={this.props.redis}
-        keyType={this.props.keyType}
-        keyName={this.props.keyName}
-      />;
-      break;
-    case 'hash':
-      view = <HashContent
-        key={this.props.keyName}
-        height={this.props.height}
-        redis={this.props.redis}
-        keyType={this.props.keyType}
-        keyName={this.props.keyName}
-      />;
-      break;
-    case 'zset':
-      view = <ZSetContent
-        key={this.props.keyName}
-        height={this.props.height}
-        redis={this.props.redis}
-        keyType={this.props.keyType}
-        keyName={this.props.keyName}
-      />;
-      break;
-    default:
-      view = <div></div>;
+    case 'string': return <StringContent {...props} />;
+    case 'list': return <ListContent {...props} />;
+    case 'set': return <SetContent {...props} />;
+    case 'hash': return <HashContent {...props} />;
+    case 'zset': return <ZSetContent {...props} />;
     }
-    return view;
+    return <div />;
   }
 }
 
