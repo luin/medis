@@ -21,13 +21,13 @@ class Content extends React.Component {
       {
         this.tabs.map(tab => {
           return <div
-            className={ 'item' + (tab === this.state.activeTab ? ' is-active' : '' )}
+            className={ 'item' + (tab === this.state.activeTab ? ' is-active' : '') }
             key={tab}
             onClick={ () => {
               this.setState({ activeTab: tab });
               this.props.onSelectTab(tab);
             } }
-            >{tab}</div>
+            >{tab}</div>;
         })
       }
     </div>;
