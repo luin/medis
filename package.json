@@ -8,7 +8,7 @@
     "dev": "webpack-dev-server --progress --colors --port 8090"
   },
   "dependencies": {
-    "fixed-data-table": "^0.5.0",
+    "fixed-data-table": "^0.6.0",
     "human-format": "^0.5.0",
     "immutable": "^3.7.5",
     "ioredis": "^1.9.1",
@@ -17,7 +17,6 @@
     "jsonlint": "^1.6.2",
     "jstree": "^3.2.1",
     "lodash": "^3.10.1",
-    "msgpack-js": "^0.3.0",
     "msgpack5": "^3.3.0",
     "react": "^0.14.0",
     "react-codemirror": "^0.2.0",

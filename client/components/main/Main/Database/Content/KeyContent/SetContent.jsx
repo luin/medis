@@ -9,25 +9,6 @@ import Editor from './Editor';
 require('./ListContent.scss');
 
 class SetContent extends BaseContent {
-  constructor() {
-    super();
-    this.state = {
-      keyName: null,
-      length: 0,
-      sidebarWidth: 200,
-      members: []
-    };
-    this.cursor = 0;
-    this.maxRow = 0;
-  }
-
-  init(keyName) {
-    this.setState({ keyName: null, content: null });
-    this.props.redis.scard(keyName, (_, length) => {
-      this.setState({ keyName, length });
-    });
-  }
-
   save(value, callback) {
     if (typeof this.state.selectIndex === 'number') {
       const oldValue = this.state.members[this.state.selectIndex];

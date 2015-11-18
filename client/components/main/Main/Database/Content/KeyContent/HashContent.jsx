@@ -9,25 +9,6 @@ import Editor from './Editor';
 require('./ListContent.scss');
 
 class HashContent extends BaseContent {
-  constructor() {
-    super();
-    this.state = {
-      keyName: null,
-      length: 0,
-      sidebarWidth: 200,
-      members: []
-    };
-    this.cursor = 0;
-    this.maxRow = 0;
-  }
-
-  init(keyName) {
-    this.setState({ keyName: null, content: null });
-    this.props.redis.hlen(keyName, (_, length) => {
-      this.setState({ keyName, length });
-    });
-  }
-
   save(value, callback) {
     if (typeof this.state.selectIndex === 'number') {
       const [key] = this.state.members[this.state.selectIndex];
@@ -39,7 +20,10 @@ class HashContent extends BaseContent {
     }
   }
 
-  load() {
+  load(index) {
+    if (index > this.maxRow) {
+      this.maxRow = index;
+    }
     if (this.isLoading) {
       return;
     }
@@ -58,16 +42,6 @@ class HashContent extends BaseContent {
     });
   }
 
-  getRow(index) {
-    if (typeof this.state.members[index] === 'undefined') {
-      if (index > this.maxRow) {
-        this.maxRow = index;
-      }
-      this.load();
-    }
-    return this.state.members[index];
-  }
-
   render() {
     return <div className="HashContent">
       <SplitPane
@@ -83,7 +57,6 @@ class HashContent extends BaseContent {
         <div style={ { 'marginTop': -1 } }>
           <Table
             rowHeight={24}
-            rowGetter={this.getRow.bind(this)}
             rowsCount={this.state.length}
             rowClassNameGetter={
               index => {
@@ -108,18 +81,16 @@ class HashContent extends BaseContent {
             headerHeight={24}
             >
             <Column
-              label="key"
+              header="key"
               width={this.state.sidebarWidth}
-              dataKey={0}
-              allowCellsRecycling={true}
-              cellRenderer={
-                (cellData, cellDataKey, rowData, rowIndex) => {
-                  if (cellData === null) {
-                    cellData = 'Loading...';
-                  }
-                  return <div style={ { width: this.state.sidebarWidth, display: 'flex' } }><div className="list-preview">{cellData}</div></div>;
+              cell={ ({ rowIndex }) => {
+                if (!this.state.members[rowIndex]) {
+                  this.load(rowIndex);
+                  return 'Loading...';
                 }
-              }
+                const cellData = this.state.members[rowIndex][0];
+                return <div style={ { width: this.state.sidebarWidth, display: 'flex' } }><div className="list-preview">{cellData}</div></div>;
+              } }
             />
           </Table>
           </div>

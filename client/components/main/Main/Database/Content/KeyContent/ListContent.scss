@@ -14,14 +14,41 @@
       display: block;
       text-align: center;
       color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
-  .list-preview {
-    flex: 1;
+  .overflow-wrapper {
+    display: flex;
     width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+
+    span {
+      display: block;
+      flex: 1;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .SortHeaderCell {
+    position: relative;
+
+    a {
+      display: block;
+    }
+
+    img {
+      position: absolute;
+      right: -15px;
+      top: 5px;
+    }
+
+    &.is-asc img {
+      transform: rotate(180deg);
+    }
   }
 }

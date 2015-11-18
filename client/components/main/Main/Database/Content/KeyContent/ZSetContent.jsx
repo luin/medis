@@ -11,22 +11,7 @@ require('./ListContent.scss');
 class ZSetContent extends BaseContent {
   constructor() {
     super();
-    this.state = {
-      keyName: null,
-      length: 0,
-      sidebarWidth: 200,
-      members: [],
-      scoreWidth: 60
-    };
-    this.cursor = 0;
-    this.maxRow = 0;
-  }
-
-  init(keyName) {
-    this.setState({ keyName: null, content: null });
-    this.props.redis.zcard(keyName, (_, length) => {
-      this.setState({ keyName, length });
-    });
+    this.state.scoreWidth = 60;
   }
 
   save(value, callback) {

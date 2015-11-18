@@ -1,5 +1,5 @@
 .key-type {
-  margin: 0 0 0 8px;
+  margin: 4px 0 0;
   padding: 0 !important;
   text-transform: uppercase;
   width: 32px;
@@ -19,12 +19,16 @@
 }
 
 .public_fixedDataTable_header, .public_fixedDataTableRow_main.is-loading {
-  .public_fixedDataTableCell_cellContent {
+  .public_fixedDataTableCell_main {
     font-family: system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif !important;
   }
 }
 
 .public_fixedDataTableCell_cellContent {
+  padding: 0;
+}
+
+.public_fixedDataTableCell_main {
   font-family: monospace;
   font-size: 12px;
   line-height: 24px;

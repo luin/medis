@@ -20,6 +20,7 @@ class KeyContent extends React.Component {
       view = <StringContent
         key={this.props.keyName}
         redis={this.props.redis}
+        keyType={this.props.keyType}
         keyName={this.props.keyName}
       />;
       break;
@@ -28,6 +29,7 @@ class KeyContent extends React.Component {
         key={this.props.keyName}
         height={this.props.height}
         redis={this.props.redis}
+        keyType={this.props.keyType}
         keyName={this.props.keyName}
       />;
       break;
@@ -36,6 +38,7 @@ class KeyContent extends React.Component {
         key={this.props.keyName}
         height={this.props.height}
         redis={this.props.redis}
+        keyType={this.props.keyType}
         keyName={this.props.keyName}
       />;
       break;
@@ -44,6 +47,7 @@ class KeyContent extends React.Component {
         key={this.props.keyName}
         height={this.props.height}
         redis={this.props.redis}
+        keyType={this.props.keyType}
         keyName={this.props.keyName}
       />;
       break;
@@ -52,6 +56,7 @@ class KeyContent extends React.Component {
         key={this.props.keyName}
         height={this.props.height}
         redis={this.props.redis}
+        keyType={this.props.keyType}
         keyName={this.props.keyName}
       />;
       break;
