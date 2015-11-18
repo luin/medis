@@ -19,7 +19,7 @@ class StringContent extends BaseContent {
 
   save(value, callback) {
     if (this.state.keyName) {
-      this.props.redis.set(this.state.keyName, value, callback);
+      this.props.redis.setKeepTTL(this.state.keyName, value, callback);
     } else {
       alert('Please wait for data been loaded before saving.');
     }

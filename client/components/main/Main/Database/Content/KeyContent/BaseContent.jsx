@@ -23,7 +23,7 @@ class BaseContent extends React.Component {
   }
 
   componentWillUnmount() {
-    this.setState = function () {}
+    this.setState = function () {};
   }
 }
 

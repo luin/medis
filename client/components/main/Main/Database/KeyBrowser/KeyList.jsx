@@ -21,7 +21,7 @@ class KeyList extends React.Component {
       this.props.redis.select(nextProps.db);
     }
 
-    var needRefresh = nextProps.db !== this.props.db ||
+    const needRefresh = nextProps.db !== this.props.db ||
       nextProps.pattern !== this.props.pattern ||
       nextProps.redis !== this.props.redis;
 
@@ -130,6 +130,25 @@ class KeyList extends React.Component {
 
   componentDidMount() {
     this.scan();
+    $.contextMenu({
+      selector: '.pattern-table',
+      trigger: 'none',
+      callback: (key, opt) => {
+        console.log(opt);
+        const m = 'clicked: ' + key;
+        alert(m);
+      },
+      items: {
+        rename: { name: 'Rename' },
+        delete: { name: 'Delete' },
+        sep1: '---------'
+      }
+    });
+  }
+
+  showContextMenu(e) {
+    console.log(e);
+    $('.pattern-table').contextMenu();
   }
 
   getRow(index) {
@@ -137,7 +156,7 @@ class KeyList extends React.Component {
   }
 
   render() {
-    return <div className="pattern-table">
+    return <div className="pattern-table" onContextMenu={this.showContextMenu.bind(this)}>
       <Table
         rowHeight={24}
         rowGetter={this.getRow.bind(this)}
@@ -152,6 +171,7 @@ class KeyList extends React.Component {
           }
           return '';
         }}
+        onRowContextMenu={this.showContextMenu.bind(this)}
         onRowClick={(evt, index) => {
           const item = this.state.keys[index];
           if (item && item[0]) {

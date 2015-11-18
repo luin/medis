@@ -3,6 +3,8 @@
 import React from 'react';
 import StringContent from './StringContent';
 import ListContent from './ListContent';
+import SetContent from './SetContent';
+import HashContent from './HashContent';
 
 class KeyContent extends React.Component {
   constructor() {
@@ -22,6 +24,22 @@ class KeyContent extends React.Component {
       break;
     case 'list':
       view = <ListContent
+        key={this.props.keyName}
+        height={this.props.height}
+        redis={this.props.redis}
+        keyName={this.props.keyName}
+      />;
+      break;
+    case 'set':
+      view = <SetContent
+        key={this.props.keyName}
+        height={this.props.height}
+        redis={this.props.redis}
+        keyName={this.props.keyName}
+      />;
+      break;
+    case 'hash':
+      view = <HashContent
         key={this.props.keyName}
         height={this.props.height}
         redis={this.props.redis}

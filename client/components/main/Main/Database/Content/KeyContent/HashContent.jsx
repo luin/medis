@@ -8,7 +8,7 @@ import Editor from './Editor';
 
 require('./ListContent.scss');
 
-class ListContent extends BaseContent {
+class HashContent extends BaseContent {
   constructor() {
     super();
     this.state = {
@@ -17,49 +17,59 @@ class ListContent extends BaseContent {
       sidebarWidth: 200,
       members: []
     };
+    this.cursor = 0;
+    this.maxRow = 0;
   }
 
   init(keyName) {
     this.setState({ keyName: null, content: null });
-    this.props.redis.llen(keyName, (_, length) => {
+    this.props.redis.hlen(keyName, (_, length) => {
       this.setState({ keyName, length });
     });
   }
 
   save(value, callback) {
     if (typeof this.state.selectIndex === 'number') {
-      this.state.members[this.state.selectIndex] = value.toString();
+      const [key] = this.state.members[this.state.selectIndex];
+      this.state.members[this.state.selectIndex][1] = value;
       this.setState({ members: this.state.members });
-      this.props.redis.lset(this.state.keyName, this.state.selectIndex, value, callback);
+      this.props.redis.hset(this.state.keyName, key, value, callback);
     } else {
       alert('Please wait for data been loaded before saving.');
     }
   }
 
-  load(from, length) {
-    const to = from + length - 1;
-    const members = this.state.members;
-    for (let i = from; i <= to; i++) {
-      members[i] = null;
+  load() {
+    if (this.isLoading) {
+      return;
     }
-    this.props.redis.lrange(this.state.keyName, from, to, (_, results) => {
-      const members = this.state.members;
-      for (let i = from; i <= to; i++) {
-        members[i] = results[i - from];
+    this.isLoading = true;
+    const count = Number(this.cursor) ? 10000 : 500;
+    this.props.redis.hscanBuffer(this.state.keyName, this.cursor, 'MATCH', '*', 'COUNT', count, (_, [cursor, result]) => {
+      this.isLoading = false;
+      for (let i = 0; i < result.length - 1; i += 2) {
+        this.state.members.push([result[i].toString(), result[i + 1]]);
       }
-      this.setState({ members });
+      this.cursor = cursor;
+      this.setState({ members: this.state.members });
+      if (this.state.members.length - 1 < this.maxRow && Number(cursor)) {
+        this.load();
+      }
     });
   }
 
   getRow(index) {
     if (typeof this.state.members[index] === 'undefined') {
-      this.load(Math.floor(index / 100) * 100, 100);
+      if (index > this.maxRow) {
+        this.maxRow = index;
+      }
+      this.load();
     }
-    return [this.state.members[index]];
+    return this.state.members[index];
   }
 
   render() {
-    return <div className="ListContent">
+    return <div className="HashContent">
       <SplitPane
         className="pane-group"
         minSize="80"
@@ -89,8 +99,8 @@ class ListContent extends BaseContent {
             }
             onRowClick={(evt, index) => {
               const item = this.state.members[index];
-              if (item) {
-                this.setState({ selectIndex: index, content: item });
+              if (item && item[0]) {
+                this.setState({ selectIndex: index, content: item[1] });
               }
             }}
             width={this.state.sidebarWidth}
@@ -101,12 +111,13 @@ class ListContent extends BaseContent {
               label="members"
               width={this.state.sidebarWidth}
               dataKey={0}
+              allowCellsRecycling={true}
               cellRenderer={
                 (cellData, cellDataKey, rowData, rowIndex) => {
                   if (cellData === null) {
                     cellData = 'Loading...';
                   }
-                  return <div style={ { width: this.state.sidebarWidth, display: 'flex' } }><div className="index-label">{rowIndex}</div><div className="list-preview">{cellData}</div></div>;
+                  return <div style={ { width: this.state.sidebarWidth, display: 'flex' } }><div className="list-preview">{cellData}</div></div>;
                 }
               }
             />
@@ -114,7 +125,7 @@ class ListContent extends BaseContent {
           </div>
           <Editor
             style={{ height: this.props.height }}
-            buffer={this.state.content && new Buffer(this.state.content)}
+            buffer={this.state.content && this.state.content}
             onSave={this.save.bind(this)}
           />
         </SplitPane>
@@ -122,4 +133,4 @@ class ListContent extends BaseContent {
   }
 }
 
-export default ListContent;
+export default HashContent;

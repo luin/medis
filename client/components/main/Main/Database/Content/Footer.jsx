@@ -30,54 +30,53 @@ class Footer extends React.Component {
     }
   }
 
-  init() {
-    if (!this.props.keyType && this.props.keyType !== 'none') {
+  init(keyName, keyType) {
+    if (!keyType && keyType !== 'none') {
       this.resetState();
       return;
     }
-    const key = this.props.keyName;
-    const pipeline = this.props.redis.pipeline()
-    pipeline.pttl(key)
-    pipeline.object('ENCODING', key)
+    const pipeline = this.props.redis.pipeline();
+    pipeline.pttl(keyName);
+    pipeline.object('ENCODING', keyName);
 
     let sizeUnit = 'Members';
-    switch (this.props.keyType) {
-    case 'string': pipeline.strlen(key); sizeUnit = 'Bytes'; break;
-    case 'hash': pipeline.hlen(key); break;
-    case 'list': pipeline.llen(key); break;
-    case 'set': pipeline.scard(key); break;
-    case 'zset': pipeline.zcard(key); break;
+    switch (keyType) {
+    case 'string': pipeline.strlen(keyName); sizeUnit = 'Bytes'; break;
+    case 'hash': pipeline.hlen(keyName); break;
+    case 'list': pipeline.llen(keyName); break;
+    case 'set': pipeline.scard(keyName); break;
+    case 'zset': pipeline.zcard(keyName); break;
     }
 
     pipeline.exec((err, [[err1, pttl], [err2, encoding], res3]) => {
       this.setState({
-        encoding: `Encoding: ${encoding}`,
+        encoding: encoding ? `Encoding: ${encoding}` : '',
         ttl: pttl >= 0 ? `TTL: ${humanFormat(pttl, { scale: timeScale }).replace(' ', '')}` : null,
-        size: res3 ? `${sizeUnit}: ${res3[1]}` : null
+        size: (res3 && res3[1]) ? `${sizeUnit}: ${res3[1]}` : null
       });
     });
   }
 
   componentDidMount() {
-    this.init(this.props.keyName);
+    this.init(this.props.keyName, this.props.keyType);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.keyName !== this.props.keyName || nextProps.keyType !== this.props.keyType) {
-      this.init(nextProps.keyName);
+      this.init(nextProps.keyName, nextProps.keyType);
     }
   }
 
   render() {
     const desc = ['size', 'encoding', 'ttl']
-    .map(key => ({ key, value: this.state[key]}))
+    .map(key => ({ key, value: this.state[key] }))
     .filter(item => typeof item.value === 'string');
     return <footer className="toolbar toolbar-footer">
       {
         desc.map(({ key, value }) => <span
           key={key}
           style={ { margin: '0 5px' } }
-        >{value}</span> )
+        >{value}</span>)
       }
     </footer>;
   }
