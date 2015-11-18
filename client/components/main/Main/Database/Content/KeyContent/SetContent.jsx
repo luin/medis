@@ -95,10 +95,10 @@ class SetContent extends BaseContent {
                 return 'type-list';
               }
             }
-            onRowClick={(evt, index) => {
-              const item = this.state.members[index];
-              if (item) {
-                this.setState({ selectIndex: index, content: item });
+            onRowClick={(evt, selectIndex) => {
+              const content = this.state.members[selectIndex];
+              if (content) {
+                this.setState({ selectIndex, content });
               }
             }}
             width={this.state.sidebarWidth}
@@ -106,7 +106,7 @@ class SetContent extends BaseContent {
             headerHeight={24}
             >
             <Column
-              label="members"
+              label="member"
               width={this.state.sidebarWidth}
               dataKey={0}
               allowCellsRecycling={true}

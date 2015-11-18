@@ -97,10 +97,10 @@ class HashContent extends BaseContent {
                 return 'type-list';
               }
             }
-            onRowClick={(evt, index) => {
-              const item = this.state.members[index];
+            onRowClick={(evt, selectIndex) => {
+              const item = this.state.members[selectIndex];
               if (item && item[0]) {
-                this.setState({ selectIndex: index, content: item[1] });
+                this.setState({ selectIndex, content: item[1] });
               }
             }}
             width={this.state.sidebarWidth}
@@ -108,7 +108,7 @@ class HashContent extends BaseContent {
             headerHeight={24}
             >
             <Column
-              label="members"
+              label="key"
               width={this.state.sidebarWidth}
               dataKey={0}
               allowCellsRecycling={true}

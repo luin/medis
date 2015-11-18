@@ -5,6 +5,7 @@ import StringContent from './StringContent';
 import ListContent from './ListContent';
 import SetContent from './SetContent';
 import HashContent from './HashContent';
+import ZSetContent from './ZSetContent';
 
 class KeyContent extends React.Component {
   constructor() {
@@ -40,6 +41,14 @@ class KeyContent extends React.Component {
       break;
     case 'hash':
       view = <HashContent
+        key={this.props.keyName}
+        height={this.props.height}
+        redis={this.props.redis}
+        keyName={this.props.keyName}
+      />;
+      break;
+    case 'zset':
+      view = <ZSetContent
         key={this.props.keyName}
         height={this.props.height}
         redis={this.props.redis}
