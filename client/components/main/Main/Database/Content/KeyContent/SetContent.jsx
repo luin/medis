@@ -6,7 +6,7 @@ import SplitPane from 'react-split-pane';
 import { Table, Column } from 'fixed-data-table';
 import Editor from './Editor';
 
-require('./ListContent.scss');
+require('./BaseContent.scss');
 
 class SetContent extends BaseContent {
   save(value, callback) {
@@ -20,31 +20,25 @@ class SetContent extends BaseContent {
     }
   }
 
-  load() {
-    if (this.isLoading) {
+  load(index) {
+    if (!super.load(index)) {
       return;
     }
-    this.isLoading = true;
     const count = Number(this.cursor) ? 10000 : 500;
-    this.props.redis.sscan(this.state.keyName, this.cursor, 'MATCH', '*', 'COUNT', count, (_, [cursor, result]) => {
-      this.isLoading = false;
-      result.forEach(item => this.state.members.push(item));
+    this.props.redis.sscan(this.state.keyName, this.cursor, 'COUNT', count, (_, [cursor, results]) => {
       this.cursor = cursor;
-      this.setState({ members: this.state.members });
-      if (this.state.members.length - 1 < this.maxRow && Number(cursor)) {
-        this.load();
-      }
-    });
-  }
+      const length = Number(cursor) ? this.state.length : this.state.members.length + results.length;
 
-  getRow(index) {
-    if (typeof this.state.members[index] === 'undefined') {
-      if (index > this.maxRow) {
-        this.maxRow = index;
-      }
-      this.load();
-    }
-    return [this.state.members[index]];
+      this.setState({
+        members: this.state.members.concat(results),
+        length
+      }, () => {
+        this.loading = false;
+        if (this.state.members.length - 1 < this.maxRow && Number(cursor)) {
+          this.load();
+        }
+      });
+    });
   }
 
   render() {
@@ -62,20 +56,8 @@ class SetContent extends BaseContent {
         <div style={ { 'marginTop': -1 } }>
           <Table
             rowHeight={24}
-            rowGetter={this.getRow.bind(this)}
             rowsCount={this.state.length}
-            rowClassNameGetter={
-              index => {
-                const item = this.state.members[index];
-                if (!item) {
-                  return 'type-list is-loading';
-                }
-                if (index === this.state.selectIndex) {
-                  return 'type-list is-selected';
-                }
-                return 'type-list';
-              }
-            }
+            rowClassNameGetter={this.rowClassGetter.bind(this)}
             onRowClick={(evt, selectIndex) => {
               const content = this.state.members[selectIndex];
               if (content) {
@@ -87,18 +69,16 @@ class SetContent extends BaseContent {
             headerHeight={24}
             >
             <Column
-              label="member"
+              header="member"
               width={this.state.sidebarWidth}
-              dataKey={0}
-              allowCellsRecycling={true}
-              cellRenderer={
-                (cellData, cellDataKey, rowData, rowIndex) => {
-                  if (cellData === null) {
-                    cellData = 'Loading...';
-                  }
-                  return <div style={ { width: this.state.sidebarWidth, display: 'flex' } }><div className="list-preview">{cellData}</div></div>;
+              cell={ ({ rowIndex }) => {
+                const member = this.state.members[rowIndex];
+                if (!member) {
+                  this.load(rowIndex);
+                  return 'Loading...';
                 }
-              }
+                return <div className="overflow-wrapper"><span>{member}</span></div>;
+              } }
             />
           </Table>
           </div>
