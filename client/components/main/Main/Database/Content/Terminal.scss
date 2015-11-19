@@ -7,7 +7,7 @@
     color: #8f9d6a;
   }
 
-  .array-resp {
+  .array-resp, .object-resp {
     margin: 0;
     padding: 0;
 
@@ -23,6 +23,11 @@
         flex: 1;
       }
     }
+  }
+
+  .object-resp li span {
+    font-weight: bold;
+    color: #cda869;
   }
 
   .null {

@@ -1,3 +1,9 @@
+.pattern-table {
+  &:focus {
+    outline: 0;
+  }
+}
+
 .key-type {
   margin: 4px 0 0;
   padding: 0 !important;

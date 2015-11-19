@@ -20,8 +20,13 @@ class Database extends React.Component {
   }
 
   componentDidMount() {
-    $(window).on('resize', this.updateLayout.bind(this));
+    this.updateLayoutBinded = this.updateLayout.bind(this);
+    $(window).on('resize', this.updateLayoutBinded);
     this.updateLayout();
+  }
+
+  componentWillUnmount() {
+    $(window).off('resize', this.updateLayoutBinded);
   }
 
   updateLayout() {
@@ -52,6 +57,7 @@ class Database extends React.Component {
       <Content
         height={ this.state.clientHeight }
         keyName={ this.state.key }
+        connectionKey={ this.props.connectionKey }
         redis={ this.props.redis }
         db={ this.state.db }
         onDatabaseChange={ db => this.setState({ db }) }

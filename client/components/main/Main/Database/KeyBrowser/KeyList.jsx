@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Table, Column } from 'fixed-data-table';
 import _ from 'lodash';
 require('./KeyList.scss');
@@ -128,7 +129,38 @@ class KeyList extends React.Component {
     }
   }
 
+  handleSelect(index) {
+    const item = this.state.keys[index];
+    if (item && item[0]) {
+      this.index = index;
+      this.setState({ selectedKey: item[0] });
+      this.props.onSelect(item[0]);
+    }
+  }
+
   componentDidMount() {
+    $(ReactDOM.findDOMNode(this.refs.table)).on('keydown', (e) => {
+      console.log(e.keyCode);
+      if (typeof this.index === 'number') {
+        if (e.keyCode === 38 || e.keyCode === 75) {
+          this.handleSelect(this.index - 1);
+          return false;
+        }
+        if (e.keyCode === 40 || e.keyCode === 74) {
+          this.handleSelect(this.index + 1);
+          return false;
+        }
+        if (e.keyCode === 13) {
+          this.setState({ editableKey: this.state.keys[this.index][0]});
+          return false;
+        }
+      }
+      if (!e.ctrlKey && e.metaKey) {
+        const code = e.keyCode;
+        console.log(code);
+      }
+      return false;
+    });
     this.scan();
     $.contextMenu({
       selector: '.pattern-table',
@@ -150,7 +182,12 @@ class KeyList extends React.Component {
   }
 
   render() {
-    return <div className="pattern-table" onContextMenu={this.showContextMenu.bind(this)}>
+    return <div
+      ref="table"
+      tabIndex="1"
+      className="pattern-table"
+      onContextMenu={this.showContextMenu.bind(this)}
+    >
       <Table
         rowHeight={24}
         rowsCount={this.state.keys.length + (this.state.cursor === '0' ? 0 : 1)}
@@ -165,13 +202,7 @@ class KeyList extends React.Component {
           return '';
         }}
         onRowContextMenu={this.showContextMenu.bind(this)}
-        onRowClick={(evt, index) => {
-          const item = this.state.keys[index];
-          if (item && item[0]) {
-            this.setState({ selectedKey: item[0] });
-            this.props.onSelect(item[0]);
-          }
-        }}
+        onRowClick={(evt, index) => this.handleSelect(index) }
         width={this.props.width}
         height={this.props.height}
         headerHeight={24}
@@ -202,7 +233,9 @@ class KeyList extends React.Component {
                 this.scan();
               }}>Scan more</a>;
             }
-            return <div className="overflow-wrapper"><span>{cellData}</span></div>;
+            return <div className="overflow-wrapper">
+              <span contentEditable={cellData === this.state.editableKey}>{cellData}</span>
+            </div>;
           } }
         />
       </Table>
