@@ -3,13 +3,37 @@
     color: #78CF8A;
   }
 
+  .string {
+    color: #8f9d6a;
+  }
+
+  .array-resp {
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: flex;
+      span {
+        color: #3d3d3d;
+        min-width: 28px;
+        text-align: right;
+        margin-right: 10px;
+      }
+      div {
+        flex: 1;
+      }
+    }
+  }
+
+  .null {
+    color: #cf7ea9;
+  }
+
+  .error {
+    color: #ee6868 !important;
+  }
+
   .list {
     color: #8f9d6a;
-    span {
-      color: #3d3d3d;
-      min-width: 28px;
-      text-align: right;
-      margin-right: 10px;
-    }
   }
 }

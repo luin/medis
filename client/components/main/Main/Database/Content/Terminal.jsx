@@ -11,15 +11,9 @@ class Terminal extends React.Component {
     $(this.refs.terminal).terminal((command, term) => {
       command = command.trim().replace(/\s+/g, ' ');
       redis.call.apply(redis, command.split(' ')).then(res => {
-        if (typeof res === 'number') {
-          term.echo(`<div class="number">${res}</div>`, { raw: true });
-        } else if (Array.isArray(res)) {
-          console.log(res);
-          const html = res.map((item, index) => `<div><span>${index}</span>${item}</div>`).join('');
-          term.echo(`<div class="list">${html}</div>`, { raw: true });
-        }
+        term.echo(getHTML(res), { raw: true });
       }).catch(err => {
-        term.error(err.message);
+        term.echo(getHTML(err), { raw: true });
       });
     }, {
       greetings: '',
@@ -39,3 +33,26 @@ class Terminal extends React.Component {
 }
 
 export default Terminal;
+
+function getHTML(response) {
+  if (Array.isArray(response)) {
+    return `<ul start="0" class="array-resp">
+      ${response.map((item, index) => '<li><span>' + index + '</span>' + getHTML(item) + '</li>').join('')}
+    </ul>`;
+  }
+  const type = typeof response;
+  if (type === 'number') {
+    return `<div class="number">${response}</div>`;
+  }
+  if (type === 'string') {
+    return `<div class="string">${response.replace(/\r?\n/g, '<br>')}</div>`;
+  }
+  if (response === null) {
+    return `<div class="null">null</div>`;
+  }
+  if (response instanceof Error) {
+    return `<div class="error">${response.message}</div>`;
+  }
+
+  return `<div class="json">${JSON.stringify(response)}</div>`;
+}
