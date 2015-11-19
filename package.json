@@ -9,7 +9,7 @@
     "dev": "webpack-dev-server --progress --colors --port 8090"
   },
   "dependencies": {
-    "fixed-data-table": "^0.6.0",
+    "fixed-data-table-contextmenu": "^0.6.3",
     "human-format": "^0.5.0",
     "immutable": "^3.7.5",
     "ioredis": "^1.11.0",
