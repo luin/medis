@@ -53,6 +53,7 @@ class Content extends React.Component {
         style={{ display: this.state.tab === 'Terminal' ? 'block' : 'none' }}
         height={this.props.height - 67}
         redis={this.props.redis}
+        onDatabaseChange={this.props.onDatabaseChange}
       />
       <Footer
         keyName={this.props.keyName}

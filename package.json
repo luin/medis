@@ -12,7 +12,7 @@
     "fixed-data-table": "^0.6.0",
     "human-format": "^0.5.0",
     "immutable": "^3.7.5",
-    "ioredis": "^1.9.1",
+    "ioredis": "^1.11.0",
     "jquery": "^2.1.4",
     "jsonlint": "^1.6.2",
     "lodash": "^3.10.1",

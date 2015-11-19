@@ -6,8 +6,14 @@ import commands from 'redis-commands';
 require('./Terminal.scss');
 
 class Terminal extends React.Component {
+  constructor() {
+    super();
+    this.onSelectBinded = this.onSelect.bind(this);
+  }
+
   componentDidMount() {
     const redis = this.props.redis;
+    redis.on('select', this.onSelectBinded);
     $(this.refs.terminal).terminal((command, term) => {
       command = command.trim().replace(/\s+/g, ' ');
       redis.call.apply(redis, command.split(' ')).then(res => {
@@ -24,6 +30,14 @@ class Terminal extends React.Component {
       width: '100%',
       prompt: `[[;#fff;]redis> ]`
     });
+  }
+
+  onSelect(db) {
+    this.props.onDatabaseChange(db);
+  }
+
+  componentWillUnmount() {
+    this.props.redis.removeAllListeners('select', this.onSelectBinded);
   }
 
   render() {
