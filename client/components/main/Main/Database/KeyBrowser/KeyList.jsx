@@ -3,6 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Column } from 'fixed-data-table-contextmenu';
+import ContentEditable from '../../../../common/ContentEditable';
 import _ from 'lodash';
 require('./KeyList.scss');
 
@@ -132,42 +133,47 @@ class KeyList extends React.Component {
   handleSelect(index) {
     const item = this.state.keys[index];
     if (item && item[0]) {
+      const key = item[0];
       this.index = index;
-      this.setState({ selectedKey: item[0] });
+      const editableKey = this.state.editableKey === key ? this.state.editableKey : null;
+      this.setState({ selectedKey: item[0], editableKey });
       this.props.onSelect(item[0]);
     }
   }
 
   componentDidMount() {
-    $(ReactDOM.findDOMNode(this.refs.table)).on('keydown', (e) => {
-      console.log(e.keyCode);
+    $(ReactDOM.findDOMNode(this)).on('keydown', (e) => {
       if (typeof this.index === 'number') {
-        if (e.keyCode === 38 || e.keyCode === 75) {
+        if (e.keyCode === 38) {
           this.handleSelect(this.index - 1);
           return false;
         }
-        if (e.keyCode === 40 || e.keyCode === 74) {
+        if (e.keyCode === 40) {
           this.handleSelect(this.index + 1);
-          return false;
-        }
-        if (e.keyCode === 13) {
-          this.setState({ editableKey: this.state.keys[this.index][0]});
           return false;
         }
       }
       if (!e.ctrlKey && e.metaKey) {
         const code = e.keyCode;
-        console.log(code);
       }
-      return false;
+      return true;
     });
     this.scan();
     $.contextMenu({
       selector: '.pattern-table',
       trigger: 'none',
+      zIndex: 99999,
       callback: (key, opt) => {
-        const m = 'clicked: ' + key;
-        alert(m);
+        if (key === 'delete') {
+          const keys = this.state.keys;
+          const deleted = keys.splice(this.index, 1);
+          if (deleted.length) {
+            this.props.redis.del(deleted[0][0]);
+            this.setState({ keys });
+          }
+        } else if (key === 'rename') {
+          this.setState({ editableKey: this.state.keys[this.index][0]});
+        }
       },
       items: {
         rename: { name: 'Rename' },
@@ -177,20 +183,28 @@ class KeyList extends React.Component {
     });
   }
 
-  showContextMenu(e) {
-    console.log(arguments);
-    // $('.pattern-table').contextMenu();
+  showContextMenu(e, row) {
+    this.handleSelect(row);
+    $(ReactDOM.findDOMNode(this)).contextMenu({
+      x: e.pageX,
+      y: e.pageY,
+      zIndex: 99999
+    });
   }
 
   render() {
     return <div
-      ref="table"
       tabIndex="1"
       className="pattern-table"
     >
       <Table
         rowHeight={24}
         rowsCount={this.state.keys.length + (this.state.cursor === '0' ? 0 : 1)}
+        onScrollStart={() => {
+          if (this.state.editableKey) {
+            this.setState({ editableKey: null });
+          }
+        }}
         rowClassNameGetter={index => {
           const item = this.state.keys[index];
           if (!item) {
@@ -211,7 +225,11 @@ class KeyList extends React.Component {
           header="type"
           width={40}
           cell = { ({ rowIndex }) => {
-            const cellData = this.state.keys[rowIndex][1];
+            const item = this.state.keys[rowIndex];
+            if (!item) {
+              return '';
+            }
+            const cellData = item[1];
             if (!cellData) {
               return '';
             }
@@ -223,7 +241,11 @@ class KeyList extends React.Component {
           header="name"
           width={this.props.width - 40}
           cell = { ({ rowIndex }) => {
-            const cellData = this.state.keys[rowIndex][0];
+            const item = this.state.keys[rowIndex];
+            let cellData;
+            if (item) {
+              cellData = item[0];
+            }
             if (!cellData) {
               if (this.state.scanning) {
                 return <span style={ { color: '#ccc' }}>Scanning...(cursor {this.state.cursor})</span>;
@@ -233,9 +255,21 @@ class KeyList extends React.Component {
                 this.scan();
               }}>Scan more</a>;
             }
-            return <div className="overflow-wrapper">
-              <span contentEditable={cellData === this.state.editableKey}>{cellData}</span>
-            </div>;
+            return <ContentEditable
+              className="ContentEditable overflow-wrapper"
+              enabled={cellData === this.state.editableKey}
+              onChange={newKeyName => {
+                const keys = this.state.keys;
+                const oldKey = keys[rowIndex][0];
+                if (oldKey !== newKeyName) {
+                  keys[rowIndex] = [newKeyName, keys[rowIndex][1]];
+                  this.props.redis.rename(oldKey, newKeyName)
+                }
+                this.setState({ keys, editableKey: null });
+                ReactDOM.findDOMNode(this).focus();
+              }}
+              html={cellData}
+            />;
           } }
         />
       </Table>
