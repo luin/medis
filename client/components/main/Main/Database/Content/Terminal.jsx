@@ -14,7 +14,7 @@ class Terminal extends React.Component {
   componentDidMount() {
     const redis = this.props.redis;
     redis.on('select', this.onSelectBinded);
-    this.terminal = $(this.refs.terminal).terminal((command, term) => {
+    const terminal = this.terminal = $(this.refs.terminal).terminal((command, term) => {
       command = command.trim().replace(/\s+/g, ' ').split(' ');
       const commandName = command[0] && command[0].toUpperCase();
       if (commandName === 'FLUSHALL' || commandName === 'FLUSHDB') {
@@ -47,7 +47,6 @@ class Terminal extends React.Component {
           })
         );
       },
-      // completion: commands.list.concat(commands.list.map(c => c.toUpperCase())),
       name: this.props.connectionKey,
       height: '100%',
       width: '100%',
@@ -59,6 +58,15 @@ class Terminal extends React.Component {
           }
           if ([84, 87, 78, 82, 81].indexOf(e.keyCode) !== -1) {
             return true;
+          }
+          if (e.keyCode === 67) {
+            if (terminal.level() > 1) {
+              terminal.pop();
+              if (terminal.paused()) {
+                terminal.resume();
+              }
+            }
+            return false;
           }
         }
       }
@@ -72,13 +80,31 @@ class Terminal extends React.Component {
   execute(term, args) {
     term.pause();
     const redis = this.props.redis;
-    redis.call.apply(redis, args).then(res => {
-      term.echo(getHTML(res), { raw: true });
-      term.resume();
-    }).catch(err => {
-      term.echo(getHTML(err), { raw: true });
-      term.resume();
-    });
+    if (args.length === 1 && args[0].toUpperCase() === 'MONITOR') {
+      redis.monitor((_, monitor) => {
+        term.echo('[[;#aac6e3;]Enter monitor mode. Press Ctrl+C to exit. ]');
+        term.push(input => {
+        }, {
+          onExit() {
+            monitor.disconnect();
+          }
+        });
+        monitor.on('monitor', (time, args) => {
+          if (term.level() > 1) {
+            term.echo(formatMonitor(time, args), { raw: true });
+          }
+        })
+      });
+    } else {
+      redis.call.apply(redis, args).then(res => {
+        console.log(res);
+        term.echo(getHTML(res), { raw: true });
+        term.resume();
+      }).catch(err => {
+        term.echo(getHTML(err), { raw: true });
+        term.resume();
+      });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -125,4 +151,21 @@ function getHTML(response) {
   }
 
   return `<div class="json">${JSON.stringify(response)}</div>`;
+}
+
+function formatMonitor(time, args) {
+  args = args || [];
+  const command = args[0] ? args.shift().toUpperCase() : '';
+  if (command) {
+    commands.getKeyIndexes(command.toLowerCase(), args).forEach(index => {
+      args[index] = `<span class="command-key">${args[index]}</span>`;
+    });
+  }
+  return `<div class="monitor">
+    <span class="time">${time}</span>
+    <span class="command">
+      <span class="command-name">${command}</span>
+      <span class="command args">${args.join(' ')}</span>
+    </span>
+  </div>`;
 }

@@ -41,4 +41,19 @@
   .list {
     color: #8f9d6a;
   }
+
+  .monitor {
+    .time {
+      color: #3d3d3d;
+      margin-right: 4px;
+    }
+
+    .command-name {
+      color: #cf7ea9;
+    }
+
+    .command-key {
+      color: #cda869;
+    }
+  }
 }
