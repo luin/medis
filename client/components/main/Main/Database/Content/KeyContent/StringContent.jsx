@@ -5,15 +5,10 @@ import BaseContent from './BaseContent';
 import Editor from './Editor';
 
 class StringContent extends BaseContent {
-  constructor() {
-    super();
-    this.state = { keyName: null, buffer: null };
-  }
-
   init(keyName) {
-    this.setState({ keyName: null, content: null });
+    super.init(keyName);
     this.props.redis.getBuffer(keyName, (_, buffer) => {
-      this.setState({ keyName, buffer });
+      this.setState({ buffer });
     });
   }
 

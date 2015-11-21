@@ -149,15 +149,10 @@ class KeyList extends React.Component {
     $('.pattern-table').contextMenu();
   }
 
-  getRow(index) {
-    return this.state.keys[index] || [];
-  }
-
   render() {
     return <div className="pattern-table" onContextMenu={this.showContextMenu.bind(this)}>
       <Table
         rowHeight={24}
-        rowGetter={this.getRow.bind(this)}
         rowsCount={this.state.keys.length + (this.state.cursor === '0' ? 0 : 1)}
         rowClassNameGetter={index => {
           const item = this.state.keys[index];
@@ -182,37 +177,33 @@ class KeyList extends React.Component {
         headerHeight={24}
         >
         <Column
-          label="type"
+          header="type"
           width={40}
-          dataKey={1}
-          cellRenderer={
-            cellData => {
-              if (!cellData) {
-                return '';
-              }
-              const type = cellData === 'string' ? 'str' : cellData;
-              return <span className={`key-type ${type}`}>{type}</span>;
+          cell = { ({ rowIndex }) => {
+            const cellData = this.state.keys[rowIndex][1];
+            if (!cellData) {
+              return '';
             }
-          }
+            const type = cellData === 'string' ? 'str' : cellData;
+            return <span className={`key-type ${type}`}>{type}</span>;
+          } }
         />
         <Column
-          label="name"
+          header="name"
           width={this.props.width - 40}
-          dataKey={0}
-          cellRenderer={
-            cellData => {
-              if (!cellData) {
-                if (this.state.scanning) {
-                  return <span style={ { color: '#ccc' }}>Scanning...(cursor {this.state.cursor})</span>;
-                }
-                return <a href="#" onClick={(evt) => {
-                  evt.preventDefault();
-                  this.scan();
-                }}>Scan more</a>;
+          cell = { ({ rowIndex }) => {
+            const cellData = this.state.keys[rowIndex][0];
+            if (!cellData) {
+              if (this.state.scanning) {
+                return <span style={ { color: '#ccc' }}>Scanning...(cursor {this.state.cursor})</span>;
               }
-              return cellData;
+              return <a href="#" onClick={(evt) => {
+                evt.preventDefault();
+                this.scan();
+              }}>Scan more</a>;
             }
-          }
+            return cellData;
+          } }
         />
       </Table>
     </div>;
