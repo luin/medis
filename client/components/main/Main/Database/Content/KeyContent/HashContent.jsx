@@ -10,9 +10,9 @@ require('./BaseContent.scss');
 
 class HashContent extends BaseContent {
   save(value, callback) {
-    if (typeof this.state.selectIndex === 'number') {
-      const [key] = this.state.members[this.state.selectIndex];
-      this.state.members[this.state.selectIndex][1] = value;
+    if (typeof this.state.selectedIndex === 'number') {
+      const [key] = this.state.members[this.state.selectedIndex];
+      this.state.members[this.state.selectedIndex][1] = value;
       this.setState({ members: this.state.members });
       this.props.redis.hset(this.state.keyName, key, value, callback);
     } else {
@@ -59,10 +59,10 @@ class HashContent extends BaseContent {
             rowHeight={24}
             rowsCount={this.state.length}
             rowClassNameGetter={this.rowClassGetter.bind(this)}
-            onRowClick={(evt, selectIndex) => {
-              const item = this.state.members[selectIndex];
+            onRowClick={(evt, selectedIndex) => {
+              const item = this.state.members[selectedIndex];
               if (item && item[0]) {
-                this.setState({ selectIndex, content: item[1] });
+                this.setState({ selectedIndex, content: item[1] });
               }
             }}
             width={this.state.sidebarWidth}

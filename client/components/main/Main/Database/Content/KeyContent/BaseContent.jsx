@@ -56,7 +56,7 @@ class BaseContent extends React.Component {
     if (!item) {
       return 'type-list is-loading';
     }
-    if (index === this.state.selectIndex) {
+    if (index === this.state.selectedIndex) {
       return 'type-list is-selected';
     }
     return 'type-list';

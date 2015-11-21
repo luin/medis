@@ -10,9 +10,9 @@ require('./BaseContent.scss');
 
 class SetContent extends BaseContent {
   save(value, callback) {
-    if (typeof this.state.selectIndex === 'number') {
-      const oldValue = this.state.members[this.state.selectIndex];
-      this.state.members[this.state.selectIndex] = value.toString();
+    if (typeof this.state.selectedIndex === 'number') {
+      const oldValue = this.state.members[this.state.selectedIndex];
+      this.state.members[this.state.selectedIndex] = value.toString();
       this.setState({ members: this.state.members });
       this.props.redis.multi().srem(this.state.keyName, oldValue).sadd(this.state.keyName, value).exec(callback);
     } else {
@@ -58,10 +58,10 @@ class SetContent extends BaseContent {
             rowHeight={24}
             rowsCount={this.state.length}
             rowClassNameGetter={this.rowClassGetter.bind(this)}
-            onRowClick={(evt, selectIndex) => {
-              const content = this.state.members[selectIndex];
+            onRowClick={(evt, selectedIndex) => {
+              const content = this.state.members[selectedIndex];
               if (content) {
-                this.setState({ selectIndex, content });
+                this.setState({ selectedIndex, content });
               }
             }}
             width={this.state.sidebarWidth}
