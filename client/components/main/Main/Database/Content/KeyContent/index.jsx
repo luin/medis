@@ -15,14 +15,15 @@ class KeyContent extends React.Component {
 
   render() {
     const props = { key: this.props.keyName, ...this.props };
+    let view;
     switch (this.props.keyType) {
-    case 'string': return <StringContent {...props} />;
-    case 'list': return <ListContent {...props} />;
-    case 'set': return <SetContent {...props} />;
-    case 'hash': return <HashContent {...props} />;
-    case 'zset': return <ZSetContent {...props} />;
+    case 'string': view = <StringContent {...props} />; break;
+    case 'list': view = <ListContent {...props} />; break;
+    case 'set': view = <SetContent {...props} />; break;
+    case 'hash': view = <HashContent {...props} />; break;
+    case 'zset': view = <ZSetContent {...props} />; break;
     }
-    return <div />;
+    return <div style={this.props.style} className="BaseContent">{ view }</div>;
   }
 }
 

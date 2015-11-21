@@ -6,8 +6,6 @@ import SplitPane from 'react-split-pane';
 import { Table, Column } from 'fixed-data-table';
 import Editor from './Editor';
 
-require('./BaseContent.scss');
-
 class HashContent extends BaseContent {
   save(value, callback) {
     if (typeof this.state.selectedIndex === 'number') {
@@ -43,53 +41,50 @@ class HashContent extends BaseContent {
   }
 
   render() {
-    return <div className="HashContent">
-      <SplitPane
-        className="pane-group"
-        minSize="80"
-        split="vertical"
-        defaultSize={200}
-        ref="node"
-        onChange={size => {
-          this.setState({ sidebarWidth: size });
-        }}
-        >
-        <div style={ { 'marginTop': -1 } }>
-          <Table
-            rowHeight={24}
-            rowsCount={this.state.length}
-            rowClassNameGetter={this.rowClassGetter.bind(this)}
-            onRowClick={(evt, selectedIndex) => {
-              const item = this.state.members[selectedIndex];
-              if (item && item[0]) {
-                this.setState({ selectedIndex, content: item[1] });
-              }
-            }}
+    return <SplitPane
+      className="pane-group"
+      minSize="80"
+      split="vertical"
+      defaultSize={200}
+      onChange={size => {
+        this.setState({ sidebarWidth: size });
+      }}
+      >
+      <div style={ { 'marginTop': -1 } }>
+        <Table
+          rowHeight={24}
+          rowsCount={this.state.length}
+          rowClassNameGetter={this.rowClassGetter.bind(this)}
+          onRowClick={(evt, selectedIndex) => {
+            const item = this.state.members[selectedIndex];
+            if (item && item[0]) {
+              this.setState({ selectedIndex, content: item[1] });
+            }
+          }}
+          width={this.state.sidebarWidth}
+          height={this.props.height + 1}
+          headerHeight={24}
+          >
+          <Column
+            header="key"
             width={this.state.sidebarWidth}
-            height={this.props.height + 1}
-            headerHeight={24}
-            >
-            <Column
-              header="key"
-              width={this.state.sidebarWidth}
-              cell={ ({ rowIndex }) => {
-                const member = this.state.members[rowIndex];
-                if (!member) {
-                  this.load(rowIndex);
-                  return 'Loading...';
-                }
-                return <div className="overflow-wrapper"><span>{member[0]}</span></div>;
-              } }
-            />
-          </Table>
-          </div>
-          <Editor
-            style={{ height: this.props.height }}
-            buffer={this.state.content && this.state.content}
-            onSave={this.save.bind(this)}
+            cell={ ({ rowIndex }) => {
+              const member = this.state.members[rowIndex];
+              if (!member) {
+                this.load(rowIndex);
+                return 'Loading...';
+              }
+              return <div className="overflow-wrapper"><span>{member[0]}</span></div>;
+            } }
           />
-        </SplitPane>
-      </div>;
+        </Table>
+        </div>
+        <Editor
+          style={{ height: this.props.height }}
+          buffer={this.state.content && this.state.content}
+          onSave={this.save.bind(this)}
+        />
+      </SplitPane>;
   }
 }
 
