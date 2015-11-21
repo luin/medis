@@ -134,7 +134,6 @@ class KeyList extends React.Component {
       selector: '.pattern-table',
       trigger: 'none',
       callback: (key, opt) => {
-        console.log(opt);
         const m = 'clicked: ' + key;
         alert(m);
       },
@@ -147,7 +146,6 @@ class KeyList extends React.Component {
   }
 
   showContextMenu(e) {
-    console.log(e);
     $('.pattern-table').contextMenu();
   }
 

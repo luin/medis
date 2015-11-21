@@ -46,13 +46,11 @@ class ZSetContent extends BaseContent {
     }
     this.isLoading = true;
     const count = Number(this.cursor) ? 10000 : 500;
-    console.log('====');
     this.props.redis.zscan(this.state.keyName, this.cursor, 'MATCH', '*', 'COUNT', count, (_, [cursor, result]) => {
       this.isLoading = false;
       for (let i = 0; i < result.length - 1; i += 2) {
         this.state.members.push([result[i], Number(result[i + 1])]);
       }
-      console.log(this.state.members);
       this.cursor = cursor;
       this.setState({ members: this.state.members });
       if (this.state.members.length - 1 < this.maxRow && Number(cursor)) {
