@@ -3,26 +3,32 @@
 import React from 'react';
 import commands from 'redis-commands';
 
-require('./TabBar.scss');
+require('./Terminal.scss');
 
 class Terminal extends React.Component {
   componentDidMount() {
     const redis = this.props.redis;
     $(this.refs.terminal).terminal((command, term) => {
-      console.log();
+      command = command.trim().replace(/\s+/g, ' ');
       redis.call.apply(redis, command.split(' ')).then(res => {
-        term.echo(res);
+        if (typeof res === 'number') {
+          term.echo(`<div class="number">${res}</div>`, { raw: true });
+        } else if (Array.isArray(res)) {
+          console.log(res);
+          const html = res.map((item, index) => `<div><span>${index}</span>${item}</div>`).join('');
+          term.echo(`<div class="list">${html}</div>`, { raw: true });
+        }
       }).catch(err => {
-        console.log(err);
+        term.error(err.message);
       });
     }, {
-      greetings: 'Javascript Interpreter',
+      greetings: '',
       exit: false,
       completion: commands.list.concat(commands.list.map(c => c.toUpperCase())),
       name: 'Redis Terminal',
       height: '100%',
       width: '100%',
-      prompt: 'redis> '
+      prompt: `[[;#fff;]redis> ]`
     });
   }
 
