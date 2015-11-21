@@ -59,6 +59,8 @@ class Terminal extends React.Component {
           if ([84, 87, 78, 82, 81].indexOf(e.keyCode) !== -1) {
             return true;
           }
+        }
+        if (e.ctrlKey) {
           if (e.keyCode === 67) {
             if (terminal.level() > 1) {
               terminal.pop();

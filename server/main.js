@@ -1,6 +1,6 @@
 'use strict';
 
-const app = require('app');
+const app = require('electron').app;
 const windowManager = require('./windowManager');
 const menu = require('./menu');
 const Menu = require('menu');

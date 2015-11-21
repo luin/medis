@@ -4,7 +4,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Column } from 'fixed-data-table-contextmenu';
 import ContentEditable from '../../../../common/ContentEditable';
+import Modal from '../../../../common/Modal';
 import _ from 'lodash';
+import { clipboard } from 'electron';
 require('./KeyList.scss');
 
 class KeyList extends React.Component {
@@ -175,12 +177,15 @@ class KeyList extends React.Component {
           }
         } else if (key === 'rename') {
           this.setState({ editableKey: this.state.keys[this.index][0]});
+        } else if (key === 'copy') {
+          clipboard.writeText(this.state.keys[this.index][0]);
         }
       },
       items: {
+        copy: { name: 'Copy to Clipboard'},
+        sep1: '---------',
         rename: { name: 'Rename' },
-        delete: { name: 'Delete' },
-        sep1: '---------'
+        delete: { name: 'Delete' }
       }
     });
   }

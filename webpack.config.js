@@ -32,6 +32,7 @@ module.exports = {
   },
   externals: {
     'ioredis': 'require("ioredis")',
+    'electron': 'require("electron")',
     'redis-commands': 'require("redis-commands")',
     'ssh2': 'require("ssh2")',
     'net': 'require("net")',

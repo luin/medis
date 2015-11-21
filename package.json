@@ -11,6 +11,7 @@
   "dependencies": {
     "fixed-data-table": "^0.6.0",
     "fixed-data-table-contextmenu": "^0.6.3",
+    "form-generator-react": "^1.0.5",
     "human-format": "^0.5.0",
     "immutable": "^3.7.5",
     "ioredis": "^1.11.0",
