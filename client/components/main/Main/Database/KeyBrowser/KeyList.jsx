@@ -4,7 +4,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Column } from 'fixed-data-table-contextmenu';
 import ContentEditable from '../../../../common/ContentEditable';
-import Modal from '../../../../common/Modal';
 import _ from 'lodash';
 import { clipboard } from 'electron';
 require('./KeyList.scss');
@@ -141,12 +140,38 @@ class KeyList extends React.Component {
       const editableKey = this.state.editableKey === key ? this.state.editableKey : null;
       this.setState({ selectedKey: item[0], editableKey });
       this.props.onSelect(item[0]);
+    } else {
+      this.setState({ selectedKey: null, editableKey: null });
     }
+  }
+
+  deleteSelectedKey() {
+    showModal({
+      title: 'Delete selected key?',
+      button: 'Delete',
+      content: 'Are you sure you want to delete the selected key? This action cannot be undone.'
+    }).then(() => {
+      const keys = this.state.keys;
+      const deleted = keys.splice(this.index, 1);
+      if (deleted.length) {
+        this.props.redis.del(deleted[0][0]);
+        if (this.index >= keys.length - 1) {
+          this.index -= 1;
+        }
+        this.setState({ keys }, () => {
+          this.handleSelect(this.index);
+        });
+      }
+    }).catch(() => {});
   }
 
   componentDidMount() {
     $(ReactDOM.findDOMNode(this)).on('keydown', (e) => {
-      if (typeof this.index === 'number') {
+      if (typeof this.index === 'number' && !this.state.editableKey) {
+        if (e.keyCode === 8) {
+          this.deleteSelectedKey();
+          return false;
+        }
         if (e.keyCode === 38) {
           this.handleSelect(this.index - 1);
           return false;
@@ -169,12 +194,7 @@ class KeyList extends React.Component {
       zIndex: 99999,
       callback: (key, opt) => {
         if (key === 'delete') {
-          const keys = this.state.keys;
-          const deleted = keys.splice(this.index, 1);
-          if (deleted.length) {
-            this.props.redis.del(deleted[0][0]);
-            this.setState({ keys });
-          }
+          this.deleteSelectedKey();
         } else if (key === 'rename') {
           this.setState({ editableKey: this.state.keys[this.index][0]});
         } else if (key === 'copy') {
@@ -201,7 +221,7 @@ class KeyList extends React.Component {
 
   render() {
     return <div
-      tabIndex="1"
+      tabIndex="0"
       className={'pattern-table ' + this.randomClass}
     >
       <Table
@@ -224,6 +244,10 @@ class KeyList extends React.Component {
         }}
         onRowContextMenu={this.showContextMenu.bind(this)}
         onRowClick={(evt, index) => this.handleSelect(index) }
+        onRowDoubleClick={(evt, index) => {
+          this.handleSelect(index);
+          this.setState({ editableKey: this.state.keys[index][0]});
+        }}
         width={this.props.width}
         height={this.props.height}
         headerHeight={24}
@@ -268,11 +292,22 @@ class KeyList extends React.Component {
               onChange={newKeyName => {
                 const keys = this.state.keys;
                 const oldKey = keys[rowIndex][0];
-                if (oldKey !== newKeyName) {
-                  keys[rowIndex] = [newKeyName, keys[rowIndex][1]];
-                  this.props.redis.rename(oldKey, newKeyName)
+                if (oldKey !== newKeyName && newKeyName) {
+                  this.props.redis.exists(newKeyName).then(exists => {
+                    if (exists) {
+                      return showModal({
+                        title: 'Overwrite the key?',
+                        button: 'Overwrite',
+                        content: `Key "${newKeyName}" already exists. Are you sure you want to overwrite this key?`
+                      });
+                    }
+                  }).then(() => {
+                    keys[rowIndex] = [newKeyName, keys[rowIndex][1]];
+                    this.props.redis.rename(oldKey, newKeyName)
+                    this.setState({ keys });
+                  }).catch(() => {});
                 }
-                this.setState({ keys, editableKey: null });
+                this.setState({ editableKey: null });
                 ReactDOM.findDOMNode(this).focus();
               }}
               html={cellData}

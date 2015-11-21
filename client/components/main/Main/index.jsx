@@ -3,8 +3,47 @@
 import React from 'react';
 import ConnectionSelector from './ConnectionSelector';
 import Database from './Database';
+import Modal from '../../common/Modal';
 
 class Main extends React.Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
+
+  componentDidMount() {
+    window.showModal = (modal) => {
+      this.activeElement = document.activeElement;
+      this.setState({ modal });
+
+      console.log('==', this);
+      return new Promise((resolve, reject) => {
+        console.log('==', this);
+        this.promise = { resolve, reject };
+      });
+    };
+  }
+
+  modalSubmit(result) {
+    this.promise.resolve(result);
+    this.setState({ modal: null });
+    if (this.activeElement) {
+      this.activeElement.focus();
+    }
+  }
+
+  modalCancel() {
+    this.promise.reject();
+    this.setState({ modal: null });
+    if (this.activeElement) {
+      this.activeElement.focus();
+    }
+  }
+
+  componentWillUnmount() {
+    delete window.showModal;
+  }
+
   render() {
     const { instances, activeInstanceKey, favorites, patternStore } = this.props;
     const contents = instances.map(instance => {
@@ -28,7 +67,16 @@ class Main extends React.Component {
       </div>;
     }).toJS();
 
-    return <div className="main">{ contents }</div>;
+    return <div className="main">
+      {
+        this.state.modal && <Modal
+          {...this.state.modal}
+          onSubmit={this.modalSubmit.bind(this)}
+          onCancel={this.modalCancel.bind(this)}
+        />
+      }
+      { contents }
+    </div>;
   }
 }
 
