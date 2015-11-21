@@ -1,8 +1,6 @@
 'use strict';
 
 import React from 'react';
-import store from '../../../../store';
-import action from '../../../../actions';
 import SplitPane from 'react-split-pane';
 import KeyBrowser from './KeyBrowser';
 import Content from './Content';
