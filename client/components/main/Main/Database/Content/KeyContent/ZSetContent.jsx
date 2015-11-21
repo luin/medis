@@ -5,8 +5,9 @@ import BaseContent from './BaseContent';
 import SplitPane from 'react-split-pane';
 import { Table, Column } from 'fixed-data-table';
 import Editor from './Editor';
+import SortHeaderCell from './SortHeaderCell';
 
-require('./ListContent.scss');
+require('./BaseContent.scss');
 
 class ZSetContent extends BaseContent {
   constructor() {
@@ -25,33 +26,29 @@ class ZSetContent extends BaseContent {
     }
   }
 
-  load() {
-    if (this.isLoading) {
+  load(index) {
+    if (!super.load(index)) {
       return;
     }
-    this.isLoading = true;
-    const count = Number(this.cursor) ? 10000 : 500;
-    this.props.redis.zscan(this.state.keyName, this.cursor, 'MATCH', '*', 'COUNT', count, (_, [cursor, result]) => {
-      this.isLoading = false;
-      for (let i = 0; i < result.length - 1; i += 2) {
-        this.state.members.push([result[i], Number(result[i + 1])]);
-      }
-      this.cursor = cursor;
-      this.setState({ members: this.state.members });
-      if (this.state.members.length - 1 < this.maxRow && Number(cursor)) {
-        this.load();
-      }
-    });
-  }
+    const from = this.state.members.length;
+    const to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1 - from);
 
-  getRow(index) {
-    if (typeof this.state.members[index] === 'undefined') {
-      if (index > this.maxRow) {
-        this.maxRow = index;
+    this.props.redis.zrange(this.state.keyName, from, to, 'WITHSCORES', (_, results) => {
+      const items = [];
+      for (let i = 0; i < results.length - 1; i += 2) {
+        items.push([results[i], results[i + 1]]);
       }
-      this.load();
-    }
-    return this.state.members[index];
+      const diff = to - from + 1 - items.length;
+      this.setState({
+        members: this.state.members.concat(items),
+        length: this.state.length - diff
+      }, () => {
+        this.loading = false;
+        if (this.state.members.length - 1 < this.maxRow && !diff) {
+          this.load();
+        }
+      });
+    });
   }
 
   render() {
@@ -69,20 +66,8 @@ class ZSetContent extends BaseContent {
         <div style={ { 'marginTop': -1 } }>
           <Table
             rowHeight={24}
-            rowGetter={this.getRow.bind(this)}
             rowsCount={this.state.length}
-            rowClassNameGetter={
-              index => {
-                const item = this.state.members[index];
-                if (!item) {
-                  return 'type-list is-loading';
-                }
-                if (index === this.state.selectIndex) {
-                  return 'type-list is-selected';
-                }
-                return 'type-list';
-              }
-            }
+            rowClassNameGetter={this.rowClassGetter.bind(this)}
             onRowClick={(evt, selectIndex) => {
               const item = this.state.members[selectIndex];
               if (item && item[0]) {
@@ -98,33 +83,34 @@ class ZSetContent extends BaseContent {
             headerHeight={24}
             >
             <Column
-              label="score"
+              header={
+                <SortHeaderCell
+                  title="index"
+                  onOrderChange={desc => this.sestState({ desc })}
+                  desc={this.state.desc}
+                />
+              }
               width={this.state.scoreWidth}
               isResizable={true}
-              dataKey={1}
-              allowCellsRecycling={true}
-              cellRenderer={
-                (cellData, cellDataKey, rowData, rowIndex) => {
-                  if (cellData === null) {
-                    cellData = 'Loading...';
-                  }
-                  return <div style={ { width: this.state.sidebarWidth, display: 'flex' } }><div className="list-preview">{cellData}</div></div>;
+              cell={ ({ rowIndex }) => {
+                const member = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex];
+                if (!member) {
+                  return '';
                 }
-              }
+                return <div className="overflow-wrapper"><span>{member[1]}</span></div>;
+              } }
             />
             <Column
-              label="member"
+              header="member"
               width={this.state.sidebarWidth - this.state.scoreWidth}
-              dataKey={0}
-              allowCellsRecycling={true}
-              cellRenderer={
-                (cellData, cellDataKey, rowData, rowIndex) => {
-                  if (cellData === null) {
-                    cellData = 'Loading...';
-                  }
-                  return <div style={ { width: this.state.sidebarWidth, display: 'flex' } }><div className="list-preview">{cellData}</div></div>;
+              cell={ ({ rowIndex }) => {
+                const member = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex];
+                if (!member) {
+                  this.load(rowIndex);
+                  return 'Loading...';
                 }
-              }
+                return <div className="overflow-wrapper"><span>{member[0]}</span></div>;
+              } }
             />
           </Table>
           </div>

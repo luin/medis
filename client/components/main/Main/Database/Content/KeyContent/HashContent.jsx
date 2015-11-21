@@ -6,7 +6,7 @@ import SplitPane from 'react-split-pane';
 import { Table, Column } from 'fixed-data-table';
 import Editor from './Editor';
 
-require('./ListContent.scss');
+require('./BaseContent.scss');
 
 class HashContent extends BaseContent {
   save(value, callback) {
@@ -58,18 +58,7 @@ class HashContent extends BaseContent {
           <Table
             rowHeight={24}
             rowsCount={this.state.length}
-            rowClassNameGetter={
-              index => {
-                const item = this.state.members[index];
-                if (!item) {
-                  return 'type-list is-loading';
-                }
-                if (index === this.state.selectIndex) {
-                  return 'type-list is-selected';
-                }
-                return 'type-list';
-              }
-            }
+            rowClassNameGetter={this.rowClassGetter.bind(this)}
             onRowClick={(evt, selectIndex) => {
               const item = this.state.members[selectIndex];
               if (item && item[0]) {
@@ -84,12 +73,12 @@ class HashContent extends BaseContent {
               header="key"
               width={this.state.sidebarWidth}
               cell={ ({ rowIndex }) => {
-                if (!this.state.members[rowIndex]) {
+                const member = this.state.members[rowIndex];
+                if (!member) {
                   this.load(rowIndex);
                   return 'Loading...';
                 }
-                const cellData = this.state.members[rowIndex][0];
-                return <div style={ { width: this.state.sidebarWidth, display: 'flex' } }><div className="list-preview">{cellData}</div></div>;
+                return <div className="overflow-wrapper"><span>{member[0]}</span></div>;
               } }
             />
           </Table>

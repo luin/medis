@@ -7,7 +7,7 @@ import { Table, Column } from 'fixed-data-table';
 import Editor from './Editor';
 import SortHeaderCell from './SortHeaderCell';
 
-require('./ListContent.scss');
+require('./BaseContent.scss');
 
 class ListContent extends BaseContent {
   constructor() {
@@ -37,10 +37,12 @@ class ListContent extends BaseContent {
       this.setState({
         members: this.state.members.concat(results),
         length: this.state.length - diff
+      }, () => {
+        this.loading = false;
+        if (this.state.members.length - 1 < this.maxRow && !diff) {
+          this.load();
+        }
       });
-      if (this.state.members.length - 1 < this.maxRow && !diff) {
-        this.load();
-      }
     });
   }
 
@@ -64,18 +66,7 @@ class ListContent extends BaseContent {
           <Table
             rowHeight={24}
             rowsCount={this.state.length}
-            rowClassNameGetter={
-              index => {
-                const item = this.state.members[index];
-                if (!item) {
-                  return 'type-list is-loading';
-                }
-                if (index === this.state.selectIndex) {
-                  return 'type-list is-selected';
-                }
-                return 'type-list';
-              }
-            }
+            rowClassNameGetter={this.rowClassGetter.bind(this)}
             onRowClick={(evt, selectIndex) => {
               const content = this.state.members[selectIndex];
               if (content) {
@@ -92,7 +83,11 @@ class ListContent extends BaseContent {
             >
             <Column
               header={
-                <SortHeaderCell onOrderChange={this.handleOrderChange.bind(this)} desc={this.state.desc} title="index" />
+                <SortHeaderCell
+                  title="index"
+                  onOrderChange={desc => this.sestState({ desc })}
+                  desc={this.state.desc}
+                />
               }
               width={this.state.indexWidth}
               isResizable={true}

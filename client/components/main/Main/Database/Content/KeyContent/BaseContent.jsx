@@ -51,6 +51,17 @@ class BaseContent extends React.Component {
     return true;
   }
 
+  rowClassGetter(index) {
+    const item = this.state.members[index];
+    if (!item) {
+      return 'type-list is-loading';
+    }
+    if (index === this.state.selectIndex) {
+      return 'type-list is-selected';
+    }
+    return 'type-list';
+  }
+
   componentDidMount() {
     this.init(this.props.keyName);
   }
