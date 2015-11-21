@@ -14,6 +14,7 @@ class Database extends React.Component {
     this.state = {
       sidebarWidth: 300,
       key: null,
+      db: 0,
       clientHeight: this.$window.height()
     };
   }
@@ -45,11 +46,15 @@ class Database extends React.Component {
         redis={ this.props.redis }
         connectionKey={ this.props.connectionKey }
         onSelectKey={ key => this.setState({ key }) }
+        db={ this.state.db }
+        onDatabaseChange={ db => this.setState({ db }) }
       />
       <Content
         height={ this.state.clientHeight }
         keyName={ this.state.key }
         redis={ this.props.redis }
+        db={ this.state.db }
+        onDatabaseChange={ db => this.setState({ db }) }
       />
     </SplitPane>;
   }

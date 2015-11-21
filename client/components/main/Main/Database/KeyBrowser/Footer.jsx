@@ -5,12 +5,18 @@ import React from 'react';
 class Footer extends React.Component {
   constructor() {
     super();
-    this.state = { currentDB: 0 };
+    this.state = {};
   }
 
   componentDidMount() {
     this.updateInfo();
     this.interval = setInterval(this.updateInfo.bind(this), 10000);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.db !== this.props.db) {
+      this.updateInfo();
+    }
   }
 
   updateInfo() {
@@ -41,17 +47,15 @@ class Footer extends React.Component {
   }
 
   handleChange(evt) {
-    const newDB = Number(evt.target.value);
-    this.setState({ currentDB: newDB });
-    this.updateInfo();
-    this.props.onDatabaseChange(newDB);
+    const db = Number(evt.target.value);
+    this.props.onDatabaseChange(db);
   }
 
   render() {
-    const currentDB = `db${this.state.currentDB}`;
+    const db = `db${this.props.db}`;
     let keys = 0;
-    if (this.state[currentDB]) {
-      const match = this.state[currentDB].match(/keys=(\d+)/);
+    if (this.state[db]) {
+      const match = this.state[db].match(/keys=(\d+)/);
       if (match) {
         keys = match[1];
       }
@@ -62,7 +66,7 @@ class Footer extends React.Component {
         <span>DB:</span>
         <select
           onChange={this.handleChange.bind(this)}
-          value={this.state.currentDB} className="form-control" style={ {
+          value={this.props.db} className="form-control" style={ {
             width: 50,
             marginTop: 2,
             marginRight: 2,
