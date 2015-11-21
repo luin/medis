@@ -3,6 +3,7 @@
 import React from 'react';
 import TabBar from './TabBar';
 import KeyContent from './KeyContent';
+import Terminal from './Terminal';
 import Footer from './Footer';
 
 class Content extends React.Component {
@@ -45,6 +46,11 @@ class Content extends React.Component {
         style={{ display: this.state.tab === 'Content' ? 'block' : 'none' }}
         keyName={this.props.keyName}
         keyType={this.state.keyType}
+        height={this.props.height - 67}
+        redis={this.props.redis}
+      />
+      <Terminal
+        style={{ display: this.state.tab === 'Terminal' ? 'block' : 'none' }}
         height={this.props.height - 67}
         redis={this.props.redis}
       />

@@ -1,5 +1,6 @@
 {
   "name": "redis-pro",
+  "description": "Redis GUI",
   "productName": "Redis Pro",
   "version": "0.0.1",
   "main": "server/main.js",
@@ -13,9 +14,7 @@
     "immutable": "^3.7.5",
     "ioredis": "^1.9.1",
     "jquery": "^2.1.4",
-    "jsoneditor": "^4.2.1",
     "jsonlint": "^1.6.2",
-    "jstree": "^3.2.1",
     "lodash": "^3.10.1",
     "msgpack5": "^3.3.0",
     "react": "^0.14.0",
@@ -30,8 +29,7 @@
     "redux-thunk": "^1.0.0",
     "reselect": "^2.0.0",
     "sortablejs": "^1.4.1",
-    "ssh2": "^0.4.12",
-    "tunnel-ssh": "^2.0.0"
+    "ssh2": "^0.4.12"
   },
   "devDependencies": {
     "babel-core": "^5.8.25",
