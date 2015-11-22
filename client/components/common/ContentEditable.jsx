@@ -15,22 +15,24 @@ export default class ContentEditable extends React.Component {
       onKeyDown={this.handleKeyDown.bind(this)}
       onBlur={this.handleSubmit.bind(this)}
       contentEditable={this.props.enabled}
-      dangerouslySetInnerHTML={{__html: this.props.html}}></div>;
+    >
+      <span ref="text" dangerouslySetInnerHTML={{__html: this.props.html}} />
+    </div>;
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.html !== ReactDOM.findDOMNode(this).innerHTML ||
+    return nextProps.html !== ReactDOM.findDOMNode(this.refs.text).innerHTML ||
       nextProps.enabled !== this.props.enabled;
   }
 
   componentDidMount(){
     if (this.props.enabled) {
-      ReactDOM.findDOMNode(this).focus();
+      ReactDOM.findDOMNode(this.refs.text).focus();
     }
   }
 
   componentDidUpdate() {
-    const node = ReactDOM.findDOMNode(this);
+    const node = ReactDOM.findDOMNode(this.refs.text);
     if (this.props.html !== node.innerHTML) {
       node.innerHTML = this.props.html;
     }
@@ -45,7 +47,7 @@ export default class ContentEditable extends React.Component {
 
   handleKeyDown(evt) {
     if (evt.keyCode === 13) {
-      this.props.onChange(ReactDOM.findDOMNode(this).textContent);
+      this.props.onChange(ReactDOM.findDOMNode(this.refs.text).textContent);
       return false;
     }
     if (evt.keyCode === 27) {
@@ -55,7 +57,7 @@ export default class ContentEditable extends React.Component {
   }
 
   handleChange(evt) {
-    var html = ReactDOM.findDOMNode(this).innerHTML;
+    var html = ReactDOM.findDOMNode(this.refs.text).innerHTML;
     if (html !== this.lastHtml) {
       evt.target = { value: html };
     }
@@ -63,6 +65,6 @@ export default class ContentEditable extends React.Component {
   }
 
   handleSubmit(evt) {
-    this.props.onChange(ReactDOM.findDOMNode(this).textContent);
+    this.props.onChange(ReactDOM.findDOMNode(this.refs.text).textContent);
   }
 }
