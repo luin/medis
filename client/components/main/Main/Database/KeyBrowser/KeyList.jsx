@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Table, Column } from 'fixed-data-table';
+import { Table, Column } from 'fixed-data-table-contextmenu';
 import _ from 'lodash';
 require('./KeyList.scss');
 
@@ -178,7 +178,8 @@ class KeyList extends React.Component {
   }
 
   showContextMenu(e) {
-    $('.pattern-table').contextMenu();
+    console.log(arguments);
+    // $('.pattern-table').contextMenu();
   }
 
   render() {
@@ -186,7 +187,6 @@ class KeyList extends React.Component {
       ref="table"
       tabIndex="1"
       className="pattern-table"
-      onContextMenu={this.showContextMenu.bind(this)}
     >
       <Table
         rowHeight={24}
