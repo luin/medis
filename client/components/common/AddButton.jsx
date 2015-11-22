@@ -8,14 +8,10 @@ export default class AddButton extends React.Component {
     super();
   }
 
-  handleClick() {
-    this.props.onClick();
-  }
-
   render() {
-    return <div
-      className="AddButton"
-      onClick={this.handleClick.bind(this)}
-    >{this.props.title}<span className="plus">+</span></div>;
+    return <div className="AddButton">
+      {this.props.title}
+      <span className="plus" onClick={this.props.onClick}>+</span>
+    </div>;
   }
 }

@@ -19,11 +19,12 @@
   width: 420px;
   background: #efefef;
   border: 1px solid #a3a3a3;
+  border-top: 0;
 
   padding: 18px 20px 18px 100px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 1px 4px 9px -6px, 0 5px 20px rgba(0, 0, 0, 0.3);
 
-  margin: 99px auto 0;
+  margin: 100px auto 0;
 
   font-size: 12px;
 
@@ -50,17 +51,46 @@
     position: relative;
     background: none;
     border: 0;
+    padding: 4px 0px 14px !important;
 
     label {
       position: absolute;
       left: -90px;
       text-align: right;
       width: 80px;
-      font-weight: normal;
+      font-weight: normal !important;
+    }
+
+    input, select {
+      width: 100% !important;
+      margin: 0 !important;
+    }
+
+    .ui-state-error {
+      position: absolute;
+      top: 25px;
+      opacity: 0;
     }
   }
 
-  input {
-    width: 100%;
+  .ui-state-error {
+    color: #ff2a1c;
+    font-size: 12px;
   }
+
+  // input, select {
+  //   width: 100%;
+  //   min-height: 25px;
+  //   padding: 5px 10px;
+  //   line-height: 1.6;
+  //   background-color: #fff;
+  //   border: 1px solid #ddd;
+  //   outline: 0;
+
+  //   &:focus {
+  //     border-radius: 4px;
+  //     border-color: #6db3fd;
+  //     box-shadow: 3px 3px 0 #6db3fd, -3px -3px 0 #6db3fd, -3px 3px 0 #6db3fd, 3px -3px 0 #6db3fd;
+  //   }
+  // }
 }

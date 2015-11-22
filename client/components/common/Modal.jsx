@@ -7,11 +7,20 @@ require('./Modal.scss');
 export default class Modal extends React.Component {
   constructor() {
     super();
-    this.state = { active: 0 };
   }
 
   handleSubmit() {
-    this.props.onSubmit(1);
+    if (this.editor) {
+      const errors = this.editor.validate();
+      console.log(errors);
+      if (errors.length) {
+        $('.ui-state-error', ReactDOM.findDOMNode(this.refs.form)).css('opacity', 1);
+        return;
+      }
+      this.props.onSubmit(this.editor.getValue());
+    } else {
+      this.props.onSubmit(1);
+    }
   }
 
   handleCancel() {
@@ -19,7 +28,6 @@ export default class Modal extends React.Component {
   }
 
   componentDidMount() {
-    ReactDOM.findDOMNode(this).focus();
     if (this.props.form) {
       this.editor = new JSONEditor(ReactDOM.findDOMNode(this.refs.form), {
         disable_array_add: true,
@@ -30,14 +38,31 @@ export default class Modal extends React.Component {
         disable_properties: true,
         required_by_default: true,
         schema: this.props.form,
+        show_errors: 'always',
         theme: 'jqueryui'
       });
+
+      $('.row input, .row select', ReactDOM.findDOMNode(this.refs.form)).first().focus();
+    } else {
+      $('.nt-button', ReactDOM.findDOMNode(this)).first().focus();
     }
   }
 
   handleKeyDown(evt) {
     if (evt.keyCode === 9) {
-      this.setState({ active: 1 - this.state.active })
+      const $all = $('.row input, .row select, .nt-button', ReactDOM.findDOMNode(this));
+      const focused = $(':focus')[0];
+      let i;
+      for (i = 0; i < $all.length - 1; ++i) {
+        if ($all[i] != focused) {
+          continue;
+        }
+        $all[i + 1].focus();
+        break;
+      }
+      // Must have been focused on the last one or none of them.
+      if(i == $all.length - 1)
+          $all[0].focus();
       evt.stopPropagation();
       evt.preventDefault();
       return;
@@ -48,16 +73,16 @@ export default class Modal extends React.Component {
       evt.preventDefault();
       return;
     }
-    if (evt.keyCode === 13 || evt.keyCode === 32) {
-      if (this.state.active === 0) {
-        this.handleCancel();
-      } else {
-        this.handleSubmit();
-      }
-      evt.stopPropagation();
-      evt.preventDefault();
-      return;
-    }
+    // if (evt.keyCode === 13 || evt.keyCode === 32) {
+    //   if (this.state.active === 0) {
+    //     this.handleCancel();
+    //   } else {
+    //     this.handleSubmit();
+    //   }
+    //   evt.stopPropagation();
+    //   evt.preventDefault();
+    //   return;
+    // }
   }
 
   render() {
@@ -78,11 +103,11 @@ export default class Modal extends React.Component {
         </div>
         <div className="nt-button-group nt-button-group--pull-right">
           <button
-            className={'nt-button' + (this.state.active === 0 ? ' nt-button--primary' : '')}
+            className="nt-button"
             onClick={this.handleCancel.bind(this)}
           >Cancel</button>
           <button
-            className={'nt-button' + (this.state.active === 1 ? ' nt-button--primary' : '')}
+            className="nt-button"
             onClick={this.handleSubmit.bind(this)}
             >{this.props.button || 'OK'}</button>
         </div>

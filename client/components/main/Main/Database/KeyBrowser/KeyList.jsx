@@ -142,11 +142,15 @@ class KeyList extends React.Component {
       this.setState({ selectedKey: item[0], editableKey });
       this.props.onSelect(item[0]);
     } else {
+      this.index = null;
       this.setState({ selectedKey: null, editableKey: null });
     }
   }
 
   deleteSelectedKey() {
+    if (typeof this.index !== 'number') {
+      return;
+    }
     showModal({
       title: 'Delete selected key?',
       button: 'Delete',
@@ -278,15 +282,18 @@ class KeyList extends React.Component {
                   type: 'object',
                   properties: {
                     'Key Name:': {
-                      type: 'string'
+                      type: 'string',
+                      minLength: 1
                     },
                     'Type:': {
                       type: 'string',
-                      enum: ['String', 'Hash', 'List', 'Set', 'Sorted Set']
+                      enum: ['string', 'hash', 'list', 'set', 'zset']
                     }
                   }
                 }
-              })
+              }).then(res => {
+                this.props.onCreateKey(res);
+              });
             }} />
           }
           width={this.props.width - 40}
