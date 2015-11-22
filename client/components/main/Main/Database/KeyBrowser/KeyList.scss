@@ -46,9 +46,17 @@
   padding: 0 8px;
 }
 
-.public_fixedDataTableRow_main.is-selected {
+:focus .public_fixedDataTableRow_main.is-selected {
   background: #116cd6;
   color: #fff;
+
+  .public_fixedDataTableCell_main {
+    background: transparent;
+  }
+}
+
+.public_fixedDataTableRow_main.is-selected {
+  background: #dcdcdc;
 
   .public_fixedDataTableCell_main {
     background: transparent;

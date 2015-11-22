@@ -52,10 +52,7 @@ class Terminal extends React.Component {
       width: '100%',
       prompt: `[[;#fff;]redis> ]`,
       keydown(e) {
-        if (!terminal.isenabled) {
-          return true;
-        }
-        if (style.display === 'none') {
+        if (!terminal.enabled()) {
           return true;
         }
         if (e.ctrlKey || e.metaKey) {

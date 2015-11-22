@@ -269,7 +269,7 @@ class KeyList extends React.Component {
           } }
         />
         <Column
-          header="name"
+          header={<div>name2</div>}
           width={this.props.width - 40}
           cell = { ({ rowIndex }) => {
             const item = this.state.keys[rowIndex];
