@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Column } from 'fixed-data-table-contextmenu';
 import ContentEditable from '../../../../common/ContentEditable';
+import AddButton from '../../../../common/AddButton';
 import _ from 'lodash';
 import { clipboard } from 'electron';
 require('./KeyList.scss');
@@ -269,7 +270,25 @@ class KeyList extends React.Component {
           } }
         />
         <Column
-          header={<div>name2</div>}
+          header={
+            <AddButton title="name" onClick={() => {
+              showModal({
+                button: 'Create Key',
+                form: {
+                  type: 'object',
+                  properties: {
+                    'Key Name:': {
+                      type: 'string'
+                    },
+                    'Type:': {
+                      type: 'string',
+                      enum: ['String', 'Hash', 'List', 'Set', 'Sorted Set']
+                    }
+                  }
+                }
+              })
+            }} />
+          }
           width={this.props.width - 40}
           cell = { ({ rowIndex }) => {
             const item = this.state.keys[rowIndex];
