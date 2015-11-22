@@ -12,7 +12,7 @@ class Terminal extends React.Component {
   }
 
   componentDidMount() {
-    const redis = this.props.redis;
+    const { redis, style } = this.props;
     redis.on('select', this.onSelectBinded);
     const terminal = this.terminal = $(this.refs.terminal).terminal((command, term) => {
       command = command.trim().replace(/\s+/g, ' ').split(' ');
@@ -52,6 +52,12 @@ class Terminal extends React.Component {
       width: '100%',
       prompt: `[[;#fff;]redis> ]`,
       keydown(e) {
+        if (!terminal.isenabled) {
+          return true;
+        }
+        if (style.display === 'none') {
+          return true;
+        }
         if (e.ctrlKey || e.metaKey) {
           if (e.keyCode >= 48 && e.keyCode <=57) {
             return true;
