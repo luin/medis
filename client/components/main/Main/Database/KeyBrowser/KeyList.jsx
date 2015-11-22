@@ -16,6 +16,7 @@ class KeyList extends React.Component {
       sidebarWidth: 300,
       cursor: '0'
     };
+    this.randomClass = 'pattern-table-' + (Math.random() * 100000 | 0);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -160,7 +161,8 @@ class KeyList extends React.Component {
     });
     this.scan();
     $.contextMenu({
-      selector: '.pattern-table',
+      context: ReactDOM.findDOMNode(this),
+      selector: '.' + this.randomClass,
       trigger: 'none',
       zIndex: 99999,
       callback: (key, opt) => {
@@ -195,7 +197,7 @@ class KeyList extends React.Component {
   render() {
     return <div
       tabIndex="1"
-      className="pattern-table"
+      className={'pattern-table ' + this.randomClass}
     >
       <Table
         rowHeight={24}
