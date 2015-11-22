@@ -1,4 +1,8 @@
 .Terminal {
+  * {
+    -webkit-user-select: text;
+  }
+
   .number {
     color: #78CF8A;
   }
