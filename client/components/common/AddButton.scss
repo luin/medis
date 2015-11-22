@@ -1,0 +1,22 @@
+.AddButton {
+  position: relative;
+
+  span.plus {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    line-height: 13px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    background-image: linear-gradient(#fff, #efefef);
+    text-align: center;
+    font-weight: normal;
+    color: #888;
+
+    &:hover {
+      background: #efefef;
+    }
+  }
+}

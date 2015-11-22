@@ -35,3 +35,32 @@
     -webkit-user-select: text;
   }
 }
+
+.Modal__form {
+  h3 {
+    display: none;
+  }
+
+  .ui-corner-all {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .form-control {
+    position: relative;
+    background: none;
+    border: 0;
+
+    label {
+      position: absolute;
+      left: -90px;
+      text-align: right;
+      width: 80px;
+      font-weight: normal;
+    }
+  }
+
+  input {
+    width: 100%;
+  }
+}

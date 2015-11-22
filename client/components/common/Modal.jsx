@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+require('json-editor');
 
 require('./Modal.scss');
 
@@ -19,6 +20,19 @@ export default class Modal extends React.Component {
 
   componentDidMount() {
     ReactDOM.findDOMNode(this).focus();
+    if (this.props.form) {
+      this.editor = new JSONEditor(ReactDOM.findDOMNode(this.refs.form), {
+        disable_array_add: true,
+        disable_array_delete: true,
+        disable_array_reorder: true,
+        disable_collapse: true,
+        disable_edit_json: true,
+        disable_properties: true,
+        required_by_default: true,
+        schema: this.props.form,
+        theme: 'jqueryui'
+      });
+    }
   }
 
   handleKeyDown(evt) {
@@ -53,11 +67,14 @@ export default class Modal extends React.Component {
       onKeyDown={this.handleKeyDown.bind(this)}
     >
       <div className="Modal__content">
-        <div className="Modal__title">
-          {this.props.title}
-        </div>
+        {
+          this.props.title && <div className="Modal__title">
+            {this.props.title}
+          </div>
+        }
         <div className="Modal__body">
           {this.props.content}
+          <div className="Modal__form" ref="form" />
         </div>
         <div className="nt-button-group nt-button-group--pull-right">
           <button
