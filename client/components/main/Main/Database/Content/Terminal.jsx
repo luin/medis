@@ -53,12 +53,12 @@ class Terminal extends React.Component {
       width: '100%',
       prompt: `[[;#fff;]redis> ]`,
       keydown(e) {
-        return true;
         if (e.ctrlKey || e.metaKey) {
-          if ([81, 82, 87].indexOf(e.which) !== -1) {
-            e.preventDefault();
+          if (e.keyCode >= 48 && e.keyCode <=57) {
             return true;
-            // return false;
+          }
+          if ([84, 87, 78, 82, 81].indexOf(e.keyCode) !== -1) {
+            return true;
           }
         }
       }
