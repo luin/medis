@@ -43,7 +43,7 @@ class Content extends React.Component {
         onSelectTab={this.handleTabChange.bind(this)}
       />
       <KeyContent
-        style={{ display: this.state.tab === 'Content' ? 'block' : 'none' }}
+        style={{ display: this.state.tab === 'Content' ? 'flex' : 'none' }}
         keyName={this.props.keyName}
         keyType={this.state.keyType}
         height={this.props.height - 67}
@@ -53,6 +53,7 @@ class Content extends React.Component {
         style={{ display: this.state.tab === 'Terminal' ? 'block' : 'none' }}
         height={this.props.height - 67}
         redis={this.props.redis}
+        connectionKey={ this.props.connectionKey }
         onDatabaseChange={this.props.onDatabaseChange}
       />
       <Footer

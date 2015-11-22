@@ -6,10 +6,39 @@ import { connect } from 'react-redux';
 import InstanceTabs from './InstanceTabs';
 import Main from './Main';
 import DocumentTitle from 'react-document-title';
+import action from '../../actions';
+import store from '../../store';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
+  componentDidMount() {
+    $(window).on('keydown.redis', this.onHotKey.bind(this));
+  }
+
+  componentWillUnmount() {
+    $(window).off('keydown.redis');
+  }
+
+  onHotKey(e) {
+    if (!e.ctrlKey && e.metaKey) {
+      const code = e.keyCode;
+      if (code >= 49 && code <= 57) {
+        const number = code - 49;
+        if (number === 8) {
+          const instance = this.props.instances.get(this.props.instances.count() - 1);
+          if (instance) {
+            store.dispatch(action('selectInstance', instance.get('key')));
+            return false;
+          }
+        } else {
+          const instance = this.props.instances.get(number);
+          if (instance) {
+            store.dispatch(action('selectInstance', instance.get('key')));
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
 
   render() {
