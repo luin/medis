@@ -32,9 +32,9 @@
   display: flex;
   width: calc(100% + 16px);
   margin-left: -8px;
-  padding: 0 8px;
 
   span {
+    padding: 0 8px;
     display: block;
     flex: 1;
     width: 100%;
@@ -43,9 +43,7 @@
     text-overflow: ellipsis;
   }
 
-  &[contenteditable="true"] {
-    span {
-      text-overflow: clip;
-    }
+  span[contenteditable="true"] {
+    text-overflow: clip;
   }
 }

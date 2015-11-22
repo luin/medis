@@ -12,7 +12,6 @@ export default class Modal extends React.Component {
   handleSubmit() {
     if (this.editor) {
       const errors = this.editor.validate();
-      console.log(errors);
       if (errors.length) {
         $('.ui-state-error', ReactDOM.findDOMNode(this.refs.form)).css('opacity', 1);
         return;

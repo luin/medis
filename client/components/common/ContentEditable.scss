@@ -1,5 +1,5 @@
 .ContentEditable {
-  &[contenteditable="true"] {
+  [contenteditable="true"] {
     background: #fff !important;
     color: #333;
   }

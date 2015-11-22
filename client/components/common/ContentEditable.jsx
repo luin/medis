@@ -11,12 +11,15 @@ export default class ContentEditable extends React.Component {
   render() {
     return <div
       {...this.props}
-      onInput={this.handleChange.bind(this)}
-      onKeyDown={this.handleKeyDown.bind(this)}
-      onBlur={this.handleSubmit.bind(this)}
-      contentEditable={this.props.enabled}
     >
-      <span ref="text" dangerouslySetInnerHTML={{__html: this.props.html}} />
+      <span
+        onInput={this.handleChange.bind(this)}
+        onKeyDown={this.handleKeyDown.bind(this)}
+        onBlur={this.handleSubmit.bind(this)}
+        contentEditable={this.props.enabled}
+        ref="text"
+        dangerouslySetInnerHTML={{__html: this.props.html}}
+      />
     </div>;
   }
 
@@ -47,12 +50,16 @@ export default class ContentEditable extends React.Component {
 
   handleKeyDown(evt) {
     if (evt.keyCode === 13) {
-      this.props.onChange(ReactDOM.findDOMNode(this.refs.text).textContent);
-      return false;
+      ReactDOM.findDOMNode(this.refs.text).blur();
+      evt.preventDefault();
+      evt.stopPropagation();
+      return;
     }
     if (evt.keyCode === 27) {
       this.props.onChange(this.props.html);
-      return false;
+      evt.preventDefault();
+      evt.stopPropagation();
+      return;
     }
   }
 
@@ -64,7 +71,7 @@ export default class ContentEditable extends React.Component {
     this.lastHtml = html;
   }
 
-  handleSubmit(evt) {
+  handleSubmit() {
     this.props.onChange(ReactDOM.findDOMNode(this.refs.text).textContent);
   }
 }
