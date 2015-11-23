@@ -33,6 +33,7 @@ class KeyBrowser extends React.Component {
         db={ this.props.db }
         pattern={ this.state.pattern || '*' }
         redis={ this.props.redis }
+        onCreateKey={ this.props.onCreateKey }
         onSelect={key => {
           this.props.onSelectKey(key);
         }}

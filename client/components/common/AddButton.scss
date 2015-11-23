@@ -16,6 +16,10 @@
     color: #888;
 
     &:hover {
+      background: #fff;
+    }
+
+    &:active {
       background: #efefef;
     }
   }

@@ -8,7 +8,7 @@ class StringContent extends BaseContent {
   init(keyName) {
     super.init(keyName);
     this.props.redis.getBuffer(keyName, (_, buffer) => {
-      this.setState({ buffer });
+      this.setState({ buffer: buffer || new Buffer(0) });
     });
   }
 

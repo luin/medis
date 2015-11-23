@@ -16,19 +16,23 @@ class Content extends React.Component {
     };
   }
 
-  init(keyName) {
+  init(keyName, keyType) {
+    if (keyType) {
+      this.setState({ keyType });
+      return;
+    }
     this.props.redis.type(keyName, (_, keyType) => {
       this.setState({ keyType });
     });
   }
 
   componentDidMount() {
-    this.init(this.props.keyName);
+    this.init(this.props.keyName, this.props.keyType);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.keyName !== this.props.keyName) {
-      this.init(nextProps.keyName);
+    if (nextProps.keyName !== this.props.keyName || nextProps.keyType !== this.props.keyType) {
+      this.init(nextProps.keyName, nextProps.keyType);
     }
   }
 

@@ -13,8 +13,7 @@
   padding: 23px 18px 22px 18px;
 }
 
-.nt-form-row {
-  overflow: hidden;
+.nt-form-row, .form-control {
   padding: 5px 0;
   $label-width: 140px;
   label {
@@ -22,10 +21,10 @@
     width: $label-width;
     text-align: right;
   }
-  input, textarea {
+  input, textarea, select {
     margin-left: 10px;
   }
-  input[type="text"], input[type="password"] {
+  input[type="text"], input[type="password"], select {
     width: 250px;
     -webkit-user-select: text;
     border-width: 1px;
@@ -105,7 +104,7 @@
   }
 }
 
-.nt-button--primary {
+.nt-button--primary, .nt-button:focus {
   background-image: -webkit-linear-gradient(top, #6cb3fa 0%, #087eff 100%);
   border-top-color: #4ca2f9;
   border-bottom-color: #015cff;

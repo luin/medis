@@ -33,6 +33,12 @@ class Database extends React.Component {
     this.setState({ clientHeight: $(window).height() - $('.tab-group').height() - 2 });
   }
 
+  handleCreateKey(res) {
+    const key = res['Key Name:'];
+    const type = res['Type:'];
+    this.setState({ key, type })
+  }
+
   render() {
     return <SplitPane
       className="pane-group"
@@ -51,12 +57,14 @@ class Database extends React.Component {
         redis={ this.props.redis }
         connectionKey={ this.props.connectionKey }
         onSelectKey={ key => this.setState({ key }) }
+        onCreateKey={ this.handleCreateKey.bind(this) }
         db={ this.state.db }
         onDatabaseChange={ db => this.setState({ db }) }
       />
       <Content
         height={ this.state.clientHeight }
         keyName={ this.state.key }
+        keyType={ this.state.type }
         connectionKey={ this.props.connectionKey }
         redis={ this.props.redis }
         db={ this.state.db }
