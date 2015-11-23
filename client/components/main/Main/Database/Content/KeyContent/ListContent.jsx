@@ -36,6 +36,9 @@ class ListContent extends BaseContent {
         members: this.state.members.concat(results),
         length: this.state.length - diff
       }, () => {
+        if (typeof this.state.selectedIndex !== 'number' && this.state.members.length) {
+          this.handleSelect(null, 0);
+        }
         this.loading = false;
         if (this.state.members.length - 1 < this.maxRow && !diff) {
           this.load();
@@ -46,6 +49,15 @@ class ListContent extends BaseContent {
 
   handleOrderChange(desc) {
     this.setState({ desc });
+  }
+
+  handleSelect(_, selectedIndex) {
+    const content = this.state.members[this.state.desc ? this.state.length - 1 - selectedIndex : selectedIndex];
+    if (content) {
+      this.setState({ selectedIndex, content });
+    } else {
+      this.setState({ selectedIndex: null, content: null });
+    }
   }
 
   render() {
@@ -59,17 +71,16 @@ class ListContent extends BaseContent {
         this.setState({ sidebarWidth: size });
       }}
       >
-      <div style={{ marginTop: -1 }}>
+      <div
+        style={{ marginTop: -1 }}
+        tabIndex="0"
+        className={this.randomClass}
+      >
         <Table
           rowHeight={24}
           rowsCount={this.state.length}
           rowClassNameGetter={this.rowClassGetter.bind(this)}
-          onRowClick={(evt, selectedIndex) => {
-            const content = this.state.members[this.state.desc ? this.state.length - 1 - selectedIndex : selectedIndex];
-            if (content) {
-              this.setState({ selectedIndex, content });
-            }
-          }}
+          onRowClick={this.handleSelect.bind(this)}
           isColumnResizing={false}
           onColumnResizeEndCallback={ indexWidth => {
             this.setState({ indexWidth });
