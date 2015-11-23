@@ -21,6 +21,7 @@ class BaseContent extends React.Component {
     this.state.sidebarWidth = 200;
     this.maxRow = 0;
     this.cursor = 0;
+    this.randomClass = 'base-content-' + (Math.random() * 100000 | 0);
   }
 
   init() {
