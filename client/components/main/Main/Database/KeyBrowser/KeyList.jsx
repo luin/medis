@@ -35,6 +35,7 @@ class KeyList extends React.Component {
         cursor: '0',
         keys: []
       }, () => {
+        this.handleSelect();
         this.scan();
       });
     }
@@ -120,13 +121,21 @@ class KeyList extends React.Component {
               keys: this.state.keys.concat(keys)
             }, () => {
               iter.call(this, count < 10 ? 5000 : (count < 50 ? 2000 : 1000), times + 1);
+              if (typeof this.index !== 'number') {
+                this.handleSelect(0);
+              }
             });
           } else {
             this.setState({
               cursor,
               scanning: false,
               keys: this.state.keys.concat(keys)
-            }, () => this.scanning = false);
+            }, () => {
+              this.scanning = false;
+              if (typeof this.index !== 'number') {
+                this.handleSelect(0);
+              }
+            });
           }
         });
       });
