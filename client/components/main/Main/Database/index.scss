@@ -42,4 +42,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  &[contenteditable="true"] {
+    span {
+      text-overflow: clip;
+    }
+  }
 }
