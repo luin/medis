@@ -59,7 +59,7 @@ class SetContent extends BaseContent {
           rowClassNameGetter={this.rowClassGetter.bind(this)}
           onRowClick={(evt, selectedIndex) => {
             const content = this.state.members[selectedIndex];
-            if (content) {
+            if (typeof content !== 'undefined') {
               this.setState({ selectedIndex, content });
             }
           }}
@@ -72,7 +72,7 @@ class SetContent extends BaseContent {
             width={this.state.sidebarWidth}
             cell={ ({ rowIndex }) => {
               const member = this.state.members[rowIndex];
-              if (!member) {
+              if (typeof member === 'undefined') {
                 this.load(rowIndex);
                 return 'Loading...';
               }
@@ -83,7 +83,7 @@ class SetContent extends BaseContent {
         </div>
         <Editor
           style={{ height: this.props.height }}
-          buffer={this.state.content && new Buffer(this.state.content)}
+          buffer={typeof this.state.content === 'string' && new Buffer(this.state.content)}
           onSave={this.save.bind(this)}
         />
       </SplitPane>;

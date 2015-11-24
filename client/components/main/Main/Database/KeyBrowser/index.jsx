@@ -7,11 +7,17 @@ import KeyList from './KeyList';
 import Footer from './Footer';
 
 class KeyBrowser extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
     this.footerHeight = 66;
 
-    this.state = { pattern: '' };
+    this.state = { pattern: props.pattern };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.pattern !== this.props.pattern) {
+      this.setState({ pattern: nextProps.pattern });
+    }
   }
 
   render() {
@@ -23,6 +29,7 @@ class KeyBrowser extends React.Component {
         height={ this.props.height - this.footerHeight }
         connectionKey={ this.props.connectionKey }
         db={ this.props.db }
+        pattern={ this.state.pattern }
         onChange={pattern => {
           this.setState({ pattern });
         }}

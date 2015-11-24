@@ -224,6 +224,22 @@ class KeyList extends React.Component {
     });
   }
 
+  createKey(key, type) {
+    const redis = this.props.redis;
+    switch (type) {
+    case 'string':
+      return redis.set(key, '');
+    case 'list':
+      return redis.lpush(key, 'New Item');
+    case 'hash':
+      return redis.hset(key, 'New Key', 'New Value');
+    case 'set':
+      return redis.sadd(key, '');
+    case 'zset':
+      return redis.zadd(key, 0, '');
+    }
+  }
+
   showContextMenu(e, row) {
     this.handleSelect(row);
     $(ReactDOM.findDOMNode(this)).contextMenu({
@@ -301,7 +317,20 @@ class KeyList extends React.Component {
                   }
                 }
               }).then(res => {
-                this.props.onCreateKey(res);
+                const key = res['Key Name:'];
+                const type = res['Type:'];
+                return this.props.redis.exists(key).then(exists => {
+                  const error = 'The key already exists';
+                  if (exists) {
+                    alert(error);
+                    throw new Error(error);
+                  }
+                  return { key, type };
+                });
+              }).then(({ key, type }) => {
+                this.createKey(key, type).then(() => {
+                  this.props.onCreateKey(key);
+                });
               });
             }} />
           }

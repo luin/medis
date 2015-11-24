@@ -97,10 +97,21 @@ class Editor extends React.Component {
     this.setState({ currentMode: newMode });
   }
 
+  focus() {
+    const codemirror = this.refs.codemirror;
+    if (codemirror) {
+      const node = ReactDOM.findDOMNode(codemirror);
+      if (node) {
+        node.focus();
+      }
+    }
+  }
+
   render() {
     let viewer;
     if (this.state.currentMode === 'raw') {
       viewer = <Codemirror
+        ref="codemirror"
         key="raw"
         value={this.state.modes.raw}
         onChange={this.updateContent.bind(this, 'raw')}
@@ -114,6 +125,7 @@ class Editor extends React.Component {
       />;
     } else if (this.state.currentMode === 'json') {
       viewer = <Codemirror
+        ref="codemirror"
         key="json"
         value={this.state.modes.json}
         onChange={this.updateContent.bind(this, 'json')}
@@ -135,6 +147,7 @@ class Editor extends React.Component {
       />;
     } else if (this.state.currentMode === 'messagepack') {
       viewer = <Codemirror
+        ref="codemirror"
         key="messagepack"
         value={this.state.modes.messagepack}
         onChange={this.updateContent.bind(this, 'messagepack')}

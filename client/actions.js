@@ -48,6 +48,7 @@ const actions = {
       function handleRedis(config, override) {
         dispatch({ type: 'updateConnectStatus', data: 'Redis connecting...' });
         const redis = new Redis(_.assign({}, config, override, {
+          showFriendlyErrorStack: true,
           retryStrategy() {
             return false;
           }

@@ -8,7 +8,7 @@ class StringContent extends BaseContent {
   init(keyName) {
     super.init(keyName);
     this.props.redis.getBuffer(keyName, (_, buffer) => {
-      this.setState({ buffer: buffer || new Buffer(0) });
+      this.setState({ buffer: buffer instanceof Buffer ? buffer : new Buffer(0) });
     });
   }
 
@@ -18,6 +18,10 @@ class StringContent extends BaseContent {
     } else {
       alert('Please wait for data been loaded before saving.');
     }
+  }
+
+  create() {
+    return this.props.redis.set(this.state.keyName, '');
   }
 
   render() {

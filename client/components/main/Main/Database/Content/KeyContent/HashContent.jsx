@@ -57,7 +57,7 @@ class HashContent extends BaseContent {
           rowClassNameGetter={this.rowClassGetter.bind(this)}
           onRowClick={(evt, selectedIndex) => {
             const item = this.state.members[selectedIndex];
-            if (item && item[0]) {
+            if (item) {
               this.setState({ selectedIndex, content: item[1] });
             }
           }}
