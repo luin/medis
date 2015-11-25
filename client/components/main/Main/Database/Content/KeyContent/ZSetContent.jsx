@@ -18,7 +18,7 @@ class ZSetContent extends BaseContent {
   save(value, callback) {
     if (typeof this.state.selectedIndex === 'number') {
       const oldValue = this.state.members[this.state.selectedIndex];
-      this.state.members[this.state.selectedIndex] = value.toString();
+      this.state.members[this.state.selectedIndex][0] = value.toString();
       this.setState({ members: this.state.members });
       this.props.redis.multi().srem(this.state.keyName, oldValue).sadd(this.state.keyName, value).exec(callback);
     } else {
@@ -69,7 +69,7 @@ class ZSetContent extends BaseContent {
           rowClassNameGetter={this.rowClassGetter.bind(this)}
           onRowClick={(evt, selectedIndex) => {
             const item = this.state.members[this.state.desc ? this.state.length - 1 - selectedIndex : selectedIndex];
-            if (item && item[0]) {
+            if (item) {
               this.setState({ selectedIndex, content: item[0] });
             }
           }}
@@ -118,7 +118,7 @@ class ZSetContent extends BaseContent {
         </div>
         <Editor
           style={{ height: this.props.height }}
-          buffer={this.state.content && new Buffer(this.state.content)}
+          buffer={typeof this.state.content === 'string' && new Buffer(this.state.content)}
           onSave={this.save.bind(this)}
         />
       </SplitPane>;

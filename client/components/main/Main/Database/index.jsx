@@ -15,6 +15,7 @@ class Database extends React.Component {
       sidebarWidth: 300,
       key: null,
       db: 0,
+      pattern: '',
       clientHeight: this.$window.height()
     };
   }
@@ -33,10 +34,8 @@ class Database extends React.Component {
     this.setState({ clientHeight: $(window).height() - $('.tab-group').height() - 2 });
   }
 
-  handleCreateKey(res) {
-    const key = res['Key Name:'];
-    const type = res['Type:'];
-    this.setState({ key, type })
+  handleCreateKey(key) {
+    this.setState({ key, pattern: key });
   }
 
   render() {
@@ -52,11 +51,12 @@ class Database extends React.Component {
       >
       <KeyBrowser
         patternStore={ this.props.patternStore }
+        pattern={ this.state.pattern }
         height={ this.state.clientHeight }
         width= { this.state.sidebarWidth }
         redis={ this.props.redis }
         connectionKey={ this.props.connectionKey }
-        onSelectKey={ key => this.setState({ key }) }
+        onSelectKey={ key => this.setState({ key, type: null }) }
         onCreateKey={ this.handleCreateKey.bind(this) }
         db={ this.state.db }
         onDatabaseChange={ db => this.setState({ db }) }

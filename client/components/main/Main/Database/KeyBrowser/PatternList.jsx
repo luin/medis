@@ -5,17 +5,20 @@ import React from 'react';
 require('./PatternList.scss');
 
 class PatternList extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
       patternDropdown: false,
-      pattern: ''
+      pattern: props.pattern
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.db !== this.props.db) {
       this.updatePattern('');
+    }
+    if (nextProps.pattern !== this.props.pattern) {
+      this.setState({ pattern: nextProps.pattern });
     }
   }
 

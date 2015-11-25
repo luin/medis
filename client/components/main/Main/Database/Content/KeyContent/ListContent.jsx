@@ -23,12 +23,23 @@ class ListContent extends BaseContent {
     }
   }
 
+  create() {
+    return this.props.redis.lpush(this.state.keyName, '');
+  }
+
   load(index) {
+    console.log('want to load');
     if (!super.load(index)) {
+      console.log('reject to load');
       return;
     }
+    console.log('alow to load');
+
     const from = this.state.members.length;
     const to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1 - from);
+    if (to < from) {
+      throw new Error('sdf');
+    }
 
     this.props.redis.lrange(this.state.keyName, from, to, (_, results) => {
       const diff = to - from + 1 - results.length;
@@ -53,7 +64,9 @@ class ListContent extends BaseContent {
 
   handleSelect(_, selectedIndex) {
     const content = this.state.members[this.state.desc ? this.state.length - 1 - selectedIndex : selectedIndex];
-    if (content) {
+    console.log(content, typeof content);
+    if (typeof content !== 'undefined') {
+      console.log('selectedIndex', selectedIndex);
       this.setState({ selectedIndex, content });
     } else {
       this.setState({ selectedIndex: null, content: null });
@@ -110,8 +123,9 @@ class ListContent extends BaseContent {
             header="item"
             width={this.state.sidebarWidth - this.state.indexWidth}
             cell={ ({ rowIndex }) => {
+              console.log('Access rowIndex', rowIndex);
               const data = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex];
-              if (!data) {
+              if (typeof data === 'undefined') {
                 this.load(rowIndex);
                 return 'Loading...';
               }
@@ -122,7 +136,7 @@ class ListContent extends BaseContent {
         </div>
         <Editor
           style={{ height: this.props.height }}
-          buffer={this.state.content && new Buffer(this.state.content)}
+          buffer={typeof this.state.content === 'string' && new Buffer(this.state.content)}
           onSave={this.save.bind(this)}
         />
       </SplitPane>;

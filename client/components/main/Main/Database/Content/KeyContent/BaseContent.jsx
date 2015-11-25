@@ -24,11 +24,11 @@ class BaseContent extends React.Component {
     this.randomClass = 'base-content-' + (Math.random() * 100000 | 0);
   }
 
-  init() {
+  init(keyName) {
     this.loading = false;
     this.setState(getDefaultState());
 
-    const { redis, keyType, keyName } = this.props;
+    const { redis, keyType } = this.props;
 
     const method = {
       string: 'strlen',
@@ -38,10 +38,24 @@ class BaseContent extends React.Component {
       hash: 'hlen'
     }[keyType];
 
-    redis[method](keyName, (_, length) => {
-      this.setState({ keyName, length });
+    console.log('keyType', keyType, keyName);
+
+    redis[method](keyName).then(length => {
+      this.setState({ keyName, length: length || 0 });
+      if (typeof length !== 'number') {
+        this.create().then(() => {
+          this.init(keyName);
+        }).catch(err => {
+          alert(err.message);
+        });
+      }
     });
   }
+
+  // create() {
+  //   const { redis, keyType, keyName } = this.props;
+  //   let schema;
+  // }
 
   load(index) {
     if (index > this.maxRow) {
@@ -56,7 +70,7 @@ class BaseContent extends React.Component {
 
   rowClassGetter(index) {
     const item = this.state.members[index];
-    if (!item) {
+    if (typeof item === 'undefined') {
       return 'type-list is-loading';
     }
     if (index === this.state.selectedIndex) {
