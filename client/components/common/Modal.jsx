@@ -72,16 +72,16 @@ export default class Modal extends React.Component {
       evt.preventDefault();
       return;
     }
-    // if (evt.keyCode === 13 || evt.keyCode === 32) {
-    //   if (this.state.active === 0) {
-    //     this.handleCancel();
-    //   } else {
-    //     this.handleSubmit();
-    //   }
-    //   evt.stopPropagation();
-    //   evt.preventDefault();
-    //   return;
-    // }
+    if (evt.keyCode === 13) {
+      const node = ReactDOM.findDOMNode(this.props.form ? this.refs.cancel: this.refs.submit);
+      node.focus();
+      setTimeout(() => {
+        node.click();
+      }, 10);
+      evt.stopPropagation();
+      evt.preventDefault();
+      return;
+    }
   }
 
   render() {
@@ -102,11 +102,13 @@ export default class Modal extends React.Component {
         </div>
         <div className="nt-button-group nt-button-group--pull-right">
           <button
-            className="nt-button"
+            ref="submit"
+            className={'nt-button' + (this.props.form ? '' : ' nt-button--primary')}
             onClick={this.handleCancel.bind(this)}
           >Cancel</button>
           <button
-            className="nt-button"
+            ref="cancel"
+            className={'nt-button' + (!this.props.form ? '' : ' nt-button--primary')}
             onClick={this.handleSubmit.bind(this)}
             >{this.props.button || 'OK'}</button>
         </div>
