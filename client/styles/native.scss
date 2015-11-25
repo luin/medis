@@ -104,7 +104,7 @@
   }
 }
 
-.nt-button--primary, .nt-button:focus {
+.nt-button--primary {
   background-image: -webkit-linear-gradient(top, #6cb3fa 0%, #087eff 100%);
   border-top-color: #4ca2f9;
   border-bottom-color: #015cff;
@@ -120,6 +120,11 @@
     border-right-color: #125eed;
     color: rgba(255, 255, 255, .9);
   }
+}
+
+.nt-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3.5px #93c2f3;
 }
 
 .nt-button[disabled], .nt-button--disabled {
