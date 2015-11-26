@@ -144,7 +144,7 @@ class KeyList extends React.Component {
 
   handleSelect(index) {
     const item = this.state.keys[index];
-    if (item && item[0]) {
+    if (item && typeof item[0] !== 'undefined') {
       const key = item[0];
       this.index = index;
       const editableKey = this.state.editableKey === key ? this.state.editableKey : null;
@@ -207,13 +207,16 @@ class KeyList extends React.Component {
       trigger: 'none',
       zIndex: 99999,
       callback: (key, opt) => {
-        if (key === 'delete') {
-          this.deleteSelectedKey();
-        } else if (key === 'rename') {
-          this.setState({ editableKey: this.state.keys[this.index][0]});
-        } else if (key === 'copy') {
-          clipboard.writeText(this.state.keys[this.index][0]);
-        }
+        setTimeout(() => {
+          if (key === 'delete') {
+            this.deleteSelectedKey();
+          } else if (key === 'rename') {
+            this.setState({ editableKey: this.state.keys[this.index][0]});
+          } else if (key === 'copy') {
+            clipboard.writeText(this.state.keys[this.index][0]);
+          }
+        }, 0);
+        ReactDOM.findDOMNode(this).focus();
       },
       items: {
         copy: { name: 'Copy to Clipboard'},
@@ -341,7 +344,7 @@ class KeyList extends React.Component {
             if (item) {
               cellData = item[0];
             }
-            if (!cellData) {
+            if (typeof cellData === 'undefined') {
               if (this.state.scanning) {
                 return <span style={ { color: '#ccc' }}>Scanning...(cursor {this.state.cursor})</span>;
               }
