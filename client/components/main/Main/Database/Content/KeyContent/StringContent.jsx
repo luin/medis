@@ -5,8 +5,8 @@ import BaseContent from './BaseContent';
 import Editor from './Editor';
 
 class StringContent extends BaseContent {
-  init(keyName) {
-    super.init(keyName);
+  init(keyName, keyType) {
+    super.init(keyName, keyType);
     this.props.redis.getBuffer(keyName, (_, buffer) => {
       this.setState({ buffer: buffer instanceof Buffer ? buffer : new Buffer(0) });
     });

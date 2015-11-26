@@ -24,11 +24,14 @@ class BaseContent extends React.Component {
     this.randomClass = 'base-content-' + (Math.random() * 100000 | 0);
   }
 
-  init(keyName) {
+  init(keyName, keyType) {
+    if (!keyName || !keyType) {
+      return;
+    }
     this.loading = false;
     this.setState(getDefaultState());
 
-    const { redis, keyType } = this.props;
+    const { redis } = this.props;
 
     const method = {
       string: 'strlen',
@@ -38,24 +41,10 @@ class BaseContent extends React.Component {
       hash: 'hlen'
     }[keyType];
 
-    console.log('keyType', keyType, keyName);
-
     redis[method](keyName).then(length => {
       this.setState({ keyName, length: length || 0 });
-      if (typeof length !== 'number') {
-        this.create().then(() => {
-          this.init(keyName);
-        }).catch(err => {
-          alert(err.message);
-        });
-      }
     });
   }
-
-  // create() {
-  //   const { redis, keyType, keyName } = this.props;
-  //   let schema;
-  // }
 
   load(index) {
     if (index > this.maxRow) {
@@ -80,12 +69,19 @@ class BaseContent extends React.Component {
   }
 
   componentDidMount() {
-    this.init(this.props.keyName);
+    this.init(this.props.keyName, this.props.keyType);
+  }
+
+  componentDidUpdate() {
+    if (typeof this.state.scrollToRow === 'number') {
+      this.setState({ scrollToRow: null });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.keyName !== this.props.keyName && nextProps.keyName) {
-      this.init(nextProps.keyName);
+    if (nextProps.keyName !== this.props.keyName ||
+        nextProps.keyType !== this.props.keyType) {
+      this.init(nextProps.keyName, nextProps.keyType);
     }
   }
 

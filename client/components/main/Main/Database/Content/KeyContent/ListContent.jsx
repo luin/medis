@@ -6,6 +6,7 @@ import SplitPane from 'react-split-pane';
 import { Table, Column } from 'fixed-data-table';
 import Editor from './Editor';
 import SortHeaderCell from './SortHeaderCell';
+import AddButton from '../../../../../common/AddButton';
 
 class ListContent extends BaseContent {
   constructor() {
@@ -120,10 +121,37 @@ class ListContent extends BaseContent {
             } }
           />
           <Column
-            header="item"
+            header={
+              <AddButton title="item" onClick={() => {
+                showModal({
+                  button: 'Insert Item',
+                  form: {
+                    type: 'object',
+                    properties: {
+                      'Insert To:': {
+                        type: 'string',
+                        enum: ['head', 'tail']
+                      }
+                    }
+                  }
+                }).then(res => {
+                  return res['Insert To:'] === 'head' ? 'lpush' : 'rpush';
+                }).then(method => {
+                  const data = 'New Item';
+                  this.props.redis[method](this.state.keyName, data).then(() => {
+                    this.state.members[method === 'lpush' ? 'unshift' : 'push'](data)
+                    this.setState({
+                      members: this.state.members,
+                      length: this.state.length + 1,
+                    }, () => {
+                      this.handleSelect(null, method === 'lpush' ? 0 : this.state.members.length - 1);
+                    });
+                  });
+                });
+              }} />
+            }
             width={this.state.sidebarWidth - this.state.indexWidth}
             cell={ ({ rowIndex }) => {
-              console.log('Access rowIndex', rowIndex);
               const data = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex];
               if (typeof data === 'undefined') {
                 this.load(rowIndex);

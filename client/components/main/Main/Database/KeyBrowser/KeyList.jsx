@@ -234,9 +234,9 @@ class KeyList extends React.Component {
     case 'hash':
       return redis.hset(key, 'New Key', 'New Value');
     case 'set':
-      return redis.sadd(key, '');
+      return redis.sadd(key, 'New Member');
     case 'zset':
-      return redis.zadd(key, 0, '');
+      return redis.zadd(key, 0, 'New Member');
     }
   }
 
