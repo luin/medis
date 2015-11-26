@@ -3,9 +3,11 @@
 import React from 'react';
 import BaseContent from './BaseContent';
 import SplitPane from 'react-split-pane';
-import { Table, Column } from 'fixed-data-table';
+import { Table, Column } from 'fixed-data-table-contextmenu';
 import Editor from './Editor';
 import AddButton from '../../../../../common/AddButton';
+import ContentEditable from '../../../../../common/ContentEditable';
+import ReactDOM from 'react-dom';
 
 class HashContent extends BaseContent {
   save(value, callback) {
@@ -50,6 +52,87 @@ class HashContent extends BaseContent {
     }
   }
 
+  handleKeyDown(e) {
+    if (typeof this.state.selectedIndex === 'number' && typeof this.state.editableIndex !== 'number') {
+      if (e.keyCode === 8) {
+        this.deleteSelectedMember();
+        return false;
+      }
+      if (e.keyCode === 38) {
+        if (this.state.selectedIndex > 0) {
+          this.handleSelect(null, this.state.selectedIndex - 1);
+        }
+        return false;
+      }
+      if (e.keyCode === 40) {
+        if (this.state.selectedIndex < this.state.members.length - 1) {
+          this.handleSelect(null, this.state.selectedIndex + 1);
+        }
+        return false;
+      }
+    }
+  }
+
+  deleteSelectedMember() {
+    if (typeof this.state.selectedIndex !== 'number') {
+      return;
+    }
+    showModal({
+      title: 'Delete selected item?',
+      button: 'Delete',
+      content: 'Are you sure you want to delete the selected item? This action cannot be undone.'
+    }).then(() => {
+      const members = this.state.members;
+      const deleted = members.splice(this.state.selectedIndex, 1);
+      if (deleted.length) {
+        this.props.redis.hdel(this.state.keyName, deleted[0]);
+        if (this.state.selectedIndex >= members.length - 1) {
+          this.state.selectedIndex -= 1;
+        }
+        this.setState({ members, length: this.state.length - 1 }, () => {
+          this.handleSelect(null, this.state.selectedIndex);
+        });
+      }
+    });
+  }
+
+  componentDidMount() {
+    super.componentDidMount();
+    $.contextMenu({
+      context: ReactDOM.findDOMNode(this.refs.table),
+      selector: '.' + this.randomClass,
+      trigger: 'none',
+      zIndex: 99999,
+      callback: (key, opt) => {
+        setTimeout(() => {
+          if (key === 'delete') {
+            this.deleteSelectedMember();
+          } else if (key === 'copy') {
+            clipboard.writeText(this.state.keys[this.state.selectedIndex][0]);
+          } else if (key === 'rename') {
+            this.setState({ editableIndex: this.state.selectedIndex});
+          }
+        }, 0);
+        ReactDOM.findDOMNode(this.refs.table).focus();
+      },
+      items: {
+        copy: { name: 'Copy to Clipboard'},
+        sep1: '---------',
+        rename: { name: 'Rename Key'},
+        delete: { name: 'Delete' }
+      }
+    });
+  }
+
+  showContextMenu(e, row) {
+    this.handleSelect(null, row);
+    $(ReactDOM.findDOMNode(this.refs.table)).contextMenu({
+      x: e.pageX,
+      y: e.pageY,
+      zIndex: 99999
+    });
+  }
+
   render() {
     return <SplitPane
       className="pane-group"
@@ -60,12 +143,23 @@ class HashContent extends BaseContent {
         this.setState({ sidebarWidth: size });
       }}
       >
-      <div style={ { 'marginTop': -1 } }>
+      <div
+        style={ { 'marginTop': -1 } }
+        onKeyDown={this.handleKeyDown.bind(this)}
+        tabIndex="0"
+        ref="table"
+        className={this.randomClass}
+      >
         <Table
           rowHeight={24}
           rowsCount={this.state.length}
           rowClassNameGetter={this.rowClassGetter.bind(this)}
+          onRowContextMenu={this.showContextMenu.bind(this)}
           onRowClick={this.handleSelect.bind(this)}
+          onRowDoubleClick={(evt, index) => {
+            this.handleSelect(evt, index);
+            this.setState({ editableIndex: index });
+          }}
           width={this.state.sidebarWidth}
           height={this.props.height + 1}
           headerHeight={24}
@@ -105,7 +199,48 @@ class HashContent extends BaseContent {
                 this.load(rowIndex);
                 return 'Loading...';
               }
-              return <div className="overflow-wrapper"><span>{member[0]}</span></div>;
+              return <ContentEditable
+                className="ContentEditable overflow-wrapper"
+                enabled={rowIndex === this.state.editableIndex}
+                onChange={target => {
+                  const members = this.state.members;
+                  const member = members[rowIndex];
+                  const keyName = this.state.keyName;
+                  const source = member[0];
+                  if (source !== target && target) {
+                    this.props.redis.hexists(keyName, target).then(exists => {
+                      if (exists) {
+                        return showModal({
+                          title: 'Overwrite the field?',
+                          button: 'Overwrite',
+                          content: `Field "${target}" already exists. Are you sure you want to overwrite this field?`
+                        }).then(() => {
+                          let found;
+                          for (let i = 0; i < members.length; i++) {
+                            if (members[i][0] === target) {
+                              found = i;
+                              break;
+                            }
+                          }
+                          if (typeof found === 'number') {
+                            members.splice(found, 1);
+                            this.setState({ length: this.state.length - 1 });
+                          }
+                        });
+                      }
+                    }).then(() => {
+                      member[0] = target;
+                      this.props.redis.multi()
+                      .hdel(keyName, source)
+                      .hset(keyName, target, member[1]).exec();
+                      this.setState({ members });
+                    }).catch(() => {});
+                  }
+                  this.setState({ editableIndex: null });
+                  ReactDOM.findDOMNode(this).focus();
+                }}
+                html={member[0]}
+              />;
             } }
           />
         </Table>

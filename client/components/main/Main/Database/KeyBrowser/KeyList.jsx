@@ -181,7 +181,7 @@ class KeyList extends React.Component {
 
   componentDidMount() {
     $(ReactDOM.findDOMNode(this)).on('keydown', (e) => {
-      if (typeof this.index === 'number' && !this.state.editableKey) {
+      if (typeof this.index === 'number' && typeof this.state.editableKey !== 'string') {
         if (e.keyCode === 8) {
           this.deleteSelectedKey();
           return false;
