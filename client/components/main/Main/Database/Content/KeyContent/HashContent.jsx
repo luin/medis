@@ -45,9 +45,6 @@ class HashContent extends BaseContent {
   }
 
   handleSelect(evt, selectedIndex) {
-    if (selectedIndex === this.state.selectedIndex) {
-      return;
-    }
     const item = this.state.members[selectedIndex];
     if (item) {
       this.setState({ selectedIndex, content: item[1] });
