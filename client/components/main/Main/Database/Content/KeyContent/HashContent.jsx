@@ -45,10 +45,11 @@ class HashContent extends BaseContent {
   }
 
   handleSelect(evt, selectedIndex) {
+    if (selectedIndex === this.state.selectedIndex) {
+      return;
+    }
     const item = this.state.members[selectedIndex];
-    console.log('want set');
     if (item) {
-      console.log('set', item);
       this.setState({ selectedIndex, content: item[1] });
     }
   }

@@ -146,6 +146,10 @@ class KeyList extends React.Component {
     const item = this.state.keys[index];
     if (item && typeof item[0] !== 'undefined') {
       const key = item[0];
+      if (key === this.state.selectedKey) {
+        return;
+      }
+
       this.index = index;
       const editableKey = this.state.editableKey === key ? this.state.editableKey : null;
       this.setState({ selectedKey: item[0], editableKey });
