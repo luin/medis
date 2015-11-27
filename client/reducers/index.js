@@ -12,7 +12,6 @@ Object.assign(handlers, patternStore);
 Object.assign(handlers, connection);
 
 export default function (state, action) {
-  console.log(`* ACTION ${action.type}`);
   if (handlers[action.type]) {
     return handlers[action.type].call(state, action.data, action.callback || noop);
   }

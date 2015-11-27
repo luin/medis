@@ -30,12 +30,9 @@ class ListContent extends BaseContent {
   }
 
   load(index) {
-    console.log('want to load');
     if (!super.load(index)) {
-      console.log('reject to load');
       return;
     }
-    console.log('alow to load');
 
     const from = this.state.members.length;
     const to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1 - from);
@@ -67,7 +64,6 @@ class ListContent extends BaseContent {
   handleSelect(_, selectedIndex) {
     const content = this.state.members[this.state.desc ? this.state.length - 1 - selectedIndex : selectedIndex];
     if (typeof content !== 'undefined') {
-      console.log('selectedIndex', selectedIndex);
       this.setState({ selectedIndex, content });
     } else {
       this.setState({ selectedIndex: null, content: null });
