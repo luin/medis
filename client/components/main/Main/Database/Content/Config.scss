@@ -1,0 +1,14 @@
+.Config {
+  overflow: auto;
+  .wrapper {
+    width: 450px;
+    margin: 20px auto;
+    .nt-form-row label {
+      width: 170px;
+    }
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+}

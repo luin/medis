@@ -24,7 +24,7 @@
   input, textarea, select {
     margin-left: 10px;
   }
-  input[type="text"], input[type="password"], select {
+  input[type="text"], input[type="number"], input[type="password"], select {
     width: 250px;
     -webkit-user-select: text;
     border-width: 1px;

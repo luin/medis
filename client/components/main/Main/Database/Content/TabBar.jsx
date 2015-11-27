@@ -10,7 +10,8 @@ class Content extends React.Component {
 
     this.tabs = [
       'Content',
-      'Terminal'
+      'Terminal',
+      'Config'
     ];
 
     this.state = { activeTab: 'Content' };
