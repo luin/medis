@@ -196,7 +196,10 @@ class KeyList extends React.Component {
         }
       }
       if (!e.ctrlKey && e.metaKey) {
-        const code = e.keyCode;
+        if (e.keyCode === 67) {
+          clipboard.writeText(this.state.keys[this.index][0]);
+          return false;
+        }
       }
       return true;
     });

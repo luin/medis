@@ -4,6 +4,7 @@ import React from 'react';
 import TabBar from './TabBar';
 import KeyContent from './KeyContent';
 import Terminal from './Terminal';
+import Config from './Config';
 import Footer from './Footer';
 
 class Content extends React.Component {
@@ -51,6 +52,13 @@ class Content extends React.Component {
       />
       <Terminal
         style={{ display: this.state.tab === 'Terminal' ? 'block' : 'none' }}
+        height={this.props.height - 67}
+        redis={this.props.redis}
+        connectionKey={ this.props.connectionKey }
+        onDatabaseChange={this.props.onDatabaseChange}
+      />
+      <Config
+        style={{ display: this.state.tab === 'Config' ? 'block' : 'none' }}
         height={this.props.height - 67}
         redis={this.props.redis}
         connectionKey={ this.props.connectionKey }

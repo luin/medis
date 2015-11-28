@@ -15,6 +15,9 @@ class Terminal extends React.Component {
     const { redis, style } = this.props;
     redis.on('select', this.onSelectBinded);
     const terminal = this.terminal = $(this.refs.terminal).terminal((command, term) => {
+      if (!command) {
+        return;
+      }
       command = command.trim().replace(/\s+/g, ' ').split(' ');
       const commandName = command[0] && command[0].toUpperCase();
       if (commandName === 'FLUSHALL' || commandName === 'FLUSHDB') {

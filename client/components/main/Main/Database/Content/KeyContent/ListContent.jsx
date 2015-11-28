@@ -129,18 +129,11 @@ class ListContent extends BaseContent {
         setTimeout(() => {
           if (key === 'delete') {
             this.deleteSelectedMember();
-          } else if (key === 'insertBefore') {
-            this.setState({ editableKey: this.state.keys[this.index][0]});
-          } else if (key === 'insertAfter') {
-            clipboard.writeText(this.state.keys[this.index][0]);
           }
         }, 0);
         ReactDOM.findDOMNode(this.refs.table).focus();
       },
       items: {
-        insertBefore: { name: 'Insert Before'},
-        insertAfter: { name: 'Insert After'},
-        sep1: '---------',
         delete: { name: 'Delete' }
       }
     });
