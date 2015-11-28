@@ -5,12 +5,13 @@ import BaseContent from './BaseContent';
 import SplitPane from 'react-split-pane';
 import { Table, Column } from 'fixed-data-table';
 import Editor from './Editor';
+import AddButton from '../../../../../common/AddButton';
 
 class HashContent extends BaseContent {
   save(value, callback) {
     if (typeof this.state.selectedIndex === 'number') {
       const [key] = this.state.members[this.state.selectedIndex];
-      this.state.members[this.state.selectedIndex][1] = value;
+      this.state.members[this.state.selectedIndex][1] = new Buffer(value);
       this.setState({ members: this.state.members });
       this.props.redis.hset(this.state.keyName, key, value, callback);
     } else {
@@ -40,6 +41,15 @@ class HashContent extends BaseContent {
     });
   }
 
+  handleSelect(evt, selectedIndex) {
+    const item = this.state.members[selectedIndex];
+    console.log('want set');
+    if (item) {
+      console.log('set', item);
+      this.setState({ selectedIndex, content: item[1] });
+    }
+  }
+
   render() {
     return <SplitPane
       className="pane-group"
@@ -55,18 +65,39 @@ class HashContent extends BaseContent {
           rowHeight={24}
           rowsCount={this.state.length}
           rowClassNameGetter={this.rowClassGetter.bind(this)}
-          onRowClick={(evt, selectedIndex) => {
-            const item = this.state.members[selectedIndex];
-            if (item) {
-              this.setState({ selectedIndex, content: item[1] });
-            }
-          }}
+          onRowClick={this.handleSelect.bind(this)}
           width={this.state.sidebarWidth}
           height={this.props.height + 1}
           headerHeight={24}
           >
           <Column
-            header="key"
+            header={
+              <AddButton title="key" onClick={() => {
+                showModal({
+                  button: 'Insert Member',
+                  form: {
+                    type: 'object',
+                    properties: {
+                      'Key:': {
+                        type: 'string'
+                      }
+                    }
+                  }
+                }).then(res => {
+                  const data = res['Key:'];
+                  const value = 'New Member';
+                  this.props.redis.hset(this.state.keyName, data, value).then(() => {
+                    this.state.members.push([data, new Buffer(value)])
+                    this.setState({
+                      members: this.state.members,
+                      length: this.state.length + 1,
+                    }, () => {
+                      this.handleSelect(null, this.state.members.length - 1);
+                    });
+                  });
+                });
+              }} />
+            }
             width={this.state.sidebarWidth}
             cell={ ({ rowIndex }) => {
               const member = this.state.members[rowIndex];
@@ -81,7 +112,7 @@ class HashContent extends BaseContent {
         </div>
         <Editor
           style={{ height: this.props.height }}
-          buffer={this.state.content && this.state.content}
+          buffer={this.state.content}
           onSave={this.save.bind(this)}
         />
       </SplitPane>;

@@ -5,6 +5,7 @@ import BaseContent from './BaseContent';
 import SplitPane from 'react-split-pane';
 import { Table, Column } from 'fixed-data-table';
 import Editor from './Editor';
+import AddButton from '../../../../../common/AddButton';
 
 require('./BaseContent.scss');
 
@@ -41,6 +42,13 @@ class SetContent extends BaseContent {
     });
   }
 
+  handleSelect(evt, selectedIndex) {
+    const content = this.state.members[selectedIndex];
+    if (typeof content !== 'undefined') {
+      this.setState({ selectedIndex, content });
+    }
+  }
+
   render() {
     return <SplitPane
       className="pane-group"
@@ -57,18 +65,38 @@ class SetContent extends BaseContent {
           rowHeight={24}
           rowsCount={this.state.length}
           rowClassNameGetter={this.rowClassGetter.bind(this)}
-          onRowClick={(evt, selectedIndex) => {
-            const content = this.state.members[selectedIndex];
-            if (typeof content !== 'undefined') {
-              this.setState({ selectedIndex, content });
-            }
-          }}
+          onRowClick={this.handleSelect.bind(this)}
           width={this.state.sidebarWidth}
           height={this.props.height + 1}
           headerHeight={24}
           >
           <Column
-            header="member"
+            header={
+              <AddButton title="member" onClick={() => {
+                showModal({
+                  button: 'Insert Member',
+                  form: {
+                    type: 'object',
+                    properties: {
+                      'Value:': {
+                        type: 'string'
+                      }
+                    }
+                  }
+                }).then(res => {
+                  const data = res['Value:'];
+                  this.props.redis.sadd(this.state.keyName, data).then(() => {
+                    this.state.members.push(data)
+                    this.setState({
+                      members: this.state.members,
+                      length: this.state.length + 1,
+                    }, () => {
+                      this.handleSelect(null, this.state.members.length - 1);
+                    });
+                  });
+                });
+              }} />
+            }
             width={this.state.sidebarWidth}
             cell={ ({ rowIndex }) => {
               const member = this.state.members[rowIndex];

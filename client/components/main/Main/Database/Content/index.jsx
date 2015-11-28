@@ -17,7 +17,8 @@ class Content extends React.Component {
   }
 
   init(keyName) {
-    this.props.redis.type(keyName, (_, keyType) => {
+    this.setState({ keyType: null });
+    this.props.redis.type(keyName).then(keyType => {
       this.setState({ keyType });
     });
   }
@@ -33,7 +34,6 @@ class Content extends React.Component {
   }
 
   handleTabChange(tab) {
-    console.log(tab);
     this.setState({ tab });
   }
 
