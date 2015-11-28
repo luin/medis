@@ -3,9 +3,10 @@
 import React from 'react';
 import BaseContent from './BaseContent';
 import SplitPane from 'react-split-pane';
-import { Table, Column } from 'fixed-data-table';
+import { Table, Column } from 'fixed-data-table-contextmenu';
 import Editor from './Editor';
 import AddButton from '../../../../../common/AddButton';
+import ReactDOM from 'react-dom';
 
 require('./BaseContent.scss');
 
@@ -49,6 +50,80 @@ class SetContent extends BaseContent {
     }
   }
 
+  handleKeyDown(e) {
+    if (typeof this.state.selectedIndex === 'number') {
+      if (e.keyCode === 8) {
+        this.deleteSelectedMember();
+        return false;
+      }
+      if (e.keyCode === 38) {
+        if (this.state.selectedIndex > 0) {
+          this.handleSelect(null, this.state.selectedIndex - 1);
+        }
+        return false;
+      }
+      if (e.keyCode === 40) {
+        if (this.state.selectedIndex < this.state.members.length - 1) {
+          this.handleSelect(null, this.state.selectedIndex + 1);
+        }
+        return false;
+      }
+    }
+  }
+
+  deleteSelectedMember() {
+    if (typeof this.state.selectedIndex !== 'number') {
+      return;
+    }
+    showModal({
+      title: 'Delete selected item?',
+      button: 'Delete',
+      content: 'Are you sure you want to delete the selected item? This action cannot be undone.'
+    }).then(() => {
+      const members = this.state.members;
+      const deleted = members.splice(this.state.selectedIndex, 1);
+      if (deleted.length) {
+        this.props.redis.srem(this.state.keyName, deleted);
+        if (this.state.selectedIndex >= members.length - 1) {
+          this.state.selectedIndex -= 1;
+        }
+        this.setState({ members, length: this.state.length - 1 }, () => {
+          this.handleSelect(null, this.state.selectedIndex);
+        });
+      }
+    });
+  }
+
+  componentDidMount() {
+    super.componentDidMount();
+    $.contextMenu({
+      context: ReactDOM.findDOMNode(this.refs.table),
+      selector: '.' + this.randomClass,
+      trigger: 'none',
+      zIndex: 99999,
+      callback: (key, opt) => {
+        setTimeout(() => {
+          if (key === 'delete') {
+            this.deleteSelectedMember();
+          }
+        }, 0);
+        ReactDOM.findDOMNode(this.refs.table).focus();
+      },
+      items: {
+        delete: { name: 'Delete' }
+      }
+    });
+  }
+
+  showContextMenu(e, row) {
+    this.handleSelect(null, row);
+    $(ReactDOM.findDOMNode(this.refs.table)).contextMenu({
+      x: e.pageX,
+      y: e.pageY,
+      zIndex: 99999
+    });
+  }
+
   render() {
     return <SplitPane
       className="pane-group"
@@ -60,11 +135,18 @@ class SetContent extends BaseContent {
         this.setState({ sidebarWidth: size });
       }}
       >
-      <div style={ { 'marginTop': -1 } }>
+      <div
+        style={ { 'marginTop': -1 } }
+        onKeyDown={this.handleKeyDown.bind(this)}
+        tabIndex="0"
+        ref="table"
+        className={this.randomClass}
+      >
         <Table
           rowHeight={24}
           rowsCount={this.state.length}
           rowClassNameGetter={this.rowClassGetter.bind(this)}
+          onRowContextMenu={this.showContextMenu.bind(this)}
           onRowClick={this.handleSelect.bind(this)}
           width={this.state.sidebarWidth}
           height={this.props.height + 1}
