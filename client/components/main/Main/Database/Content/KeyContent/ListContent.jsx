@@ -89,8 +89,7 @@ class ListContent extends BaseContent {
       const members = this.state.members;
       const deleted = members.splice(this.state.selectedIndex, 1);
       if (deleted.length) {
-        // TODO
-        this.props.redis.lrem(this.state.keyName, 0, deleted[0]);
+        this.props.redis.lremindex(this.state.keyName, this.state.selectedIndex);
         if (this.state.selectedIndex >= members.length - 1) {
           this.state.selectedIndex -= 1;
         }

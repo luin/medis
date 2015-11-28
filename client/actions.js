@@ -57,6 +57,10 @@ const actions = {
           numberOfKeys: 1,
           lua: 'local ttl = redis.call("pttl", KEYS[1]) if ttl > 0 then return redis.call("SET", KEYS[1], ARGV[1], "PX", ttl) else return redis.call("SET", KEYS[1], ARGV[1]) end'
         });
+        redis.defineCommand('lremindex', {
+          numberOfKeys: 1,
+          lua: 'local FLAG = "$$#__@DELETE@_REDIS_@PRO@__#$$" redis.call("lset", KEYS[1], ARGV[1], FLAG) redis.call("lrem", KEYS[1], 1, FLAG)'
+        });
         redis.once('ready', function () {
           dispatch({ type: 'connect', data: { redis, config } });
         });
