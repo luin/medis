@@ -9,6 +9,67 @@ require('./Config.scss');
 class Config extends React.Component {
   constructor(props) {
     super(props);
+    this.writeableFields = [
+      'dbfilename',
+      'requirepass',
+      'masterauth',
+      'maxclients',
+      'appendonly',
+      'save',
+      'dir',
+      'client-output-buffer-limit',
+      'notify-keyspace-events',
+      'rdbcompression',
+      'repl-disable-tcp-nodelay',
+      'repl-diskless-sync',
+      'cluster-require-full-coverage',
+      'aof-rewrite-incremental-fsync',
+      'aof-load-truncated',
+      'slave-serve-stale-data',
+      'slave-read-only',
+      'activerehashing',
+      'stop-writes-on-bgsave-error',
+      'lazyfree-lazy-eviction',
+      'lazyfree-lazy-expire',
+      'lazyfree-lazy-server-del',
+      'slave-lazy-flush',
+      'tcp-keepalive',
+      'maxmemory-samples',
+      'timeout',
+      'auto-aof-rewrite-percentage',
+      'auto-aof-rewrite-min-size',
+      'hash-max-ziplist-entries',
+      'hash-max-ziplist-value',
+      'list-max-ziplist-entries',
+      'list-max-ziplist-value',
+      'list-max-ziplist-size',
+      'list-compress-depth',
+      'set-max-intset-entries',
+      'zset-max-ziplist-entries',
+      'zset-max-ziplist-value',
+      'hll-sparse-max-bytes',
+      'lua-time-limit',
+      'slowlog-log-slower-than',
+      'slowlog-max-len',
+      'latency-monitor-threshold',
+      'repl-ping-slave-period',
+      'repl-timeout',
+      'repl-backlog-ttl',
+      'repl-diskless-sync-delay',
+      'slave-priority',
+      'min-slaves-to-write',
+      'min-slaves-max-lag',
+      'cluster-node-timeout',
+      'cluster-migration-barrier',
+      'cluster-slave-validity-factor',
+      'hz',
+      'watchdog-period',
+      'maxmemory',
+      'repl-backlog-size',
+      'loglevel',
+      'maxmemory-policy',
+      'appendfsync'
+    ];
     this.groups = [
       {
         name: 'General',
@@ -147,7 +208,11 @@ class Config extends React.Component {
         ]
       }
     ];
-    this.state = { groups: [], unsavedConfigs: {} };
+    this.state = {
+      groups: [],
+      unsavedRewrites: {},
+      unsavedConfigs: {}
+    };
     this.load();
   }
 
@@ -179,7 +244,11 @@ class Config extends React.Component {
         }) });
       }
 
-      this.setState({ groups, unsavedConfigs: {} });
+      this.setState({
+        groups,
+        unsavedConfigs: {},
+        unsavedRewrites: {}
+      });
     });
   }
 
@@ -202,37 +271,41 @@ class Config extends React.Component {
 
   change({ name, value }) {
     this.state.unsavedConfigs[name] = value;
+    this.state.unsavedRewrites[name] = value;
     this.setState({
       groups: this.state.groups,
-      unsavedConfigs: this.state.unsavedConfigs
+      unsavedConfigs: this.state.unsavedConfigs,
+      unsavedRewrites: this.state.unsavedRewrites,
     });
   }
 
   renderConfig(config) {
     let input;
+    const props = { readOnly: this.writeableFields.indexOf(config.name) === -1 };
+    props.disabled = props.readOnly;
     if (config.type === 'boolean' &&
         (config.value === 'yes' || config.value === 'no')) {
       input = <input type="checkbox" checked={config.value === 'yes'} onChange={e => {
         config.value = e.target.checked ? 'yes' : 'no';
         this.change(config);
-      }} />;
+      }} {...props}  />;
     } else if (config.type === 'number' && String(parseInt(config.value, 10)) === config.value) {
       input = <input type="number" value={config.value} onChange={e => {
         config.value = e.target.value;
         this.change(config);
-      }} />;
+      }} {...props} />;
     } else if (Array.isArray(config.type) && config.type.indexOf(config.value) !== -1) {
       input = <select value={config.value} onChange={e => {
         config.value = e.target.value;
         this.change(config);
-      }}>
+      }} {...props}>
         {config.type.map(option => <option>{option}</option>)}
       </select>;
     } else {
       input = <input type="text" value={config.value} onChange={e => {
         config.value = e.target.value;
         this.change(config);
-      }} />;
+      }} {...props} />;
     }
     return <div
       className="nt-form-row"
@@ -244,6 +317,58 @@ class Config extends React.Component {
     </div>
   }
 
+  isChanged(rewrite) {
+    return Object.keys(this.state[rewrite ? 'unsavedRewrites' : 'unsavedConfigs']).length > 0;
+  }
+
+  handleReload() {
+    if (this.isChanged()) {
+      showModal({
+        title: 'Reload config?',
+        content: 'Are you sure you want to reload the config? Your changes will be lost if you reload the config.',
+        button: 'Reload'
+      }).then(() => {
+        this.load();
+      });
+    } else {
+      this.load();
+    }
+  }
+
+  handleSave() {
+    showModal({
+      title: 'Save the changes',
+      content: 'Are you sure you want to apply the changes and save the changes to the config file?',
+      button: 'Save'
+    }).then(() => {
+      return this.handleApply(true);
+    }).then((res) => {
+      return this.props.redis.config('rewrite');
+    }).then(res => {
+      this.setState({ unsavedRewrites: {} })
+    }).catch(err => {
+      alert(err.message);
+    });
+  }
+
+  handleApply(embed) {
+    const confirm = embed ? Promise.resolve(1) : showModal({
+      title: 'Apply the changes',
+      content: 'Are you sure you want to apply the changes? The changes are only valid for the current session and will be lost when Redis restarts.',
+      button: 'Apply'
+    });
+    return confirm.then(() => {
+      const pipeline = this.props.redis.pipeline();
+      const unsavedConfigs = this.state.unsavedConfigs;
+      Object.keys(unsavedConfigs).forEach(config => {
+        pipeline.config('set', config, unsavedConfigs[config]);
+      });
+      return pipeline.exec();
+    }).then((res) => {
+      this.setState({ unsavedConfigs: {} })
+    });
+  }
+
   render() {
     return <div style={this.props.style} className="Config">
       <div className="wrapper">
@@ -252,6 +377,25 @@ class Config extends React.Component {
             this.state.groups.map(this.renderGroup, this)
           }
         </form>
+        <div className="nt-button-group nt-button-group--pull-right">
+          <button
+            ref="submit"
+            className="nt-button"
+            onClick={this.handleReload.bind(this)}
+          >Reload</button>
+        <button
+          ref="submit"
+          className="nt-button"
+          disabled={!this.isChanged(true)}
+          onClick={this.handleSave.bind(this)}
+          >Save To Config File</button>
+        <button
+          ref="cancel"
+          className="nt-button nt-button--primary"
+          disabled={!this.isChanged()}
+          onClick={() => { this.handleApply() }}
+          >Apply</button>
+      </div>
       </div>
     </div>;
   }

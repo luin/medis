@@ -20,6 +20,7 @@
     float: left;
     width: $label-width;
     text-align: right;
+    -webkit-user-select: text;
   }
   input, textarea, select {
     margin-left: 10px;
@@ -40,6 +41,7 @@
     line-height: 14px;
     font-family: "San Francisco", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
     font-size: 13px;
+    background: #fff;
 
     &:focus {
       outline: none;
@@ -48,6 +50,10 @@
 
     &:placeholder {
       color: #c0c0c0;
+    }
+
+    &[disabled] {
+      background: #f8f8f8;
     }
   }
 
