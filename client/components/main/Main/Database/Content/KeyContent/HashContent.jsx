@@ -8,6 +8,7 @@ import Editor from './Editor';
 import AddButton from '../../../../../common/AddButton';
 import ContentEditable from '../../../../../common/ContentEditable';
 import ReactDOM from 'react-dom';
+import { clipboard } from 'electron';
 
 class HashContent extends BaseContent {
   save(value, callback) {
@@ -108,7 +109,7 @@ class HashContent extends BaseContent {
           if (key === 'delete') {
             this.deleteSelectedMember();
           } else if (key === 'copy') {
-            clipboard.writeText(this.state.keys[this.state.selectedIndex][0]);
+            clipboard.writeText(this.state.members[this.state.selectedIndex][0]);
           } else if (key === 'rename') {
             this.setState({ editableIndex: this.state.selectedIndex});
           }
