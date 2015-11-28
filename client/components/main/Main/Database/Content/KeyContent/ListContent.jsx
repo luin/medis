@@ -3,10 +3,11 @@
 import React from 'react';
 import BaseContent from './BaseContent';
 import SplitPane from 'react-split-pane';
-import { Table, Column } from 'fixed-data-table';
+import { Table, Column } from 'fixed-data-table-contextmenu';
 import Editor from './Editor';
 import SortHeaderCell from './SortHeaderCell';
 import AddButton from '../../../../../common/AddButton';
+import ReactDOM from 'react-dom';
 
 class ListContent extends BaseContent {
   constructor() {
@@ -74,6 +75,91 @@ class ListContent extends BaseContent {
     }
   }
 
+  deleteSelectedMember() {
+    if (typeof this.state.selectedIndex !== 'number') {
+      return;
+    }
+    showModal({
+      title: 'Delete selected item?',
+      button: 'Delete',
+      content: 'Are you sure you want to delete the selected item? This action cannot be undone.'
+    }).then(() => {
+      const members = this.state.members;
+      const deleted = members.splice(this.state.selectedIndex, 1);
+      if (deleted.length) {
+        // TODO
+        this.props.redis.lrem(this.state.keyName, 0, deleted[0]);
+        if (this.state.selectedIndex >= members.length - 1) {
+          this.state.selectedIndex -= 1;
+        }
+        this.setState({ members, length: this.state.length - 1 }, () => {
+          this.handleSelect(null, this.state.selectedIndex);
+        });
+      }
+    });
+  }
+
+  handleKeyDown(e) {
+    if (typeof this.state.selectedIndex === 'number') {
+      if (e.keyCode === 8) {
+        this.deleteSelectedMember();
+        return false;
+      }
+      if (e.keyCode === 38) {
+        if (this.state.selectedIndex > 0) {
+          this.handleSelect(null, this.state.selectedIndex - 1);
+        }
+        return false;
+      }
+      if (e.keyCode === 40) {
+        if (this.state.selectedIndex < this.state.members.length - 1) {
+          this.handleSelect(null, this.state.selectedIndex + 1);
+        }
+        return false;
+      }
+    }
+  }
+
+  componentDidMount() {
+    super.componentDidMount();
+    $.contextMenu({
+      context: ReactDOM.findDOMNode(this.refs.table),
+      selector: '.' + this.randomClass,
+      trigger: 'none',
+      zIndex: 99999,
+      callback: (key, opt) => {
+        setTimeout(() => {
+          if (key === 'delete') {
+            this.deleteSelectedMember();
+          } else if (key === 'insertBefore') {
+            this.setState({ editableKey: this.state.keys[this.index][0]});
+          } else if (key === 'insertAfter') {
+            clipboard.writeText(this.state.keys[this.index][0]);
+          }
+        }, 0);
+        ReactDOM.findDOMNode(this.refs.table).focus();
+      },
+      items: {
+        insertBefore: { name: 'Insert Before'},
+        insertAfter: { name: 'Insert After'},
+        sep1: '---------',
+        delete: { name: 'Delete' }
+      }
+    });
+  }
+
+  insert() {
+  }
+
+  showContextMenu(e, row) {
+    this.handleSelect(null, row);
+    $(ReactDOM.findDOMNode(this.refs.table)).contextMenu({
+      x: e.pageX,
+      y: e.pageY,
+      zIndex: 99999
+    });
+  }
+
   render() {
     return <SplitPane
       className="pane-group"
@@ -88,6 +174,8 @@ class ListContent extends BaseContent {
       <div
         style={{ marginTop: -1 }}
         tabIndex="0"
+        ref="table"
+        onKeyDown={this.handleKeyDown.bind(this)}
         className={this.randomClass}
       >
         <Table
@@ -95,6 +183,7 @@ class ListContent extends BaseContent {
           rowsCount={this.state.length}
           rowClassNameGetter={this.rowClassGetter.bind(this)}
           onRowClick={this.handleSelect.bind(this)}
+          onRowContextMenu={this.showContextMenu.bind(this)}
           isColumnResizing={false}
           onColumnResizeEndCallback={ indexWidth => {
             this.setState({ indexWidth });
