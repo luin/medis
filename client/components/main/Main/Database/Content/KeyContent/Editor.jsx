@@ -107,6 +107,14 @@ class Editor extends React.Component {
     }
   }
 
+  handleKeyDown(evt) {
+    if (!evt.ctrlKey && evt.metaKey && evt.keyCode === 83) {
+      this.save();
+      evt.preventDefault();
+      evt.stopPropagation();
+    }
+  }
+
   render() {
     let viewer;
     if (this.state.currentMode === 'raw') {
@@ -170,7 +178,11 @@ class Editor extends React.Component {
     } else {
       viewer = <div></div>;
     }
-    return <div style={ { flex: 1, display: 'flex' } } className="Editor">
+    return <div
+      style={ { flex: 1, display: 'flex' } }
+      className="Editor"
+      onKeyDown={this.handleKeyDown.bind(this)}
+    >
       <label className="wrap-selector">
         <input
           type="checkbox"

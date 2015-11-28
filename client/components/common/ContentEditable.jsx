@@ -24,7 +24,7 @@ export default class ContentEditable extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.html !== ReactDOM.findDOMNode(this.refs.text).innerHTML ||
+    return nextProps.html !== this.props.html || //ReactDOM.findDOMNode(this.refs.text).innerHTML ||
       nextProps.enabled !== this.props.enabled;
   }
 

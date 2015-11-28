@@ -44,9 +44,6 @@ class SetContent extends BaseContent {
   }
 
   handleSelect(evt, selectedIndex) {
-    if (selectedIndex === this.state.selectedIndex) {
-      return;
-    }
     const content = this.state.members[selectedIndex];
     if (typeof content !== 'undefined') {
       this.setState({ selectedIndex, content });

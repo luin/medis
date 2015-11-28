@@ -59,9 +59,6 @@ class ZSetContent extends BaseContent {
   }
 
   handleSelect(evt, selectedIndex) {
-    if (selectedIndex === this.state.selectedIndex) {
-      return;
-    }
     const item = this.state.members[this.state.desc ? this.state.length - 1 - selectedIndex : selectedIndex];
     if (item) {
       this.setState({ selectedIndex, content: item[0] });
