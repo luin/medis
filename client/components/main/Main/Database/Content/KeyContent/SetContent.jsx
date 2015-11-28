@@ -44,6 +44,9 @@ class SetContent extends BaseContent {
   }
 
   handleSelect(evt, selectedIndex) {
+    if (selectedIndex === this.state.selectedIndex) {
+      return;
+    }
     const content = this.state.members[selectedIndex];
     if (typeof content !== 'undefined') {
       this.setState({ selectedIndex, content });
@@ -167,6 +170,15 @@ class SetContent extends BaseContent {
                   }
                 }).then(res => {
                   const data = res['Value:'];
+                  return this.props.redis.sismember(this.state.keyName, data).then(exists => {
+                    if (exists) {
+                      const error = 'Member already exists';
+                      alert(error);
+                      throw new Error(error);
+                    }
+                    return data;
+                  });
+                }).then(data => {
                   this.props.redis.sadd(this.state.keyName, data).then(() => {
                     this.state.members.push(data)
                     this.setState({

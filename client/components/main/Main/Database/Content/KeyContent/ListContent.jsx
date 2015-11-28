@@ -65,8 +65,10 @@ class ListContent extends BaseContent {
   }
 
   handleSelect(_, selectedIndex) {
+    if (selectedIndex === this.state.selectedIndex) {
+      return;
+    }
     const content = this.state.members[this.state.desc ? this.state.length - 1 - selectedIndex : selectedIndex];
-    console.log(content, typeof content);
     if (typeof content !== 'undefined') {
       console.log('selectedIndex', selectedIndex);
       this.setState({ selectedIndex, content });
