@@ -25,7 +25,6 @@ class ZSetContent extends BaseContent {
       const oldValue = item[0];
       item[0] = value.toString();
       this.setState({ members: this.state.members });
-      console.log('change', oldValue, value);
       this.props.redis.multi().zrem(this.state.keyName, oldValue).zadd(this.state.keyName, item[1], value).exec(callback);
     } else {
       alert('Please wait for data been loaded before saving.');
@@ -49,7 +48,6 @@ class ZSetContent extends BaseContent {
         members: this.state.members.concat(items),
         length: this.state.length - diff
       }, () => {
-        console.log(this.state.members);
         this.loading = false;
         if (this.state.members.length - 1 < this.maxRow && !diff) {
           this.load();

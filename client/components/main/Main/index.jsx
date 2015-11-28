@@ -16,9 +16,7 @@ class Main extends React.Component {
       this.activeElement = document.activeElement;
       this.setState({ modal });
 
-      console.log('==', this);
       return new Promise((resolve, reject) => {
-        console.log('==', this);
         this.promise = { resolve, reject };
       });
     };

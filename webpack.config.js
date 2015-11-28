@@ -10,8 +10,8 @@ module.exports = {
     buffer: false
   },
   output: {
-    filename: '[name].js',
-    publicPath: 'http://localhost:8090/assets'
+    filename: '[name].js'
+    // publicPath: 'http://localhost:8090/assets'
   },
   module: {
     loaders: [{

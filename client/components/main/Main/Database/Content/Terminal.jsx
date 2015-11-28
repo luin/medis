@@ -105,7 +105,6 @@ class Terminal extends React.Component {
       });
     } else {
       redis.call.apply(redis, args).then(res => {
-        console.log(res);
         term.echo(getHTML(res), { raw: true });
         term.resume();
       }).catch(err => {
