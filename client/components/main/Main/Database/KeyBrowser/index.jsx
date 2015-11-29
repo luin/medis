@@ -9,7 +9,7 @@ import Footer from './Footer';
 class KeyBrowser extends React.Component {
   constructor(props) {
     super();
-    this.footerHeight = 66;
+    this.footerHeight = 65;
 
     this.state = { pattern: props.pattern };
   }

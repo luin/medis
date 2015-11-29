@@ -52,7 +52,7 @@ class Content extends React.Component {
         style={{ display: this.state.tab === 'Content' ? 'flex' : 'none' }}
         keyName={this.props.keyName}
         keyType={this.state.keyType}
-        height={this.props.height - 67}
+        height={this.props.height - 66}
         redis={this.props.redis}
       />
       <Terminal

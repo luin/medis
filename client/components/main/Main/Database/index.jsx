@@ -31,7 +31,7 @@ class Database extends React.Component {
   }
 
   updateLayout() {
-    this.setState({ clientHeight: $(window).height() - $('.tab-group').height() - 2 });
+    this.setState({ clientHeight: $(window).height() - $('.tab-group').height() - 1 });
   }
 
   handleCreateKey(key) {

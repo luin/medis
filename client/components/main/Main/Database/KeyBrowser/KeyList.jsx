@@ -74,10 +74,10 @@ class KeyList extends React.Component {
             keys: this.state.keys.concat([[targetPattern, type]])
           });
         }
-        iter.call(this, 400, 1);
+        iter.call(this, 100, 1);
       });
     } else {
-      iter.call(this, 400, 1);
+      iter.call(this, 100, 1);
     }
 
     function iter(fetchCount, times) {

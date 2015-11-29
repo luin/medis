@@ -42863,7 +42863,7 @@
 	  }, {
 	    key: 'updateLayout',
 	    value: function updateLayout() {
-	      this.setState({ clientHeight: $(window).height() - $('.tab-group').height() - 2 });
+	      this.setState({ clientHeight: $(window).height() - $('.tab-group').height() - 1 });
 	    }
 	  }, {
 	    key: 'handleCreateKey',
@@ -43246,7 +43246,7 @@
 	    _classCallCheck(this, KeyBrowser);
 
 	    _get(Object.getPrototypeOf(KeyBrowser.prototype), 'constructor', this).call(this);
-	    this.footerHeight = 66;
+	    this.footerHeight = 65;
 
 	    this.state = { pattern: props.pattern };
 	  }
@@ -43594,10 +43594,10 @@
 	              keys: _this2.state.keys.concat([[targetPattern, type]])
 	            });
 	          }
-	          iter.call(_this2, 400, 1);
+	          iter.call(_this2, 100, 1);
 	        });
 	      } else {
-	        iter.call(this, 400, 1);
+	        iter.call(this, 100, 1);
 	      }
 
 	      function iter(fetchCount, times) {
@@ -51098,7 +51098,7 @@
 
 
 	// module
-	exports.push([module.id, ".context-menu-item.context-menu-hover {\n  background: #116cd6;\n  color: #fff; }\n\n.pattern-table:focus {\n  outline: 0; }\n\n.key-type {\n  margin: 4px 0 0;\n  padding: 0 !important;\n  text-transform: uppercase;\n  width: 32px;\n  height: 16px;\n  font-size: 11px !important;\n  line-height: 16px !important;\n  display: block;\n  text-align: center;\n  background: #60d4ca;\n  color: #fff; }\n  .key-type.str {\n    background: #5dc936; }\n  .key-type.list {\n    background: #fca32a; }\n  .key-type.hash {\n    background: #b865d0; }\n  .key-type.zset {\n    background: #fa5049; }\n  .key-type.set {\n    background: #239ff2; }\n\n.public_fixedDataTable_header .public_fixedDataTableCell_main, .public_fixedDataTableRow_main.is-loading .public_fixedDataTableCell_main {\n  font-family: system, -apple-system, \".SFNSDisplay-Regular\", \"Helvetica Neue\", Helvetica, \"Segoe UI\", sans-serif !important; }\n\n.public_fixedDataTableCell_cellContent {\n  padding: 0; }\n\n.public_fixedDataTableCell_main {\n  font-family: monospace;\n  font-size: 12px;\n  line-height: 24px;\n  padding: 0 8px; }\n\n:focus .public_fixedDataTableRow_main.is-selected {\n  background: #116cd6;\n  color: #fff; }\n  :focus .public_fixedDataTableRow_main.is-selected .public_fixedDataTableCell_main {\n    background: transparent; }\n\n.public_fixedDataTableRow_main.is-selected {\n  background: #dcdcdc; }\n  .public_fixedDataTableRow_main.is-selected .public_fixedDataTableCell_main {\n    background: transparent; }\n\n.public_fixedDataTableCell_main {\n  border: none; }\n\n.public_fixedDataTable_main {\n  border-right: none;\n  border-left-color: transparent; }\n", ""]);
+	exports.push([module.id, ".context-menu-item.context-menu-hover {\n  background: #116cd6;\n  color: #fff; }\n\n.pattern-table {\n  position: relative;\n  top: 1px; }\n  .pattern-table:focus {\n    outline: 0; }\n\n.public_fixedDataTable_bottomShadow {\n  display: none; }\n\n.key-type {\n  margin: 4px 0 0;\n  padding: 0 !important;\n  text-transform: uppercase;\n  width: 32px;\n  height: 16px;\n  font-size: 11px !important;\n  line-height: 16px !important;\n  display: block;\n  text-align: center;\n  background: #60d4ca;\n  color: #fff; }\n  .key-type.str {\n    background: #5dc936; }\n  .key-type.list {\n    background: #fca32a; }\n  .key-type.hash {\n    background: #b865d0; }\n  .key-type.zset {\n    background: #fa5049; }\n  .key-type.set {\n    background: #239ff2; }\n\n.public_fixedDataTable_header .public_fixedDataTableCell_main, .public_fixedDataTableRow_main.is-loading .public_fixedDataTableCell_main {\n  font-family: system, -apple-system, \".SFNSDisplay-Regular\", \"Helvetica Neue\", Helvetica, \"Segoe UI\", sans-serif !important; }\n\n.public_fixedDataTableCell_cellContent {\n  padding: 0; }\n\n.public_fixedDataTableCell_main {\n  font-family: monospace;\n  font-size: 12px;\n  line-height: 24px;\n  padding: 0 8px; }\n\n:focus .public_fixedDataTableRow_main.is-selected {\n  background: #116cd6;\n  color: #fff; }\n  :focus .public_fixedDataTableRow_main.is-selected .public_fixedDataTableCell_main {\n    background: transparent; }\n\n.public_fixedDataTableRow_main.is-selected {\n  background: #dcdcdc; }\n  .public_fixedDataTableRow_main.is-selected .public_fixedDataTableCell_main {\n    background: transparent; }\n\n.public_fixedDataTableCell_main {\n  border: none; }\n\n.public_fixedDataTable_main {\n  border-right: none;\n  border-left-color: transparent; }\n", ""]);
 
 	// exports
 
@@ -51356,7 +51356,7 @@
 	          style: { display: this.state.tab === 'Content' ? 'flex' : 'none' },
 	          keyName: this.props.keyName,
 	          keyType: this.state.keyType,
-	          height: this.props.height - 67,
+	          height: this.props.height - 66,
 	          redis: this.props.redis
 	        }),
 	        _react2['default'].createElement(_Terminal2['default'], {
@@ -51569,7 +51569,6 @@
 	  _createClass(KeyContent, [{
 	    key: 'render',
 	    value: function render() {
-	      console.log(this.props);
 	      var props = _extends({ key: this.props.keyName }, this.props);
 	      var view = undefined;
 	      switch (this.props.keyType) {
