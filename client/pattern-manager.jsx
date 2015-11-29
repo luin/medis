@@ -6,10 +6,11 @@ import { Provider } from 'react-redux';
 import App from './components/pattern-manager/App';
 import store from './store';
 import remote from 'remote';
+import { ipcRenderer } from 'electron';
 
 require('./styles/global.scss');
 
-require('ipc').on('action', function (type, data) {
+ipcRenderer.on('action', function (type, data) {
   if (type === 'delInstance') {
     remote.getCurrentWindow().close();
     return;
