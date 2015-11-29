@@ -78984,9 +78984,6 @@
 	      });
 	    }
 	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {}
-	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
 	      this.props.redis.removeAllListeners('select', this.onSelectBinded);
@@ -79050,7 +79047,7 @@
 	          config.type.map(function (option) {
 	            return _react2['default'].createElement(
 	              'option',
-	              null,
+	              { key: option },
 	              option
 	            );
 	          })

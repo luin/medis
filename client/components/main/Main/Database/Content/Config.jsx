@@ -252,9 +252,6 @@ class Config extends React.Component {
     });
   }
 
-  componentDidMount() {
-  }
-
   componentWillUnmount() {
     this.props.redis.removeAllListeners('select', this.onSelectBinded);
   }
@@ -299,7 +296,7 @@ class Config extends React.Component {
         config.value = e.target.value;
         this.change(config);
       }} {...props}>
-        {config.type.map(option => <option>{option}</option>)}
+        {config.type.map(option => <option key={option}>{option}</option>)}
       </select>;
     } else {
       input = <input type="text" value={config.value} onChange={e => {
