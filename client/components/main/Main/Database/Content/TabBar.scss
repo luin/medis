@@ -5,6 +5,10 @@
     display: inline-block;
     padding: 12px;
 
+    .icon {
+      margin-right: 5px;
+    }
+
     &.is-active {
       background: #dbdfe1;
     }

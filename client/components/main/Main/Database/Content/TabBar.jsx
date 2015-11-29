@@ -28,7 +28,20 @@ class Content extends React.Component {
               this.setState({ activeTab: tab });
               this.props.onSelectTab(tab);
             } }
-            >{tab}</div>;
+          >
+            {
+              (() => {
+                if (tab === 'Content') {
+                  return <span className="icon icon-book" />;
+                } else if (tab === 'Terminal') {
+                  return <span className="icon icon-window" />;
+                } else if (tab === 'Config') {
+                  return <span className="icon icon-cog" />;
+                }
+              })()
+            }
+            {tab}
+          </div>;
         })
       }
     </div>;

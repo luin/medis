@@ -1,0 +1,17 @@
+.notfound {
+  position: absolute;
+  top: 50%;
+  font-size: 22px;
+  color: #ccc;
+  text-align: center;
+  transform: translateY(-50%);
+  width: 100%;
+
+  p {
+    margin: 0;
+  }
+
+  .icon {
+    font-size: 62px;
+  }
+}
