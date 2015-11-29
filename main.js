@@ -43753,13 +43753,38 @@
 	              _this5.setState({ editableKey: _this5.state.keys[_this5.index][0] });
 	            } else if (key === 'copy') {
 	              _electron.clipboard.writeText(_this5.state.keys[_this5.index][0]);
+	            } else if (key === 'ttl') {
+	              _this5.props.redis.pttl(_this5.state.selectedKey).then(function (ttl) {
+	                showModal({
+	                  button: 'Set Expiration',
+	                  form: {
+	                    type: 'object',
+	                    properties: {
+	                      'PTTL (ms):': {
+	                        type: 'number',
+	                        minLength: 1,
+	                        'default': ttl
+	                      }
+	                    }
+	                  }
+	                }).then(function (res) {
+	                  var ttl = res['PTTL (ms):'];
+	                  _this5.props.redis.pexpire(_this5.state.selectedKey, ttl).then(function (res) {
+	                    if (res === 0) {
+	                      alert('Update Failed');
+	                    }
+	                  });
+	                });
+	              });
 	            }
 	          }, 0);
 	          _reactDom2['default'].findDOMNode(_this5).focus();
 	        },
 	        items: {
 	          copy: { name: 'Copy to Clipboard' },
+	          reload: { name: 'Reload' },
 	          sep1: '---------',
+	          ttl: { name: 'Set expiration...' },
 	          rename: { name: 'Rename' },
 	          'delete': { name: 'Delete' }
 	        }
