@@ -42895,7 +42895,7 @@
 	          redis: this.props.redis,
 	          connectionKey: this.props.connectionKey,
 	          onSelectKey: function (key) {
-	            return _this.setState({ key: key, type: null });
+	            return _this.setState({ key: key, version: _this.state.version + 1 });
 	          },
 	          onCreateKey: this.handleCreateKey.bind(this),
 	          db: this.state.db,
@@ -42906,7 +42906,7 @@
 	        _react2['default'].createElement(_Content2['default'], {
 	          height: this.state.clientHeight,
 	          keyName: this.state.key,
-	          keyType: this.state.type,
+	          version: this.state.version,
 	          connectionKey: this.props.connectionKey,
 	          redis: this.props.redis,
 	          db: this.state.db,
@@ -43536,10 +43536,21 @@
 	  }
 
 	  _createClass(KeyList, [{
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
+	    key: 'refresh',
+	    value: function refresh() {
 	      var _this = this;
 
+	      this.setState({
+	        cursor: '0',
+	        keys: []
+	      }, function () {
+	        _this.handleSelect();
+	        _this.scan();
+	      });
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
 	      if (nextProps.db !== this.props.db) {
 	        this.props.redis.select(nextProps.db);
 	      }
@@ -43547,13 +43558,7 @@
 	      var needRefresh = nextProps.db !== this.props.db || nextProps.pattern !== this.props.pattern || nextProps.redis !== this.props.redis;
 
 	      if (needRefresh) {
-	        this.setState({
-	          cursor: '0',
-	          keys: []
-	        }, function () {
-	          _this.handleSelect();
-	          _this.scan();
-	        });
+	        this.refresh();
 	      }
 	    }
 	  }, {
@@ -43672,7 +43677,10 @@
 	    }
 	  }, {
 	    key: 'handleSelect',
-	    value: function handleSelect(index) {
+	    value: function handleSelect(index, force) {
+	      if (index === this.index && !force) {
+	        return;
+	      }
 	      var item = this.state.keys[index];
 	      if (item && typeof item[0] !== 'undefined') {
 	        var key = item[0];
@@ -43736,6 +43744,10 @@
 	            _electron.clipboard.writeText(_this5.state.keys[_this5.index][0]);
 	            return false;
 	          }
+	          if (e.keyCode === 82) {
+	            _this5.refresh();
+	            return false;
+	          }
 	        }
 	        return true;
 	      });
@@ -43776,6 +43788,8 @@
 	                  });
 	                });
 	              });
+	            } else if (key === 'reload') {
+	              _this5.handleSelect(_this5.index, true);
 	            }
 	          }, 0);
 	          _reactDom2['default'].findDOMNode(_this5).focus();
@@ -43883,7 +43897,9 @@
 	            }
 	          }),
 	          _react2['default'].createElement(_fixedDataTableContextmenu.Column, {
-	            header: _react2['default'].createElement(_commonAddButton2['default'], { title: 'name', onClick: function () {
+	            header: _react2['default'].createElement(_commonAddButton2['default'], { reload: 'true', title: 'name', onReload: function () {
+	                _this6.refresh();
+	              }, onClick: function () {
 	                showModal({
 	                  button: 'Create Key',
 	                  form: {
@@ -50984,6 +51000,7 @@
 	        'div',
 	        { className: 'AddButton' },
 	        this.props.title,
+	        this.props.reload && _react2['default'].createElement('span', { className: 'reload icon icon-cw', onClick: this.props.onReload }),
 	        _react2['default'].createElement(
 	          'span',
 	          { className: 'plus', onClick: this.props.onClick },
@@ -51034,7 +51051,7 @@
 
 
 	// module
-	exports.push([module.id, ".AddButton {\n  position: relative; }\n  .AddButton span.plus {\n    position: absolute;\n    right: 4px;\n    top: 4px;\n    width: 16px;\n    height: 16px;\n    line-height: 13px;\n    border: 1px solid #ccc;\n    border-radius: 2px;\n    background-image: linear-gradient(#fff, #efefef);\n    text-align: center;\n    font-weight: normal;\n    color: #888; }\n    .AddButton span.plus:hover {\n      background: #fff; }\n    .AddButton span.plus:active {\n      background: #efefef; }\n", ""]);
+	exports.push([module.id, ".AddButton {\n  position: relative; }\n  .AddButton span.plus, .AddButton span.reload {\n    position: absolute;\n    right: 4px;\n    top: 4px;\n    width: 16px;\n    height: 16px;\n    line-height: 13px;\n    border: 1px solid #ccc;\n    border-radius: 2px;\n    background-image: linear-gradient(#fff, #efefef);\n    text-align: center;\n    font-weight: normal;\n    color: #888; }\n    .AddButton span.plus:hover, .AddButton span.reload:hover {\n      background: #fff; }\n    .AddButton span.plus:active, .AddButton span.reload:active {\n      background: #efefef; }\n  .AddButton span.reload {\n    right: 24px; }\n", ""]);
 
 	// exports
 
@@ -51311,7 +51328,7 @@
 	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
-	      if (nextProps.keyName !== this.props.keyName) {
+	      if (nextProps.keyName !== this.props.keyName || nextProps.version !== this.props.version) {
 	        this.init(nextProps.keyName);
 	      }
 	    }

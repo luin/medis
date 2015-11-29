@@ -21,6 +21,16 @@ class KeyList extends React.Component {
     this.randomClass = 'pattern-table-' + (Math.random() * 100000 | 0);
   }
 
+  refresh() {
+    this.setState({
+      cursor: '0',
+      keys: []
+    }, () => {
+      this.handleSelect();
+      this.scan();
+    });
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.db !== this.props.db) {
       this.props.redis.select(nextProps.db);
@@ -31,13 +41,7 @@ class KeyList extends React.Component {
       nextProps.redis !== this.props.redis;
 
     if (needRefresh) {
-      this.setState({
-        cursor: '0',
-        keys: []
-      }, () => {
-        this.handleSelect();
-        this.scan();
-      });
+      this.refresh();
     }
   }
 
@@ -142,7 +146,10 @@ class KeyList extends React.Component {
     }
   }
 
-  handleSelect(index) {
+  handleSelect(index, force) {
+    if (index === this.index && !force) {
+      return;
+    }
     const item = this.state.keys[index];
     if (item && typeof item[0] !== 'undefined') {
       const key = item[0];
@@ -200,6 +207,10 @@ class KeyList extends React.Component {
           clipboard.writeText(this.state.keys[this.index][0]);
           return false;
         }
+        if (e.keyCode === 82) {
+          this.refresh();
+          return false;
+        }
       }
       return true;
     });
@@ -240,6 +251,8 @@ class KeyList extends React.Component {
                 });
               });
             });
+          } else if (key === 'reload') {
+            this.handleSelect(this.index, true);
           }
         }, 0);
         ReactDOM.findDOMNode(this).focus();
@@ -331,7 +344,9 @@ class KeyList extends React.Component {
         />
         <Column
           header={
-            <AddButton title="name" onClick={() => {
+            <AddButton reload="true" title="name" onReload={() => {
+              this.refresh();
+            }} onClick={() => {
               showModal({
                 button: 'Create Key',
                 form: {

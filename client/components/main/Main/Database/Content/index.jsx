@@ -29,7 +29,7 @@ class Content extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.keyName !== this.props.keyName) {
+    if (nextProps.keyName !== this.props.keyName || nextProps.version !== this.props.version) {
       this.init(nextProps.keyName);
     }
   }
