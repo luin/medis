@@ -217,13 +217,38 @@ class KeyList extends React.Component {
             this.setState({ editableKey: this.state.keys[this.index][0]});
           } else if (key === 'copy') {
             clipboard.writeText(this.state.keys[this.index][0]);
+          } else if (key === 'ttl') {
+            this.props.redis.pttl(this.state.selectedKey).then(ttl => {
+              showModal({
+                button: 'Set Expiration',
+                form: {
+                  type: 'object',
+                  properties: {
+                    'PTTL (ms):': {
+                      type: 'number',
+                      minLength: 1,
+                      default: ttl
+                    }
+                  }
+                }
+              }).then(res => {
+                const ttl = res['PTTL (ms):'];
+                this.props.redis.pexpire(this.state.selectedKey, ttl).then(res => {
+                  if (res === 0) {
+                    alert('Update Failed');
+                  }
+                });
+              });
+            });
           }
         }, 0);
         ReactDOM.findDOMNode(this).focus();
       },
       items: {
         copy: { name: 'Copy to Clipboard'},
+        reload: { name: 'Reload' },
         sep1: '---------',
+        ttl: { name: 'Set expiration...' },
         rename: { name: 'Rename' },
         delete: { name: 'Delete' }
       }
