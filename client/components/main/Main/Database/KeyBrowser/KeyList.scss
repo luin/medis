@@ -4,9 +4,15 @@
 }
 
 .pattern-table {
+  position: relative;
+  top: 1px;
   &:focus {
     outline: 0;
   }
+}
+
+.public_fixedDataTable_bottomShadow {
+  display: none;
 }
 
 .key-type {
