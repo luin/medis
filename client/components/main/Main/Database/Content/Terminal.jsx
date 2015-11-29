@@ -192,7 +192,6 @@ function formatMonitor(time, args) {
 }
 
 function formatMessage(channel, message) {
-  console.log(channel, message);
   return `<div class="monitor">
     <span class="time">${channel}</span>
     <span class="message">${message}</span>

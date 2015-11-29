@@ -15,6 +15,7 @@ class Database extends React.Component {
       sidebarWidth: 300,
       key: null,
       db: 0,
+      version: 0,
       pattern: '',
       clientHeight: this.$window.height()
     };
