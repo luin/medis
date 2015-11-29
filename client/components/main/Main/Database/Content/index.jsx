@@ -19,9 +19,14 @@ class Content extends React.Component {
 
   init(keyName) {
     this.setState({ keyType: null });
-    this.props.redis.type(keyName).then(keyType => {
-      this.setState({ keyType });
-    });
+    if (keyName !== null) {
+      this.setState({ keyType: null });
+      this.props.redis.type(keyName).then(keyType => {
+        if (keyName === this.props.keyName) {
+          this.setState({ keyType });
+        }
+      });
+    }
   }
 
   componentDidMount() {

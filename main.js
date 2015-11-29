@@ -43691,6 +43691,7 @@
 	      } else {
 	        this.index = null;
 	        this.setState({ selectedKey: null, editableKey: null });
+	        this.props.onSelect(null);
 	      }
 	    }
 	  }, {
@@ -51316,9 +51317,14 @@
 	      var _this = this;
 
 	      this.setState({ keyType: null });
-	      this.props.redis.type(keyName).then(function (keyType) {
-	        _this.setState({ keyType: keyType });
-	      });
+	      if (keyName !== null) {
+	        this.setState({ keyType: null });
+	        this.props.redis.type(keyName).then(function (keyType) {
+	          if (keyName === _this.props.keyName) {
+	            _this.setState({ keyType: keyType });
+	          }
+	        });
+	      }
 	    }
 	  }, {
 	    key: 'componentDidMount',
@@ -51563,6 +51569,7 @@
 	  _createClass(KeyContent, [{
 	    key: 'render',
 	    value: function render() {
+	      console.log(this.props);
 	      var props = _extends({ key: this.props.keyName }, this.props);
 	      var view = undefined;
 	      switch (this.props.keyType) {
