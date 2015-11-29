@@ -16,6 +16,7 @@ class KeyContent extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     const props = { key: this.props.keyName, ...this.props };
     let view;
     switch (this.props.keyType) {

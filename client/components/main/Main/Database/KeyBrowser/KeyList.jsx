@@ -160,6 +160,7 @@ class KeyList extends React.Component {
     } else {
       this.index = null;
       this.setState({ selectedKey: null, editableKey: null });
+      this.props.onSelect(null);
     }
   }
 
