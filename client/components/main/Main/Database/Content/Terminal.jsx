@@ -103,6 +103,20 @@ class Terminal extends React.Component {
           }
         })
       });
+    } else if (args.length > 1 && ['SUBSCRIBE', 'PSUBSCRIBE'].indexOf(args[0].toUpperCase()) !== -1) {
+      const newRedis = redis.duplicate();
+      newRedis.call.apply(newRedis, args).then(res => {
+        term.echo('[[;#aac6e3;]Enter subscription mode. Press Ctrl+C to exit. ]');
+        term.push(input => {
+        }, {
+          onExit() {
+            newRedis.disconnect();
+          }
+        });
+      });
+      newRedis.on('message', (channel, message) => {
+        term.echo(formatMessage(channel, message), { raw: true });
+      });
     } else {
       redis.call.apply(redis, args).then(res => {
         term.echo(getHTML(res), { raw: true });
@@ -174,5 +188,13 @@ function formatMonitor(time, args) {
       <span class="command-name">${command}</span>
       <span class="command args">${args.join(' ')}</span>
     </span>
+  </div>`;
+}
+
+function formatMessage(channel, message) {
+  console.log(channel, message);
+  return `<div class="monitor">
+    <span class="time">${channel}</span>
+    <span class="message">${message}</span>
   </div>`;
 }

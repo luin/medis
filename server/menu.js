@@ -150,7 +150,7 @@ const menu = Menu.buildFromTemplate([{
   submenu: [{
     label: 'Learn More',
     click() {
-      require('shell').openExternal('http://electron.atom.io');
+      require('shell').openExternal('http://medisapp.com');
     }
   }]
 }]);

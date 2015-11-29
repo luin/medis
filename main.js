@@ -78710,6 +78710,21 @@
 	            }
 	          });
 	        });
+	      } else if (args.length > 1 && ['SUBSCRIBE', 'PSUBSCRIBE'].indexOf(args[0].toUpperCase()) !== -1) {
+	        (function () {
+	          var newRedis = redis.duplicate();
+	          newRedis.call.apply(newRedis, args).then(function (res) {
+	            term.echo('[[;#aac6e3;]Enter subscription mode. Press Ctrl+C to exit. ]');
+	            term.push(function (input) {}, {
+	              onExit: function onExit() {
+	                newRedis.disconnect();
+	              }
+	            });
+	          });
+	          newRedis.on('message', function (channel, message) {
+	            term.echo(formatMessage(channel, message), { raw: true });
+	          });
+	        })();
 	      } else {
 	        redis.call.apply(redis, args).then(function (res) {
 	          term.echo(getHTML(res), { raw: true });
@@ -78781,6 +78796,11 @@
 	    });
 	  }
 	  return '<div class="monitor">\n    <span class="time">' + time + '</span>\n    <span class="command">\n      <span class="command-name">' + command + '</span>\n      <span class="command args">' + args.join(' ') + '</span>\n    </span>\n  </div>';
+	}
+
+	function formatMessage(channel, message) {
+	  console.log(channel, message);
+	  return '<div class="monitor">\n    <span class="time">' + channel + '</span>\n    <span class="message">' + message + '</span>\n  </div>';
 	}
 	module.exports = exports['default'];
 
