@@ -56,7 +56,7 @@ class Database extends React.Component {
         width= { this.state.sidebarWidth }
         redis={ this.props.redis }
         connectionKey={ this.props.connectionKey }
-        onSelectKey={ key => this.setState({ key, type: null }) }
+        onSelectKey={ key => this.setState({ key, version: this.state.version + 1 }) }
         onCreateKey={ this.handleCreateKey.bind(this) }
         db={ this.state.db }
         onDatabaseChange={ db => this.setState({ db }) }
@@ -64,7 +64,7 @@ class Database extends React.Component {
       <Content
         height={ this.state.clientHeight }
         keyName={ this.state.key }
-        keyType={ this.state.type }
+        version={ this.state.version }
         connectionKey={ this.props.connectionKey }
         redis={ this.props.redis }
         db={ this.state.db }

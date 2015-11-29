@@ -1,7 +1,7 @@
 .AddButton {
   position: relative;
 
-  span.plus {
+  span.plus, span.reload {
     position: absolute;
     right: 4px;
     top: 4px;
@@ -22,5 +22,9 @@
     &:active {
       background: #efefef;
     }
+  }
+
+  span.reload {
+    right: 24px;
   }
 }
