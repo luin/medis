@@ -5,7 +5,7 @@ import id from './id';
 
 export function addInstance(data) {
   return Immutable.Map(Object.assign({
-    title: 'Redis Pro',
+    title: 'Medis',
     key: id('instance')
   }, data || {}));
 }

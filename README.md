@@ -1,1 +1,3 @@
-# Redis Pro
+# Medis
+
+GUI for Redis.
