@@ -42843,6 +42843,7 @@
 	      sidebarWidth: 300,
 	      key: null,
 	      db: 0,
+	      version: 0,
 	      pattern: '',
 	      clientHeight: this.$window.height()
 	    };
@@ -78870,7 +78871,6 @@
 	}
 
 	function formatMessage(channel, message) {
-	  console.log(channel, message);
 	  return '<div class="monitor">\n    <span class="time">' + channel + '</span>\n    <span class="message">' + message + '</span>\n  </div>';
 	}
 	module.exports = exports['default'];
