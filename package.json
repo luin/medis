@@ -5,8 +5,8 @@
   "version": "0.0.1",
   "main": "server/main.js",
   "scripts": {
-    "start": "npm run dev",
-    "dev": "webpack-dev-server --progress --colors --port 8090",
+    "start": "rm RedisPro.app/Contents/Resources/app.asar; RedisPro.app/Contents/MacOS/Electron .",
+    "dev": "webpack --progress --colors --watch",
     "deploy": "NODE_ENV=production ./bin/deploy"
   },
   "dependencies": {

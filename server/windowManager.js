@@ -35,7 +35,7 @@ class WindowManager extends EventEmitter {
     }
 
     const newWindow = new BrowserWindow(option);
-    newWindow.loadUrl(`file://${__dirname}/windows/${type}.html${arg ? '?arg=' + arg : ''}`);
+    newWindow.loadURL(`file://${__dirname}/windows/${type}.html${arg ? '?arg=' + arg : ''}`);
 
     this._register(newWindow);
 
