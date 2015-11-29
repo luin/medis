@@ -1,11 +1,11 @@
 {
-  "name": "redis-pro",
-  "description": "Redis GUI",
-  "productName": "Redis Pro",
+  "name": "medis",
+  "description": "GUI for Redis",
+  "productName": "Medis",
   "version": "0.0.1",
   "main": "server/main.js",
   "scripts": {
-    "start": "rm RedisPro.app/Contents/Resources/app.asar; RedisPro.app/Contents/MacOS/Electron .",
+    "start": "rm Medis.app/Contents/Resources/app.asar; Medis.app/Contents/MacOS/Electron .",
     "dev": "webpack --progress --colors --watch",
     "deploy": "NODE_ENV=production ./bin/deploy"
   },

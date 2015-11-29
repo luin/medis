@@ -33981,7 +33981,7 @@
 
 	function addInstance(data) {
 	  return _immutable2['default'].Map(Object.assign({
-	    title: 'Redis Pro',
+	    title: 'Medis',
 	    key: (0, _id2['default'])('instance')
 	  }, data || {}));
 	}
@@ -39237,7 +39237,7 @@
 	  return this.update('instances', function (list) {
 	    return list.map(function (instance) {
 	      if (instance.get('key') === activeInstanceKey) {
-	        return instance.remove('connectStatus').remove('redis').remove('config').remove('version').set('title', 'Redis Pro');
+	        return instance.remove('connectStatus').remove('redis').remove('config').remove('version').set('title', 'Medis');
 	      }
 	      return instance;
 	    });

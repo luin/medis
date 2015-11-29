@@ -29,7 +29,7 @@ cp node_modules/fixed-data-table/dist/fixed-data-table.css deploy/node_modules/f
 
 asar pack deploy app.asar
 rm -rf deploy
-mv app.asar RedisPro.app/Contents/Resources
+mv app.asar Medis.app/Contents/Resources
 
-# open RedisPro.app
-RedisPro.app/Contents/MacOS/Electron --enable-logging
+# open Medis.app
+Medis.app/Contents/MacOS/Electron --enable-logging

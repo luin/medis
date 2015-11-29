@@ -28,7 +28,7 @@ export function disconnect() {
         .remove('redis')
         .remove('config')
         .remove('version')
-        .set('title', 'Redis Pro');
+        .set('title', 'Medis');
     }
     return instance;
   }));
