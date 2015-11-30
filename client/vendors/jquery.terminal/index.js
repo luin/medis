@@ -1089,7 +1089,7 @@
         function paste() {
             clip.focus();
             //wait until Browser insert text to textarea
-            self.oneTime(1, function() {
+            self.oneTime(100, function() {
                 self.insert(clip.val());
                 clip.blur().val('');
             });
