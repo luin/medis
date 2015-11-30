@@ -12,7 +12,7 @@ class Database extends React.Component {
     this.$window = $(window);
 
     this.state = {
-      sidebarWidth: 300,
+      sidebarWidth: 260,
       key: null,
       db: 0,
       version: 0,
@@ -44,7 +44,7 @@ class Database extends React.Component {
       className="pane-group"
       minSize="250"
       split="vertical"
-      defaultSize={300}
+      defaultSize={260}
       ref="node"
       onChange={size => {
         this.setState({ sidebarWidth: size });

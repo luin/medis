@@ -147,7 +147,7 @@ class ZSetContent extends BaseContent {
   render() {
     return <SplitPane
       className="pane-group"
-      minSize="80"
+      minSize="146"
       split="vertical"
       defaultSize={200}
       ref="node"
