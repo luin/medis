@@ -51885,6 +51885,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactDom = __webpack_require__(158);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
 	var _reactCodemirror = __webpack_require__(302);
 
 	var _reactCodemirror2 = _interopRequireDefault(_reactCodemirror);
@@ -51927,9 +51931,26 @@
 	  }
 
 	  _createClass(Editor, [{
+	    key: 'updateLayout',
+	    value: function updateLayout() {
+	      var $this = $(_reactDom2['default'].findDOMNode(this));
+	      if ($this.width() < 372) {
+	        $(_reactDom2['default'].findDOMNode(this.refs.wrapSelector)).hide();
+	      } else {
+	        $(_reactDom2['default'].findDOMNode(this.refs.wrapSelector)).show();
+	      }
+	    }
+	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      this.updateLayoutBinded = this.updateLayout.bind(this);
+	      $(window).on('resize', this.updateLayoutBinded);
 	      this.init(this.props.buffer);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      $(window).off('resize', this.updateLayoutBinded);
 	    }
 	  }, {
 	    key: 'componentWillReceiveProps',
@@ -51941,6 +51962,8 @@
 	  }, {
 	    key: 'init',
 	    value: function init(buffer) {
+	      var _this = this;
+
 	      if (!buffer) {
 	        this.setState({ currentMode: null, changed: false });
 	        return;
@@ -51956,12 +51979,14 @@
 	      } else if (modes.json) {
 	        currentMode = 'json';
 	      }
-	      this.setState({ modes: modes, currentMode: currentMode, changed: false });
+	      this.setState({ modes: modes, currentMode: currentMode, changed: false }, function () {
+	        _this.updateLayout();
+	      });
 	    }
 	  }, {
 	    key: 'save',
 	    value: function save() {
-	      var _this = this;
+	      var _this2 = this;
 
 	      var content = this.state.modes.raw;
 	      if (this.state.currentMode === 'json') {
@@ -51982,7 +52007,7 @@
 	        if (err) {
 	          alert('Redis save failed: ' + err.message);
 	        } else {
-	          _this.init(typeof content === 'string' ? new Buffer(content) : content);
+	          _this2.init(typeof content === 'string' ? new Buffer(content) : content);
 	        }
 	      });
 	    }
@@ -52005,7 +52030,7 @@
 	    value: function focus() {
 	      var codemirror = this.refs.codemirror;
 	      if (codemirror) {
-	        var node = ReactDOM.findDOMNode(codemirror);
+	        var node = _reactDom2['default'].findDOMNode(codemirror);
 	        if (node) {
 	          node.focus();
 	        }
@@ -52023,7 +52048,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      var viewer = undefined;
 	      if (this.state.currentMode === 'raw') {
@@ -52096,12 +52121,12 @@
 	        },
 	        _react2['default'].createElement(
 	          'label',
-	          { className: 'wrap-selector' },
+	          { className: 'wrap-selector', ref: 'wrapSelector' },
 	          _react2['default'].createElement('input', {
 	            type: 'checkbox',
 	            checked: this.state.wrapping,
 	            onChange: function (evt) {
-	              return _this2.setState({ wrapping: evt.target.checked });
+	              return _this3.setState({ wrapping: evt.target.checked });
 	            }
 	          }),
 	          _react2['default'].createElement(

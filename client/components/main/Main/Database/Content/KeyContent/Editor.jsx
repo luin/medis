@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Codemirror from 'react-codemirror';
 require('react-codemirror/node_modules/codemirror/mode/javascript/javascript');
 require('react-codemirror/node_modules/codemirror/addon/lint/json-lint');
@@ -31,8 +32,23 @@ class Editor extends React.Component {
     };
   }
 
+  updateLayout() {
+    const $this = $(ReactDOM.findDOMNode(this));
+    if ($this.width() < 372) {
+      $(ReactDOM.findDOMNode(this.refs.wrapSelector)).hide();
+    } else {
+      $(ReactDOM.findDOMNode(this.refs.wrapSelector)).show();
+    }
+  }
+
   componentDidMount() {
+    this.updateLayoutBinded = this.updateLayout.bind(this);
+    $(window).on('resize', this.updateLayoutBinded);
     this.init(this.props.buffer);
+  }
+
+  componentWillUnmount() {
+    $(window).off('resize', this.updateLayoutBinded);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -57,7 +73,9 @@ class Editor extends React.Component {
     } else if (modes.json) {
       currentMode = 'json';
     }
-    this.setState({ modes, currentMode, changed: false });
+    this.setState({ modes, currentMode, changed: false }, () => {
+      this.updateLayout();
+    });
   }
 
   save() {
@@ -183,7 +201,7 @@ class Editor extends React.Component {
       className="Editor"
       onKeyDown={this.handleKeyDown.bind(this)}
     >
-      <label className="wrap-selector">
+      <label className="wrap-selector" ref="wrapSelector">
         <input
           type="checkbox"
           checked={this.state.wrapping}
