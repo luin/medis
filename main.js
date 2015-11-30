@@ -70,9 +70,11 @@
 
 	var _remote2 = _interopRequireDefault(_remote);
 
+	var _electron = __webpack_require__(288);
+
 	__webpack_require__(436);
 
-	__webpack_require__(197).on('action', function (type, data) {
+	_electron.ipcRenderer.on('action', function (type, data) {
 	  _store2['default'].dispatch({ type: type, data: data });
 	});
 
@@ -39072,6 +39074,8 @@
 
 	var _immutable2 = _interopRequireDefault(_immutable);
 
+	var _electron = __webpack_require__(288);
+
 	function getFavorites() {
 	  return _immutable2['default'].fromJS(JSON.parse(localStorage.getItem('favorites')) || []);
 	}
@@ -39079,17 +39083,12 @@
 	function saveFavorites(favorites) {
 	  localStorage.setItem('favorites', JSON.stringify(favorites.toJSON()));
 
-	  __webpack_require__(197).send('dispatch', 'reloadFavorites');
+	  _electron.ipcRenderer.send('dispatch', 'reloadFavorites');
 	  return favorites;
 	}
 
 /***/ },
-/* 197 */
-/***/ function(module, exports) {
-
-	module.exports = require("ipc");
-
-/***/ },
+/* 197 */,
 /* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -39189,6 +39188,8 @@
 
 	var _immutable2 = _interopRequireDefault(_immutable);
 
+	var _electron = __webpack_require__(288);
+
 	function getPatternStore() {
 	  return _immutable2['default'].fromJS(JSON.parse(localStorage.getItem('patternStore')) || {});
 	}
@@ -39197,7 +39198,7 @@
 	  var patternStore = getPatternStore().set(store, patterns);
 	  localStorage.setItem('patternStore', JSON.stringify(patternStore.toJSON()));
 
-	  __webpack_require__(197).send('dispatch', 'reloadPatternStore');
+	  _electron.ipcRenderer.send('dispatch', 'reloadPatternStore');
 	  return patterns;
 	}
 
@@ -43328,9 +43329,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _ipc = __webpack_require__(197);
-
-	var _ipc2 = _interopRequireDefault(_ipc);
+	var _electron = __webpack_require__(288);
 
 	var _react = __webpack_require__(1);
 
@@ -43416,7 +43415,7 @@
 	              {
 	                className: 'manage-pattern-button',
 	                onClick: function () {
-	                  _ipc2['default'].send('create pattern-manager', _this.props.connectionKey + '|' + _this.props.db);
+	                  _electron.ipcRenderer.send('create pattern-manager', _this.props.connectionKey + '|' + _this.props.db);
 	                }
 	              },
 	              _react2['default'].createElement('span', { className: 'icon icon-cog' }),

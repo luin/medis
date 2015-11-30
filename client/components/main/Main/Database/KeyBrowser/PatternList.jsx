@@ -1,6 +1,6 @@
 'use strict';
 
-import ipc from 'ipc';
+import { ipcRenderer } from 'electron';
 import React from 'react';
 require('./PatternList.scss');
 
@@ -62,7 +62,7 @@ class PatternList extends React.Component {
           <li
             className="manage-pattern-button"
             onClick={() => {
-              ipc.send('create pattern-manager', `${this.props.connectionKey}|${this.props.db}`);
+              ipcRenderer.send('create pattern-manager', `${this.props.connectionKey}|${this.props.db}`);
             }}
             >
             <span className="icon icon-cog"></span>

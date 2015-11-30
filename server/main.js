@@ -4,13 +4,13 @@ const app = require('electron').app;
 const windowManager = require('./windowManager');
 const menu = require('./menu');
 const Menu = require('menu');
-const ipc = require('ipc');
+const ipcMain = require('electron').ipcMain;
 
-ipc.on('create pattern-manager', function (event, arg) {
+ipcMain.on('create pattern-manager', function (event, arg) {
   windowManager.create('pattern-manager', arg);
 });
 
-ipc.on('dispatch', function (event, action, arg) {
+ipcMain.on('dispatch', function (event, action, arg) {
   windowManager.dispatch(action, arg);
 });
 

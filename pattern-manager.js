@@ -70,9 +70,11 @@
 
 	var _remote2 = _interopRequireDefault(_remote);
 
+	var _electron = __webpack_require__(288);
+
 	__webpack_require__(436);
 
-	__webpack_require__(197).on('action', function (type, data) {
+	_electron.ipcRenderer.on('action', function (type, data) {
 	  if (type === 'delInstance') {
 	    _remote2['default'].getCurrentWindow().close();
 	    return;
@@ -38845,6 +38847,8 @@
 
 	var _immutable2 = _interopRequireDefault(_immutable);
 
+	var _electron = __webpack_require__(288);
+
 	function getFavorites() {
 	  return _immutable2['default'].fromJS(JSON.parse(localStorage.getItem('favorites')) || []);
 	}
@@ -38852,17 +38856,12 @@
 	function saveFavorites(favorites) {
 	  localStorage.setItem('favorites', JSON.stringify(favorites.toJSON()));
 
-	  __webpack_require__(197).send('dispatch', 'reloadFavorites');
+	  _electron.ipcRenderer.send('dispatch', 'reloadFavorites');
 	  return favorites;
 	}
 
 /***/ },
-/* 197 */
-/***/ function(module, exports) {
-
-	module.exports = require("ipc");
-
-/***/ },
+/* 197 */,
 /* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -38962,6 +38961,8 @@
 
 	var _immutable2 = _interopRequireDefault(_immutable);
 
+	var _electron = __webpack_require__(288);
+
 	function getPatternStore() {
 	  return _immutable2['default'].fromJS(JSON.parse(localStorage.getItem('patternStore')) || {});
 	}
@@ -38970,7 +38971,7 @@
 	  var patternStore = getPatternStore().set(store, patterns);
 	  localStorage.setItem('patternStore', JSON.stringify(patternStore.toJSON()));
 
-	  __webpack_require__(197).send('dispatch', 'reloadPatternStore');
+	  _electron.ipcRenderer.send('dispatch', 'reloadPatternStore');
 	  return patterns;
 	}
 
@@ -40650,7 +40651,12 @@
 /* 285 */,
 /* 286 */,
 /* 287 */,
-/* 288 */,
+/* 288 */
+/***/ function(module, exports) {
+
+	module.exports = require("electron");
+
+/***/ },
 /* 289 */,
 /* 290 */,
 /* 291 */,
