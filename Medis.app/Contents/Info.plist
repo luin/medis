@@ -5,17 +5,17 @@
 	<key>BuildMachineOSBuild</key>
 	<string>14F1021</string>
 	<key>CFBundleDisplayName</key>
-	<string>Electron</string>
+  <string>Medis</string>
 	<key>CFBundleExecutable</key>
 	<string>Electron</string>
 	<key>CFBundleIconFile</key>
 	<string>atom.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.github.electron</string>
+  <string>li.zihua.medis</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Electron</string>
+  <string>Medis</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

@@ -42841,7 +42841,7 @@
 	    this.$window = $(window);
 
 	    this.state = {
-	      sidebarWidth: 300,
+	      sidebarWidth: 260,
 	      key: null,
 	      db: 0,
 	      version: 0,
@@ -42883,7 +42883,7 @@
 	          className: 'pane-group',
 	          minSize: '250',
 	          split: 'vertical',
-	          defaultSize: 300,
+	          defaultSize: 260,
 	          ref: 'node',
 	          onChange: function (size) {
 	            _this.setState({ sidebarWidth: size });
@@ -78478,7 +78478,7 @@
 	        _reactSplitPane2['default'],
 	        {
 	          className: 'pane-group',
-	          minSize: '80',
+	          minSize: '146',
 	          split: 'vertical',
 	          defaultSize: 200,
 	          ref: 'node',
