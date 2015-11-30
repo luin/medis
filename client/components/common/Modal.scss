@@ -2,10 +2,9 @@
   position: fixed;
   left: 0;
   width: 100%;
-  z-index: 999999;
+  z-index: 999;
   height: calc(100% + 100px);
   margin-top: -100px;
-
 }
 
 .Modal__title {
@@ -93,4 +92,30 @@
   //     box-shadow: 3px 3px 0 #6db3fd, -3px -3px 0 #6db3fd, -3px 3px 0 #6db3fd, 3px -3px 0 #6db3fd;
   //   }
   // }
+}
+
+.modal-enter {
+  .Modal__content {
+    transform: translateY(-100%);
+  }
+}
+
+.modal-enter.modal-enter-active {
+  .Modal__content {
+    transform: translateY(0);
+    transition: transform 150ms linear;
+  }
+}
+
+.modal-leave {
+  .Modal__content {
+    transform: translateY(0);
+  }
+}
+
+.modal-leave.modal-leave-active {
+  .Modal__content {
+    transform: translateY(-100%);
+    transition: transform 150ms linear;
+  }
 }

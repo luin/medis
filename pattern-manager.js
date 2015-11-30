@@ -74,7 +74,7 @@
 
 	__webpack_require__(436);
 
-	_electron.ipcRenderer.on('action', function (type, data) {
+	_electron.ipcRenderer.on('action', function (evt, type, data) {
 	  if (type === 'delInstance') {
 	    _remote2['default'].getCurrentWindow().close();
 	    return;
