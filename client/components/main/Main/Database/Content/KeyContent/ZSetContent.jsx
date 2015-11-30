@@ -48,6 +48,9 @@ class ZSetContent extends BaseContent {
         members: this.state.members.concat(items),
         length: this.state.length - diff
       }, () => {
+        if (typeof this.state.selectedIndex !== 'number' && this.state.members.length) {
+          this.handleSelect(null, 0);
+        }
         this.loading = false;
         if (this.state.members.length - 1 < this.maxRow && !diff) {
           this.load();

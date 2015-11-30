@@ -10,7 +10,7 @@ import { ipcRenderer } from 'electron';
 
 require('./styles/global.scss');
 
-ipcRenderer.on('action', function (type, data) {
+ipcRenderer.on('action', function (evt, type, data) {
   if (type === 'delInstance') {
     remote.getCurrentWindow().close();
     return;

@@ -23,24 +23,24 @@ class HashContent extends BaseContent {
   }
 
   load(index) {
-    if (index > this.maxRow) {
-      this.maxRow = index;
-    }
-    if (this.isLoading) {
+    if (!super.load(index)) {
       return;
     }
-    this.isLoading = true;
     const count = Number(this.cursor) ? 10000 : 500;
     this.props.redis.hscanBuffer(this.state.keyName, this.cursor, 'MATCH', '*', 'COUNT', count, (_, [cursor, result]) => {
-      this.isLoading = false;
       for (let i = 0; i < result.length - 1; i += 2) {
         this.state.members.push([result[i].toString(), result[i + 1]]);
       }
       this.cursor = cursor;
-      this.setState({ members: this.state.members });
-      if (this.state.members.length - 1 < this.maxRow && Number(cursor)) {
-        this.load();
-      }
+      this.setState({ members: this.state.members }, () => {
+        if (typeof this.state.selectedIndex !== 'number' && this.state.members.length) {
+          this.handleSelect(null, 0);
+        }
+        this.loading = false;
+        if (this.state.members.length - 1 < this.maxRow && Number(cursor)) {
+          this.load();
+        }
+      });
     });
   }
 

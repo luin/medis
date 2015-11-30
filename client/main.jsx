@@ -10,7 +10,10 @@ import { ipcRenderer } from 'electron';
 
 require('./styles/global.scss');
 
-ipcRenderer.on('action', function (type, data) {
+ipcRenderer.on('action', function (evt, type, data) {
+  if ($('.Modal').length && type.indexOf('Instance') !== -1) {
+    return;
+  }
   store.dispatch({ type, data });
 });
 

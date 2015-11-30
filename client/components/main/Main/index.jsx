@@ -4,6 +4,7 @@ import React from 'react';
 import ConnectionSelector from './ConnectionSelector';
 import Database from './Database';
 import Modal from '../../common/Modal';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 class Main extends React.Component {
   constructor() {
@@ -66,13 +67,15 @@ class Main extends React.Component {
     }).toJS();
 
     return <div className="main">
-      {
-        this.state.modal && <Modal
-          {...this.state.modal}
-          onSubmit={this.modalSubmit.bind(this)}
-          onCancel={this.modalCancel.bind(this)}
-        />
-      }
+      <ReactCSSTransitionGroup transitionName="modal" transitionEnterTimeout={150} transitionLeaveTimeout={150}>
+        {
+          this.state.modal && <Modal key="modal"
+            {...this.state.modal}
+            onSubmit={this.modalSubmit.bind(this)}
+            onCancel={this.modalCancel.bind(this)}
+          />
+        }
+      </ReactCSSTransitionGroup>
       { contents }
     </div>;
   }

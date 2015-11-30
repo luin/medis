@@ -19,17 +19,26 @@ class InstanceTabs extends React.Component {
         $(window).trigger('resize');
       }, 0);
     }
-    return <div style={ { display: this.style } }>
+    return <div style={ { display: this.style, zIndex: '1000' } }>
       <Tabs
-        onTabAddButtonClick={() =>
+        onTabAddButtonClick={() => {
+          if ($('.Modal').length) {
+            return;
+          }
           store.dispatch(action('addInstance'))
-        }
-        onTabSelect={(key) =>
+        }}
+        onTabSelect={(key) => {
+          if ($('.Modal').length) {
+            return;
+          }
           store.dispatch(action('selectInstance', key))
-        }
-        onTabClose={(key) =>
+        }}
+        onTabClose={(key) => {
+          if ($('.Modal').length) {
+            return;
+          }
           store.dispatch(action('delInstance', key))
-        }
+        }}
         onTabPositionChange={(from, to) =>
           store.dispatch(action('moveInstance', { from, to }))
         }

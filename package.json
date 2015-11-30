@@ -22,6 +22,7 @@
     "lodash": "^3.10.1",
     "msgpack5": "^3.3.0",
     "react": "^0.14.0",
+    "react-addons-css-transition-group": "^0.14.3",
     "react-codemirror": "^0.2.0",
     "react-document-title": "^2.0.1",
     "react-dom": "^0.14.0",
