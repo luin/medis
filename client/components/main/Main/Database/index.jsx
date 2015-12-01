@@ -17,7 +17,7 @@ class Database extends React.Component {
       db: 0,
       version: 0,
       pattern: '',
-      clientHeight: this.$window.height()
+      clientHeight: this.$window.height() - $('.tab-group').height()
     };
   }
 
@@ -32,7 +32,7 @@ class Database extends React.Component {
   }
 
   updateLayout() {
-    this.setState({ clientHeight: $(window).height() - $('.tab-group').height() - 1 });
+    this.setState({ clientHeight: this.$window.height() - $('.tab-group').height() });
   }
 
   handleCreateKey(key) {

@@ -43288,7 +43288,7 @@
 	      db: 0,
 	      version: 0,
 	      pattern: '',
-	      clientHeight: this.$window.height()
+	      clientHeight: this.$window.height() - $('.tab-group').height()
 	    };
 	  }
 
@@ -43307,7 +43307,7 @@
 	  }, {
 	    key: 'updateLayout',
 	    value: function updateLayout() {
-	      this.setState({ clientHeight: $(window).height() - $('.tab-group').height() - 1 });
+	      this.setState({ clientHeight: this.$window.height() - $('.tab-group').height() });
 	    }
 	  }, {
 	    key: 'handleCreateKey',
@@ -43690,7 +43690,7 @@
 	    _classCallCheck(this, KeyBrowser);
 
 	    _get(Object.getPrototypeOf(KeyBrowser.prototype), 'constructor', this).call(this);
-	    this.footerHeight = 65;
+	    this.footerHeight = 66;
 
 	    this.state = { pattern: props.pattern };
 	  }
@@ -51534,7 +51534,7 @@
 
 
 	// module
-	exports.push([module.id, ".context-menu-item.context-menu-hover {\n  background: #116cd6;\n  color: #fff; }\n\n.pattern-table {\n  position: relative;\n  top: 1px; }\n  .pattern-table:focus {\n    outline: 0; }\n\n.public_fixedDataTable_bottomShadow {\n  display: none; }\n\n.key-type {\n  margin: 4px 0 0;\n  padding: 0 !important;\n  text-transform: uppercase;\n  width: 32px;\n  height: 16px;\n  font-size: 11px !important;\n  line-height: 16px !important;\n  display: block;\n  text-align: center;\n  background: #60d4ca;\n  color: #fff; }\n  .key-type.str {\n    background: #5dc936; }\n  .key-type.list {\n    background: #fca32a; }\n  .key-type.hash {\n    background: #b865d0; }\n  .key-type.zset {\n    background: #fa5049; }\n  .key-type.set {\n    background: #239ff2; }\n\n.public_fixedDataTable_header .public_fixedDataTableCell_main, .public_fixedDataTableRow_main.is-loading .public_fixedDataTableCell_main {\n  font-family: system, -apple-system, \".SFNSDisplay-Regular\", \"Helvetica Neue\", Helvetica, \"Segoe UI\", sans-serif !important; }\n\n.public_fixedDataTableCell_cellContent {\n  padding: 0; }\n\n.public_fixedDataTableCell_main {\n  font-family: monospace;\n  font-size: 12px;\n  line-height: 24px;\n  padding: 0 8px; }\n\n:focus .public_fixedDataTableRow_main.is-selected {\n  background: #116cd6;\n  color: #fff; }\n  :focus .public_fixedDataTableRow_main.is-selected .public_fixedDataTableCell_main {\n    background: transparent; }\n\n.public_fixedDataTableRow_main.is-selected {\n  background: #dcdcdc; }\n  .public_fixedDataTableRow_main.is-selected .public_fixedDataTableCell_main {\n    background: transparent; }\n\n.public_fixedDataTableCell_main {\n  border: none; }\n\n.public_fixedDataTable_main {\n  border-right: none;\n  border-left-color: transparent; }\n", ""]);
+	exports.push([module.id, ".context-menu-item.context-menu-hover {\n  background: #116cd6;\n  color: #fff; }\n\n.pattern-table {\n  position: relative;\n  overflow: hidden; }\n  .pattern-table:focus {\n    outline: 0; }\n  .pattern-table footer {\n    height: 24px; }\n\n.public_fixedDataTable_bottomShadow {\n  display: none; }\n\n.key-type {\n  margin: 4px 0 0;\n  padding: 0 !important;\n  text-transform: uppercase;\n  width: 32px;\n  height: 16px;\n  font-size: 11px !important;\n  line-height: 16px !important;\n  display: block;\n  text-align: center;\n  background: #60d4ca;\n  color: #fff; }\n  .key-type.str {\n    background: #5dc936; }\n  .key-type.list {\n    background: #fca32a; }\n  .key-type.hash {\n    background: #b865d0; }\n  .key-type.zset {\n    background: #fa5049; }\n  .key-type.set {\n    background: #239ff2; }\n\n.public_fixedDataTable_header .public_fixedDataTableCell_main, .public_fixedDataTableRow_main.is-loading .public_fixedDataTableCell_main {\n  font-family: system, -apple-system, \".SFNSDisplay-Regular\", \"Helvetica Neue\", Helvetica, \"Segoe UI\", sans-serif !important; }\n\n.public_fixedDataTableCell_cellContent {\n  padding: 0; }\n\n.public_fixedDataTableCell_main {\n  font-family: monospace;\n  font-size: 12px;\n  line-height: 24px;\n  padding: 0 8px; }\n\n:focus .public_fixedDataTableRow_main.is-selected {\n  background: #116cd6;\n  color: #fff; }\n  :focus .public_fixedDataTableRow_main.is-selected .public_fixedDataTableCell_main {\n    background: transparent; }\n\n.public_fixedDataTableRow_main.is-selected {\n  background: #dcdcdc; }\n  .public_fixedDataTableRow_main.is-selected .public_fixedDataTableCell_main {\n    background: transparent; }\n\n.public_fixedDataTableCell_main {\n  border: none; }\n\n.public_fixedDataTable_main {\n  border-right: none;\n  border-left-color: transparent; }\n", ""]);
 
 	// exports
 
