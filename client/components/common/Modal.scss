@@ -36,6 +36,26 @@
   }
 }
 
+.Modal__icon {
+  position: absolute;
+  left: 20px;
+  top: 22px;
+  width: 62px;
+  height: 57px;
+  background: transparent url(../../images/warning.png) left top no-repeat;
+  background-size: 62px 57px;
+
+  span {
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
+    width: 34px;
+    height: 34px;
+    background: transparent url(../../images/icon.png) left top no-repeat;
+    background-size: 34px 34px;
+  }
+}
+
 .Modal__form {
   h3 {
     display: none;
