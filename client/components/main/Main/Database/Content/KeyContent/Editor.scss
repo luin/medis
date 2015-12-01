@@ -13,6 +13,10 @@
     flex-direction: column;
   }
 
+  .CodeMirror-scroll {
+    flex: 1;
+  }
+
   .ReactCodeMirror {
     position: relative;
     flex: 1;

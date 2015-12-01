@@ -43287,6 +43287,7 @@
 	      key: null,
 	      db: 0,
 	      version: 0,
+	      metaVersion: 0,
 	      pattern: '',
 	      clientHeight: this.$window.height() - $('.tab-group').height()
 	    };
@@ -43345,12 +43346,16 @@
 	          db: this.state.db,
 	          onDatabaseChange: function (db) {
 	            return _this.setState({ db: db });
+	          },
+	          onKeyMetaChange: function () {
+	            return _this.setState({ metaVersion: _this.state.metaVersion + 1 });
 	          }
 	        }),
 	        _react2['default'].createElement(_Content2['default'], {
 	          height: this.state.clientHeight,
 	          keyName: this.state.key,
 	          version: this.state.version,
+	          metaVersion: this.state.metaVersion,
 	          connectionKey: this.props.connectionKey,
 	          redis: this.props.redis,
 	          db: this.state.db,
@@ -43732,6 +43737,7 @@
 	          pattern: this.state.pattern || '*',
 	          redis: this.props.redis,
 	          onCreateKey: this.props.onCreateKey,
+	          onKeyMetaChange: this.props.onKeyMetaChange,
 	          onSelect: function (key) {
 	            return _this.props.onSelectKey(key);
 	          }
@@ -44226,12 +44232,15 @@
 	                  var ttl = Number(res['PTTL (ms):']);
 	                  if (ttl >= 0) {
 	                    _this5.props.redis.pexpire(_this5.state.selectedKey, ttl).then(function (res) {
-	                      if (res < 0) {
+	                      if (res <= 0) {
 	                        alert('Update Failed');
 	                      }
+	                      _this5.props.onKeyMetaChange();
 	                    });
 	                  } else {
-	                    _this5.props.redis.persist(_this5.state.selectedKey);
+	                    _this5.props.redis.persist(_this5.state.selectedKey, function () {
+	                      _this5.props.onKeyMetaChange();
+	                    });
 	                  }
 	                });
 	              });
@@ -51764,6 +51773,7 @@
 	    this.state = {
 	      pattern: '',
 	      db: 0,
+	      version: 0,
 	      tab: 'Content'
 	    };
 	  }
@@ -51794,6 +51804,9 @@
 	      if (nextProps.keyName !== this.props.keyName || nextProps.version !== this.props.version) {
 	        this.init(nextProps.keyName);
 	      }
+	      if (nextProps.metaVersion !== this.props.metaVersion) {
+	        this.setState({ version: this.state.version + 1 });
+	      }
 	    }
 	  }, {
 	    key: 'handleTabChange',
@@ -51803,6 +51816,8 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'pane sidebar', style: { height: '100%' } },
@@ -51814,7 +51829,10 @@
 	          keyName: this.props.keyName,
 	          keyType: this.state.keyType,
 	          height: this.props.height - 66,
-	          redis: this.props.redis
+	          redis: this.props.redis,
+	          onKeyContentChange: function () {
+	            _this2.setState({ version: _this2.state.version + 1 });
+	          }
 	        }),
 	        _react2['default'].createElement(_Terminal2['default'], {
 	          style: { display: this.state.tab === 'Terminal' ? 'block' : 'none' },
@@ -51827,12 +51845,12 @@
 	          style: { display: this.state.tab === 'Config' ? 'block' : 'none' },
 	          height: this.props.height - 67,
 	          redis: this.props.redis,
-	          connectionKey: this.props.connectionKey,
-	          onDatabaseChange: this.props.onDatabaseChange
+	          connectionKey: this.props.connectionKey
 	        }),
 	        _react2['default'].createElement(_Footer2['default'], {
 	          keyName: this.props.keyName,
 	          keyType: this.state.keyType,
+	          version: this.state.version,
 	          redis: this.props.redis
 	        })
 	      );
@@ -52120,8 +52138,13 @@
 	  }, {
 	    key: 'save',
 	    value: function save(value, callback) {
+	      var _this2 = this;
+
 	      if (this.state.keyName) {
-	        this.props.redis.setKeepTTL(this.state.keyName, value, callback);
+	        this.props.redis.setKeepTTL(this.state.keyName, value, function (err, res) {
+	          _this2.props.onKeyContentChange();
+	          callback(err, res);
+	        });
 	      } else {
 	        alert('Please wait for data been loaded before saving.');
 	      }
@@ -71019,7 +71042,7 @@
 
 
 	// module
-	exports.push([module.id, ".Editor {\n  position: relative; }\n  .Editor textarea {\n    border: none;\n    width: 100%;\n    height: 100%; }\n  .Editor .CodeMirror {\n    height: auto;\n    flex: 1;\n    display: flex;\n    flex-direction: column; }\n  .Editor .ReactCodeMirror {\n    position: relative;\n    flex: 1;\n    display: flex; }\n    .Editor .ReactCodeMirror:before {\n      content: '';\n      position: absolute;\n      left: 0;\n      top: 0;\n      width: 45px;\n      z-index: 1;\n      background: #f7f7f7;\n      border-right: 1px solid #ddd;\n      height: 100%; }\n  .Editor .mode-selector {\n    position: absolute;\n    bottom: 10px;\n    right: 10px;\n    z-index: 99; }\n  .Editor .wrap-selector {\n    position: absolute;\n    bottom: 5px;\n    right: 120px;\n    z-index: 99; }\n    .Editor .wrap-selector span {\n      margin-left: 4px; }\n  .Editor button {\n    position: absolute;\n    bottom: 10px;\n    left: 54px;\n    z-index: 99; }\n", ""]);
+	exports.push([module.id, ".Editor {\n  position: relative; }\n  .Editor textarea {\n    border: none;\n    width: 100%;\n    height: 100%; }\n  .Editor .CodeMirror {\n    height: auto;\n    flex: 1;\n    display: flex;\n    flex-direction: column; }\n  .Editor .CodeMirror-scroll {\n    flex: 1; }\n  .Editor .ReactCodeMirror {\n    position: relative;\n    flex: 1;\n    display: flex; }\n    .Editor .ReactCodeMirror:before {\n      content: '';\n      position: absolute;\n      left: 0;\n      top: 0;\n      width: 45px;\n      z-index: 1;\n      background: #f7f7f7;\n      border-right: 1px solid #ddd;\n      height: 100%; }\n  .Editor .mode-selector {\n    position: absolute;\n    bottom: 10px;\n    right: 10px;\n    z-index: 99; }\n  .Editor .wrap-selector {\n    position: absolute;\n    bottom: 5px;\n    right: 120px;\n    z-index: 99; }\n    .Editor .wrap-selector span {\n      margin-left: 4px; }\n  .Editor button {\n    position: absolute;\n    bottom: 10px;\n    left: 54px;\n    z-index: 99; }\n", ""]);
 
 	// exports
 
@@ -71087,10 +71110,15 @@
 	  _createClass(ListContent, [{
 	    key: 'save',
 	    value: function save(value, callback) {
+	      var _this = this;
+
 	      if (typeof this.state.selectedIndex === 'number') {
 	        this.state.members[this.state.selectedIndex] = value.toString();
 	        this.setState({ members: this.state.members });
-	        this.props.redis.lset(this.state.keyName, this.state.selectedIndex, value, callback);
+	        this.props.redis.lset(this.state.keyName, this.state.selectedIndex, value, function (err, res) {
+	          _this.props.onKeyContentChange();
+	          callback(err, res);
+	        });
 	      } else {
 	        alert('Please wait for data been loaded before saving.');
 	      }
@@ -71103,7 +71131,7 @@
 	  }, {
 	    key: 'load',
 	    value: function load(index) {
-	      var _this = this;
+	      var _this2 = this;
 
 	      if (!_get(Object.getPrototypeOf(ListContent.prototype), 'load', this).call(this, index)) {
 	        return;
@@ -71112,22 +71140,21 @@
 	      var from = this.state.members.length;
 	      var to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1);
 	      if (to < from) {
-	        console.log(to, from);
 	        return;
 	      }
 
 	      this.props.redis.lrange(this.state.keyName, from, to, function (_, results) {
 	        var diff = to - from + 1 - results.length;
-	        _this.setState({
-	          members: _this.state.members.concat(results),
-	          length: _this.state.length - diff
+	        _this2.setState({
+	          members: _this2.state.members.concat(results),
+	          length: _this2.state.length - diff
 	        }, function () {
-	          if (typeof _this.state.selectedIndex !== 'number' && _this.state.members.length) {
-	            _this.handleSelect(null, 0);
+	          if (typeof _this2.state.selectedIndex !== 'number' && _this2.state.members.length) {
+	            _this2.handleSelect(null, 0);
 	          }
-	          _this.loading = false;
-	          if (_this.state.members.length - 1 < _this.maxRow && !diff) {
-	            _this.load();
+	          _this2.loading = false;
+	          if (_this2.state.members.length - 1 < _this2.maxRow && !diff) {
+	            _this2.load();
 	          }
 	        });
 	      });
@@ -71150,7 +71177,7 @@
 	  }, {
 	    key: 'deleteSelectedMember',
 	    value: function deleteSelectedMember() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      if (typeof this.state.selectedIndex !== 'number') {
 	        return;
@@ -71160,15 +71187,16 @@
 	        button: 'Delete',
 	        content: 'Are you sure you want to delete the selected item? This action cannot be undone.'
 	      }).then(function () {
-	        var members = _this2.state.members;
-	        var deleted = members.splice(_this2.state.selectedIndex, 1);
+	        var members = _this3.state.members;
+	        var deleted = members.splice(_this3.state.selectedIndex, 1);
 	        if (deleted.length) {
-	          _this2.props.redis.lremindex(_this2.state.keyName, _this2.state.selectedIndex);
-	          if (_this2.state.selectedIndex >= members.length - 1) {
-	            _this2.state.selectedIndex -= 1;
+	          _this3.props.redis.lremindex(_this3.state.keyName, _this3.state.selectedIndex);
+	          if (_this3.state.selectedIndex >= members.length - 1) {
+	            _this3.state.selectedIndex -= 1;
 	          }
-	          _this2.setState({ members: members, length: _this2.state.length - 1 }, function () {
-	            _this2.handleSelect(null, _this2.state.selectedIndex);
+	          _this3.setState({ members: members, length: _this3.state.length - 1 }, function () {
+	            _this3.props.onKeyContentChange();
+	            _this3.handleSelect(null, _this3.state.selectedIndex);
 	          });
 	        }
 	      });
@@ -71198,7 +71226,7 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this3 = this;
+	      var _this4 = this;
 
 	      _get(Object.getPrototypeOf(ListContent.prototype), 'componentDidMount', this).call(this);
 	      $.contextMenu({
@@ -71209,10 +71237,10 @@
 	        callback: function callback(key, opt) {
 	          setTimeout(function () {
 	            if (key === 'delete') {
-	              _this3.deleteSelectedMember();
+	              _this4.deleteSelectedMember();
 	            }
 	          }, 0);
-	          _reactDom2['default'].findDOMNode(_this3.refs.table).focus();
+	          _reactDom2['default'].findDOMNode(_this4.refs.table).focus();
 	        },
 	        items: {
 	          'delete': { name: 'Delete' }
@@ -71235,7 +71263,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this4 = this;
+	      var _this5 = this;
 
 	      return _react2['default'].createElement(
 	        _reactSplitPane2['default'],
@@ -71246,7 +71274,7 @@
 	          defaultSize: 200,
 	          ref: 'node',
 	          onChange: function (size) {
-	            _this4.setState({ sidebarWidth: size });
+	            _this5.setState({ sidebarWidth: size });
 	          }
 	        },
 	        _react2['default'].createElement(
@@ -71268,7 +71296,7 @@
 	              onRowContextMenu: this.showContextMenu.bind(this),
 	              isColumnResizing: false,
 	              onColumnResizeEndCallback: function (indexWidth) {
-	                _this4.setState({ indexWidth: indexWidth });
+	                _this5.setState({ indexWidth: indexWidth });
 	              },
 	              width: this.state.sidebarWidth,
 	              height: this.props.height + 1,
@@ -71278,9 +71306,9 @@
 	              header: _react2['default'].createElement(_SortHeaderCell2['default'], {
 	                title: 'index',
 	                onOrderChange: function (desc) {
-	                  return _this4.setState({
+	                  return _this5.setState({
 	                    desc: desc,
-	                    selectedIndex: typeof _this4.state.selectedIndex === 'number' ? _this4.state.length - 1 - _this4.state.selectedIndex : null
+	                    selectedIndex: typeof _this5.state.selectedIndex === 'number' ? _this5.state.length - 1 - _this5.state.selectedIndex : null
 	                  });
 	                },
 	                desc: this.state.desc
@@ -71293,7 +71321,7 @@
 	                return _react2['default'].createElement(
 	                  'div',
 	                  { className: 'index-label' },
-	                  _this4.state.desc ? _this4.state.length - 1 - rowIndex : rowIndex
+	                  _this5.state.desc ? _this5.state.length - 1 - rowIndex : rowIndex
 	                );
 	              }
 	            }),
@@ -71314,13 +71342,14 @@
 	                    return res['Insert To:'] === 'head' ? 'lpush' : 'rpush';
 	                  }).then(function (method) {
 	                    var data = 'New Item';
-	                    _this4.props.redis[method](_this4.state.keyName, data).then(function () {
-	                      _this4.state.members[method === 'lpush' ? 'unshift' : 'push'](data);
-	                      _this4.setState({
-	                        members: _this4.state.members,
-	                        length: _this4.state.length + 1
+	                    _this5.props.redis[method](_this5.state.keyName, data).then(function () {
+	                      _this5.state.members[method === 'lpush' ? 'unshift' : 'push'](data);
+	                      _this5.setState({
+	                        members: _this5.state.members,
+	                        length: _this5.state.length + 1
 	                      }, function () {
-	                        _this4.handleSelect(null, method === 'lpush' ? 0 : _this4.state.members.length - 1);
+	                        _this5.props.onKeyContentChange();
+	                        _this5.handleSelect(null, method === 'lpush' ? 0 : _this5.state.members.length - 1);
 	                      });
 	                    });
 	                  });
@@ -71329,9 +71358,9 @@
 	              cell: function (_ref2) {
 	                var rowIndex = _ref2.rowIndex;
 
-	                var data = _this4.state.members[_this4.state.desc ? _this4.state.length - 1 - rowIndex : rowIndex];
+	                var data = _this5.state.members[_this5.state.desc ? _this5.state.length - 1 - rowIndex : rowIndex];
 	                if (typeof data === 'undefined') {
-	                  _this4.load(rowIndex);
+	                  _this5.load(rowIndex);
 	                  return 'Loading...';
 	                }
 	                return _react2['default'].createElement(
@@ -71496,11 +71525,16 @@
 	  _createClass(SetContent, [{
 	    key: 'save',
 	    value: function save(value, callback) {
+	      var _this = this;
+
 	      if (typeof this.state.selectedIndex === 'number') {
 	        var oldValue = this.state.members[this.state.selectedIndex];
 	        this.state.members[this.state.selectedIndex] = value.toString();
 	        this.setState({ members: this.state.members });
-	        this.props.redis.multi().srem(this.state.keyName, oldValue).sadd(this.state.keyName, value).exec(callback);
+	        this.props.redis.multi().srem(this.state.keyName, oldValue).sadd(this.state.keyName, value).exec(function (err, res) {
+	          _this.props.onKeyContentChange();
+	          callback(err, res);
+	        });
 	      } else {
 	        alert('Please wait for data been loaded before saving.');
 	      }
@@ -71508,7 +71542,7 @@
 	  }, {
 	    key: 'load',
 	    value: function load(index) {
-	      var _this = this;
+	      var _this2 = this;
 
 	      if (!_get(Object.getPrototypeOf(SetContent.prototype), 'load', this).call(this, index)) {
 	        return;
@@ -71520,19 +71554,19 @@
 	        var cursor = _ref2[0];
 	        var results = _ref2[1];
 
-	        _this.cursor = cursor;
-	        var length = Number(cursor) ? _this.state.length : _this.state.members.length + results.length;
+	        _this2.cursor = cursor;
+	        var length = Number(cursor) ? _this2.state.length : _this2.state.members.length + results.length;
 
-	        _this.setState({
-	          members: _this.state.members.concat(results),
+	        _this2.setState({
+	          members: _this2.state.members.concat(results),
 	          length: length
 	        }, function () {
-	          if (typeof _this.state.selectedIndex !== 'number' && _this.state.members.length) {
-	            _this.handleSelect(null, 0);
+	          if (typeof _this2.state.selectedIndex !== 'number' && _this2.state.members.length) {
+	            _this2.handleSelect(null, 0);
 	          }
-	          _this.loading = false;
-	          if (_this.state.members.length - 1 < _this.maxRow && Number(cursor)) {
-	            _this.load();
+	          _this2.loading = false;
+	          if (_this2.state.members.length - 1 < _this2.maxRow && Number(cursor)) {
+	            _this2.load();
 	          }
 	        });
 	      });
@@ -71570,7 +71604,7 @@
 	  }, {
 	    key: 'deleteSelectedMember',
 	    value: function deleteSelectedMember() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      if (typeof this.state.selectedIndex !== 'number') {
 	        return;
@@ -71580,15 +71614,16 @@
 	        button: 'Delete',
 	        content: 'Are you sure you want to delete the selected item? This action cannot be undone.'
 	      }).then(function () {
-	        var members = _this2.state.members;
-	        var deleted = members.splice(_this2.state.selectedIndex, 1);
+	        var members = _this3.state.members;
+	        var deleted = members.splice(_this3.state.selectedIndex, 1);
 	        if (deleted.length) {
-	          _this2.props.redis.srem(_this2.state.keyName, deleted);
-	          if (_this2.state.selectedIndex >= members.length - 1) {
-	            _this2.state.selectedIndex -= 1;
+	          _this3.props.redis.srem(_this3.state.keyName, deleted);
+	          if (_this3.state.selectedIndex >= members.length - 1) {
+	            _this3.state.selectedIndex -= 1;
 	          }
-	          _this2.setState({ members: members, length: _this2.state.length - 1 }, function () {
-	            _this2.handleSelect(null, _this2.state.selectedIndex);
+	          _this3.setState({ members: members, length: _this3.state.length - 1 }, function () {
+	            _this3.props.onKeyContentChange();
+	            _this3.handleSelect(null, _this3.state.selectedIndex);
 	          });
 	        }
 	      });
@@ -71596,7 +71631,7 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this3 = this;
+	      var _this4 = this;
 
 	      _get(Object.getPrototypeOf(SetContent.prototype), 'componentDidMount', this).call(this);
 	      $.contextMenu({
@@ -71607,10 +71642,10 @@
 	        callback: function callback(key, opt) {
 	          setTimeout(function () {
 	            if (key === 'delete') {
-	              _this3.deleteSelectedMember();
+	              _this4.deleteSelectedMember();
 	            }
 	          }, 0);
-	          _reactDom2['default'].findDOMNode(_this3.refs.table).focus();
+	          _reactDom2['default'].findDOMNode(_this4.refs.table).focus();
 	        },
 	        items: {
 	          'delete': { name: 'Delete' }
@@ -71630,7 +71665,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this4 = this;
+	      var _this5 = this;
 
 	      return _react2['default'].createElement(
 	        _reactSplitPane2['default'],
@@ -71641,7 +71676,7 @@
 	          defaultSize: 200,
 	          ref: 'node',
 	          onChange: function (size) {
-	            _this4.setState({ sidebarWidth: size });
+	            _this5.setState({ sidebarWidth: size });
 	          }
 	        },
 	        _react2['default'].createElement(
@@ -71679,7 +71714,7 @@
 	                    }
 	                  }).then(function (res) {
 	                    var data = res['Value:'];
-	                    return _this4.props.redis.sismember(_this4.state.keyName, data).then(function (exists) {
+	                    return _this5.props.redis.sismember(_this5.state.keyName, data).then(function (exists) {
 	                      if (exists) {
 	                        var error = 'Member already exists';
 	                        alert(error);
@@ -71688,13 +71723,14 @@
 	                      return data;
 	                    });
 	                  }).then(function (data) {
-	                    _this4.props.redis.sadd(_this4.state.keyName, data).then(function () {
-	                      _this4.state.members.push(data);
-	                      _this4.setState({
-	                        members: _this4.state.members,
-	                        length: _this4.state.length + 1
+	                    _this5.props.redis.sadd(_this5.state.keyName, data).then(function () {
+	                      _this5.state.members.push(data);
+	                      _this5.setState({
+	                        members: _this5.state.members,
+	                        length: _this5.state.length + 1
 	                      }, function () {
-	                        _this4.handleSelect(null, _this4.state.members.length - 1);
+	                        _this5.props.onKeyContentChange();
+	                        _this5.handleSelect(null, _this5.state.members.length - 1);
 	                      });
 	                    });
 	                  });
@@ -71703,9 +71739,9 @@
 	              cell: function (_ref3) {
 	                var rowIndex = _ref3.rowIndex;
 
-	                var member = _this4.state.members[rowIndex];
+	                var member = _this5.state.members[rowIndex];
 	                if (typeof member === 'undefined') {
-	                  _this4.load(rowIndex);
+	                  _this5.load(rowIndex);
 	                  return 'Loading...';
 	                }
 	                return _react2['default'].createElement(
@@ -71802,6 +71838,8 @@
 	  _createClass(HashContent, [{
 	    key: 'save',
 	    value: function save(value, callback) {
+	      var _this = this;
+
 	      if (typeof this.state.selectedIndex === 'number') {
 	        var _state$members$state$selectedIndex = _slicedToArray(this.state.members[this.state.selectedIndex], 1);
 
@@ -71809,7 +71847,10 @@
 
 	        this.state.members[this.state.selectedIndex][1] = new Buffer(value);
 	        this.setState({ members: this.state.members });
-	        this.props.redis.hset(this.state.keyName, key, value, callback);
+	        this.props.redis.hset(this.state.keyName, key, value, function (err, res) {
+	          _this.props.onKeyContentChange();
+	          callback(err, res);
+	        });
 	      } else {
 	        alert('Please wait for data been loaded before saving.');
 	      }
@@ -71817,7 +71858,7 @@
 	  }, {
 	    key: 'load',
 	    value: function load(index) {
-	      var _this = this;
+	      var _this2 = this;
 
 	      if (!_get(Object.getPrototypeOf(HashContent.prototype), 'load', this).call(this, index)) {
 	        return;
@@ -71830,16 +71871,16 @@
 	        var result = _ref2[1];
 
 	        for (var i = 0; i < result.length - 1; i += 2) {
-	          _this.state.members.push([result[i].toString(), result[i + 1]]);
+	          _this2.state.members.push([result[i].toString(), result[i + 1]]);
 	        }
-	        _this.cursor = cursor;
-	        _this.setState({ members: _this.state.members }, function () {
-	          if (typeof _this.state.selectedIndex !== 'number' && _this.state.members.length) {
-	            _this.handleSelect(null, 0);
+	        _this2.cursor = cursor;
+	        _this2.setState({ members: _this2.state.members }, function () {
+	          if (typeof _this2.state.selectedIndex !== 'number' && _this2.state.members.length) {
+	            _this2.handleSelect(null, 0);
 	          }
-	          _this.loading = false;
-	          if (_this.state.members.length - 1 < _this.maxRow && Number(cursor)) {
-	            _this.load();
+	          _this2.loading = false;
+	          if (_this2.state.members.length - 1 < _this2.maxRow && Number(cursor)) {
+	            _this2.load();
 	          }
 	        });
 	      });
@@ -71877,7 +71918,7 @@
 	  }, {
 	    key: 'deleteSelectedMember',
 	    value: function deleteSelectedMember() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      if (typeof this.state.selectedIndex !== 'number') {
 	        return;
@@ -71887,15 +71928,16 @@
 	        button: 'Delete',
 	        content: 'Are you sure you want to delete the selected item? This action cannot be undone.'
 	      }).then(function () {
-	        var members = _this2.state.members;
-	        var deleted = members.splice(_this2.state.selectedIndex, 1);
+	        var members = _this3.state.members;
+	        var deleted = members.splice(_this3.state.selectedIndex, 1);
 	        if (deleted.length) {
-	          _this2.props.redis.hdel(_this2.state.keyName, deleted[0]);
-	          if (_this2.state.selectedIndex >= members.length - 1) {
-	            _this2.state.selectedIndex -= 1;
+	          _this3.props.redis.hdel(_this3.state.keyName, deleted[0]);
+	          if (_this3.state.selectedIndex >= members.length - 1) {
+	            _this3.state.selectedIndex -= 1;
 	          }
-	          _this2.setState({ members: members, length: _this2.state.length - 1 }, function () {
-	            _this2.handleSelect(null, _this2.state.selectedIndex);
+	          _this3.setState({ members: members, length: _this3.state.length - 1 }, function () {
+	            _this3.props.onKeyContentChange();
+	            _this3.handleSelect(null, _this3.state.selectedIndex);
 	          });
 	        }
 	      });
@@ -71903,7 +71945,7 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this3 = this;
+	      var _this4 = this;
 
 	      _get(Object.getPrototypeOf(HashContent.prototype), 'componentDidMount', this).call(this);
 	      $.contextMenu({
@@ -71914,14 +71956,14 @@
 	        callback: function callback(key, opt) {
 	          setTimeout(function () {
 	            if (key === 'delete') {
-	              _this3.deleteSelectedMember();
+	              _this4.deleteSelectedMember();
 	            } else if (key === 'copy') {
-	              _electron.clipboard.writeText(_this3.state.members[_this3.state.selectedIndex][0]);
+	              _electron.clipboard.writeText(_this4.state.members[_this4.state.selectedIndex][0]);
 	            } else if (key === 'rename') {
-	              _this3.setState({ editableIndex: _this3.state.selectedIndex });
+	              _this4.setState({ editableIndex: _this4.state.selectedIndex });
 	            }
 	          }, 0);
-	          _reactDom2['default'].findDOMNode(_this3.refs.table).focus();
+	          _reactDom2['default'].findDOMNode(_this4.refs.table).focus();
 	        },
 	        items: {
 	          copy: { name: 'Copy to Clipboard' },
@@ -71944,7 +71986,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this4 = this;
+	      var _this5 = this;
 
 	      return _react2['default'].createElement(
 	        _reactSplitPane2['default'],
@@ -71954,7 +71996,7 @@
 	          split: 'vertical',
 	          defaultSize: 200,
 	          onChange: function (size) {
-	            _this4.setState({ sidebarWidth: size });
+	            _this5.setState({ sidebarWidth: size });
 	          }
 	        },
 	        _react2['default'].createElement(
@@ -71975,8 +72017,8 @@
 	              onRowContextMenu: this.showContextMenu.bind(this),
 	              onRowClick: this.handleSelect.bind(this),
 	              onRowDoubleClick: function (evt, index) {
-	                _this4.handleSelect(evt, index);
-	                _this4.setState({ editableIndex: index });
+	                _this5.handleSelect(evt, index);
+	                _this5.setState({ editableIndex: index });
 	              },
 	              width: this.state.sidebarWidth,
 	              height: this.props.height + 1,
@@ -71997,13 +72039,14 @@
 	                  }).then(function (res) {
 	                    var data = res['Key:'];
 	                    var value = 'New Member';
-	                    _this4.props.redis.hset(_this4.state.keyName, data, value).then(function () {
-	                      _this4.state.members.push([data, new Buffer(value)]);
-	                      _this4.setState({
-	                        members: _this4.state.members,
-	                        length: _this4.state.length + 1
+	                    _this5.props.redis.hset(_this5.state.keyName, data, value).then(function () {
+	                      _this5.state.members.push([data, new Buffer(value)]);
+	                      _this5.setState({
+	                        members: _this5.state.members,
+	                        length: _this5.state.length + 1
 	                      }, function () {
-	                        _this4.handleSelect(null, _this4.state.members.length - 1);
+	                        _this5.props.onKeyContentChange();
+	                        _this5.handleSelect(null, _this5.state.members.length - 1);
 	                      });
 	                    });
 	                  });
@@ -72012,21 +72055,21 @@
 	              cell: function (_ref3) {
 	                var rowIndex = _ref3.rowIndex;
 
-	                var member = _this4.state.members[rowIndex];
+	                var member = _this5.state.members[rowIndex];
 	                if (!member) {
-	                  _this4.load(rowIndex);
+	                  _this5.load(rowIndex);
 	                  return 'Loading...';
 	                }
 	                return _react2['default'].createElement(_commonContentEditable2['default'], {
 	                  className: 'ContentEditable overflow-wrapper',
-	                  enabled: rowIndex === _this4.state.editableIndex,
+	                  enabled: rowIndex === _this5.state.editableIndex,
 	                  onChange: function (target) {
-	                    var members = _this4.state.members;
+	                    var members = _this5.state.members;
 	                    var member = members[rowIndex];
-	                    var keyName = _this4.state.keyName;
+	                    var keyName = _this5.state.keyName;
 	                    var source = member[0];
 	                    if (source !== target && target) {
-	                      _this4.props.redis.hexists(keyName, target).then(function (exists) {
+	                      _this5.props.redis.hexists(keyName, target).then(function (exists) {
 	                        if (exists) {
 	                          return showModal({
 	                            title: 'Overwrite the field?',
@@ -72042,18 +72085,18 @@
 	                            }
 	                            if (typeof found === 'number') {
 	                              members.splice(found, 1);
-	                              _this4.setState({ length: _this4.state.length - 1 });
+	                              _this5.setState({ length: _this5.state.length - 1 });
 	                            }
 	                          });
 	                        }
 	                      }).then(function () {
 	                        member[0] = target;
-	                        _this4.props.redis.multi().hdel(keyName, source).hset(keyName, target, member[1]).exec();
-	                        _this4.setState({ members: members });
+	                        _this5.props.redis.multi().hdel(keyName, source).hset(keyName, target, member[1]).exec();
+	                        _this5.setState({ members: members });
 	                      })['catch'](function () {});
 	                    }
-	                    _this4.setState({ editableIndex: null });
-	                    _reactDom2['default'].findDOMNode(_this4).focus();
+	                    _this5.setState({ editableIndex: null });
+	                    _reactDom2['default'].findDOMNode(_this5).focus();
 	                  },
 	                  html: member[0]
 	                });
@@ -72147,12 +72190,17 @@
 	  _createClass(ZSetContent, [{
 	    key: 'save',
 	    value: function save(value, callback) {
+	      var _this = this;
+
 	      if (typeof this.state.selectedIndex === 'number') {
 	        var item = this.state.members[this.state.selectedIndex];
 	        var oldValue = item[0];
 	        item[0] = value.toString();
 	        this.setState({ members: this.state.members });
-	        this.props.redis.multi().zrem(this.state.keyName, oldValue).zadd(this.state.keyName, item[1], value).exec(callback);
+	        this.props.redis.multi().zrem(this.state.keyName, oldValue).zadd(this.state.keyName, item[1], value).exec(function (err, res) {
+	          _this.props.onKeyContentChange();
+	          callback(err, res);
+	        });
 	      } else {
 	        alert('Please wait for data been loaded before saving.');
 	      }
@@ -72160,7 +72208,7 @@
 	  }, {
 	    key: 'load',
 	    value: function load(index) {
-	      var _this = this;
+	      var _this2 = this;
 
 	      if (!_get(Object.getPrototypeOf(ZSetContent.prototype), 'load', this).call(this, index)) {
 	        return;
@@ -72174,16 +72222,16 @@
 	          items.push([results[i], results[i + 1]]);
 	        }
 	        var diff = to - from + 1 - items.length;
-	        _this.setState({
-	          members: _this.state.members.concat(items),
-	          length: _this.state.length - diff
+	        _this2.setState({
+	          members: _this2.state.members.concat(items),
+	          length: _this2.state.length - diff
 	        }, function () {
-	          if (typeof _this.state.selectedIndex !== 'number' && _this.state.members.length) {
-	            _this.handleSelect(null, 0);
+	          if (typeof _this2.state.selectedIndex !== 'number' && _this2.state.members.length) {
+	            _this2.handleSelect(null, 0);
 	          }
-	          _this.loading = false;
-	          if (_this.state.members.length - 1 < _this.maxRow && !diff) {
-	            _this.load();
+	          _this2.loading = false;
+	          if (_this2.state.members.length - 1 < _this2.maxRow && !diff) {
+	            _this2.load();
 	          }
 	        });
 	      });
@@ -72221,7 +72269,7 @@
 	  }, {
 	    key: 'deleteSelectedMember',
 	    value: function deleteSelectedMember() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      if (typeof this.state.selectedIndex !== 'number') {
 	        return;
@@ -72231,15 +72279,16 @@
 	        button: 'Delete',
 	        content: 'Are you sure you want to delete the selected item? This action cannot be undone.'
 	      }).then(function () {
-	        var members = _this2.state.members;
-	        var deleted = members.splice(_this2.state.selectedIndex, 1);
+	        var members = _this3.state.members;
+	        var deleted = members.splice(_this3.state.selectedIndex, 1);
 	        if (deleted.length) {
-	          _this2.props.redis.zrem(_this2.state.keyName, deleted[0]);
-	          if (_this2.state.selectedIndex >= members.length - 1) {
-	            _this2.state.selectedIndex -= 1;
+	          _this3.props.redis.zrem(_this3.state.keyName, deleted[0]);
+	          if (_this3.state.selectedIndex >= members.length - 1) {
+	            _this3.state.selectedIndex -= 1;
 	          }
-	          _this2.setState({ members: members, length: _this2.state.length - 1 }, function () {
-	            _this2.handleSelect(null, _this2.state.selectedIndex);
+	          _this3.setState({ members: members, length: _this3.state.length - 1 }, function () {
+	            _this3.props.onKeyContentChange();
+	            _this3.handleSelect(null, _this3.state.selectedIndex);
 	          });
 	        }
 	      });
@@ -72247,7 +72296,7 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this3 = this;
+	      var _this4 = this;
 
 	      _get(Object.getPrototypeOf(ZSetContent.prototype), 'componentDidMount', this).call(this);
 	      $.contextMenu({
@@ -72258,14 +72307,14 @@
 	        callback: function callback(key, opt) {
 	          setTimeout(function () {
 	            if (key === 'delete') {
-	              _this3.deleteSelectedMember();
+	              _this4.deleteSelectedMember();
 	            } else if (key === 'copy') {
-	              _electron.clipboard.writeText(_this3.state.members[_this3.state.selectedIndex][0]);
+	              _electron.clipboard.writeText(_this4.state.members[_this4.state.selectedIndex][0]);
 	            } else if (key === 'edit') {
-	              _this3.setState({ editableIndex: _this3.state.selectedIndex });
+	              _this4.setState({ editableIndex: _this4.state.selectedIndex });
 	            }
 	          }, 0);
-	          _reactDom2['default'].findDOMNode(_this3.refs.table).focus();
+	          _reactDom2['default'].findDOMNode(_this4.refs.table).focus();
 	        },
 	        items: {
 	          copy: { name: 'Copy Score to Clipboard' },
@@ -72288,7 +72337,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this4 = this;
+	      var _this5 = this;
 
 	      return _react2['default'].createElement(
 	        _reactSplitPane2['default'],
@@ -72299,7 +72348,7 @@
 	          defaultSize: 200,
 	          ref: 'node',
 	          onChange: function (size) {
-	            _this4.setState({ sidebarWidth: size });
+	            _this5.setState({ sidebarWidth: size });
 	          }
 	        },
 	        _react2['default'].createElement(
@@ -72320,12 +72369,12 @@
 	              onRowClick: this.handleSelect.bind(this),
 	              onRowContextMenu: this.showContextMenu.bind(this),
 	              onRowDoubleClick: function (evt, index) {
-	                _this4.handleSelect(evt, index);
-	                _this4.setState({ editableIndex: index });
+	                _this5.handleSelect(evt, index);
+	                _this5.setState({ editableIndex: index });
 	              },
 	              isColumnResizing: false,
 	              onColumnResizeEndCallback: function (scoreWidth) {
-	                _this4.setState({ scoreWidth: scoreWidth });
+	                _this5.setState({ scoreWidth: scoreWidth });
 	              },
 	              width: this.state.sidebarWidth,
 	              height: this.props.height + 1,
@@ -72335,9 +72384,9 @@
 	              header: _react2['default'].createElement(_SortHeaderCell2['default'], {
 	                title: 'score',
 	                onOrderChange: function (desc) {
-	                  return _this4.setState({
+	                  return _this5.setState({
 	                    desc: desc,
-	                    selectedIndex: typeof _this4.state.selectedIndex === 'number' ? _this4.state.length - 1 - _this4.state.selectedIndex : null
+	                    selectedIndex: typeof _this5.state.selectedIndex === 'number' ? _this5.state.length - 1 - _this5.state.selectedIndex : null
 	                  });
 	                },
 	                desc: this.state.desc
@@ -72347,35 +72396,35 @@
 	              cell: function (_ref) {
 	                var rowIndex = _ref.rowIndex;
 
-	                var member = _this4.state.members[_this4.state.desc ? _this4.state.length - 1 - rowIndex : rowIndex];
+	                var member = _this5.state.members[_this5.state.desc ? _this5.state.length - 1 - rowIndex : rowIndex];
 	                if (!member) {
 	                  return '';
 	                }
 	                return _react2['default'].createElement(_commonContentEditable2['default'], {
 	                  className: 'ContentEditable overflow-wrapper',
-	                  enabled: rowIndex === _this4.state.editableIndex,
+	                  enabled: rowIndex === _this5.state.editableIndex,
 	                  onChange: function (newScore) {
-	                    var members = _this4.state.members;
+	                    var members = _this5.state.members;
 	                    var member = members[rowIndex];
-	                    var keyName = _this4.state.keyName;
-	                    _this4.props.redis.zadd(keyName, newScore, member[0]).then(function () {
+	                    var keyName = _this5.state.keyName;
+	                    _this5.props.redis.zadd(keyName, newScore, member[0]).then(function () {
 	                      member[1] = newScore;
 	                      var updatedMembers = members.sort(function (a, b) {
 	                        return Number(a[1]) - Number(b[1]);
 	                      });
-	                      _this4.setState({
+	                      _this5.setState({
 	                        members: updatedMembers
 	                      }, function () {
 	                        for (var i = 0; i < updatedMembers.length; i++) {
 	                          if (updatedMembers[i][0] === member[0]) {
-	                            _this4.handleSelect(null, i);
+	                            _this5.handleSelect(null, i);
 	                            break;
 	                          }
 	                        }
 	                      });
 	                    });
-	                    _this4.setState({ editableIndex: null });
-	                    _reactDom2['default'].findDOMNode(_this4).focus();
+	                    _this5.setState({ editableIndex: null });
+	                    _reactDom2['default'].findDOMNode(_this5).focus();
 	                  },
 	                  html: member[1]
 	                });
@@ -72399,7 +72448,7 @@
 	                  }).then(function (res) {
 	                    var data = res['Value:'];
 	                    var score = res['Score:'];
-	                    return _this4.props.redis.zscore(_this4.state.keyName, data).then(function (rank) {
+	                    return _this5.props.redis.zscore(_this5.state.keyName, data).then(function (rank) {
 	                      if (rank !== null) {
 	                        var error = 'Member already exists';
 	                        alert(error);
@@ -72411,13 +72460,14 @@
 	                    var data = _ref2.data;
 	                    var score = _ref2.score;
 
-	                    _this4.props.redis.zadd(_this4.state.keyName, score, data).then(function () {
-	                      _this4.state.members.push([data, score]);
-	                      _this4.setState({
-	                        members: _this4.state.members,
-	                        length: _this4.state.length + 1
+	                    _this5.props.redis.zadd(_this5.state.keyName, score, data).then(function () {
+	                      _this5.state.members.push([data, score]);
+	                      _this5.setState({
+	                        members: _this5.state.members,
+	                        length: _this5.state.length + 1
 	                      }, function () {
-	                        _this4.handleSelect(null, _this4.state.members.length - 1);
+	                        _this5.props.onKeyContentChange();
+	                        _this5.handleSelect(null, _this5.state.members.length - 1);
 	                      });
 	                    });
 	                  });
@@ -72426,9 +72476,9 @@
 	              cell: function (_ref3) {
 	                var rowIndex = _ref3.rowIndex;
 
-	                var member = _this4.state.members[_this4.state.desc ? _this4.state.length - 1 - rowIndex : rowIndex];
+	                var member = _this5.state.members[_this5.state.desc ? _this5.state.length - 1 - rowIndex : rowIndex];
 	                if (!member) {
-	                  _this4.load(rowIndex);
+	                  _this5.load(rowIndex);
 	                  return 'Loading...';
 	                }
 	                return _react2['default'].createElement(
@@ -73286,7 +73336,7 @@
 	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
-	      if (nextProps.keyName !== this.props.keyName || nextProps.keyType !== this.props.keyType) {
+	      if (nextProps.keyName !== this.props.keyName || nextProps.keyType !== this.props.keyType || nextProps.version !== this.props.version) {
 	        this.init(nextProps.keyName, nextProps.keyType);
 	      }
 	    }

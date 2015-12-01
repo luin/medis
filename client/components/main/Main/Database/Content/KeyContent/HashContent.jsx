@@ -16,7 +16,10 @@ class HashContent extends BaseContent {
       const [key] = this.state.members[this.state.selectedIndex];
       this.state.members[this.state.selectedIndex][1] = new Buffer(value);
       this.setState({ members: this.state.members });
-      this.props.redis.hset(this.state.keyName, key, value, callback);
+      this.props.redis.hset(this.state.keyName, key, value, (err, res) => {
+        this.props.onKeyContentChange();
+        callback(err, res);
+      });
     } else {
       alert('Please wait for data been loaded before saving.');
     }
@@ -89,6 +92,7 @@ class HashContent extends BaseContent {
           this.state.selectedIndex -= 1;
         }
         this.setState({ members, length: this.state.length - 1 }, () => {
+          this.props.onKeyContentChange();
           this.handleSelect(null, this.state.selectedIndex);
         });
       }
@@ -185,6 +189,7 @@ class HashContent extends BaseContent {
                       members: this.state.members,
                       length: this.state.length + 1,
                     }, () => {
+                      this.props.onKeyContentChange();
                       this.handleSelect(null, this.state.members.length - 1);
                     });
                   });

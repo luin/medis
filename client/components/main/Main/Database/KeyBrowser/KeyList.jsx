@@ -247,12 +247,15 @@ class KeyList extends React.Component {
                 const ttl = Number(res['PTTL (ms):']);
                 if (ttl >= 0) {
                   this.props.redis.pexpire(this.state.selectedKey, ttl).then(res => {
-                    if (res < 0) {
+                    if (res <= 0) {
                       alert('Update Failed');
                     }
+                    this.props.onKeyMetaChange();
                   });
                 } else {
-                  this.props.redis.persist(this.state.selectedKey);
+                  this.props.redis.persist(this.state.selectedKey, () => {
+                    this.props.onKeyMetaChange();
+                  });
                 }
               });
             });

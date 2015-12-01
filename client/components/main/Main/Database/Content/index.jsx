@@ -13,6 +13,7 @@ class Content extends React.Component {
     this.state = {
       pattern: '',
       db: 0,
+      version: 0,
       tab: 'Content'
     };
   }
@@ -37,6 +38,9 @@ class Content extends React.Component {
     if (nextProps.keyName !== this.props.keyName || nextProps.version !== this.props.version) {
       this.init(nextProps.keyName);
     }
+    if (nextProps.metaVersion !== this.props.metaVersion) {
+      this.setState({ version: this.state.version + 1 });
+    }
   }
 
   handleTabChange(tab) {
@@ -54,6 +58,7 @@ class Content extends React.Component {
         keyType={this.state.keyType}
         height={this.props.height - 66}
         redis={this.props.redis}
+        onKeyContentChange={() => { this.setState({ version: this.state.version + 1 })}}
       />
       <Terminal
         style={{ display: this.state.tab === 'Terminal' ? 'block' : 'none' }}
@@ -67,11 +72,11 @@ class Content extends React.Component {
         height={this.props.height - 67}
         redis={this.props.redis}
         connectionKey={ this.props.connectionKey }
-        onDatabaseChange={this.props.onDatabaseChange}
       />
       <Footer
         keyName={this.props.keyName}
         keyType={this.state.keyType}
+        version={this.state.version}
         redis={this.props.redis}
       />
     </div>;
