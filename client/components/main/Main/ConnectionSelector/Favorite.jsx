@@ -101,9 +101,15 @@ class Favorite extends React.Component {
             if (!key) {
               return;
             }
-            const index = this.props.favorites.findIndex(favorite => key === favorite.get('key'));
-            store.dispatch(actions('removeFavorite', { key }));
-            this.selectIndex(index - 1);
+            showModal({
+              title: 'Delete the bookmark?',
+              button: 'Delete',
+              content: 'Are you sure you want to delete the selected bookmark? This action cannot be undone.'
+            }).then(() => {
+              const index = this.props.favorites.findIndex(favorite => key === favorite.get('key'));
+              store.dispatch(actions('removeFavorite', { key }));
+              this.selectIndex(index - 1);
+            });
           }
         }>-</button>
       </footer>
