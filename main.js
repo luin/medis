@@ -44157,7 +44157,7 @@
 	            _this4.index -= 1;
 	          }
 	          _this4.setState({ keys: keys }, function () {
-	            _this4.handleSelect(_this4.index);
+	            _this4.handleSelect(_this4.index, true);
 	          });
 	        }
 	      })['catch'](function () {});
@@ -44223,12 +44223,16 @@
 	                    }
 	                  }
 	                }).then(function (res) {
-	                  var ttl = res['PTTL (ms):'];
-	                  _this5.props.redis.pexpire(_this5.state.selectedKey, ttl).then(function (res) {
-	                    if (res === 0) {
-	                      alert('Update Failed');
-	                    }
-	                  });
+	                  var ttl = Number(res['PTTL (ms):']);
+	                  if (ttl >= 0) {
+	                    _this5.props.redis.pexpire(_this5.state.selectedKey, ttl).then(function (res) {
+	                      if (res < 0) {
+	                        alert('Update Failed');
+	                      }
+	                    });
+	                  } else {
+	                    _this5.props.redis.persist(_this5.state.selectedKey);
+	                  }
 	                });
 	              });
 	            } else if (key === 'reload') {
@@ -44424,7 +44428,24 @@
 	                    }).then(function () {
 	                      keys[rowIndex] = [newKeyName, keys[rowIndex][1]];
 	                      _this6.props.redis.rename(oldKey, newKeyName);
-	                      _this6.setState({ keys: keys });
+	                      var found = undefined;
+	                      for (var i = 0; i < keys.length; i++) {
+	                        if (i !== rowIndex && keys[i][0] === newKeyName) {
+	                          keys.splice(i, 1);
+	                          found = i;
+	                          break;
+	                        }
+	                      }
+	                      if (typeof found === 'number') {
+	                        if (_this6.index >= found) {
+	                          _this6.index -= 1;
+	                        }
+	                        _this6.setState({ keys: keys }, function () {
+	                          _this6.handleSelect(_this6.index, true);
+	                        });
+	                      } else {
+	                        _this6.setState({ keys: keys });
+	                      }
 	                    })['catch'](function () {});
 	                  }
 	                  _this6.setState({ editableKey: null });
