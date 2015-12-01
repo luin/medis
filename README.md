@@ -1,6 +1,6 @@
 # Medis
 
-Medis is a beautiful, easy-to-use Mac database management application for working with Redis.
+Medis is a beautiful, easy-to-use Mac database management application for working with Redis >= 2.8.
 
 Medis starts with all the basic features you need:
 

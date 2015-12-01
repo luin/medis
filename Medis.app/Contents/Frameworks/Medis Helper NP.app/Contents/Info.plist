@@ -5,13 +5,13 @@
 	<key>BuildMachineOSBuild</key>
 	<string>14F1021</string>
 	<key>CFBundleDisplayName</key>
-	<string>Electron Helper NP</string>
+	<string>Medis Helper NP</string>
 	<key>CFBundleExecutable</key>
-	<string>Electron Helper NP</string>
+	<string>Medis Helper NP</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.github.electron.helper.NP</string>
+  <string>li.zihua.medis.helper.NP</string>
 	<key>CFBundleName</key>
-	<string>Electron Helper NP</string>
+	<string>Medis Helper NP</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>DTSDKBuild</key>

@@ -20,7 +20,8 @@ codesign --deep -fs "$APP_KEY" --entitlements child.plist "$FRAMEWORKS_PATH/Elec
 codesign --deep -fs "$APP_KEY" --entitlements child.plist "$FRAMEWORKS_PATH/$APP Helper.app/"
 codesign --deep -fs "$APP_KEY" --entitlements child.plist "$FRAMEWORKS_PATH/$APP Helper EH.app/"
 codesign --deep -fs "$APP_KEY" --entitlements child.plist "$FRAMEWORKS_PATH/$APP Helper NP.app/"
-codesign  -fs "$APP_KEY" --entitlements parent.plist "$APP_PATH"
+codesign --deep -fs "$APP_KEY" --entitlements child.plist "$APP_PATH/Contents/MacOS/Electron"
+codesign --deep -fs "$APP_KEY" --entitlements parent.plist "$APP_PATH"
 productbuild --component "$APP_PATH" /Applications --sign "$INSTALLER_KEY" "$RESULT_PATH"
 
-rm -rf sign
+# rm -rf sign
