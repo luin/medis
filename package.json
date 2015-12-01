@@ -7,7 +7,9 @@
   "scripts": {
     "start": "rm Medis.app/Contents/Resources/app.asar; NODE_ENV=debug Medis.app/Contents/MacOS/Electron .",
     "dev": "webpack --progress --colors --watch",
-    "deploy": "NODE_ENV=production ./bin/deploy"
+    "deploy": "NODE_ENV=production ./bin/deploy",
+    "sign": "./bin/sign",
+    "unsign": "./bin/unsign"
   },
   "dependencies": {
     "fixed-data-table-contextmenu": "^0.6.3",

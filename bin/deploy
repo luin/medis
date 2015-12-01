@@ -28,11 +28,8 @@ mkdir -p deploy/node_modules/fixed-data-table-contextmenu/dist
 cp node_modules/fixed-data-table-contextmenu/dist/fixed-data-table.css deploy/node_modules/fixed-data-table-contextmenu/dist
 
 cp -r client/images deploy/client
-rm deploy/client/design.sketch
+rm deploy/client/images/design.sketch
 
 asar pack deploy app.asar
 rm -rf deploy
 mv app.asar Medis.app/Contents/Resources
-
-# open Medis.app
-Medis.app/Contents/MacOS/Electron --enable-logging

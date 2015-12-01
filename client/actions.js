@@ -62,6 +62,15 @@ const actions = {
           lua: 'local FLAG = "$$#__@DELETE@_REDIS_@PRO@__#$$" redis.call("lset", KEYS[1], ARGV[1], FLAG) redis.call("lrem", KEYS[1], 1, FLAG)'
         });
         redis.once('ready', function () {
+          const version = redis.serverInfo.redis_version;
+          if (version && version.length === 5) {
+            const versionNumber = Number(version[0] + version[2]);
+            if (versionNumber < 28) {
+              alert('Medis only supports Redis >= 2.8 because servers older than 2.8 don\'t support SCAN command, which means it not possible to access keys without blocking Redis.');
+              dispatch({ type: 'disconnect' });
+              return;
+            }
+          }
           dispatch({ type: 'connect', data: { redis, config } });
         });
         redis.once('end', function () {
