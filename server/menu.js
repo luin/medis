@@ -155,8 +155,9 @@ const menu = Menu.buildFromTemplate([{
   }]
 }]);
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'debug') {
   menu.items[3].submenu.items[0].visible = false;
+  menu.items[3].submenu.items[2].visible = false;
 }
 
 windowManager.on('blur', function () {

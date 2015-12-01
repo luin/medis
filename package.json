@@ -5,12 +5,11 @@
   "version": "0.0.1",
   "main": "server/main.js",
   "scripts": {
-    "start": "rm Medis.app/Contents/Resources/app.asar; Medis.app/Contents/MacOS/Electron .",
+    "start": "rm Medis.app/Contents/Resources/app.asar; NODE_ENV=debug Medis.app/Contents/MacOS/Electron .",
     "dev": "webpack --progress --colors --watch",
     "deploy": "NODE_ENV=production ./bin/deploy"
   },
   "dependencies": {
-    "file-loader": "^0.8.5",
     "fixed-data-table-contextmenu": "^0.6.3",
     "form-generator-react": "^1.0.5",
     "human-format": "^0.5.0",

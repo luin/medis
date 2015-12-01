@@ -53,6 +53,7 @@ class Terminal extends React.Component {
       name: this.props.connectionKey,
       height: '100%',
       width: '100%',
+      outputLimit: 200,
       prompt: `[[;#fff;]redis> ]`,
       keydown(e) {
         if (!terminal.enabled()) {
