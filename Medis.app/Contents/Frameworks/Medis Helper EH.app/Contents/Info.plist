@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Medis Helper EH</string>
 	<key>CFBundleIdentifier</key>
-  <string>li.zihua.medis.helper.EH</string>
+	<string>li.zihua.medis.helper.EH</string>
 	<key>CFBundleName</key>
 	<string>Medis Helper EH</string>
 	<key>CFBundlePackageType</key>
@@ -19,9 +19,9 @@
 	<key>DTSDKName</key>
 	<string>macosx10.11</string>
 	<key>DTXcode</key>
-	<string>0710</string>
+	<string>0701</string>
 	<key>DTXcodeBuild</key>
-	<string>7B91b</string>
+	<string>7A1001</string>
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>

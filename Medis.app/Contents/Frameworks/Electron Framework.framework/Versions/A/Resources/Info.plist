@@ -17,9 +17,9 @@
 	<key>DTSDKName</key>
 	<string>macosx10.11</string>
 	<key>DTXcode</key>
-	<string>0710</string>
+	<string>0701</string>
 	<key>DTXcodeBuild</key>
-	<string>7B91b</string>
+	<string>7A1001</string>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
 	<true/>
 </dict>

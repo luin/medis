@@ -5,7 +5,7 @@
 	<key>BuildMachineOSBuild</key>
 	<string>14F1021</string>
 	<key>CFBundleIdentifier</key>
-  <string>li.zihua.medis.helper</string>
+	<string>li.zihua.medis.helper</string>
 	<key>CFBundleName</key>
 	<string>Medis Helper</string>
 	<key>CFBundlePackageType</key>
@@ -15,9 +15,9 @@
 	<key>DTSDKName</key>
 	<string>macosx10.11</string>
 	<key>DTXcode</key>
-	<string>0710</string>
+	<string>0701</string>
 	<key>DTXcodeBuild</key>
-	<string>7B91b</string>
+	<string>7A1001</string>
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>

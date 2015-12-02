@@ -9,7 +9,8 @@
     "dev": "webpack --progress --colors --watch",
     "deploy": "NODE_ENV=production ./bin/deploy",
     "sign": "./bin/sign",
-    "unsign": "./bin/unsign"
+    "unsign": "./bin/unsign",
+    "tomedis": "./bin/tomedis"
   },
   "dependencies": {
     "fixed-data-table-contextmenu": "^0.6.3",
