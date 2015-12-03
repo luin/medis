@@ -37,4 +37,12 @@
       transform: rotate(180deg);
     }
   }
+  .base-content {
+    margin-top: -1px;
+    position: relative;
+    overflow: hidden;
+    &:focus {
+      outline: 0;
+    }
+  }
 }

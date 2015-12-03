@@ -143,11 +143,10 @@ class SetContent extends BaseContent {
       }}
       >
       <div
-        style={ { 'marginTop': -1 } }
         onKeyDown={this.handleKeyDown.bind(this)}
         tabIndex="0"
         ref="table"
-        className={this.randomClass}
+        className={'base-content ' + this.randomClass}
       >
         <Table
           rowHeight={24}
@@ -156,7 +155,7 @@ class SetContent extends BaseContent {
           onRowContextMenu={this.showContextMenu.bind(this)}
           onRowClick={this.handleSelect.bind(this)}
           width={this.state.sidebarWidth}
-          height={this.props.height + 1}
+          height={this.props.height}
           headerHeight={24}
           >
           <Column
