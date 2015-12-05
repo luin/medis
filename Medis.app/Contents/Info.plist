@@ -5,31 +5,31 @@
 	<key>BuildMachineOSBuild</key>
 	<string>14F1021</string>
 	<key>CFBundleDisplayName</key>
-  <string>Medis</string>
+	<string>Medis</string>
 	<key>CFBundleExecutable</key>
-	<string>Electron</string>
+  <string>Electron</string>
 	<key>CFBundleIconFile</key>
 	<string>atom.icns</string>
 	<key>CFBundleIdentifier</key>
-  <string>li.zihua.medis</string>
+	<string>li.zihua.medis</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-  <string>Medis</string>
+	<string>Medis</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.1.0</string>
+  <string>0.1.4</string>
 	<key>CFBundleVersion</key>
-	<string>0.1.0</string>
+  <string>0.1.4</string>
 	<key>DTSDKBuild</key>
 	<string>15A278</string>
 	<key>DTSDKName</key>
 	<string>macosx10.11</string>
 	<key>DTXcode</key>
-	<string>0710</string>
+	<string>0701</string>
 	<key>DTXcodeBuild</key>
-	<string>7B91b</string>
+	<string>7A1001</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.developer-tools</string>
 	<key>LSMinimumSystemVersion</key>
