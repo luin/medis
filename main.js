@@ -44005,6 +44005,8 @@
 	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
+	      var _this2 = this;
+
 	      if (nextProps.db !== this.props.db) {
 	        this.props.redis.select(nextProps.db);
 	      }
@@ -44012,14 +44014,21 @@
 	      var needRefresh = nextProps.db !== this.props.db || nextProps.pattern !== this.props.pattern || nextProps.redis !== this.props.redis;
 
 	      if (needRefresh) {
-	        this.refresh();
+	        if (this.timer) {
+	          clearTimeout(this.timer);
+	          this.timer = null;
+	        }
+	        this.timer = setTimeout(function () {
+	          _this2.refresh();
+	        }, 200);
 	      }
 	    }
 	  }, {
 	    key: 'scan',
 	    value: function scan() {
-	      var _this2 = this;
+	      var _this3 = this;
 
+	      var scanKey = this.scanKey = Math.random() * 10000 | 0;
 	      if (this.scanning) {
 	        return;
 	      }
@@ -44044,23 +44053,23 @@
 	        redis.type(targetPattern, function (err, type) {
 	          if (type !== 'none') {
 	            filterKey = targetPattern;
-	            _this2.setState({
-	              keys: _this2.state.keys.concat([[targetPattern, type]])
+	            _this3.setState({
+	              keys: _this3.state.keys.concat([[targetPattern, type]])
 	            });
 	          }
-	          iter.call(_this2, 100, 1);
+	          iter.call(_this3, 100, 1);
 	        });
 	      } else {
 	        iter.call(this, 100, 1);
 	      }
 
 	      function iter(fetchCount, times) {
-	        var _this3 = this;
+	        var _this4 = this;
 
 	        redis.scan(cursor, 'MATCH', pattern, 'COUNT', fetchCount, function (err, res) {
-	          if (_this3.props.pattern !== targetPattern) {
-	            _this3.scanning = false;
-	            setTimeout(_this3.scan.bind(_this3), 0);
+	          if (_this4.scanKey !== scanKey) {
+	            _this4.scanning = false;
+	            setTimeout(_this4.scan.bind(_this4), 0);
 	            return;
 	          }
 	          var newCursor = res[0];
@@ -44084,9 +44093,9 @@
 	            promise = Promise.resolve([]);
 	          }
 	          promise.then(function (types) {
-	            if (_this3.props.pattern !== targetPattern) {
-	              _this3.scanning = false;
-	              setTimeout(_this3.scan.bind(_this3), 0);
+	            if (_this4.props.pattern !== targetPattern) {
+	              _this4.scanning = false;
+	              setTimeout(_this4.scan.bind(_this4), 0);
 	              return;
 	            }
 	            var keys = _lodash2['default'].zip(fetchedKeys, types.map(function (res) {
@@ -44104,24 +44113,24 @@
 	            cursor = newCursor;
 
 	            if (needContinue) {
-	              _this3.setState({
+	              _this4.setState({
 	                cursor: cursor,
-	                keys: _this3.state.keys.concat(keys)
+	                keys: _this4.state.keys.concat(keys)
 	              }, function () {
-	                iter.call(_this3, count < 10 ? 5000 : count < 50 ? 2000 : 1000, times + 1);
-	                if (typeof _this3.index !== 'number') {
-	                  _this3.handleSelect(0);
+	                iter.call(_this4, count < 10 ? 5000 : count < 50 ? 2000 : 1000, times + 1);
+	                if (typeof _this4.index !== 'number') {
+	                  _this4.handleSelect(0);
 	                }
 	              });
 	            } else {
-	              _this3.setState({
+	              _this4.setState({
 	                cursor: cursor,
 	                scanning: false,
-	                keys: _this3.state.keys.concat(keys)
+	                keys: _this4.state.keys.concat(keys)
 	              }, function () {
-	                _this3.scanning = false;
-	                if (typeof _this3.index !== 'number') {
-	                  _this3.handleSelect(0);
+	                _this4.scanning = false;
+	                if (typeof _this4.index !== 'number') {
+	                  _this4.handleSelect(0);
 	                }
 	              });
 	            }
@@ -44151,7 +44160,7 @@
 	  }, {
 	    key: 'deleteSelectedKey',
 	    value: function deleteSelectedKey() {
-	      var _this4 = this;
+	      var _this5 = this;
 
 	      if (typeof this.index !== 'number') {
 	        return;
@@ -44161,15 +44170,15 @@
 	        button: 'Delete',
 	        content: 'Are you sure you want to delete the selected key? This action cannot be undone.'
 	      }).then(function () {
-	        var keys = _this4.state.keys;
-	        var deleted = keys.splice(_this4.index, 1);
+	        var keys = _this5.state.keys;
+	        var deleted = keys.splice(_this5.index, 1);
 	        if (deleted.length) {
-	          _this4.props.redis.del(deleted[0][0]);
-	          if (_this4.index >= keys.length - 1) {
-	            _this4.index -= 1;
+	          _this5.props.redis.del(deleted[0][0]);
+	          if (_this5.index >= keys.length - 1) {
+	            _this5.index -= 1;
 	          }
-	          _this4.setState({ keys: keys }, function () {
-	            _this4.handleSelect(_this4.index, true);
+	          _this5.setState({ keys: keys }, function () {
+	            _this5.handleSelect(_this5.index, true);
 	          });
 	        }
 	      })['catch'](function () {});
@@ -44177,30 +44186,30 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this5 = this;
+	      var _this6 = this;
 
 	      $(_reactDom2['default'].findDOMNode(this)).on('keydown', function (e) {
-	        if (typeof _this5.index === 'number' && typeof _this5.state.editableKey !== 'string') {
+	        if (typeof _this6.index === 'number' && typeof _this6.state.editableKey !== 'string') {
 	          if (e.keyCode === 8) {
-	            _this5.deleteSelectedKey();
+	            _this6.deleteSelectedKey();
 	            return false;
 	          }
 	          if (e.keyCode === 38) {
-	            _this5.handleSelect(_this5.index - 1);
+	            _this6.handleSelect(_this6.index - 1);
 	            return false;
 	          }
 	          if (e.keyCode === 40) {
-	            _this5.handleSelect(_this5.index + 1);
+	            _this6.handleSelect(_this6.index + 1);
 	            return false;
 	          }
 	        }
 	        if (!e.ctrlKey && e.metaKey) {
 	          if (e.keyCode === 67) {
-	            _electron.clipboard.writeText(_this5.state.keys[_this5.index][0]);
+	            _electron.clipboard.writeText(_this6.state.keys[_this6.index][0]);
 	            return false;
 	          }
 	          if (e.keyCode === 82) {
-	            _this5.refresh();
+	            _this6.refresh();
 	            return false;
 	          }
 	        }
@@ -44215,13 +44224,13 @@
 	        callback: function callback(key, opt) {
 	          setTimeout(function () {
 	            if (key === 'delete') {
-	              _this5.deleteSelectedKey();
+	              _this6.deleteSelectedKey();
 	            } else if (key === 'rename') {
-	              _this5.setState({ editableKey: _this5.state.keys[_this5.index][0] });
+	              _this6.setState({ editableKey: _this6.state.keys[_this6.index][0] });
 	            } else if (key === 'copy') {
-	              _electron.clipboard.writeText(_this5.state.keys[_this5.index][0]);
+	              _electron.clipboard.writeText(_this6.state.keys[_this6.index][0]);
 	            } else if (key === 'ttl') {
-	              _this5.props.redis.pttl(_this5.state.selectedKey).then(function (ttl) {
+	              _this6.props.redis.pttl(_this6.state.selectedKey).then(function (ttl) {
 	                showModal({
 	                  button: 'Set Expiration',
 	                  form: {
@@ -44237,24 +44246,24 @@
 	                }).then(function (res) {
 	                  var ttl = Number(res['PTTL (ms):']);
 	                  if (ttl >= 0) {
-	                    _this5.props.redis.pexpire(_this5.state.selectedKey, ttl).then(function (res) {
+	                    _this6.props.redis.pexpire(_this6.state.selectedKey, ttl).then(function (res) {
 	                      if (res <= 0) {
 	                        alert('Update Failed');
 	                      }
-	                      _this5.props.onKeyMetaChange();
+	                      _this6.props.onKeyMetaChange();
 	                    });
 	                  } else {
-	                    _this5.props.redis.persist(_this5.state.selectedKey, function () {
-	                      _this5.props.onKeyMetaChange();
+	                    _this6.props.redis.persist(_this6.state.selectedKey, function () {
+	                      _this6.props.onKeyMetaChange();
 	                    });
 	                  }
 	                });
 	              });
 	            } else if (key === 'reload') {
-	              _this5.handleSelect(_this5.index, true);
+	              _this6.handleSelect(_this6.index, true);
 	            }
 	          }, 0);
-	          _reactDom2['default'].findDOMNode(_this5).focus();
+	          _reactDom2['default'].findDOMNode(_this6).focus();
 	        },
 	        items: {
 	          copy: { name: 'Copy to Clipboard' },
@@ -44296,7 +44305,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this6 = this;
+	      var _this7 = this;
 
 	      return _react2['default'].createElement(
 	        'div',
@@ -44310,27 +44319,27 @@
 	            rowHeight: 24,
 	            rowsCount: this.state.keys.length + (this.state.cursor === '0' ? 0 : 1),
 	            onScrollStart: function () {
-	              if (_this6.state.editableKey) {
-	                _this6.setState({ editableKey: null });
+	              if (_this7.state.editableKey) {
+	                _this7.setState({ editableKey: null });
 	              }
 	            },
 	            rowClassNameGetter: function (index) {
-	              var item = _this6.state.keys[index];
+	              var item = _this7.state.keys[index];
 	              if (!item) {
 	                return 'is-loading';
 	              }
-	              if (item[0] === _this6.state.selectedKey) {
+	              if (item[0] === _this7.state.selectedKey) {
 	                return 'is-selected';
 	              }
 	              return '';
 	            },
 	            onRowContextMenu: this.showContextMenu.bind(this),
 	            onRowClick: function (evt, index) {
-	              return _this6.handleSelect(index);
+	              return _this7.handleSelect(index);
 	            },
 	            onRowDoubleClick: function (evt, index) {
-	              _this6.handleSelect(index);
-	              _this6.setState({ editableKey: _this6.state.keys[index][0] });
+	              _this7.handleSelect(index);
+	              _this7.setState({ editableKey: _this7.state.keys[index][0] });
 	            },
 	            width: this.props.width,
 	            height: this.props.height,
@@ -44342,7 +44351,7 @@
 	            cell: function (_ref) {
 	              var rowIndex = _ref.rowIndex;
 
-	              var item = _this6.state.keys[rowIndex];
+	              var item = _this7.state.keys[rowIndex];
 	              if (!item) {
 	                return '';
 	              }
@@ -44360,7 +44369,7 @@
 	          }),
 	          _react2['default'].createElement(_fixedDataTableContextmenu.Column, {
 	            header: _react2['default'].createElement(_commonAddButton2['default'], { reload: 'true', title: 'name', onReload: function () {
-	                _this6.refresh();
+	                _this7.refresh();
 	              }, onClick: function () {
 	                showModal({
 	                  button: 'Create Key',
@@ -44380,7 +44389,7 @@
 	                }).then(function (res) {
 	                  var key = res['Key Name:'];
 	                  var type = res['Type:'];
-	                  return _this6.props.redis.exists(key).then(function (exists) {
+	                  return _this7.props.redis.exists(key).then(function (exists) {
 	                    var error = 'The key already exists';
 	                    if (exists) {
 	                      alert(error);
@@ -44392,8 +44401,8 @@
 	                  var key = _ref2.key;
 	                  var type = _ref2.type;
 
-	                  _this6.createKey(key, type).then(function () {
-	                    _this6.props.onCreateKey(key);
+	                  _this7.createKey(key, type).then(function () {
+	                    _this7.props.onCreateKey(key);
 	                  });
 	                });
 	              } }),
@@ -44401,18 +44410,18 @@
 	            cell: function (_ref3) {
 	              var rowIndex = _ref3.rowIndex;
 
-	              var item = _this6.state.keys[rowIndex];
+	              var item = _this7.state.keys[rowIndex];
 	              var cellData = undefined;
 	              if (item) {
 	                cellData = item[0];
 	              }
 	              if (typeof cellData === 'undefined') {
-	                if (_this6.state.scanning) {
+	                if (_this7.state.scanning) {
 	                  return _react2['default'].createElement(
 	                    'span',
 	                    { style: { color: '#ccc' } },
 	                    'Scanning...(cursor ',
-	                    _this6.state.cursor,
+	                    _this7.state.cursor,
 	                    ')'
 	                  );
 	                }
@@ -44420,19 +44429,19 @@
 	                  'a',
 	                  { href: '#', onClick: function (evt) {
 	                      evt.preventDefault();
-	                      _this6.scan();
+	                      _this7.scan();
 	                    } },
 	                  'Scan more'
 	                );
 	              }
 	              return _react2['default'].createElement(_commonContentEditable2['default'], {
 	                className: 'ContentEditable overflow-wrapper',
-	                enabled: cellData === _this6.state.editableKey,
+	                enabled: cellData === _this7.state.editableKey,
 	                onChange: function (newKeyName) {
-	                  var keys = _this6.state.keys;
+	                  var keys = _this7.state.keys;
 	                  var oldKey = keys[rowIndex][0];
 	                  if (oldKey !== newKeyName && newKeyName) {
-	                    _this6.props.redis.exists(newKeyName).then(function (exists) {
+	                    _this7.props.redis.exists(newKeyName).then(function (exists) {
 	                      if (exists) {
 	                        return showModal({
 	                          title: 'Overwrite the key?',
@@ -44442,7 +44451,7 @@
 	                      }
 	                    }).then(function () {
 	                      keys[rowIndex] = [newKeyName, keys[rowIndex][1]];
-	                      _this6.props.redis.rename(oldKey, newKeyName);
+	                      _this7.props.redis.rename(oldKey, newKeyName);
 	                      var found = undefined;
 	                      for (var i = 0; i < keys.length; i++) {
 	                        if (i !== rowIndex && keys[i][0] === newKeyName) {
@@ -44452,19 +44461,19 @@
 	                        }
 	                      }
 	                      if (typeof found === 'number') {
-	                        if (_this6.index >= found) {
-	                          _this6.index -= 1;
+	                        if (_this7.index >= found) {
+	                          _this7.index -= 1;
 	                        }
-	                        _this6.setState({ keys: keys }, function () {
-	                          _this6.handleSelect(_this6.index, true);
+	                        _this7.setState({ keys: keys }, function () {
+	                          _this7.handleSelect(_this7.index, true);
 	                        });
 	                      } else {
-	                        _this6.setState({ keys: keys });
+	                        _this7.setState({ keys: keys });
 	                      }
 	                    })['catch'](function () {});
 	                  }
-	                  _this6.setState({ editableKey: null });
-	                  _reactDom2['default'].findDOMNode(_this6).focus();
+	                  _this7.setState({ editableKey: null });
+	                  _reactDom2['default'].findDOMNode(_this7).focus();
 	                },
 	                html: cellData
 	              });

@@ -41,11 +41,18 @@ class KeyList extends React.Component {
       nextProps.redis !== this.props.redis;
 
     if (needRefresh) {
-      this.refresh();
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+      this.timer = setTimeout(() => {
+        this.refresh();
+      }, 200);
     }
   }
 
   scan() {
+    const scanKey = this.scanKey = Math.random() * 10000 | 0;
     if (this.scanning) {
       return;
     }
@@ -82,7 +89,7 @@ class KeyList extends React.Component {
 
     function iter(fetchCount, times) {
       redis.scan(cursor, 'MATCH', pattern, 'COUNT', fetchCount, (err, res) => {
-        if (this.props.pattern !== targetPattern) {
+        if (this.scanKey !== scanKey) {
           this.scanning = false;
           setTimeout(this.scan.bind(this), 0);
           return;
