@@ -35,9 +35,10 @@ class ListContent extends BaseContent {
     }
 
     const from = this.state.members.length;
-    const to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1 - from);
+    const to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1);
     if (to < from) {
-      throw new Error('sdf');
+      console.log(to, from);
+      return;
     }
 
     this.props.redis.lrange(this.state.keyName, from, to, (_, results) => {

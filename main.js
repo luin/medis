@@ -71089,9 +71089,10 @@
 	      }
 
 	      var from = this.state.members.length;
-	      var to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1 - from);
+	      var to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1);
 	      if (to < from) {
-	        throw new Error('sdf');
+	        console.log(to, from);
+	        return;
 	      }
 
 	      this.props.redis.lrange(this.state.keyName, from, to, function (_, results) {
@@ -72144,7 +72145,7 @@
 	        return;
 	      }
 	      var from = this.state.members.length;
-	      var to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1 - from);
+	      var to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1);
 
 	      this.props.redis.zrange(this.state.keyName, from, to, 'WITHSCORES', function (_, results) {
 	        var items = [];
@@ -72564,6 +72565,7 @@
 	        name: this.props.connectionKey,
 	        height: '100%',
 	        width: '100%',
+	        outputLimit: 200,
 	        prompt: '[[;#fff;]redis> ]',
 	        keydown: function keydown(e) {
 	          if (!terminal.enabled()) {

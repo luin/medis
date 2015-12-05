@@ -36,7 +36,7 @@ class ZSetContent extends BaseContent {
       return;
     }
     const from = this.state.members.length;
-    const to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1 - from);
+    const to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1);
 
     this.props.redis.zrange(this.state.keyName, from, to, 'WITHSCORES', (_, results) => {
       const items = [];
