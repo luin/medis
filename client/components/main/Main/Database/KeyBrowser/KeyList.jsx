@@ -181,7 +181,7 @@ class KeyList extends React.Component {
           this.index -= 1;
         }
         this.setState({ keys }, () => {
-          this.handleSelect(this.index);
+          this.handleSelect(this.index, true);
         });
       }
     }).catch(() => {});
@@ -244,12 +244,16 @@ class KeyList extends React.Component {
                   }
                 }
               }).then(res => {
-                const ttl = res['PTTL (ms):'];
-                this.props.redis.pexpire(this.state.selectedKey, ttl).then(res => {
-                  if (res === 0) {
-                    alert('Update Failed');
-                  }
-                });
+                const ttl = Number(res['PTTL (ms):']);
+                if (ttl >= 0) {
+                  this.props.redis.pexpire(this.state.selectedKey, ttl).then(res => {
+                    if (res < 0) {
+                      alert('Update Failed');
+                    }
+                  });
+                } else {
+                  this.props.redis.persist(this.state.selectedKey);
+                }
               });
             });
           } else if (key === 'reload') {
@@ -415,7 +419,24 @@ class KeyList extends React.Component {
                   }).then(() => {
                     keys[rowIndex] = [newKeyName, keys[rowIndex][1]];
                     this.props.redis.rename(oldKey, newKeyName)
-                    this.setState({ keys });
+                    let found;
+                    for (let i = 0; i < keys.length; i++) {
+                      if (i !== rowIndex && keys[i][0] === newKeyName) {
+                        keys.splice(i, 1);
+                        found = i;
+                        break;
+                      }
+                    }
+                    if (typeof found === 'number') {
+                      if (this.index >= found) {
+                        this.index -= 1;
+                      }
+                      this.setState({ keys }, () => {
+                        this.handleSelect(this.index, true);
+                      });
+                    } else {
+                      this.setState({ keys });
+                    }
                   }).catch(() => {});
                 }
                 this.setState({ editableKey: null });
