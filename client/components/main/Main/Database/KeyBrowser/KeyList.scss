@@ -5,9 +5,13 @@
 
 .pattern-table {
   position: relative;
-  top: 1px;
+  overflow: hidden;
   &:focus {
     outline: 0;
+  }
+
+  footer {
+    height: 24px;
   }
 }
 
