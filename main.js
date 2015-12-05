@@ -41627,11 +41627,17 @@
 	                if (!key) {
 	                  return;
 	                }
-	                var index = _this2.props.favorites.findIndex(function (favorite) {
-	                  return key === favorite.get('key');
+	                showModal({
+	                  title: 'Delete the bookmark?',
+	                  button: 'Delete',
+	                  content: 'Are you sure you want to delete the selected bookmark? This action cannot be undone.'
+	                }).then(function () {
+	                  var index = _this2.props.favorites.findIndex(function (favorite) {
+	                    return key === favorite.get('key');
+	                  });
+	                  _store2['default'].dispatch((0, _actions2['default'])('removeFavorite', { key: key }));
+	                  _this2.selectIndex(index - 1);
 	                });
-	                _store2['default'].dispatch((0, _actions2['default'])('removeFavorite', { key: key }));
-	                _this2.selectIndex(index - 1);
 	              } },
 	            '-'
 	          )

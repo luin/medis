@@ -148,6 +148,11 @@ const menu = Menu.buildFromTemplate([{
   label: 'Help',
   role: 'help',
   submenu: [{
+    label: 'Report an Issue...',
+    click() {
+      require('shell').openExternal('mailto:medis@zihua.li');
+    }
+  }, {
     label: 'Learn More',
     click() {
       require('shell').openExternal('http://medisapp.com');
