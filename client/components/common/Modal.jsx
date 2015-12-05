@@ -97,6 +97,7 @@ export default class Modal extends React.Component {
           </div>
         }
         <div className="Modal__body">
+          {!this.props.form && <div className="Modal__icon"><span /></div>}
           {this.props.content}
           <div className="Modal__form" ref="form" />
         </div>

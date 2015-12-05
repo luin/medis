@@ -24,12 +24,15 @@ cp -r node_modules/lodash deploy/node_modules
 cp -r node_modules/redis-commands deploy/node_modules
 cp -r node_modules/jquery deploy/node_modules
 
-mkdir -p deploy/node_modules/fixed-data-table/dist
-cp node_modules/fixed-data-table/dist/fixed-data-table.css deploy/node_modules/fixed-data-table/dist
+mkdir -p deploy/node_modules/fixed-data-table-contextmenu/dist
+cp node_modules/fixed-data-table-contextmenu/dist/fixed-data-table.css deploy/node_modules/fixed-data-table-contextmenu/dist
 
 asar pack deploy app.asar
 rm -rf deploy
 mv app.asar Medis.app/Contents/Resources
+
+cp -r client/images deploy/client
+rm deploy/client/design.sketch
 
 # open Medis.app
 Medis.app/Contents/MacOS/Electron --enable-logging

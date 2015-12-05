@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { Cell } from 'fixed-data-table';
+import { Cell } from 'fixed-data-table-contextmenu';
 
 export default class SortHeaderCell extends React.Component {
   handleClick(evt) {
