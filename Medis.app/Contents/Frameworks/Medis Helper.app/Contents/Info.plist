@@ -5,9 +5,9 @@
 	<key>BuildMachineOSBuild</key>
 	<string>14F1021</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.github.electron.helper</string>
+  <string>li.zihua.medis.helper</string>
 	<key>CFBundleName</key>
-	<string>Electron Helper</string>
+	<string>Medis Helper</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>DTSDKBuild</key>
