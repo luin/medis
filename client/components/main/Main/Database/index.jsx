@@ -16,6 +16,7 @@ class Database extends React.Component {
       key: null,
       db: 0,
       version: 0,
+      metaVersion: 0,
       pattern: '',
       clientHeight: this.$window.height() - $('.tab-group').height()
     };
@@ -61,11 +62,13 @@ class Database extends React.Component {
         onCreateKey={ this.handleCreateKey.bind(this) }
         db={ this.state.db }
         onDatabaseChange={ db => this.setState({ db }) }
+        onKeyMetaChange={ () => this.setState({ metaVersion: this.state.metaVersion + 1 })}
       />
       <Content
         height={ this.state.clientHeight }
         keyName={ this.state.key }
         version={ this.state.version }
+        metaVersion={ this.state.metaVersion }
         connectionKey={ this.props.connectionKey }
         redis={ this.props.redis }
         db={ this.state.db }

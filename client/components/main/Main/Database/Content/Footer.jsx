@@ -62,7 +62,9 @@ class Footer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.keyName !== this.props.keyName || nextProps.keyType !== this.props.keyType) {
+    if (nextProps.keyName !== this.props.keyName ||
+        nextProps.keyType !== this.props.keyType ||
+        nextProps.version !== this.props.version) {
       this.init(nextProps.keyName, nextProps.keyType);
     }
   }

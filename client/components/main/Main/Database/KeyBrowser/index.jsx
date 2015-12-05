@@ -41,6 +41,7 @@ class KeyBrowser extends React.Component {
         pattern={ this.state.pattern || '*' }
         redis={ this.props.redis }
         onCreateKey={ this.props.onCreateKey }
+        onKeyMetaChange={ this.props.onKeyMetaChange }
         onSelect={key => this.props.onSelectKey(key)}
       />
       <Footer

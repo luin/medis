@@ -16,7 +16,10 @@ class SetContent extends BaseContent {
       const oldValue = this.state.members[this.state.selectedIndex];
       this.state.members[this.state.selectedIndex] = value.toString();
       this.setState({ members: this.state.members });
-      this.props.redis.multi().srem(this.state.keyName, oldValue).sadd(this.state.keyName, value).exec(callback);
+      this.props.redis.multi().srem(this.state.keyName, oldValue).sadd(this.state.keyName, value).exec((err, res) => {
+        this.props.onKeyContentChange();
+        callback(err, res);
+      });
     } else {
       alert('Please wait for data been loaded before saving.');
     }
@@ -91,6 +94,7 @@ class SetContent extends BaseContent {
           this.state.selectedIndex -= 1;
         }
         this.setState({ members, length: this.state.length - 1 }, () => {
+          this.props.onKeyContentChange();
           this.handleSelect(null, this.state.selectedIndex);
         });
       }
@@ -185,6 +189,7 @@ class SetContent extends BaseContent {
                       members: this.state.members,
                       length: this.state.length + 1,
                     }, () => {
+                      this.props.onKeyContentChange();
                       this.handleSelect(null, this.state.members.length - 1);
                     });
                   });

@@ -19,7 +19,10 @@ class ListContent extends BaseContent {
     if (typeof this.state.selectedIndex === 'number') {
       this.state.members[this.state.selectedIndex] = value.toString();
       this.setState({ members: this.state.members });
-      this.props.redis.lset(this.state.keyName, this.state.selectedIndex, value, callback);
+      this.props.redis.lset(this.state.keyName, this.state.selectedIndex, value, (err, res) => {
+        this.props.onKeyContentChange();
+        callback(err, res);
+      });
     } else {
       alert('Please wait for data been loaded before saving.');
     }
@@ -37,7 +40,6 @@ class ListContent extends BaseContent {
     const from = this.state.members.length;
     const to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1);
     if (to < from) {
-      console.log(to, from);
       return;
     }
 
@@ -88,6 +90,7 @@ class ListContent extends BaseContent {
           this.state.selectedIndex -= 1;
         }
         this.setState({ members, length: this.state.length - 1 }, () => {
+          this.props.onKeyContentChange();
           this.handleSelect(null, this.state.selectedIndex);
         });
       }
@@ -221,6 +224,7 @@ class ListContent extends BaseContent {
                       members: this.state.members,
                       length: this.state.length + 1,
                     }, () => {
+                      this.props.onKeyContentChange();
                       this.handleSelect(null, method === 'lpush' ? 0 : this.state.members.length - 1);
                     });
                   });
