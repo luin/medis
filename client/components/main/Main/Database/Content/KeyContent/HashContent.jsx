@@ -183,7 +183,11 @@ class HashContent extends BaseContent {
                 }).then(res => {
                   const data = res['Key:'];
                   const value = 'New Member';
-                  this.props.redis.hset(this.state.keyName, data, value).then(() => {
+                  this.props.redis.hsetnx(this.state.keyName, data, value).then(inserted => {
+                    if (!inserted) {
+                      alert('The field already exists');
+                      return;
+                    }
                     this.state.members.push([data, new Buffer(value)])
                     this.setState({
                       members: this.state.members,
