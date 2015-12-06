@@ -151,7 +151,7 @@ class HashContent extends BaseContent {
         onKeyDown={this.handleKeyDown.bind(this)}
         tabIndex="0"
         ref="table"
-        className={this.randomClass}
+        className={'base-content ' + this.randomClass}
       >
         <Table
           rowHeight={24}
@@ -164,7 +164,7 @@ class HashContent extends BaseContent {
             this.setState({ editableIndex: index });
           }}
           width={this.state.sidebarWidth}
-          height={this.props.height + 1}
+          height={this.props.height}
           headerHeight={24}
           >
           <Column

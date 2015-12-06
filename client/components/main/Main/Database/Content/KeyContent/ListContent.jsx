@@ -163,11 +163,10 @@ class ListContent extends BaseContent {
       }}
       >
       <div
-        style={{ marginTop: -1 }}
         tabIndex="0"
         ref="table"
         onKeyDown={this.handleKeyDown.bind(this)}
-        className={this.randomClass}
+        className={'base-content ' + this.randomClass}
       >
         <Table
           rowHeight={24}
@@ -180,7 +179,7 @@ class ListContent extends BaseContent {
             this.setState({ indexWidth });
           }}
           width={this.state.sidebarWidth}
-          height={this.props.height + 1}
+          height={this.props.height}
           headerHeight={24}
           >
           <Column
