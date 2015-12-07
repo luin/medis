@@ -155,7 +155,7 @@ const menu = Menu.buildFromTemplate([{
   }, {
     label: 'Learn More',
     click() {
-      require('shell').openExternal('http://medisapp.com');
+      require('shell').openExternal('http://getmedis.com');
     }
   }]
 }]);
