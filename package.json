@@ -2,7 +2,7 @@
   "name": "medis",
   "description": "GUI for Redis",
   "productName": "Medis",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "main": "server/main.js",
   "scripts": {
     "start": "rm Medis.app/Contents/Resources/app.asar; NODE_ENV=debug Medis.app/Contents/MacOS/Electron .",
