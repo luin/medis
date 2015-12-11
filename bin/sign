@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm -rf sign || true
+
 # Name of your app.
 APP="Medis"
 # The path of you app to sign.
@@ -29,8 +31,6 @@ codesign --verify --deep --display --verbose=4 "$APP_PATH"
 
 productbuild --component "$APP_PATH" /Applications --sign "$INSTALLER_KEY" "$RESULT_PATH"
 
-# echo ""
-# echo "Veriyfing Gatekeeper acceptance..."
-# spctl --ignore-cache --no-cache --assess --type execute --verbose=4 "$APP_PATH"
-
-rm -rf sign
+echo ""
+echo "Veriyfing Gatekeeper acceptance..."
+spctl --ignore-cache --no-cache --assess --type execute --verbose=4 "$APP_PATH"

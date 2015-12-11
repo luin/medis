@@ -25,8 +25,8 @@ const actions = {
           });
         })
         .on('error', err => {
-          alert(`SSH Error: ${err.message}`);
           dispatch({ type: 'disconnect' });
+          alert(`SSH Error: ${err.message}`);
         });
 
         try {
@@ -38,8 +38,8 @@ const actions = {
             passphrase: config.sshKeyPassphrase
           });
         } catch (err) {
-          alert(`SSH Error: ${err.message}`);
           dispatch({ type: 'disconnect' });
+          alert(`SSH Error: ${err.message}`);
         }
       } else {
         handleRedis(config);
@@ -64,6 +64,9 @@ const actions = {
         redis.once('connect', function () {
           redis.ping((err, res) => {
             if (err) {
+              if (err.message === 'Ready check failed: NOAUTH Authentication required.') {
+                err.message = 'Redis Error: Access denied. Please double-check your password.';
+              }
               alert(err.message);
               dispatch({ type: 'disconnect' });
               return;
@@ -81,8 +84,8 @@ const actions = {
           })
         });
         redis.once('end', function () {
-          alert('Redis Error: Connection failed');
           dispatch({ type: 'disconnect' });
+          alert('Redis Error: Connection failed');
         });
       }
     };
