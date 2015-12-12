@@ -61,6 +61,10 @@ const actions = {
           numberOfKeys: 1,
           lua: 'local FLAG = "$$#__@DELETE@_REDIS_@PRO@__#$$" redis.call("lset", KEYS[1], ARGV[1], FLAG) redis.call("lrem", KEYS[1], 1, FLAG)'
         });
+        redis.defineCommand('duplicateKey', {
+          numberOfKeys: 2,
+          lua: 'local dump = redis.call("dump", KEYS[1]) local pttl = 0 if ARGV[1] == "TTL" then pttl = redis.call("pttl", KEYS[1]) end return redis.call("restore", KEYS[2], pttl, dump)'
+        });
         redis.once('connect', function () {
           redis.ping((err, res) => {
             if (err) {

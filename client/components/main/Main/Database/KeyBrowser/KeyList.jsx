@@ -21,13 +21,13 @@ class KeyList extends React.Component {
     this.randomClass = 'pattern-table-' + (Math.random() * 100000 | 0);
   }
 
-  refresh() {
+  refresh(firstTime) {
     this.setState({
       cursor: '0',
       keys: []
     }, () => {
       this.handleSelect();
-      this.scan();
+      this.scan(firstTime);
     });
   }
 
@@ -46,14 +46,15 @@ class KeyList extends React.Component {
         this.timer = null;
       }
       this.timer = setTimeout(() => {
-        this.refresh();
+        this.refresh(true);
       }, 200);
     }
   }
 
-  scan() {
+  scan(firstTime) {
     const scanKey = this.scanKey = Math.random() * 10000 | 0;
     if (this.scanning) {
+      this.lastFirstTime = firstTime;
       return;
     }
     this.scanning = true;
@@ -71,18 +72,28 @@ class KeyList extends React.Component {
     let cursor = this.state.cursor;
 
     let filterKey;
+    let filterKeyExists;
 
     // Plain key
     if (targetPattern !== pattern) {
-      redis.type(targetPattern, (err, type) => {
-        if (type !== 'none') {
-          filterKey = targetPattern;
-          this.setState({
-            keys: this.state.keys.concat([[targetPattern, type]])
-          });
-        }
+      filterKey = targetPattern;
+      if (this.state.keys.length) {
         iter.call(this, 100, 1);
-      });
+      } else {
+        redis.type(targetPattern, (err, type) => {
+          if (type !== 'none') {
+            this.setState({
+              keys: this.state.keys.concat([[targetPattern, type]])
+            });
+            filterKeyExists = true;
+            if (firstTime) {
+              iter.call(this, 1, 1);
+              return;
+            }
+          }
+          iter.call(this, 100, 1);
+        });
+      }
     } else {
       iter.call(this, 100, 1);
     }
@@ -91,7 +102,7 @@ class KeyList extends React.Component {
       redis.scan(cursor, 'MATCH', pattern, 'COUNT', fetchCount, (err, res) => {
         if (this.scanKey !== scanKey) {
           this.scanning = false;
-          setTimeout(this.scan.bind(this), 0);
+          setTimeout(this.scan.bind(this, this.lastFirstTime), 0);
           return;
         }
         const newCursor = res[0];
@@ -117,7 +128,9 @@ class KeyList extends React.Component {
           const keys = _.zip(fetchedKeys, types.map(res => res[1]));
 
           let needContinue = true;
-          if (Number(newCursor) === 0) {
+          if (filterKeyExists && firstTime) {
+            needContinue = false;
+          } else if (Number(newCursor) === 0) {
             needContinue = false;
           } else if (count >= 100) {
             needContinue = false;
@@ -268,6 +281,34 @@ class KeyList extends React.Component {
             });
           } else if (key === 'reload') {
             this.handleSelect(this.index, true);
+          } else if (key === 'duplicate') {
+            const sourceKey = this.state.keys[this.index][0];
+            let targetKey;
+            showModal({
+              button: 'Duplicate Key',
+              form: {
+                type: 'object',
+                properties: {
+                  'Target Key:': {
+                    type: 'string',
+                    minLength: 1
+                  },
+                  'Keep TTL:': {
+                    type: 'boolean'
+                  }
+                }
+              }
+            }).then(res => {
+              targetKey = res['Target Key:'];
+              const duplicateTTL = res['Keep TTL:'];
+              this.props.redis.duplicateKey(sourceKey, targetKey, duplicateTTL ? 'TTL' : 'NOTTL');
+            }).then(() => {
+              this.props.onCreateKey(targetKey);
+            }).catch(err => {
+              if (err && err.message) {
+                alert(err.message);
+              }
+            });
           }
         }, 0);
         ReactDOM.findDOMNode(this).focus();
@@ -277,8 +318,10 @@ class KeyList extends React.Component {
         reload: { name: 'Reload' },
         sep1: '---------',
         ttl: { name: 'Set expiration...' },
-        rename: { name: 'Rename' },
-        delete: { name: 'Delete' }
+        rename: { name: 'Rename Key...' },
+        duplicate: { name: 'Duplicate Key...' },
+        sep2: '---------',
+        delete: { name: 'Delete Key' }
       }
     });
   }
