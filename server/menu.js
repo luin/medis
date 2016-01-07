@@ -4,40 +4,7 @@ const app = require('app');
 const windowManager = require('./windowManager');
 const Menu = require('menu');
 
-const menu = Menu.buildFromTemplate([{
-  label: app.getName(),
-  submenu: [{
-    label: 'About ' + app.getName(),
-    role: 'about'
-  }, {
-    type: 'separator'
-  }, {
-    label: 'Services',
-    role: 'services',
-    submenu: []
-  }, {
-    type: 'separator'
-  }, {
-    label: 'Hide ' + app.getName(),
-    accelerator: 'Command+H',
-    role: 'hide'
-  }, {
-    label: 'Hide Others',
-    accelerator: 'Command+Shift+H',
-    role: 'hideothers'
-  }, {
-    label: 'Show All',
-    role: 'unhide'
-  }, {
-    type: 'separator'
-  }, {
-    label: 'Quit',
-    accelerator: 'Command+Q',
-    click() {
-      app.quit();
-    }
-  }]
-}, {
+const menuTemplate = [{
   label: 'File',
   submenu: [{
     label: 'New Connection Window',
@@ -158,21 +125,62 @@ const menu = Menu.buildFromTemplate([{
       require('shell').openExternal('http://getmedis.com');
     }
   }]
-}]);
+}]
+
+let baseIndex = 0;
+if (process.platform == 'darwin') {
+  baseIndex = 1;
+  menuTemplate.unshift({
+    label: app.getName(),
+    submenu: [{
+      label: 'About ' + app.getName(),
+      role: 'about'
+    }, {
+      type: 'separator'
+    }, {
+      label: 'Services',
+      role: 'services',
+      submenu: []
+    }, {
+      type: 'separator'
+    }, {
+      label: 'Hide ' + app.getName(),
+      accelerator: 'Command+H',
+      role: 'hide'
+    }, {
+      label: 'Hide Others',
+      accelerator: 'Command+Shift+H',
+      role: 'hideothers'
+    }, {
+      label: 'Show All',
+      role: 'unhide'
+    }, {
+      type: 'separator'
+    }, {
+      label: 'Quit',
+      accelerator: 'Command+Q',
+      click() {
+        app.quit();
+      }
+    }]
+  });
+}
+
+const menu = Menu.buildFromTemplate(menuTemplate);
 
 if (process.env.NODE_ENV !== 'debug') {
-  menu.items[3].submenu.items[0].visible = false;
-  menu.items[3].submenu.items[2].visible = false;
+  menu.items[baseIndex + 2].submenu.items[0].visible = false;
+  menu.items[baseIndex + 2].submenu.items[2].visible = false;
 }
 
 windowManager.on('blur', function () {
-  menu.items[1].submenu.items[3].enabled = false;
-  menu.items[1].submenu.items[4].enabled = false;
+  menu.items[baseIndex + 0].submenu.items[3].enabled = false;
+  menu.items[baseIndex + 0].submenu.items[4].enabled = false;
 });
 
 windowManager.on('focus', function () {
-  menu.items[1].submenu.items[3].enabled = true;
-  menu.items[1].submenu.items[4].enabled = true;
+  menu.items[baseIndex + 0].submenu.items[3].enabled = true;
+  menu.items[baseIndex + 0].submenu.items[4].enabled = true;
 });
 
 module.exports = menu;
