@@ -4,6 +4,8 @@
 
 Medis is a beautiful, easy-to-use Redis management application built on the modern web with [Electron](https://github.com/atom/electron), [React](https://facebook.github.io/react/), and [Redux](https://github.com/rackt/redux).
 
+[![Join the chat at https://gitter.im/luin/medis](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/luin/medis?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Medis starts with all the basic features you need:
 
 * Keys viewing/editing
