@@ -149,3 +149,15 @@
     text-align: right;
   }
 }
+
+.context-menu-list, .context-menu-item {
+  background: #f0f0f0;
+}
+
+.context-menu-list {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
+}
+
+.context-menu-separator {
+  border-bottom: 2px solid #dfdfdf;
+}
