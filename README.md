@@ -19,6 +19,10 @@ It also supports many advanced features:
 * Working with millions keys and key members without blocking the redis server
 * Pattern manager for easy selecting a sub group of keys.
 
+## Download Medis
+
+You can download compiled versions of Medis for Mac OS X from [the release page](https://github.com/luin/medis/releases). Support for Windows and Linux is coming soon.
+
 ## Running Locally
 
 ```shell
@@ -26,3 +30,17 @@ $ npm install
 $ npm run dev
 $ npm start
 ```
+
+## Build Medis
+
+```shell
+$ npm run deploy
+$ ./Medis.app
+```
+
+## I love this. How do I help?
+
+* Simply star this repository :-)
+* Help us spread the word on Facebook and Twitter
+* Contribute Code! We're developers!
+* Medis is available on the Mac App Store as a paid software. I'll be very grateful if you'd like to buy it to encourage me to continue maintaining Medis. There are no additional features comparing with the open-sourced version, except the fact that you can enjoy auto updating that brought by the Mac App Store.
