@@ -76,7 +76,7 @@ const actions = {
               return;
             }
             const version = redis.serverInfo.redis_version;
-            if (version && version.length === 5) {
+            if (version && version.length >= 5) {
               const versionNumber = Number(version[0] + version[2]);
               if (versionNumber < 28) {
                 alert('Medis only supports Redis >= 2.8 because servers older than 2.8 don\'t support SCAN command, which means it not possible to access keys without blocking Redis.');
