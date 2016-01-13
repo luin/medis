@@ -13,6 +13,7 @@
     "tomedis": "./bin/tomedis"
   },
   "dependencies": {
+    "codemirror": "^5.10.0",
     "fixed-data-table-contextmenu": "^0.6.3",
     "form-generator-react": "^1.0.5",
     "human-format": "^0.5.0",
@@ -21,6 +22,7 @@
     "jquery": "^2.1.4",
     "json-editor": "^0.7.23",
     "jsonlint": "^1.6.2",
+    "lint": "^1.1.2",
     "lodash": "^3.10.1",
     "msgpack5": "^3.3.0",
     "react": "^0.14.0",
@@ -42,8 +44,10 @@
   "devDependencies": {
     "asar": "^0.8.3",
     "babel-core": "^5.8.25",
+    "babel-eslint": "^4.1.6",
     "babel-loader": "^5.3.2",
     "css-loader": "^0.19.0",
+    "eslint-plugin-react": "^3.15.0",
     "jsx-loader": "^0.13.2",
     "node-sass": "^3.3.3",
     "sass-loader": "^3.0.0",
