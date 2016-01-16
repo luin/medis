@@ -3,16 +3,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Codemirror from 'react-codemirror';
-require('react-codemirror/node_modules/codemirror/mode/javascript/javascript');
-require('react-codemirror/node_modules/codemirror/addon/lint/json-lint');
-require('react-codemirror/node_modules/codemirror/addon/lint/lint');
-require('react-codemirror/node_modules/codemirror/addon/selection/active-line');
-require('react-codemirror/node_modules/codemirror/addon/edit/closebrackets');
-require('react-codemirror/node_modules/codemirror/addon/edit/matchbrackets');
+require('codemirror/mode/javascript/javascript');
+require('codemirror/addon/lint/json-lint');
+require('codemirror/addon/lint/lint');
+require('codemirror/addon/selection/active-line');
+require('codemirror/addon/edit/closebrackets');
+require('codemirror/addon/edit/matchbrackets');
 import jsonlint from 'jsonlint';
 window.jsonlint = jsonlint.parser;
-require('react-codemirror/node_modules/codemirror/lib/codemirror.css');
-require('react-codemirror/node_modules/codemirror/addon/lint/lint.css');
+require('codemirror/lib/codemirror.css');
+require('codemirror/addon/lint/lint.css');
 const msgpack = require('msgpack5')();
 
 require('./Editor.scss');
