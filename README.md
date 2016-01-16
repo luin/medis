@@ -19,6 +19,8 @@ It also supports many advanced features:
 * Working with millions keys and key members without blocking the redis server
 * Pattern manager for easy selecting a sub group of keys.
 
+**Note**: Medis only supports Redis >= 2.8 version because `SCAN` command was introduced since 2.8. `SCAN` is very useful to get key list without blocking the server, which is crucial to the production environment. Because the latest stable is 3.0 and 2.6 is a very old version, Medis doesn't support it at this time.
+
 ## Download Medis
 
 You can download compiled versions of Medis for Mac OS X from [the release page](https://github.com/luin/medis/releases). Support for Windows and Linux is coming soon.
