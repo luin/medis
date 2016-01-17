@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. "bin/deploy"
+
 rm -rf sign || true
 
 # Name of your app.
@@ -11,11 +13,15 @@ RESULT_PATH="$APP.pkg"
 # The name of certificates you requested.
 APP_KEY="3rd Party Mac Developer Application: Zihua Li (35DFNA47LC)"
 INSTALLER_KEY="3rd Party Mac Developer Installer: Zihua Li (35DFNA47LC)"
+INFO="$APP_PATH/Contents/Info.plist"
 
 FW_PATH="$APP_PATH/Contents/Frameworks"
 
 mkdir sign
 cp -a "$APP.app" sign
+
+version=`cat package.json | json version` &&
+perl -pi -e "s/#version#/$version/g" "$INFO" &&
 
 echo "Signing..."
 codesign --verbose -fs "$APP_KEY" --entitlements child.plist "$FW_PATH/Electron Framework.framework/Libraries/libnode.dylib"
