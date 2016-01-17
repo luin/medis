@@ -36,3 +36,7 @@ rm deploy/client/images/design.sketch
 asar pack deploy app.asar
 rm -rf deploy
 mv app.asar Medis.app/Contents/Resources
+
+echo "*****************************************************"
+echo "Medis.app is generated successfully: 'open Medis.app'"
+echo "*****************************************************"

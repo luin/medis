@@ -12,7 +12,7 @@ FRAMEWORKS_PATH="$APP_PATH/Contents/Frameworks"
 
 rm -rf $APP_PATH
 
-mv electron/Electron.app $APP_PATH
+cp -a electron/Electron.app $APP_PATH
 rm -rf electron
 
 cp "resources/mac/Info.plist" "$APP_PATH/Contents"
