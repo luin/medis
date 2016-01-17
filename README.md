@@ -49,6 +49,7 @@ $ ./Medis.app
 
 ## Roadmap
 
+* Windows and Linux version
 * Support for SaaS Redis services
 * Lua script editor
 * Cluster management
