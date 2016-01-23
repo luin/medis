@@ -49,6 +49,7 @@ $ ./Medis.app
 
 ## Roadmap
 
+* Support for SaaS Redis services
 * Lua script editor
 * Cluster management
 * GEO keys supporting
