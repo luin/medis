@@ -30,13 +30,22 @@ const actions = {
         });
 
         try {
-          conn.connect({
-            host: config.sshHost,
-            port: config.sshPort || 22,
-            username: config.sshUser,
-            privateKey: config.sshKey,
-            passphrase: config.sshKeyPassphrase
-          });
+          if (config.sshKey) {
+            conn.connect({
+              host: config.sshHost,
+              port: config.sshPort || 22,
+              username: config.sshUser,
+              privateKey: config.sshKey,
+              passphrase: config.sshKeyPassphrase
+            });
+          } else {
+            conn.connect({
+              host: config.sshHost,
+              port: config.sshPort || 22,
+              username: config.sshUser,
+              password: config.sshPassword
+            });
+          }
         } catch (err) {
           dispatch({ type: 'disconnect' });
           alert(`SSH Error: ${err.message}`);
