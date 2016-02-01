@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+'use strict';
+
+const conventionalGithubReleaser = require('conventional-github-releaser');
+
+const AUTH = {
+  type: 'oauth'
+};
+
+conventionalGithubReleaser(AUTH, {
+  preset: 'angular'
+}, function (err, res) {
+  console.log(err, res);
+});

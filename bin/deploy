@@ -1,4 +1,7 @@
 #!/bin/bash
+
+. "bin/build"
+
 export PATH=node_modules/.bin:$PATH
 
 webpack -p --config webpack.production.config.js
