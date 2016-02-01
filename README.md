@@ -31,14 +31,13 @@ You can download compiled versions of Medis for Mac OS X from [the release page]
 ```shell
 $ npm install
 $ npm run dev
-$ npm start
 ```
 
 ## Build Medis
 
 ```shell
+$ npm install
 $ npm run deploy
-$ ./Medis.app
 ```
 
 ## I Love This. How do I Help?
