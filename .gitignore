@@ -5,3 +5,5 @@ Medis.pkg
 .DS_Store
 main.js
 pattern-manager.js
+npm-debug.log
+*.zip
