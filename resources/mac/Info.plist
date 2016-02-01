@@ -19,9 +19,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-  <string>${version}</string>
+  <string>#version#</string>
 	<key>CFBundleVersion</key>
-  <string>${version}</string>
+  <string>#version#</string>
 	<key>DTSDKBuild</key>
 	<string>15A278</string>
 	<key>DTSDKName</key>
