@@ -49,7 +49,7 @@ $ npm run deploy
 
 ## Roadmap
 
-* Windows and Linux version
+* Windows and Linux version (with electron-packager)
 * Support for SaaS Redis services
 * Lua script editor
 * Cluster management
