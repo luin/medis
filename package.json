@@ -56,6 +56,7 @@
     "conventional-github-releaser": "^0.5.3",
     "css-loader": "^0.19.0",
     "cz-conventional-changelog": "^1.1.5",
+    "electron-packager": "^5.2.1",
     "eslint-plugin-react": "^3.15.0",
     "github": "^0.2.4",
     "jsx-loader": "^0.13.2",
@@ -66,6 +67,7 @@
     "webpack-dev-server": "^1.12.0"
   },
   "config": {
+    "electronVersion": "0.36.10",
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
