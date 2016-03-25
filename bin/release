@@ -14,7 +14,7 @@ npm --no-git-tag-version version ${1:-$bump} &>/dev/null &&
 version=`cat package.json | json version` &&
 perl -pi -e "s/#version#/$version/g" "$INFO" &&
 zip --symlinks -r9 "medis.zip" "$APP_PATH" &&
-conventional-changelog -i CHANGELOG.md -w -p angular &&
+conventional-changelog -i CHANGELOG.md -s -p angular &&
 git add CHANGELOG.md &&
 version=`cat package.json | json version` &&
 git commit -m"docs(CHANGELOG): $version" &&
