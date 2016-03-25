@@ -2,6 +2,7 @@
 
 import React from 'react';
 import commands from 'redis-commands';
+import splitargs from 'redis-splitargs';
 
 require('./Terminal.scss');
 
@@ -12,13 +13,13 @@ class Terminal extends React.Component {
   }
 
   componentDidMount() {
-    const { redis, style } = this.props;
+    const { redis } = this.props;
     redis.on('select', this.onSelectBinded);
     const terminal = this.terminal = $(this.refs.terminal).terminal((command, term) => {
       if (!command) {
         return;
       }
-      command = command.trim().replace(/\s+/g, ' ').split(' ');
+      command = splitargs(command);
       const commandName = command[0] && command[0].toUpperCase();
       if (commandName === 'FLUSHALL' || commandName === 'FLUSHDB') {
         term.push(input => {
