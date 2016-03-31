@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "codemirror": "^5.10.0",
+    "cryo": "0.0.6",
     "fixed-data-table-contextmenu": "^0.6.3",
     "form-generator-react": "^1.0.5",
     "human-format": "^0.5.0",

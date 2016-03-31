@@ -14,6 +14,7 @@ window.jsonlint = jsonlint.parser;
 require('codemirror/lib/codemirror.css');
 require('codemirror/addon/lint/lint.css');
 const msgpack = require('msgpack5')();
+const Cryo = require('cryo');
 
 require('./Editor.scss');
 
@@ -27,6 +28,7 @@ class Editor extends React.Component {
       modes: {
         raw: false,
         json: false,
+        deserialized: false,
         messagepack: false
       }
     };
@@ -66,12 +68,15 @@ class Editor extends React.Component {
     const modes = {};
     modes.raw = content;
     modes.json = tryFormatJSON(content, true);
+    modes.deserialized = tryFormatDeserialized(content, true);
     modes.messagepack = modes.json ? false : tryFormatMessagepack(buffer, true);
     let currentMode = 'raw';
     if (modes.messagepack) {
       currentMode = 'messagepack';
     } else if (modes.json) {
       currentMode = 'json';
+    } else if (modes.deserialized) {
+      currentMode = 'deserialized';
     }
     this.setState({ modes, currentMode, changed: false }, () => {
       this.updateLayout();
@@ -93,6 +98,13 @@ class Editor extends React.Component {
         return;
       }
       content = msgpack.encode(JSON.parse(content));
+    } else if (this.state.currentMode === 'deserialized') {
+      content = trySaveDeserialized(this.state.modes.deserialized);
+
+      if (!content) {
+        alert('The json is invalid. Please check again.');
+        return;
+      }
     }
     this.props.onSave(content, err => {
       if (err) {
@@ -171,6 +183,28 @@ class Editor extends React.Component {
           lint: !!this.state.modes.raw
         }}
       />;
+    } else if (this.state.currentMode === 'deserialized') {
+      viewer = <Codemirror
+        ref="codemirror"
+        key="deserialized"
+        value={this.state.modes.deserialized}
+        onChange={this.updateContent.bind(this, 'deserialized')}
+        options={{
+          mode: {
+            name: 'javascript',
+            json: true
+          },
+          tabSize: 2,
+          indentWithTabs: true,
+          styleActiveLine: true,
+          lineNumbers: true,
+          lineWrapping: this.state.wrapping,
+          gutters: ['CodeMirror-lint-markers'],
+          autoCloseBrackets: true,
+          matchTags: true,
+          lint: !!this.state.modes.raw
+        }}
+      />;
     } else if (this.state.currentMode === 'messagepack') {
       viewer = <Codemirror
         ref="codemirror"
@@ -216,6 +250,7 @@ class Editor extends React.Component {
       >
         <option value="raw" disabled={typeof this.state.modes.raw !== 'string'}>Raw</option>
         <option value="json" disabled={typeof this.state.modes.json !== 'string'}>JSON</option>
+        <option value="deserialized" disabled={typeof this.state.modes.deserialized !== 'string'}>Deserialized</option>
         <option value="messagepack" disabled={typeof this.state.modes.messagepack !== 'string'}>MessagePack</option>
       </select>
       <button
@@ -242,6 +277,31 @@ function tryFormatJSON(jsonString, beautify) {
   } catch (e) { /**/ }
 
   return false;
+}
+
+function tryFormatDeserialized(jsonString, beautify) {
+  try {
+    const o = JSON.parse(JSON.stringify(Cryo.parse(jsonString)));
+    if (o && typeof o === 'object' && o !== null) {
+      if (beautify) {
+        return JSON.stringify(o, null, '\t');
+      }
+      return JSON.stringify(o);
+    }
+  } catch(e) { /**/ }
+
+  return false
+}
+
+function trySaveDeserialized(jsonString) {
+  try {
+    const parsedJSON = JSON.parse(jsonString);
+    const o = JSON.parse(Cryo.stringify(parsedJSON))
+
+    if (o && typeof o === 'object' && o !== null) {
+      return JSON.stringify(o)
+    }
+  } catch(e) { /**/ }
 }
 
 function tryFormatMessagepack(buffer, beautify) {
