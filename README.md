@@ -50,7 +50,7 @@ $ npm run deploy
 
 ## Roadmap
 
-* Windows and Linux version (with electron-packager)
+* [Windows and Linux version (with electron-packager)](https://github.com/luin/medis/pull/21)
 * Support for SaaS Redis services
 * Lua script editor
 * Cluster management
