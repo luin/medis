@@ -1,8 +1,7 @@
 'use strict';
 
-const BrowserWindow = require('browser-window');
+const { BrowserWindow, app } = require('electron');
 const EventEmitter = require('events');
-const app = require('app');
 
 class WindowManager extends EventEmitter {
   constructor() {

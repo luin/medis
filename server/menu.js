@@ -1,8 +1,7 @@
 'use strict';
 
-const app = require('app');
+const { Menu, app, shell } = require('electron');
 const windowManager = require('./windowManager');
-const Menu = require('menu');
 
 const menuTemplate = [{
   label: 'File',
@@ -117,12 +116,12 @@ const menuTemplate = [{
   submenu: [{
     label: 'Report an Issue...',
     click() {
-      require('shell').openExternal('mailto:medis@zihua.li');
+      shell.openExternal('mailto:medis@zihua.li');
     }
   }, {
     label: 'Learn More',
     click() {
-      require('shell').openExternal('http://getmedis.com');
+      shell.openExternal('http://getmedis.com');
     }
   }]
 }]
