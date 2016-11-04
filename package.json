@@ -57,7 +57,7 @@
     "conventional-github-releaser": "^0.5.3",
     "css-loader": "^0.19.0",
     "cz-conventional-changelog": "^1.1.5",
-    "electron-prebuilt": "^0.37.7",
+    "electron-prebuilt": "^0.37.8",
     "eslint-plugin-react": "^3.15.0",
     "github": "^0.2.4",
     "jsx-loader": "^0.13.2",
