@@ -1,7 +1,5 @@
 #!/bin/bash
 
-. "bin/deploy"
-
 rm -rf sign || true
 
 # Name of your app.
@@ -18,10 +16,7 @@ INFO="$APP_PATH/Contents/Info.plist"
 FW_PATH="$APP_PATH/Contents/Frameworks"
 
 mkdir sign
-cp -a "$APP.app" sign
-
-version=`cat package.json | json version` &&
-perl -pi -e "s/#version#/$version/g" "$INFO" &&
+cp -a "dist-deploy/Medis-mas-x64/$APP.app" sign
 
 echo "Signing..."
 codesign --verbose -fs "$APP_KEY" --entitlements child.plist "$FW_PATH/Electron Framework.framework/Libraries/libnode.dylib"

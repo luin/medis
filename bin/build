@@ -1,36 +1,32 @@
 #!/bin/bash
 
-echo "Download Electron OSX version..."
-url="https://github.com/atom/electron/releases/download/v0.35.4/electron-v0.35.4-mas-x64.zip"
-TARGET_FILE="electron.zip"
-curl -L -o $TARGET_FILE $url
-unzip $TARGET_FILE -d electron > /dev/null
-rm $TARGET_FILE
+export PATH=node_modules/.bin:$PATH
 
-APP_PATH="Medis.app"
-FRAMEWORKS_PATH="$APP_PATH/Contents/Frameworks"
+webpack -p --config webpack.production.config.js
+rm -rf deploy
+mkdir deploy
 
-rm -rf $APP_PATH
+mv main.js deploy
+mv pattern-manager.js deploy
+cp package.json deploy
+cp -r server deploy
 
-cp -a electron/Electron.app $APP_PATH
-rm -rf electron
+mkdir -p deploy/client/photon/css
+cp client/photon/css/photon.min.css deploy/client/photon/css
+mkdir -p deploy/client/photon/fonts
+cp client/photon/fonts/photon-entypo.woff deploy/client/photon/fonts
 
-cp "resources/mac/Info.plist" "$APP_PATH/Contents"
-mv "$FRAMEWORKS_PATH/Electron Helper EH.app"  "$FRAMEWORKS_PATH/Medis Helper EH.app"
-mv "$FRAMEWORKS_PATH/Electron Helper NP.app"  "$FRAMEWORKS_PATH/Medis Helper NP.app"
-mv "$FRAMEWORKS_PATH/Electron Helper.app"  "$FRAMEWORKS_PATH/Medis Helper.app"
+cp -r client/vendors deploy/client
 
-perl -pi -e 's/Electron/Medis/g' "$FRAMEWORKS_PATH/Medis Helper EH.app/Contents/Info.plist"
-perl -pi -e 's/Electron/Medis/g' "$FRAMEWORKS_PATH/Medis Helper NP.app/Contents/Info.plist"
-perl -pi -e 's/Electron/Medis/g' "$FRAMEWORKS_PATH/Medis Helper.app/Contents/Info.plist"
+mkdir -p deploy/node_modules
+cp -r node_modules/ssh2 deploy/node_modules
+cp -r node_modules/ioredis deploy/node_modules
+cp -r node_modules/lodash deploy/node_modules
+cp -r node_modules/redis-commands deploy/node_modules
+cp -r node_modules/jquery deploy/node_modules
 
-perl -pi -e 's/com.github.electron/li.zihua.medis/g' "$FRAMEWORKS_PATH/Medis Helper EH.app/Contents/Info.plist"
-perl -pi -e 's/com.github.electron/li.zihua.medis/g' "$FRAMEWORKS_PATH/Medis Helper NP.app/Contents/Info.plist"
-perl -pi -e 's/com.github.electron/li.zihua.medis/g' "$FRAMEWORKS_PATH/Medis Helper.app/Contents/Info.plist"
+mkdir -p deploy/node_modules/fixed-data-table-contextmenu/dist
+cp node_modules/fixed-data-table-contextmenu/dist/fixed-data-table.css deploy/node_modules/fixed-data-table-contextmenu/dist
 
-rm "$APP_PATH/Contents/Resources/atom.icns"
-cp "resources/mac/atom.icns" "$APP_PATH/Contents/Resources/atom.icns"
-
-mv "$FRAMEWORKS_PATH/Medis Helper EH.app/Contents/MacOS/Electron Helper EH" "$FRAMEWORKS_PATH/Medis Helper EH.app/Contents/MacOS/Medis Helper EH"
-mv "$FRAMEWORKS_PATH/Medis Helper NP.app/Contents/MacOS/Electron Helper NP" "$FRAMEWORKS_PATH/Medis Helper NP.app/Contents/MacOS/Medis Helper NP"
-mv "$FRAMEWORKS_PATH/Medis Helper.app/Contents/MacOS/Electron Helper" "$FRAMEWORKS_PATH/Medis Helper.app/Contents/MacOS/Medis Helper"
+cp -r client/images deploy/client
+rm deploy/client/images/design.sketch

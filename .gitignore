@@ -7,3 +7,5 @@ main.js
 pattern-manager.js
 npm-debug.log
 *.zip
+dist
+dist-deploy
