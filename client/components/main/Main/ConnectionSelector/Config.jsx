@@ -4,7 +4,7 @@ import React from 'react';
 import store from '../../../../store';
 import actions from '../../../../actions';
 import Immutable from 'immutable';
-import remote from 'remote';
+import { remote } from 'electron';
 import fs from 'fs';
 
 require('./Config.scss');

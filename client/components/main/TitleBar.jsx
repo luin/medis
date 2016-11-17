@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import remote from 'remote';
+import { remote } from 'electron';
 
 class TitleBar extends React.Component {
   componentDidMount() {
