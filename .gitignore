@@ -9,3 +9,5 @@ npm-debug.log
 *.zip
 dist
 dist-deploy
+cache
+deploy
