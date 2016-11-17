@@ -19,7 +19,7 @@ packager({
   arch: 'x64',
   platform: platform,
   dir: deploy ? path.join(__dirname, '..', 'deploy') : path.join(__dirname, '..'),
-  version: '0.36.12',
+  version: '1.4.7',
   'app-version': pkg.version,
   'build-version': pkg.version,
   asar: deploy,
@@ -34,6 +34,9 @@ packager({
   'osx-sign': {
     entitlements: path.join(__dirname, '..', 'parent.plist'),
     'entitlements-inherit': path.join(__dirname, '..', 'child.plist'),
+  },
+  download: {
+    cache: path.join(__dirname, '..', 'cache')
   }
 }, function done (err, appPath) {
   if (err) {
