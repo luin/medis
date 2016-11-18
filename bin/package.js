@@ -22,19 +22,16 @@ packager({
   version: '1.4.7',
   'app-version': pkg.version,
   'build-version': pkg.version,
-  asar: deploy,
+  asar: false && deploy,
   icon: path.join(__dirname, '..', 'resources', 'icon'),
   name: 'Medis',
   out: path.join(__dirname, '..', deploy ? 'dist-deploy' : 'dist'),
   overwrite: true,
-  prune: deploy,
+  prune: false && deploy,
   // OS X
   'app-bundle-id': 'li.zihua.medis',
   'app-category-type': 'public.app-category.developer-tools',
-  'osx-sign': {
-    entitlements: path.join(__dirname, '..', 'parent.plist'),
-    'entitlements-inherit': path.join(__dirname, '..', 'child.plist'),
-  },
+  'osx-sign': false,
   download: {
     cache: path.join(__dirname, '..', 'cache')
   }
