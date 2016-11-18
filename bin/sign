@@ -15,16 +15,28 @@ INFO="$APP_PATH/Contents/Info.plist"
 
 FW_PATH="$APP_PATH/Contents/Frameworks"
 
+CHILD_PLIST="child.plist"
+PARENT_PLIST="parent.plist"
+
+FRAMEWORKS_PATH="$APP_PATH/Contents/Frameworks"
+
 mkdir sign
 cp -a "dist-deploy/Medis-mas-x64/$APP.app" sign
 
 echo "Signing..."
-codesign --verbose -fs "$APP_KEY" --entitlements child.plist "$FW_PATH/Electron Framework.framework/Libraries/libnode.dylib"
-codesign --verbose -fs "$APP_KEY" --entitlements child.plist "$FW_PATH/Electron Framework.framework/Versions/A"
-codesign --verbose -fs "$APP_KEY" --entitlements child.plist "$FW_PATH/$APP Helper EH.app"
-codesign --verbose -fs "$APP_KEY" --entitlements child.plist "$FW_PATH/$APP Helper NP.app"
-codesign --verbose -fs "$APP_KEY" --entitlements child.plist "$FW_PATH/$APP Helper.app"
-codesign --verbose -fs "$APP_KEY" --entitlements parent.plist "$APP_PATH"
+codesign -s "$APP_KEY" -f --entitlements "$CHILD_PLIST" "$FRAMEWORKS_PATH/Electron Framework.framework/Versions/A/Electron Framework"
+codesign -s "$APP_KEY" -f --entitlements "$CHILD_PLIST" "$FRAMEWORKS_PATH/Electron Framework.framework/Versions/A/Libraries/libffmpeg.dylib"
+codesign -s "$APP_KEY" -f --entitlements "$CHILD_PLIST" "$FRAMEWORKS_PATH/Electron Framework.framework/Versions/A/Libraries/libnode.dylib"
+codesign -s "$APP_KEY" -f --entitlements "$CHILD_PLIST" "$FRAMEWORKS_PATH/Electron Framework.framework"
+codesign -s "$APP_KEY" -f --entitlements "$CHILD_PLIST" "$FRAMEWORKS_PATH/$APP Helper.app/Contents/MacOS/$APP Helper"
+codesign -s "$APP_KEY" -f --entitlements "$CHILD_PLIST" "$FRAMEWORKS_PATH/$APP Helper.app/"
+codesign -s "$APP_KEY" -f --entitlements "$CHILD_PLIST" "$FRAMEWORKS_PATH/$APP Helper EH.app/Contents/MacOS/$APP Helper EH"
+codesign -s "$APP_KEY" -f --entitlements "$CHILD_PLIST" "$FRAMEWORKS_PATH/$APP Helper EH.app/"
+codesign -s "$APP_KEY" -f --entitlements "$CHILD_PLIST" "$FRAMEWORKS_PATH/$APP Helper NP.app/Contents/MacOS/$APP Helper NP"
+codesign -s "$APP_KEY" -f --entitlements "$CHILD_PLIST" "$FRAMEWORKS_PATH/$APP Helper NP.app/"
+codesign -s "$APP_KEY" -f --entitlements "$CHILD_PLIST" "$APP_PATH/Contents/MacOS/$APP"
+codesign -s "$APP_KEY" -f --entitlements "$PARENT_PLIST" "$APP_PATH"
+
 
 echo ""
 echo "Verifying signatures..."
