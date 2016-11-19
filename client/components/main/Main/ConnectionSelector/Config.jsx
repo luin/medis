@@ -115,8 +115,9 @@ class Config extends React.Component {
                   return;
                 }
                 const win = remote.getCurrentWindow();
-                const files = remote.require('dialog').showOpenDialog(win, {
-                  properties: ['openFile']
+                const {dialog} = remote;
+                const files = dialog.showOpenDialog(win, {
+                  properties: ['openFile','showHiddenFiles']
                 });
                 if (files && files.length) {
                   const file = files[0];
