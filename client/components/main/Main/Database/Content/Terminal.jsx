@@ -119,6 +119,9 @@ class Terminal extends React.Component {
       newRedis.on('message', (channel, message) => {
         term.echo(formatMessage(channel, message), { raw: true });
       });
+      newRedis.on('pmessage', (pattern, channel, message) => {
+        term.echo(formatMessage(channel, message), { raw: true });
+      });
     } else {
       redis.call.apply(redis, args).then(res => {
         term.echo(getHTML(res), { raw: true });
