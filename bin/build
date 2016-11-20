@@ -1,11 +1,14 @@
 #!/bin/bash
 
 echo "Download Electron OSX version..."
-url="https://github.com/atom/electron/releases/download/v0.35.4/electron-v0.35.4-mas-x64.zip"
-TARGET_FILE="electron.zip"
-curl -L -o $TARGET_FILE $url
+VERSION="0.37.8"
+# China Mirror
+URL="https://npm.taobao.org/mirrors/electron/$VERSION/electron-v$VERSION-mas-x64.zip"
+# URL="https://github.com/atom/electron/releases/download/v$VERSION/electron-v$VERSION-mas-x64.zip"
+TARGET_FILE="electron_$VERSION.zip"
+
+[ -f $TARGET_FILE ] && echo "Found cache" || curl -L -o $TARGET_FILE $URL
 unzip $TARGET_FILE -d electron > /dev/null
-rm $TARGET_FILE
 
 APP_PATH="Medis.app"
 FRAMEWORKS_PATH="$APP_PATH/Contents/Frameworks"
