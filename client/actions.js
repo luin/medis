@@ -8,6 +8,7 @@ import _ from 'lodash';
 const actions = {
   connect(config) {
     return dispatch => {
+      let sshErrorThrown = false
       if (config.ssh) {
         dispatch({ type: 'updateConnectStatus', data: 'SSH connecting...' });
         const conn = new Client();
@@ -25,26 +26,26 @@ const actions = {
           });
         })
         .on('error', err => {
+          sshErrorThrown = true
           dispatch({ type: 'disconnect' });
           alert(`SSH Error: ${err.message}`);
         });
 
         try {
+          const connectionConfig = {
+            host: config.sshHost,
+            port: config.sshPort || 22,
+            username: config.sshUser
+          }
           if (config.sshKey) {
-            conn.connect({
-              host: config.sshHost,
-              port: config.sshPort || 22,
-              username: config.sshUser,
+            conn.connect(Object.assign(connectionConfig, {
               privateKey: config.sshKey,
               passphrase: config.sshKeyPassphrase
-            });
+            }));
           } else {
-            conn.connect({
-              host: config.sshHost,
-              port: config.sshPort || 22,
-              username: config.sshUser,
+            conn.connect(Object.assign(connectionConfig, {
               password: config.sshPassword
-            });
+            }));
           }
         } catch (err) {
           dispatch({ type: 'disconnect' });
@@ -98,7 +99,9 @@ const actions = {
         });
         redis.once('end', function () {
           dispatch({ type: 'disconnect' });
-          alert('Redis Error: Connection failed');
+          if (!sshErrorThrown) {
+            alert('Redis Error: Connection failed');
+          }
         });
       }
     };

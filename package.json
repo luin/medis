@@ -46,7 +46,7 @@
     "redux-thunk": "^1.0.0",
     "reselect": "^2.0.0",
     "sortablejs": "^1.4.1",
-    "ssh2": "^0.4.12",
+    "ssh2": "^0.5.4",
     "url-loader": "^0.5.7"
   },
   "devDependencies": {
