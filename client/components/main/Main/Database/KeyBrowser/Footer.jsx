@@ -21,6 +21,9 @@ class Footer extends React.Component {
 
   updateInfo() {
     this.props.redis.info((err, res) => {
+      if (err) {
+        return;
+      }
       const info = {};
 
       const lines = res.split('\r\n');
