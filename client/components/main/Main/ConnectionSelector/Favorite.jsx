@@ -59,7 +59,7 @@ class Favorite extends React.Component {
   select(favorite, connect) {
     const activeKey = favorite ? favorite.get('key') : null;
     this.setState({ activeKey });
-    if (connect && activeKey) {
+    if (connect) {
       this.props.onRequireConnecting(activeKey);
     } else {
       this.props.onSelect(activeKey);
@@ -70,7 +70,11 @@ class Favorite extends React.Component {
     return <div style={ { flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'hidden' } }>
       <nav className="nav-group">
         <h5 className="nav-group-title"></h5>
-        <a className={'nav-group-item' + (this.state.activeKey ? '' : ' active')} onClick={this.onClick.bind(this, -1)}>
+        <a
+          className={'nav-group-item' + (this.state.activeKey ? '' : ' active')}
+          onClick={this.onClick.bind(this, -1)}
+          onDoubleClick={this.onDoubleClick.bind(this, -1)}
+        >
           <span className="icon icon-flash"></span>
           QUICK CONNECT
         </a>
