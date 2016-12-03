@@ -57,6 +57,10 @@ const actions = {
 
       function handleRedis(config, override) {
         dispatch({ type: 'updateConnectStatus', data: 'Redis connecting...' });
+        if (config.ssl) {
+          config.tls = {
+          }
+        }
         const redis = new Redis(_.assign({}, config, override, {
           showFriendlyErrorStack: true,
           retryStrategy() {

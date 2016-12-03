@@ -49,7 +49,7 @@ class Config extends React.Component {
 
   handleChange(property, e) {
     let value = e.target.value;
-    if (property === 'ssh') {
+    if (property === 'ssh' || property === 'ssl') {
       value = e.target.checked;
     }
     this.setProp(property, value);
@@ -80,6 +80,10 @@ class Config extends React.Component {
         <div className="nt-form-row">
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" onChange={this.handleChange.bind(this, 'password')} value={this.getProp('password')} />
+        </div>
+        <div className="nt-form-row">
+          <label htmlFor="ssh">SSL:</label>
+          <input type="checkbox" id="ssl" onChange={this.handleChange.bind(this, 'ssl')} checked={this.getProp('ssl')} />
         </div>
         <div className="nt-form-row">
           <label htmlFor="ssh">SSH Tunnel:</label>
