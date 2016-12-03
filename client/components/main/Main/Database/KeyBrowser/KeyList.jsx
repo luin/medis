@@ -449,7 +449,7 @@ class KeyList extends React.Component {
               if (this.state.scanning) {
                 return <span style={ { color: '#ccc' }}>Scanning...(cursor {this.state.cursor})</span>;
               }
-              return <a href="#" onClick={(evt) => {
+              return <a href="#" style={ { color: '#666' } } onClick={(evt) => {
                 evt.preventDefault();
                 this.scan();
               }}>Scan more</a>;

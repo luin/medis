@@ -10,6 +10,7 @@ class Footer extends React.Component {
 
   componentDidMount() {
     this.updateInfo();
+    this.updateDBCount();
     this.interval = setInterval(this.updateInfo.bind(this), 10000);
   }
 
@@ -17,6 +18,25 @@ class Footer extends React.Component {
     if (nextProps.db !== this.props.db) {
       this.updateInfo();
     }
+  }
+
+  updateDBCount() {
+    this.props.redis.config('get', 'databases', (err, res) => {
+      if (!err) {
+        if (res[1]) {
+          this.setState({ databases: Number(res[1]) });
+        } else {
+          const redis = this.props.redis.duplicate();
+          const select = redis.select.bind(redis);
+          this.guessDatabaseNumber(select, 15).then((count) => {
+            console.log('===', count)
+            return typeof count === 'number' ? count : this.guessDatabaseNumber(select, 1, 0);
+          }).then((count) => {
+            this.setState({ databases: count + 1 });
+          });
+        }
+      }
+    });
   }
 
   updateInfo() {
@@ -36,12 +56,21 @@ class Footer extends React.Component {
 
       this.setState(info);
     });
+  }
 
-    this.props.redis.config('get', 'databases', (err, res) => {
-      if (res && res[1]) {
-        this.setState({ databases: Number(res[1]) });
+  guessDatabaseNumber(select, startIndex, lastSuccessIndex) {
+    if (startIndex > 30) {
+      return Promise.resolve(30);
+    }
+    return select(startIndex)
+    .then(() => {
+      return this.guessDatabaseNumber(select, startIndex + 1, startIndex);
+    }).catch((err) => {
+      if (typeof lastSuccessIndex === 'number') {
+        return lastSuccessIndex;
       }
-    });
+      return null;
+    })
   }
 
   componentWillUnmount() {
@@ -87,7 +116,7 @@ class Footer extends React.Component {
               >{i}</option>);
             }
             return items;
-          })(this.state.databases)
+          })(this.state.databases || 1)
         }
       </select>
     </div>
