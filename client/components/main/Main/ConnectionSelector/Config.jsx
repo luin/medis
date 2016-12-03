@@ -35,6 +35,13 @@ class Config extends React.Component {
     if (!this.props.connect && nextProps.connect) {
       this.connect();
     }
+    const leaving =
+      (!this.props.favorite && nextProps.favorite) ||
+      (this.props.favorite && !nextProps.favorite) ||
+      (this.props.favorite.get('key') !== nextProps.favorite.get('key'));
+    if (leaving) {
+      this.setState({ changed: false, data: new Immutable.Map() });
+    }
   }
 
   connect() {
