@@ -34,6 +34,9 @@ class ConnectionSelector extends React.Component {
           onSave={(data) => {
             store.dispatch(actions('updateFavorite', { key: selectedFavorite.get('key'), data }));
           }}
+          onDuplicate={(data) => {
+            store.dispatch(actions('addFavorite', data, () => {}));
+          }}
         />
       </div>
     </div>;
