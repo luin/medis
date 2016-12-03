@@ -30,7 +30,7 @@
   width: 32px;
   height: 16px;
   font-size: 11px !important;
-  line-height: 16px !important;
+  line-height: 17px !important;
   display: block;
   text-align: center;
   background: #60d4ca;
@@ -54,10 +54,14 @@
 }
 
 .public_fixedDataTableCell_main {
-  font-family: monospace;
+  font-family: Consolas, monospace;
   font-size: 12px;
   line-height: 24px;
   padding: 0 8px;
+}
+
+.public_fixedDataTableRow_main {
+  color: #606061;
 }
 
 :focus .public_fixedDataTableRow_main.is-selected {
