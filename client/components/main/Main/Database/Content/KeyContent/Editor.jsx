@@ -197,33 +197,37 @@ class Editor extends React.Component {
       viewer = <div></div>;
     }
     return <div
-      style={ { flex: 1, display: 'flex' } }
+      style={ { flex: 1, display: 'flex', width: '100%', flexDirection: 'column' } }
       className="Editor"
       onKeyDown={this.handleKeyDown.bind(this)}
     >
-      <label className="wrap-selector" ref="wrapSelector">
-        <input
-          type="checkbox"
-          checked={this.state.wrapping}
-          onChange={evt => this.setState({ wrapping: evt.target.checked })}
-        />
-        <span>Wrapping</span>
-      </label>
-      <select
-        className="mode-selector"
-        value={this.state.currentMode}
-        onChange={this.updateMode.bind(this)}
-      >
-        <option value="raw" disabled={typeof this.state.modes.raw !== 'string'}>Raw</option>
-        <option value="json" disabled={typeof this.state.modes.json !== 'string'}>JSON</option>
-        <option value="messagepack" disabled={typeof this.state.modes.messagepack !== 'string'}>MessagePack</option>
-      </select>
-      <button
-        className="nt-button"
-        disabled={!this.state.changed}
-        onClick={this.save.bind(this)}
-      >Save Changes</button>
       { viewer }
+      <div
+        className="operation-pannel"
+      >
+        <label className="wrap-selector" ref="wrapSelector">
+          <input
+            type="checkbox"
+            checked={this.state.wrapping}
+            onChange={evt => this.setState({ wrapping: evt.target.checked })}
+          />
+          <span>Wrapping</span>
+        </label>
+        <select
+          className="mode-selector"
+          value={this.state.currentMode}
+          onChange={this.updateMode.bind(this)}
+        >
+          <option value="raw" disabled={typeof this.state.modes.raw !== 'string'}>Raw</option>
+          <option value="json" disabled={typeof this.state.modes.json !== 'string'}>JSON</option>
+          <option value="messagepack" disabled={typeof this.state.modes.messagepack !== 'string'}>MessagePack</option>
+        </select>
+        <button
+          className="nt-button"
+          disabled={!this.state.changed}
+          onClick={this.save.bind(this)}
+        >Save Changes</button>
+      </div>
     </div>;
   }
 }
