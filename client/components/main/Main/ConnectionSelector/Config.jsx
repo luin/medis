@@ -55,6 +55,18 @@ class Config extends React.Component {
     this.setProp(property, value);
   }
 
+  duplicate() {
+    if (this.props.favorite) {
+      const data = Object.assign(this.props.favorite.toJS(), this.state.data.toJS());
+      delete data.key;
+      this.props.onDuplicate(data);
+    } else {
+      const data = this.state.data.toJS();
+      data.name = 'Quick Connect'
+      this.props.onDuplicate(data);
+    }
+  }
+
   save() {
     if (this.props.favorite && this.state.changed) {
       this.props.onSave(this.state.data.toJS());
@@ -141,6 +153,11 @@ class Config extends React.Component {
         </div>
       </div>
       <div className="nt-button-group nt-button-group--pull-right" style={ { width: 500, margin: '10px auto 0' } }>
+        <button className="nt-button" style={
+          { float: 'left' }
+        } onClick={() => {
+          this.duplicate();
+        }}>{ this.props.favorite ? 'Duplicate' : 'Add to Favorite' }</button>
         <button className="nt-button" style={ { display: this.state.changed ? 'inline-block' : 'none' } } onClick={() => {
           this.save();
         }}>Save Changes</button>
