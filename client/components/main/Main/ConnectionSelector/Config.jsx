@@ -132,9 +132,9 @@ class Config extends React.Component {
           <input type="checkbox" id="ssl" onChange={this.handleChange.bind(this, 'ssl')} checked={this.getProp('ssl')} />
         </div>
         <div style={ { display: this.getProp('ssl') ? 'block' : 'none' } }>
-          {this.renderCertInput('Private Key', 'key')}
-          {this.renderCertInput('Certificate', 'cert')}
-          {this.renderCertInput('CA', 'ca')}
+          {this.renderCertInput('Private Key', 'tlskey')}
+          {this.renderCertInput('Certificate', 'tlscert')}
+          {this.renderCertInput('CA', 'tlsca')}
         </div>
         <div className="nt-form-row">
           <label htmlFor="ssh">SSH Tunnel:</label>
@@ -191,7 +191,7 @@ class Config extends React.Component {
           </div>
         </div>
       </div>
-      <div className="nt-button-group nt-button-group--pull-right" style={ { width: 500, margin: '10px auto 0' } }>
+      <div className="nt-button-group nt-button-group--pull-right" style={ { width: 500, margin: '10px auto 0', paddingBottom: 10 } }>
         <button className="nt-button" style={
           { float: 'left' }
         } onClick={() => {
