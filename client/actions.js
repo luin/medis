@@ -60,11 +60,10 @@ const actions = {
       function handleRedis(config, override) {
         dispatch({ type: 'updateConnectStatus', data: 'Redis connecting...' });
         if (config.ssl) {
-          config.tls = {
-            ca: config.ca,
-            key: config.key,
-            cert: config.cert
-          }
+          config.tls = {};
+          if (config.tlsca) config.tls.ca = config.tlsca;
+          if (config.tlskey) config.tls.key = config.tlskey;
+          if (config.tlscert) config.tls.cert = config.tlscert;
         }
         const redis = new Redis(_.assign({}, config, override, {
           showFriendlyErrorStack: true,
