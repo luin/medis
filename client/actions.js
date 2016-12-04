@@ -8,7 +8,9 @@ import _ from 'lodash';
 const actions = {
   connect(config) {
     return dispatch => {
-      let sshErrorThrown = false
+      let sshErrorThrown = false;
+      let redisErrorThrown = false;
+      let redisErrorMessage;
       if (config.ssh) {
         dispatch({ type: 'updateConnectStatus', data: 'SSH connecting...' });
         const conn = new Client();
@@ -26,7 +28,7 @@ const actions = {
           });
         })
         .on('error', err => {
-          sshErrorThrown = true
+          sshErrorThrown = true;
           dispatch({ type: 'disconnect' });
           alert(`SSH Error: ${err.message}`);
         });
@@ -85,8 +87,10 @@ const actions = {
               if (err.message === 'Ready check failed: NOAUTH Authentication required.') {
                 err.message = 'Redis Error: Access denied. Please double-check your password.';
               }
-              alert(err.message);
-              dispatch({ type: 'disconnect' });
+              if (err.message !== 'Connection is closed.') {
+                alert(err.message);
+                redis.disconnect();
+              }
               return;
             }
             const version = redis.serverInfo.redis_version;
@@ -101,10 +105,17 @@ const actions = {
             dispatch({ type: 'connect', data: { redis, config } });
           })
         });
+        redis.once('error', function (error) {
+          redisErrorMessage = error;
+        });
         redis.once('end', function () {
           dispatch({ type: 'disconnect' });
           if (!sshErrorThrown) {
-            alert('Redis Error: Connection failed');
+            let msg = 'Redis Error: Connection failed. ';
+            if (redisErrorMessage) {
+              msg += `(${redisErrorMessage})`;
+            }
+            alert(msg);
           }
         });
       }
