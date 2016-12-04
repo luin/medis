@@ -61,6 +61,9 @@ const actions = {
         dispatch({ type: 'updateConnectStatus', data: 'Redis connecting...' });
         if (config.ssl) {
           config.tls = {
+            ca: config.ca,
+            key: config.key,
+            cert: config.cert
           }
         }
         const redis = new Redis(_.assign({}, config, override, {

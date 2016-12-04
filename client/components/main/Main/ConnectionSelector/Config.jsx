@@ -35,12 +35,12 @@ class Config extends React.Component {
     if (!this.props.connect && nextProps.connect) {
       this.connect();
     }
-    const leaving =
-      (!this.props.favorite && nextProps.favorite) ||
-      (this.props.favorite && !nextProps.favorite) ||
-      (this.props.favorite.get('key') !== nextProps.favorite.get('key'));
-    if (leaving) {
-      this.setState({ changed: false, data: new Immutable.Map() });
+    if (this.props.favorite || nextProps.favorite) {
+      const leaving = !this.props.favorite || !nextProps.favorite ||
+        (this.props.favorite.get('key') !== nextProps.favorite.get('key'));
+      if (leaving) {
+        this.setState({ changed: false, data: new Immutable.Map() });
+      }
     }
   }
 
@@ -81,6 +81,33 @@ class Config extends React.Component {
     }
   }
 
+  renderCertInput(label, id) {
+    return <div className="nt-form-row">
+      <label htmlFor="cert">{label}:</label>
+      <input
+        type="text"
+        id={id}
+        readOnly={true}
+        value={this.getProp(`${id}File`)}
+        placeholder={`Select ${label} File (PEM)`}
+      />
+      <button
+        className={'icon icon-dot-3 ssh-key'}
+        onClick={() => {
+          const win = remote.getCurrentWindow();
+          const files = remote.require('dialog').showOpenDialog(win, {
+            properties: ['openFile']
+          });
+          if (files && files.length) {
+            const file = files[0];
+            const content = fs.readFileSync(file, 'utf8');
+            this.setProp({ [id]: content, [`${id}File`]: file });
+          }
+        }}
+      ></button>
+    </div>
+  }
+
   render() {
     return <div>
       <div className="nt-box" style={ { width: 500, margin: '60px auto 0' } }>
@@ -103,6 +130,11 @@ class Config extends React.Component {
         <div className="nt-form-row">
           <label htmlFor="ssh">SSL:</label>
           <input type="checkbox" id="ssl" onChange={this.handleChange.bind(this, 'ssl')} checked={this.getProp('ssl')} />
+        </div>
+        <div style={ { display: this.getProp('ssl') ? 'block' : 'none' } }>
+          {this.renderCertInput('Private Key', 'key')}
+          {this.renderCertInput('Certificate', 'cert')}
+          {this.renderCertInput('CA', 'ca')}
         </div>
         <div className="nt-form-row">
           <label htmlFor="ssh">SSH Tunnel:</label>
