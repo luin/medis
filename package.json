@@ -25,7 +25,7 @@
     "form-generator-react": "^1.0.5",
     "human-format": "^0.5.0",
     "immutable": "^3.8.1",
-    "ioredis": "^1.11.1",
+    "ioredis": "^2.4.2",
     "jquery": "^2.1.4",
     "json-editor": "^0.7.23",
     "jsonlint": "^1.6.2",
