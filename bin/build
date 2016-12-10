@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Download Electron OSX version..."
-VERSION="0.37.8"
+VERSION="0.35.6"
 # China Mirror
 URL="https://npm.taobao.org/mirrors/electron/$VERSION/electron-v$VERSION-mas-x64.zip"
 # URL="https://github.com/atom/electron/releases/download/v$VERSION/electron-v$VERSION-mas-x64.zip"
