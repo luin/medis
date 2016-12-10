@@ -25,6 +25,7 @@ perl -pi -e "s/#version#/$version/g" "$INFO" &&
 
 echo "Signing..."
 codesign --verbose -fs "$APP_KEY" --entitlements child.plist "$FW_PATH/Electron Framework.framework/Libraries/libnode.dylib"
+codesign --verbose -fs "$APP_KEY" --entitlements child.plist "$FW_PATH/Electron Framework.framework/Libraries/libffmpeg.dylib"
 codesign --verbose -fs "$APP_KEY" --entitlements child.plist "$FW_PATH/Electron Framework.framework/Versions/A"
 codesign --verbose -fs "$APP_KEY" --entitlements child.plist "$FW_PATH/$APP Helper EH.app"
 codesign --verbose -fs "$APP_KEY" --entitlements child.plist "$FW_PATH/$APP Helper NP.app"
