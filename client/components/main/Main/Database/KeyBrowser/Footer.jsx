@@ -22,19 +22,16 @@ class Footer extends React.Component {
 
   updateDBCount() {
     this.props.redis.config('get', 'databases', (err, res) => {
-      if (!err) {
-        if (res[1]) {
-          this.setState({ databases: Number(res[1]) });
-        } else {
-          const redis = this.props.redis.duplicate();
-          const select = redis.select.bind(redis);
-          this.guessDatabaseNumber(select, 15).then((count) => {
-            console.log('===', count)
-            return typeof count === 'number' ? count : this.guessDatabaseNumber(select, 1, 0);
-          }).then((count) => {
-            this.setState({ databases: count + 1 });
-          });
-        }
+      if (!err && res[1]) {
+        this.setState({ databases: Number(res[1]) });
+      } else {
+        const redis = this.props.redis.duplicate();
+        const select = redis.select.bind(redis);
+        this.guessDatabaseNumber(select, 15).then((count) => {
+          return typeof count === 'number' ? count : this.guessDatabaseNumber(select, 1, 0);
+        }).then((count) => {
+          this.setState({ databases: count + 1 });
+        });
       }
     });
   }

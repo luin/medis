@@ -40,6 +40,16 @@ $ npm install
 $ npm run deploy
 ```
 
+## Connect to Heroku
+Medis can connect to Heroku Redis addon to manage your data. You just need to call `heroku redis:credentials --app APP` to get your redis credential:
+
+```shell
+$ heroku redis:credentials --app YOUR_APP
+redis://x:PASSWORD@HOST:PORT
+```
+
+And then input `HOST`, `PORT` and `PASSWORD` to the connection tab.
+
 ## I Love This. How do I Help?
 
 * Simply star this repository :-)
