@@ -23,6 +23,7 @@
     flex: 1;
     display: flex;
     width: 100%;
+    overflow-y: auto;
 
     &:before {
       content: '';
@@ -37,18 +38,20 @@
     }
   }
 
+  .operation-pannel {
+    z-index: 99;
+  }
+
   .mode-selector {
     position: absolute;
     bottom: 10px;
     right: 10px;
-    z-index: 99;
   }
 
   .wrap-selector {
     position: absolute;
     bottom: 5px;
     right: 120px;
-    z-index: 99;
     span {
       margin-left: 4px;
     }
