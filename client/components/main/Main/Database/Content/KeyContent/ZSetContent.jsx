@@ -100,7 +100,8 @@ class ZSetContent extends BaseContent {
       content: 'Are you sure you want to delete the selected item? This action cannot be undone.'
     }).then(() => {
       const members = this.state.members;
-      const deleted = members.splice(this.state.selectedIndex, 1);
+      const index = this.state.desc ? this.state.length - 1 - this.state.selectedIndex : this.state.selectedIndex;
+      const deleted = members.splice(index, 1);
       if (deleted.length) {
         this.props.redis.zrem(this.state.keyName, deleted[0]);
         if (this.state.selectedIndex >= members.length - 1) {
