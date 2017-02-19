@@ -8,12 +8,13 @@ INFO="$APP_PATH/Contents/Info.plist"
 
 [ -z "$CONVENTIONAL_GITHUB_RELEASER_TOKEN" ] && echo "Need to set Token" && exit 1;
 version=`cat package.json | json version` &&
+git commit -am "chore(release): %s" &&
 perl -pi -e "s/#version#/$version/g" "$INFO" &&
 zip --symlinks -r9 "medis.zip" "$APP_PATH" &&
 conventional-changelog -i CHANGELOG.md -s -p angular &&
 git add CHANGELOG.md &&
 git commit -m"docs(CHANGELOG): $version" &&
-npm version $version -m "chore(release): %s" &&
+git tag -a -m "chore(release): %s" $version &&
 git push --follow-tags &&
 node "bin/conventional-github-releaser" &&
 TARGET="medis-v$version-mac-x64.zip" &&
