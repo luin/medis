@@ -1,3 +1,19 @@
+<a name="0.6.1"></a>
+## [0.6.1](https://github.com/luin/medis/compare/v0.5.0...v0.6.1) (2017-02-19)
+
+
+### Bug Fixes
+
+* detect database number for Heroku Redis ([f2c6d7e](https://github.com/luin/medis/commit/f2c6d7e)), closes [#55](https://github.com/luin/medis/issues/55) [#52](https://github.com/luin/medis/issues/52)
+* UI for edit button ([3599392](https://github.com/luin/medis/commit/3599392))
+* zset delete wrong element when sorting desc ([3d3f29a](https://github.com/luin/medis/commit/3d3f29a)), closes [#60](https://github.com/luin/medis/issues/60)
+
+### Features
+
+* support search/find within a key ([9ecce73](https://github.com/luin/medis/commit/9ecce73)), closes [#61](https://github.com/luin/medis/issues/61)
+
+
+
 <a name="0.6.0"></a>
 # [0.6.0](https://github.com/luin/medis/compare/v0.5.0...v0.6.0) (2017-02-19)
 
