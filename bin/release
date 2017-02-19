@@ -7,19 +7,13 @@ FRAMEWORKS_PATH="$APP_PATH/Contents/Frameworks"
 INFO="$APP_PATH/Contents/Info.plist"
 
 [ -z "$CONVENTIONAL_GITHUB_RELEASER_TOKEN" ] && echo "Need to set Token" && exit 1;
-cp package.json _package.json &&
-bump=`conventional-recommended-bump -p angular` &&
-echo ${1:-$bump} &&
-npm --no-git-tag-version version ${1:-$bump} &>/dev/null &&
 version=`cat package.json | json version` &&
 perl -pi -e "s/#version#/$version/g" "$INFO" &&
 zip --symlinks -r9 "medis.zip" "$APP_PATH" &&
 conventional-changelog -i CHANGELOG.md -s -p angular &&
 git add CHANGELOG.md &&
-version=`cat package.json | json version` &&
 git commit -m"docs(CHANGELOG): $version" &&
-mv -f _package.json package.json &&
-npm version ${1:-$bump} -m "chore(release): %s" &&
+npm version $version -m "chore(release): %s" &&
 git push --follow-tags &&
 node "bin/conventional-github-releaser" &&
 TARGET="medis-v$version-mac-x64.zip" &&
