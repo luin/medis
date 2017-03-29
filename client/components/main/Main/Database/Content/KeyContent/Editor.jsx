@@ -44,6 +44,7 @@ class Editor extends React.Component {
     } else {
       $(ReactDOM.findDOMNode(this.refs.wrapSelector)).show();
     }
+    this.refs.codemirror.getCodeMirror().refresh();
   }
 
   componentDidMount() {
