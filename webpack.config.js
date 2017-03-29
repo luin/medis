@@ -14,20 +14,20 @@ module.exports = {
     // publicPath: 'http://localhost:8090/assets'
   },
   module: {
-    loaders: [{
+    rules: [{
       test: /\.jsx$/,
       exclude: /node_modules/,
-      loader: 'jsx-loader?harmony!babel?stage=0&ignore=buffer'
+      loader: 'jsx-loader?harmony!babel-loader?stage=0&ignore=buffer'
     }, {
       test: /\.js$/,
       exclude: /node_modules/,
-      loader: 'babel?stage=0&ignore=buffer'
+      loader: 'babel-loader?stage=0&ignore=buffer'
     }, {
       test: /\.scss$/,
-      loader: 'style!css!sass'
+      loader: 'style-loader!css-loader!sass-loader'
     }, {
       test: /\.css$/,
-      loader: 'style!css'
+      loader: 'style-loader!css-loader'
     }, {
       test: /\.(png|jpg)$/,
       loader: "url-loader"
@@ -49,6 +49,6 @@ module.exports = {
     'file': '{}'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['.js', '.jsx']
   }
 };
