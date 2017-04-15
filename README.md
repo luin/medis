@@ -30,14 +30,7 @@ You can download compiled versions of Medis for Mac OS X from [the release page]
 
 ```shell
 $ npm install
-$ npm run dev
-```
-
-## Build Medis
-
-```shell
-$ npm install
-$ npm run deploy
+$ npm run run
 ```
 
 ## Connect to Heroku

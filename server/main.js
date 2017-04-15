@@ -1,10 +1,8 @@
 'use strict';
 
-const app = require('electron').app;
-const windowManager = require('./windowManager');
-const menu = require('./menu');
-const Menu = require('menu');
-const ipcMain = require('electron').ipcMain;
+const {app, Menu, ipcMain} = require('electron')
+const windowManager = require('./windowManager')
+const menu = require('./menu')
 
 ipcMain.on('create pattern-manager', function (event, arg) {
   windowManager.create('pattern-manager', arg);
