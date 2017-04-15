@@ -1,1 +1,0 @@
-find Medis.app -name _CodeSignature -type d -print0 | xargs -0 rm -rf
