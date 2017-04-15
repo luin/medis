@@ -1,9 +1,5 @@
 #!/bin/bash
 
-if [ ! -d "Medis.app" ]; then
-  . "bin/build"
-fi
-
 echo "***************************************************"
 echo "run 'npm start' after webpack building successfully"
 echo "***************************************************"

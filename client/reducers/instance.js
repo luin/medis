@@ -1,7 +1,7 @@
 'use strict';
 
 import * as Instance from '../backend/instance';
-import remote from 'remote';
+import {remote} from 'electron';
 
 export function addInstance(data) {
   const instance = Instance.addInstance(data);

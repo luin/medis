@@ -5,8 +5,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './components/main/App';
 import store from './store';
-import remote from 'remote';
-import { ipcRenderer } from 'electron';
+import {remote, ipcRenderer} from 'electron';
 
 require('./styles/global.scss');
 
