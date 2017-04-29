@@ -142,7 +142,7 @@ class Editor extends React.Component {
   render() {
     let viewer
     if (this.state.currentMode === 'raw') {
-      viewer = <Codemirror
+      viewer = (<Codemirror
         ref="codemirror"
         key="raw"
         value={this.state.modes.raw}
@@ -154,9 +154,9 @@ class Editor extends React.Component {
           gutters: ['CodeMirror-lint-markers'],
           lineNumbers: true
         }}
-      />
+        />)
     } else if (this.state.currentMode === 'json') {
-      viewer = <Codemirror
+      viewer = (<Codemirror
         ref="codemirror"
         key="json"
         value={this.state.modes.json}
@@ -176,9 +176,9 @@ class Editor extends React.Component {
           matchTags: true,
           lint: Boolean(this.state.modes.raw)
         }}
-      />
+        />)
     } else if (this.state.currentMode === 'messagepack') {
-      viewer = <Codemirror
+      viewer = (<Codemirror
         ref="codemirror"
         key="messagepack"
         value={this.state.modes.messagepack}
@@ -198,32 +198,32 @@ class Editor extends React.Component {
           matchTags: true,
           lint: Boolean(this.state.modes.raw)
         }}
-      />
+        />)
     } else {
-      viewer = <div></div>
+      viewer = <div/>
     }
-    return <div
-      style={ {flex: 1, display: 'flex', width: '100%', flexDirection: 'column'} }
+    return (<div
+      style={{flex: 1, display: 'flex', width: '100%', flexDirection: 'column'}}
       className="Editor"
       onKeyDown={this.handleKeyDown.bind(this)}
-    >
+      >
       { viewer }
       <div
         className="operation-pannel"
-      >
+        >
         <label className="wrap-selector" ref="wrapSelector">
           <input
             type="checkbox"
             checked={this.state.wrapping}
             onChange={evt => this.setState({wrapping: evt.target.checked})}
-          />
+            />
           <span>Wrapping</span>
         </label>
         <select
           className="mode-selector"
           value={this.state.currentMode}
           onChange={this.updateMode.bind(this)}
-        >
+          >
           <option value="raw" disabled={typeof this.state.modes.raw !== 'string'}>Raw</option>
           <option value="json" disabled={typeof this.state.modes.json !== 'string'}>JSON</option>
           <option value="messagepack" disabled={typeof this.state.modes.messagepack !== 'string'}>MessagePack</option>
@@ -232,9 +232,9 @@ class Editor extends React.Component {
           className="nt-button"
           disabled={!this.state.changed}
           onClick={this.save.bind(this)}
-        >Save Changes</button>
+          >Save Changes</button>
       </div>
-    </div>
+    </div>)
   }
 }
 

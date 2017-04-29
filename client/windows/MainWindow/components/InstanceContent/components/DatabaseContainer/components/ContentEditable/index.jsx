@@ -9,9 +9,9 @@ export default class ContentEditable extends React.Component {
   }
 
   render() {
-    return <div
+    return (<div
       {...this.props}
-    >
+      >
       <span
         onInput={this.handleChange.bind(this)}
         onKeyDown={this.handleKeyDown.bind(this)}
@@ -19,8 +19,8 @@ export default class ContentEditable extends React.Component {
         contentEditable={this.props.enabled}
         ref="text"
         dangerouslySetInnerHTML={{__html: this.props.html}}
-      />
-    </div>
+        />
+    </div>)
   }
 
   shouldComponentUpdate(nextProps) {

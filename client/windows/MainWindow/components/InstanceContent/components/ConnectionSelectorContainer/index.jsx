@@ -21,7 +21,7 @@ class ConnectionSelector extends React.Component {
 
   render() {
     const selectedFavorite = this.state.key && this.props.favorites.find(item => item.get('key') === this.state.key)
-    return <div className="pane-group">
+    return (<div className="pane-group">
       <aside className="pane pane-sm sidebar">
         <Favorite
           favorites={this.props.favorites}
@@ -31,7 +31,7 @@ class ConnectionSelector extends React.Component {
           addFavorite={this.props.addFavorite}
           removeFavorite={this.props.removeFavorite}
           reorderFavorites={this.props.reorderFavorites}
-        />
+          />
       </aside>
       <div className="pane">
         <Config
@@ -43,9 +43,9 @@ class ConnectionSelector extends React.Component {
             updateFavorite(selectedFavorite.get('key'), data)
           }}
           onDuplicate={addFavorite}
-        />
+          />
       </div>
-    </div>
+    </div>)
   }
 }
 

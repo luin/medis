@@ -43,7 +43,7 @@ class Database extends React.Component {
   }
 
   render() {
-    return <SplitPane
+    return (<SplitPane
       className="pane-group"
       minSize="250"
       split="vertical"
@@ -54,29 +54,29 @@ class Database extends React.Component {
       }}
       >
       <KeyBrowser
-        patterns={ this.props.patterns }
-        pattern={ this.state.pattern }
-        height={ this.state.clientHeight }
-        width= { this.state.sidebarWidth }
-        redis={ this.props.redis }
-        connectionKey={ this.props.connectionKey }
-        onSelectKey={ key => this.setState({key, version: this.state.version + 1}) }
-        onCreateKey={ this.handleCreateKey.bind(this) }
-        db={ this.state.db }
-        onDatabaseChange={ db => this.setState({db}) }
-        onKeyMetaChange={ () => this.setState({metaVersion: this.state.metaVersion + 1})}
-      />
+        patterns={this.props.patterns}
+        pattern={this.state.pattern}
+        height={this.state.clientHeight}
+        width={this.state.sidebarWidth}
+        redis={this.props.redis}
+        connectionKey={this.props.connectionKey}
+        onSelectKey={key => this.setState({key, version: this.state.version + 1})}
+        onCreateKey={this.handleCreateKey.bind(this)}
+        db={this.state.db}
+        onDatabaseChange={db => this.setState({db})}
+        onKeyMetaChange={() => this.setState({metaVersion: this.state.metaVersion + 1})}
+        />
       <Content
-        height={ this.state.clientHeight }
-        keyName={ this.state.key }
-        version={ this.state.version }
-        metaVersion={ this.state.metaVersion }
-        connectionKey={ this.props.connectionKey }
-        redis={ this.props.redis }
-        db={ this.state.db }
-        onDatabaseChange={ db => this.setState({db}) }
-      />
-    </SplitPane>
+        height={this.state.clientHeight}
+        keyName={this.state.key}
+        version={this.state.version}
+        metaVersion={this.state.metaVersion}
+        connectionKey={this.props.connectionKey}
+        redis={this.props.redis}
+        db={this.state.db}
+        onDatabaseChange={db => this.setState({db})}
+        />
+    </SplitPane>)
   }
 }
 

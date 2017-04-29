@@ -19,16 +19,16 @@ class KeyContent extends React.Component {
     const props = {key: this.props.keyName, ...this.props}
     let view
     switch (this.props.keyType) {
-    case 'string': view = <StringContent {...props} />; break
-    case 'list': view = <ListContent {...props} />; break
-    case 'set': view = <SetContent {...props} />; break
-    case 'hash': view = <HashContent {...props} />; break
-    case 'zset': view = <ZSetContent {...props} />; break
+    case 'string': view = <StringContent {...props}/>; break
+    case 'list': view = <ListContent {...props}/>; break
+    case 'set': view = <SetContent {...props}/>; break
+    case 'hash': view = <HashContent {...props}/>; break
+    case 'zset': view = <ZSetContent {...props}/>; break
     case 'none':
-      view = <div className="notfound">
-        <span className="icon icon-trash"></span>
+      view = (<div className="notfound">
+        <span className="icon icon-trash"/>
         <p>The key has been deleted</p>
-      </div>
+      </div>)
       break
     }
     return <div style={this.props.style} className="BaseContent">{ view }</div>

@@ -20,7 +20,7 @@ class InstanceTabs extends React.Component {
 
     const {activeInstanceKey, onCreateInstance, onSelectInstance,
       onDelInstance, onMoveInstance} = this.props
-    return <div style={ {display: this.style, zIndex: '1000'} }>
+    return (<div style={{display: this.style, zIndex: '1000'}}>
       <Tabs
         onTabAddButtonClick={() => {
           if (!$('.Modal').length) {
@@ -41,11 +41,11 @@ class InstanceTabs extends React.Component {
         selectedTab={activeInstanceKey}
         tabs={
           this.props.instances.map(instance => {
-            return (<Tab key={instance.get('key')} title={instance.get('title')} ></Tab>)
+            return (<Tab key={instance.get('key')} title={instance.get('title')}/>)
           }).toJS()
         }
-      />
-    </div>
+        />
+    </div>)
   }
 }
 

@@ -85,11 +85,11 @@ export default class Modal extends React.Component {
   }
 
   render() {
-    return <div
+    return (<div
       className="Modal"
       tabIndex="0"
       onKeyDown={this.handleKeyDown.bind(this)}
-    >
+      >
       <div className="Modal__content">
         {
           this.props.title && <div className="Modal__title">
@@ -97,16 +97,16 @@ export default class Modal extends React.Component {
           </div>
         }
         <div className="Modal__body">
-          {!this.props.form && <div className="Modal__icon"><span /></div>}
+          {!this.props.form && <div className="Modal__icon"><span/></div>}
           {this.props.content}
-          <div className="Modal__form" ref="form" />
+          <div className="Modal__form" ref="form"/>
         </div>
         <div className="nt-button-group nt-button-group--pull-right">
           <button
             ref="submit"
             className={'nt-button' + (this.props.form ? '' : ' nt-button--primary')}
             onClick={this.handleCancel.bind(this)}
-          >Cancel</button>
+            >Cancel</button>
           <button
             ref="cancel"
             className={'nt-button' + (!this.props.form ? '' : ' nt-button--primary')}
@@ -114,6 +114,6 @@ export default class Modal extends React.Component {
             >{this.props.button || 'OK'}</button>
         </div>
       </div>
-    </div>
+    </div>)
   }
 }

@@ -54,7 +54,7 @@ class MainWindow extends React.Component {
   render() {
     const {instances, activeInstance, createInstance,
       selectInstance, delInstance, moveInstance} = this.props
-    return <DocumentTitle title={this.getTitle()}>
+    return (<DocumentTitle title={this.getTitle()}>
       <div className="window">
         <InstanceTabs
           instances={instances}
@@ -63,13 +63,13 @@ class MainWindow extends React.Component {
           onDelInstance={delInstance}
           onMoveInstance={moveInstance}
           activeInstanceKey={activeInstance.get('key')}
-        />
+          />
         <InstanceContent
           instances={instances}
           activeInstanceKey={activeInstance.get('key')}
-        />
+          />
       </div>
-    </DocumentTitle>
+    </DocumentTitle>)
   }
 }
 
@@ -94,5 +94,5 @@ const mapDispatchToProps = {
 const MainWindowContainer = connect(selector, mapDispatchToProps)(MainWindow)
 
 export default <Provider store={store}>
-  <MainWindowContainer />
+  <MainWindowContainer/>
 </Provider>

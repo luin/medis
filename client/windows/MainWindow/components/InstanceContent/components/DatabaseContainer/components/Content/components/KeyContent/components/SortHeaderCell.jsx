@@ -11,21 +11,22 @@ export default class SortHeaderCell extends React.Component {
   }
 
   render() {
-    return <Cell
+    return (<Cell
       onClick={this.handleClick.bind(this)}
-    >
+      >
       <a
         className={'SortHeaderCell' + (this.props.desc ? '' : ' is-asc')}
-      >
+        >
         {this.props.title}
         {
           <img
             onClick={this.handleClick.bind(this)}
             width="7"
             height="4"
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAJBAMAAADwYwBaAAAAKlBMVEUAAACfn5/t7e2lpaXAwMD9/f3x8fHGxsapqan4+Pj19fWrq6uhoaG+vr4IBCNyAAAAAXRSTlMAQObYZgAAAERJREFUCNdjmMUAAisZDl4FUiEyDBtFAhhYHaUZMgQdGFgE2xjYGsUZCiUSGBiUBcsFjYBqmAwFhRVAepRBXJCAMZALALm5CbsZPOUxAAAAAElFTkSuQmCC" />
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAJBAMAAADwYwBaAAAAKlBMVEUAAACfn5/t7e2lpaXAwMD9/f3x8fHGxsapqan4+Pj19fWrq6uhoaG+vr4IBCNyAAAAAXRSTlMAQObYZgAAAERJREFUCNdjmMUAAisZDl4FUiEyDBtFAhhYHaUZMgQdGFgE2xjYGsUZCiUSGBiUBcsFjYBqmAwFhRVAepRBXJCAMZALALm5CbsZPOUxAAAAAElFTkSuQmCC"
+            />
         }
       </a>
-    </Cell>
+    </Cell>)
   }
 }

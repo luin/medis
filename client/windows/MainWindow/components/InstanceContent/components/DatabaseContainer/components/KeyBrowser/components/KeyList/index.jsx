@@ -352,10 +352,10 @@ class KeyList extends React.Component {
   }
 
   render() {
-    return <div
+    return (<div
       tabIndex="0"
       className={'pattern-table ' + this.randomClass}
-    >
+      >
       <Table
         rowHeight={24}
         rowsCount={this.state.keys.length + (this.state.cursor === '0' ? 0 : 1)}
@@ -375,7 +375,7 @@ class KeyList extends React.Component {
           return ''
         }}
         onRowContextMenu={this.showContextMenu.bind(this)}
-        onRowClick={(evt, index) => this.handleSelect(index) }
+        onRowClick={(evt, index) => this.handleSelect(index)}
         onRowDoubleClick={(evt, index) => {
           this.handleSelect(index)
           this.setState({editableKey: this.state.keys[index][0]})
@@ -387,7 +387,7 @@ class KeyList extends React.Component {
         <Column
           header="type"
           width={40}
-          cell = { ({rowIndex}) => {
+          cell={({rowIndex}) => {
             const item = this.state.keys[rowIndex]
             if (!item) {
               return ''
@@ -398,48 +398,50 @@ class KeyList extends React.Component {
             }
             const type = cellData === 'string' ? 'str' : cellData
             return <span className={`key-type ${type}`}>{type}</span>
-          } }
-        />
+          }}
+          />
         <Column
           header={
-            <AddButton reload="true" title="name" onReload={() => {
-              this.refresh()
-            }} onClick={() => {
-              showModal({
-                button: 'Create Key',
-                form: {
-                  type: 'object',
-                  properties: {
-                    'Key Name:': {
-                      type: 'string',
-                      minLength: 1
-                    },
-                    'Type:': {
-                      type: 'string',
-                      enum: ['string', 'hash', 'list', 'set', 'zset']
+            <AddButton
+              reload="true" title="name" onReload={() => {
+                this.refresh()
+              }} onClick={() => {
+                showModal({
+                  button: 'Create Key',
+                  form: {
+                    type: 'object',
+                    properties: {
+                      'Key Name:': {
+                  type: 'string',
+                  minLength: 1
+                },
+                      'Type:': {
+                  type: 'string',
+                  enum: ['string', 'hash', 'list', 'set', 'zset']
+                }
                     }
                   }
-                }
-              }).then(res => {
-                const key = res['Key Name:']
-                const type = res['Type:']
-                return this.props.redis.exists(key).then(exists => {
-                  const error = 'The key already exists'
-                  if (exists) {
-                    alert(error)
-                    throw new Error(error)
-                  }
-                  return {key, type}
+                }).then(res => {
+                  const key = res['Key Name:']
+                  const type = res['Type:']
+                  return this.props.redis.exists(key).then(exists => {
+                    const error = 'The key already exists'
+                    if (exists) {
+                alert(error)
+                throw new Error(error)
+              }
+                    return {key, type}
+                  })
+                }).then(({key, type}) => {
+                  this.createKey(key, type).then(() => {
+              this.props.onCreateKey(key)
+            })
                 })
-              }).then(({key, type}) => {
-                this.createKey(key, type).then(() => {
-                  this.props.onCreateKey(key)
-                })
-              })
-            }} />
+              }}
+                 />
           }
           width={this.props.width - 40}
-          cell = { ({rowIndex}) => {
+          cell={({rowIndex}) => {
             const item = this.state.keys[rowIndex]
             let cellData
             if (item) {
@@ -447,14 +449,16 @@ class KeyList extends React.Component {
             }
             if (typeof cellData === 'undefined') {
               if (this.state.scanning) {
-                return <span style={ {color: '#ccc'}}>Scanning...(cursor {this.state.cursor})</span>
+                return <span style={{color: '#ccc'}}>Scanning...(cursor {this.state.cursor})</span>
               }
-              return <a href="#" style={ {color: '#666'} } onClick={evt => {
-                evt.preventDefault()
-                this.scan()
-              }}>Scan more</a>
+              return (<a
+                href="#" style={{color: '#666'}} onClick={evt => {
+                  evt.preventDefault()
+                  this.scan()
+                }}
+                                                 >Scan more</a>)
             }
-            return <ContentEditable
+            return (<ContentEditable
               className="ContentEditable overflow-wrapper"
               enabled={cellData === this.state.editableKey}
               onChange={newKeyName => {
@@ -475,18 +479,18 @@ class KeyList extends React.Component {
                     let found
                     for (let i = 0; i < keys.length; i++) {
                       if (i !== rowIndex && keys[i][0] === newKeyName) {
-                        keys.splice(i, 1)
-                        found = i
-                        break
-                      }
+                  keys.splice(i, 1)
+                  found = i
+                  break
+                }
                     }
                     if (typeof found === 'number') {
                       if (this.index >= found) {
-                        this.index -= 1
-                      }
+                  this.index -= 1
+                }
                       this.setState({keys}, () => {
-                        this.handleSelect(this.index, true)
-                      })
+                  this.handleSelect(this.index, true)
+                })
                     } else {
                       this.setState({keys})
                     }
@@ -496,11 +500,11 @@ class KeyList extends React.Component {
                 ReactDOM.findDOMNode(this).focus()
               }}
               html={cellData}
-            />
-          } }
-        />
+              />)
+          }}
+          />
       </Table>
-    </div>
+    </div>)
   }
 }
 

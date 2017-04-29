@@ -88,17 +88,17 @@ class App extends React.Component {
   render() {
     const [activeIndex, activePattern] = this.getActivePattern()
 
-    return <div className="window">
+    return (<div className="window">
       <div className="patternList">
         <div ref="sortable" key={this.sortableKey}>{
           this.props.patterns.map((pattern, index) => {
-            return <a
+            return (<a
               key={pattern.key}
               className={'nav-group-item' + (pattern.key === this.state.activeKey ? ' is-active' : '')}
               onClick={this.onClick.bind(this, index)}
-            >
+              >
               <span>{pattern.name}</span>
-            </a>
+            </a>)
           })
         }</div>
         <footer>
@@ -108,7 +108,7 @@ class App extends React.Component {
               // TODO: auto select
               // this.select(pattern.toJS());
             }}
-          >+</button>
+            >+</button>
           <button
             className={activePattern ? '' : 'is-disabled'}
             onClick={() => {
@@ -123,33 +123,33 @@ class App extends React.Component {
                 }
               }
             }}
-          >-</button>
+            >-</button>
         </footer>
       </div>
       <div
         key={this.state.indexKey}
         className="form nt-box"
-        style={ {display: activePattern ? 'block' : 'none'} }
-      >
+        style={{display: activePattern ? 'block' : 'none'}}
+        >
         <div className="nt-form-row nt-form-row--vertical">
           <label htmlFor="name">Name:</label>
           <input
             type="text" id="name"
-            readOnly={!activePattern }
+            readOnly={!activePattern}
             value={this.state.name}
             onChange={this.handleChange.bind(this, 'name')}
-          />
+            />
         </div>
         <div className="nt-form-row nt-form-row--vertical">
           <label htmlFor="value">Pattern:</label>
           <input
             type="text" id="value"
-            readOnly={!activePattern }
+            readOnly={!activePattern}
             value={this.state.value}
             onChange={this.handleChange.bind(this, 'value')}
-          />
+            />
         </div>
-        <div className="nt-button-group nt-button-group--pull-right" style={ {margin: '10px auto 0'} }>
+        <div className="nt-button-group nt-button-group--pull-right" style={{margin: '10px auto 0'}}>
           <button
             className="nt-button nt-button--primary"
             onClick={() => {
@@ -160,10 +160,10 @@ class App extends React.Component {
               })
               alert('Save Successfully')
             }}
-          >Save</button>
+            >Save</button>
         </div>
       </div>
-    </div>
+    </div>)
   }
 }
 

@@ -153,7 +153,7 @@ class ZSetContent extends BaseContent {
   }
 
   render() {
-    return <SplitPane
+    return (<SplitPane
       className="pane-group"
       minSize="146"
       split="vertical"
@@ -166,7 +166,7 @@ class ZSetContent extends BaseContent {
         tabIndex="0"
         ref="table"
         className={'base-content ' + this.randomClass}
-      >
+        >
         <Table
           rowHeight={24}
           rowsCount={this.state.length}
@@ -178,7 +178,7 @@ class ZSetContent extends BaseContent {
             this.setState({editableIndex: index})
           }}
           isColumnResizing={false}
-          onColumnResizeEndCallback={ scoreWidth => {
+          onColumnResizeEndCallback={scoreWidth => {
             this.setState({scoreWidth})
           }}
           width={this.props.sidebarWidth}
@@ -194,16 +194,16 @@ class ZSetContent extends BaseContent {
                   selectedIndex: typeof this.state.selectedIndex === 'number' ? this.state.length - 1 - this.state.selectedIndex : null
                 })}
                 desc={this.state.desc}
-              />
+                />
             }
             width={this.state.scoreWidth}
-            isResizable={true}
-            cell={ ({rowIndex}) => {
+            isResizable
+            cell={({rowIndex}) => {
               const member = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex]
               if (!member) {
                 return ''
               }
-              return <ContentEditable
+              return (<ContentEditable
                 className="ContentEditable overflow-wrapper"
                 enabled={rowIndex === this.state.editableIndex}
                 onChange={newScore => {
@@ -220,9 +220,9 @@ class ZSetContent extends BaseContent {
                     }, () => {
                       for (let i = 0; i < updatedMembers.length; i++) {
                         if (updatedMembers[i][0] === member[0]) {
-                          this.handleSelect(null, i)
-                          break
-                        }
+                    this.handleSelect(null, i)
+                    break
+                  }
                       }
                     })
                   })
@@ -230,68 +230,70 @@ class ZSetContent extends BaseContent {
                   ReactDOM.findDOMNode(this).focus()
                 }}
                 html={member[1]}
-              />
-            } }
-          />
+                />)
+            }}
+            />
           <Column
             header={
-              <AddButton title="member" onClick={() => {
-                showModal({
-                  button: 'Insert Member',
-                  form: {
-                    type: 'object',
-                    properties: {
-                      'Value:': {
-                        type: 'string'
-                      },
-                      'Score:': {
-                        type: 'number'
+              <AddButton
+                title="member" onClick={() => {
+                  showModal({
+                    button: 'Insert Member',
+                    form: {
+                      type: 'object',
+                      properties: {
+                        'Value:': {
+                    type: 'string'
+                  },
+                        'Score:': {
+                    type: 'number'
+                  }
                       }
                     }
-                  }
-                }).then(res => {
-                  const data = res['Value:']
-                  const score = res['Score:']
-                  return this.props.redis.zscore(this.state.keyName, data).then(rank => {
-                    if (rank !== null) {
-                      const error = 'Member already exists'
-                      alert(error)
-                      throw new Error(error)
-                    }
-                    return {data, score}
-                  })
-                }).then(({data, score}) => {
-                  this.props.redis.zadd(this.state.keyName, score, data).then(() => {
-                    this.state.members.push([data, score])
-                    this.setState({
-                      members: this.state.members,
-                      length: this.state.length + 1
-                    }, () => {
-                      this.props.onKeyContentChange()
-                      this.handleSelect(null, this.state.members.length - 1)
+                  }).then(res => {
+                    const data = res['Value:']
+                    const score = res['Score:']
+                    return this.props.redis.zscore(this.state.keyName, data).then(rank => {
+                      if (rank !== null) {
+                  const error = 'Member already exists'
+                  alert(error)
+                  throw new Error(error)
+                }
+                      return {data, score}
                     })
+                  }).then(({data, score}) => {
+                    this.props.redis.zadd(this.state.keyName, score, data).then(() => {
+                this.state.members.push([data, score])
+                this.setState({
+                members: this.state.members,
+                length: this.state.length + 1
+              }, () => {
+                this.props.onKeyContentChange()
+                this.handleSelect(null, this.state.members.length - 1)
+              })
+              })
                   })
-                })
-              }} />
+                }}
+                               />
             }
             width={this.props.sidebarWidth - this.state.scoreWidth}
-            cell={ ({rowIndex}) => {
+            cell={({rowIndex}) => {
               const member = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex]
               if (!member) {
                 this.load(rowIndex)
                 return 'Loading...'
               }
               return <div className="overflow-wrapper"><span>{member[0]}</span></div>
-            } }
-          />
+            }}
+            />
         </Table>
-        </div>
-        <Editor
-          style={{height: this.props.height}}
-          buffer={typeof this.state.content === 'string' && Buffer.from(this.state.content)}
-          onSave={this.save.bind(this)}
+      </div>
+      <Editor
+        style={{height: this.props.height}}
+        buffer={typeof this.state.content === 'string' && Buffer.from(this.state.content)}
+        onSave={this.save.bind(this)}
         />
-      </SplitPane>
+    </SplitPane>)
   }
 }
 

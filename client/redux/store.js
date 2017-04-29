@@ -1,6 +1,6 @@
 import {createStore, applyMiddleware} from 'redux'
-import reducers from './reducers'
 import {createThunkReplyMiddleware} from 'Redux/middlewares'
+import reducers from './reducers'
 
 export default createStore(
   reducers,
