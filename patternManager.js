@@ -36945,7 +36945,7 @@
 
 	var _ReduxMiddlewares = __webpack_require__(338);
 
-	exports['default'] = (0, _redux.applyMiddleware)((0, _ReduxMiddlewares.createThunkReplyMiddleware)())(_redux.createStore)(_reducers2['default']);
+	exports['default'] = (0, _redux.createStore)(_reducers2['default'], (0, _redux.applyMiddleware)((0, _ReduxMiddlewares.createThunkReplyMiddleware)()));
 	module.exports = exports['default'];
 
 /***/ }),
@@ -37000,7 +37000,7 @@
 	var activeInstanceKey = (0, _Utils.handleActions)(defaultInstanceKey, (_handleActions = {}, _defineProperty(_handleActions, _ReduxActions.createInstance, function (state, data) {
 	  return data.key;
 	}), _defineProperty(_handleActions, _ReduxActions.selectInstance, function (state, data) {
-	  return data.key;
+	  return data;
 	}), _defineProperty(_handleActions, _ReduxActions.moveInstance, function (state, _ref) {
 	  var activeInstanceKey = _ref.activeInstanceKey;
 
@@ -40461,19 +40461,19 @@
 
 	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
 
-	var _reduxActions = __webpack_require__(228);
+	var _Utils = __webpack_require__(227);
 
 	var _electron = __webpack_require__(324);
 
-	var createInstance = (0, _reduxActions.createAction)('CREATE_INSTANCE', function (data) {
-	  return Object.assign({}, data, { key: getId('instance') });
+	var createInstance = (0, _Utils.createAction)('CREATE_INSTANCE', function (data) {
+	  return Object.assign({}, data, { key: (0, _Utils.getId)('instance') });
 	});
 
 	exports.createInstance = createInstance;
-	var selectInstance = (0, _reduxActions.createAction)('SELECT_INSTANCE');
+	var selectInstance = (0, _Utils.createAction)('SELECT_INSTANCE');
 
 	exports.selectInstance = selectInstance;
-	var moveInstance = (0, _reduxActions.createAction)('MOVE_INSTANCE', function (_ref) {
+	var moveInstance = (0, _Utils.createAction)('MOVE_INSTANCE', function (_ref) {
 	  var from = _ref.from;
 	  var to = _ref.to;
 	  return function (_ref2) {
@@ -40502,7 +40502,7 @@
 	});
 
 	exports.moveInstance = moveInstance;
-	var delInstance = (0, _reduxActions.createAction)('DEL_INSTANCE', function (key) {
+	var delInstance = (0, _Utils.createAction)('DEL_INSTANCE', function (key) {
 	  return function (_ref3) {
 	    var getState = _ref3.getState;
 	    var next = _ref3.next;
@@ -40554,25 +40554,25 @@
 	  value: true
 	});
 
-	var _reduxActions = __webpack_require__(228);
+	var _Utils = __webpack_require__(227);
 
 	var _immutable = __webpack_require__(326);
 
 	var _storage = __webpack_require__(327);
 
-	var createFavorite = (0, _reduxActions.createAction)('CREATE_FAVORITE', function (data) {
+	var createFavorite = (0, _Utils.createAction)('CREATE_FAVORITE', function (data) {
 	  var key = 'favorite-' + Math.round(Math.random() * 100000);
 	  return Object.assign({ key: key }, data);
 	});
 
 	exports.createFavorite = createFavorite;
-	var reloadFavorites = (0, _reduxActions.createAction)('RELOAD_FAVORITES', _storage.Favorites.get);
+	var reloadFavorites = (0, _Utils.createAction)('RELOAD_FAVORITES', _storage.Favorites.get);
 	exports.reloadFavorites = reloadFavorites;
-	var removeFavorite = (0, _reduxActions.createAction)('REMOVE_FAVORITE');
+	var removeFavorite = (0, _Utils.createAction)('REMOVE_FAVORITE');
 	exports.removeFavorite = removeFavorite;
-	var reorderFavorite = (0, _reduxActions.createAction)('REORDER_FAVORITE');
+	var reorderFavorite = (0, _Utils.createAction)('REORDER_FAVORITE');
 	exports.reorderFavorite = reorderFavorite;
-	var updateFavorite = (0, _reduxActions.createAction)('UPDATE_FAVORITE', function (key, data) {
+	var updateFavorite = (0, _Utils.createAction)('UPDATE_FAVORITE', function (key, data) {
 	  return { key: key, data: data };
 	});
 	exports.updateFavorite = updateFavorite;
@@ -45655,25 +45655,25 @@
 	  value: true
 	});
 
-	var _reduxActions = __webpack_require__(228);
+	var _Utils = __webpack_require__(227);
 
 	var _immutable = __webpack_require__(326);
 
 	var _storage = __webpack_require__(327);
 
-	var createPattern = (0, _reduxActions.createAction)('CREATE_pattern', function (data) {
+	var createPattern = (0, _Utils.createAction)('CREATE_pattern', function (data) {
 	  var key = 'pattern-' + Math.round(Math.random() * 100000);
 	  return Object.assign({ key: key }, data);
 	});
 
 	exports.createPattern = createPattern;
-	var reloadPatterns = (0, _reduxActions.createAction)('RELOAD_patternS', _storage.Patterns.get);
+	var reloadPatterns = (0, _Utils.createAction)('RELOAD_patternS', _storage.Patterns.get);
 	exports.reloadPatterns = reloadPatterns;
-	var removePattern = (0, _reduxActions.createAction)('REMOVE_pattern');
+	var removePattern = (0, _Utils.createAction)('REMOVE_pattern');
 	exports.removePattern = removePattern;
-	var reorderPattern = (0, _reduxActions.createAction)('REORDER_pattern');
+	var reorderPattern = (0, _Utils.createAction)('REORDER_pattern');
 	exports.reorderPattern = reorderPattern;
-	var updatePattern = (0, _reduxActions.createAction)('UPDATE_pattern', function (conn, key, data) {
+	var updatePattern = (0, _Utils.createAction)('UPDATE_pattern', function (conn, key, data) {
 	  return { conn: conn, key: key, data: data };
 	});
 	exports.updatePattern = updatePattern;
@@ -45690,7 +45690,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _reduxActions = __webpack_require__(228);
+	var _Utils = __webpack_require__(227);
 
 	var _ssh2 = __webpack_require__(332);
 
@@ -45717,7 +45717,7 @@
 	  });
 	}
 
-	var updateConnectStatus = (0, _reduxActions.createAction)('UPDATE_CONNECT_STATUS', function (status) {
+	var updateConnectStatus = (0, _Utils.createAction)('UPDATE_CONNECT_STATUS', function (status) {
 	  return function (_ref) {
 	    var getState = _ref.getState;
 	    var next = _ref.next;
@@ -45727,7 +45727,7 @@
 	});
 
 	exports.updateConnectStatus = updateConnectStatus;
-	var disconnect = (0, _reduxActions.createAction)('DISCONNECT', function () {
+	var disconnect = (0, _Utils.createAction)('DISCONNECT', function () {
 	  return function (_ref2) {
 	    var getState = _ref2.getState;
 	    var next = _ref2.next;
@@ -45737,7 +45737,7 @@
 	});
 
 	exports.disconnect = disconnect;
-	var connectToRedis = (0, _reduxActions.createAction)('CONNECT', function (config) {
+	var connectToRedis = (0, _Utils.createAction)('CONNECT', function (config) {
 	  return function (_ref3) {
 	    var getState = _ref3.getState;
 	    var dispatch = _ref3.dispatch;
@@ -45910,9 +45910,7 @@
 	}
 
 	var instances = (0, _Utils.handleActions)((0, _immutable.List)([InstanceFactory({ key: _activeInstanceKey.defaultInstanceKey })]), (_handleActions = {}, _defineProperty(_handleActions, _ReduxActions.createInstance, function (state, data) {
-	  return state.update('instances', function (list) {
-	    return list.push(InstanceFactory({ data: data }));
-	  });
+	  return state.push(InstanceFactory({ data: data }));
 	}), _defineProperty(_handleActions, _ReduxActions.moveInstance, function (state, _ref2) {
 	  var fromIndex = _ref2.fromIndex;
 	  var toIndex = _ref2.toIndex;
@@ -45937,6 +45935,7 @@
 	}), _defineProperty(_handleActions, _ReduxActions.connectToRedis, function (state, _ref6) {
 	  var index = _ref6.index;
 	  var config = _ref6.config;
+	  var redis = _ref6.redis;
 	  var name = config.name;
 	  var sshHost = config.sshHost;
 	  var host = config.host;

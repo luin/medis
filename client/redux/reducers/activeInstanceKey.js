@@ -13,7 +13,7 @@ export const activeInstanceKey = handleActions(defaultInstanceKey, {
     return data.key
   },
   [selectInstance](state, data) {
-    return data.key
+    return data
   },
   [moveInstance](state, {activeInstanceKey}) {
     return activeInstanceKey

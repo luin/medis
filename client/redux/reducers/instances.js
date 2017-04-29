@@ -16,7 +16,7 @@ function InstanceFactory({key, data}) {
 
 export const instances = handleActions(List([InstanceFactory({key: defaultInstanceKey})]), {
   [createInstance](state, data) {
-    return state.update('instances', list => list.push(InstanceFactory({data})))
+    return state.push(InstanceFactory({data}))
   },
   [moveInstance](state, {fromIndex, toIndex}) {
     const instance = state.get(fromIndex)
@@ -33,7 +33,7 @@ export const instances = handleActions(List([InstanceFactory({key: defaultInstan
       instance.removeAll(['connectStatus', 'redis', 'config', 'version']).set('title', 'Medis')
     ))
   },
-  [connectToRedis](state, {index, config}) {
+  [connectToRedis](state, {index, config, redis}) {
     const {name, sshHost, host, port} = config
     const remote = name ? `${name}/` : (sshHost ? `${sshHost}/` : '')
     const address = `${host}:${port}`

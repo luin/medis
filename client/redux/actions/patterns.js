@@ -1,4 +1,4 @@
-import {createAction} from 'redux-actions'
+import {createAction} from 'Utils';
 import {fromJS} from 'immutable'
 import {Patterns} from '../../storage'
 

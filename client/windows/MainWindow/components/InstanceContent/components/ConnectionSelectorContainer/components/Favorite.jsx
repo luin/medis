@@ -17,6 +17,7 @@ class Favorite extends React.Component {
   }
 
   _bindSortable() {
+    const {reorderFavorites} = this.props
     this.sortable = Sortable.create(this.refs.sortable, {
       animation: 100,
       onStart: evt => {
@@ -27,7 +28,7 @@ class Favorite extends React.Component {
       },
       onUpdate: evt => {
         this._updateSortableKey();
-        this.props.reorderFavorites({ from: evt.oldIndex, to: evt.newIndex })
+        reorderFavorites({ from: evt.oldIndex, to: evt.newIndex })
       }
     });
   }
