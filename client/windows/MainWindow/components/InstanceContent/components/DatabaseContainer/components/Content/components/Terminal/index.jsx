@@ -144,8 +144,7 @@ class Terminal extends React.Component {
   }
 
   render() {
-    return <div ref="terminal" style={this.props.style} className="Terminal">
-    </div>
+    return (<div ref="terminal" style={this.props.style} className="Terminal"/>)
   }
 }
 

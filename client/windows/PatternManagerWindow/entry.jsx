@@ -19,7 +19,7 @@ ipcRenderer.on('action', (evt, type, data) => {
 
 ReactDOM.render(
   <Provider store={store}>
-    <PatternManagerWindow />
+    <PatternManagerWindow/>
   </Provider>,
   document.getElementById('content')
 )

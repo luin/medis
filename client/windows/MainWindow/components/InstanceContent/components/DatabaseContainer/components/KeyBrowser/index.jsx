@@ -22,33 +22,33 @@ class KeyBrowser extends React.Component {
 
   render() {
     const {patterns, connectionKey} = this.props
-    return <div className="pane sidebar">
+    return (<div className="pane sidebar">
       <PatternList
         patterns={patterns.get(`${connectionKey}|${this.props.db}`, List())}
-        height={ this.props.height - this.footerHeight }
-        connectionKey={ this.props.connectionKey }
-        db={ this.props.db }
-        pattern={ this.state.pattern }
+        height={this.props.height - this.footerHeight}
+        connectionKey={this.props.connectionKey}
+        db={this.props.db}
+        pattern={this.state.pattern}
         onChange={pattern => {
           this.setState({pattern})
         }}
-      />
+        />
       <KeyList
-        height={ this.props.height - this.footerHeight }
-        width= { this.props.width }
-        db={ this.props.db }
-        pattern={ this.state.pattern || '*' }
-        redis={ this.props.redis }
-        onCreateKey={ this.props.onCreateKey }
-        onKeyMetaChange={ this.props.onKeyMetaChange }
+        height={this.props.height - this.footerHeight}
+        width={this.props.width}
+        db={this.props.db}
+        pattern={this.state.pattern || '*'}
+        redis={this.props.redis}
+        onCreateKey={this.props.onCreateKey}
+        onKeyMetaChange={this.props.onKeyMetaChange}
         onSelect={key => this.props.onSelectKey(key)}
-      />
+        />
       <Footer
         onDatabaseChange={this.props.onDatabaseChange}
-        db={ this.props.db }
-        redis={ this.props.redis }
-      />
-    </div>
+        db={this.props.db}
+        redis={this.props.redis}
+        />
+    </div>)
   }
 }
 

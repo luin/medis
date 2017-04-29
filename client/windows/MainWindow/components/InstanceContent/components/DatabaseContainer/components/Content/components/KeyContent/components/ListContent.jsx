@@ -152,7 +152,7 @@ class ListContent extends BaseContent {
   }
 
   render() {
-    return <SplitPane
+    return (<SplitPane
       className="pane-group"
       minSize="80"
       split="vertical"
@@ -165,7 +165,7 @@ class ListContent extends BaseContent {
         ref="table"
         onKeyDown={this.handleKeyDown.bind(this)}
         className={'base-content ' + this.randomClass}
-      >
+        >
         <Table
           rowHeight={24}
           rowsCount={this.state.length}
@@ -173,7 +173,7 @@ class ListContent extends BaseContent {
           onRowClick={this.handleSelect.bind(this)}
           onRowContextMenu={this.showContextMenu.bind(this)}
           isColumnResizing={false}
-          onColumnResizeEndCallback={ indexWidth => {
+          onColumnResizeEndCallback={indexWidth => {
             this.setState({indexWidth})
           }}
           width={this.props.sidebarWidth}
@@ -189,63 +189,65 @@ class ListContent extends BaseContent {
                   selectedIndex: typeof this.state.selectedIndex === 'number' ? this.state.length - 1 - this.state.selectedIndex : null
                 })}
                 desc={this.state.desc}
-              />
+                />
             }
             width={this.state.indexWidth}
-            isResizable={true}
-            cell={ ({rowIndex}) => {
+            isResizable
+            cell={({rowIndex}) => {
               return <div className="index-label">{ this.state.desc ? this.state.length - 1 - rowIndex : rowIndex }</div>
-            } }
-          />
+            }}
+            />
           <Column
             header={
-              <AddButton title="item" onClick={() => {
-                showModal({
-                  button: 'Insert Item',
-                  form: {
-                    type: 'object',
-                    properties: {
-                      'Insert To:': {
-                        type: 'string',
-                        enum: ['head', 'tail']
+              <AddButton
+                title="item" onClick={() => {
+                  showModal({
+                    button: 'Insert Item',
+                    form: {
+                      type: 'object',
+                      properties: {
+                        'Insert To:': {
+                    type: 'string',
+                    enum: ['head', 'tail']
+                  }
                       }
                     }
-                  }
-                }).then(res => {
-                  return res['Insert To:'] === 'head' ? 'lpush' : 'rpush'
-                }).then(method => {
-                  const data = 'New Item'
-                  this.props.redis[method](this.state.keyName, data).then(() => {
-                    this.state.members[method === 'lpush' ? 'unshift' : 'push'](data)
-                    this.setState({
-                      members: this.state.members,
-                      length: this.state.length + 1
-                    }, () => {
-                      this.props.onKeyContentChange()
-                      this.handleSelect(null, method === 'lpush' ? 0 : this.state.members.length - 1)
-                    })
+                  }).then(res => {
+                    return res['Insert To:'] === 'head' ? 'lpush' : 'rpush'
+                  }).then(method => {
+                    const data = 'New Item'
+                    this.props.redis[method](this.state.keyName, data).then(() => {
+                this.state.members[method === 'lpush' ? 'unshift' : 'push'](data)
+                this.setState({
+                members: this.state.members,
+                length: this.state.length + 1
+              }, () => {
+                this.props.onKeyContentChange()
+                this.handleSelect(null, method === 'lpush' ? 0 : this.state.members.length - 1)
+              })
+              })
                   })
-                })
-              }} />
+                }}
+                             />
             }
             width={this.props.sidebarWidth - this.state.indexWidth}
-            cell={ ({rowIndex}) => {
+            cell={({rowIndex}) => {
               const data = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex]
               if (typeof data === 'undefined') {
                 this.load(rowIndex)
                 return 'Loading...'
               }
               return <div className="overflow-wrapper"><span>{ data }</span></div>
-            } }
-          />
+            }}
+            />
         </Table>
-        </div>
-        <Editor
-          style={{height: this.props.height}}
-          buffer={typeof this.state.content === 'string' && Buffer.from(this.state.content)}
-          onSave={this.save.bind(this)}
+      </div>
+      <Editor
+        style={{height: this.props.height}}
+        buffer={typeof this.state.content === 'string' && Buffer.from(this.state.content)}
+        onSave={this.save.bind(this)}
         />
-      </SplitPane>
+    </SplitPane>)
   }
 }
 

@@ -66,39 +66,42 @@ class Favorite extends React.Component {
   }
 
   render() {
-    return <div style={ {flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'hidden'} }>
+    return (<div style={{flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'hidden'}}>
       <nav className="nav-group">
-        <h5 className="nav-group-title"></h5>
+        <h5 className="nav-group-title"/>
         <a
           className={'nav-group-item' + (this.state.activeKey ? '' : ' active')}
           onClick={this.onClick.bind(this, -1)}
           onDoubleClick={this.onDoubleClick.bind(this, -1)}
-        >
-          <span className="icon icon-flash"></span>
+          >
+          <span className="icon icon-flash"/>
           QUICK CONNECT
         </a>
         <h5 className="nav-group-title">FAVORITES</h5>
         <div ref="sortable" key={this.sortableKey}>{
           this.props.favorites.map((favorite, index) => {
-            return <a
+            return (<a
               key={favorite.get('key')}
               className={'nav-group-item' + (favorite.get('key') === this.state.activeKey ? ' active' : '')}
               onClick={this.onClick.bind(this, index)}
               onDoubleClick={this.onDoubleClick.bind(this, index)}
-            >
-              <span className="icon icon-home"></span>
+              >
+              <span className="icon icon-home"/>
               <span>{favorite.get('name')}</span>
-            </a>
+            </a>)
           })
         }</div>
       </nav>
       <footer className="toolbar toolbar-footer">
-        <button onClick={() => {
-          this.props.addFavorite()
+        <button
+          onClick={() => {
+            this.props.addFavorite()
           // TODO: auto select
           // this.select(favorite);
-        }}>+</button>
-        <button onClick={
+          }}
+          >+</button>
+        <button
+          onClick={
           () => {
             const key = this.state.activeKey
             if (!key) {
@@ -114,9 +117,10 @@ class Favorite extends React.Component {
               this.selectIndex(index - 1)
             })
           }
-        }>-</button>
+        }
+          >-</button>
       </footer>
-    </div>
+    </div>)
   }
 
   componentWillUnmount() {

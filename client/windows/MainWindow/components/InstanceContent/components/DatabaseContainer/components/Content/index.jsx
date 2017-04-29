@@ -48,10 +48,10 @@ class Content extends React.Component {
   }
 
   render() {
-    return <div className="pane sidebar" style={ {height: '100%'} }>
+    return (<div className="pane sidebar" style={{height: '100%'}}>
       <TabBar
         onSelectTab={this.handleTabChange.bind(this)}
-      />
+        />
       <KeyContent
         style={{display: this.state.tab === 'Content' ? 'flex' : 'none'}}
         keyName={this.props.keyName}
@@ -61,27 +61,27 @@ class Content extends React.Component {
         onKeyContentChange={() => {
           this.setState({version: this.state.version + 1})
         }}
-      />
+        />
       <Terminal
         style={{display: this.state.tab === 'Terminal' ? 'block' : 'none'}}
         height={this.props.height - 67}
         redis={this.props.redis}
-        connectionKey={ this.props.connectionKey }
+        connectionKey={this.props.connectionKey}
         onDatabaseChange={this.props.onDatabaseChange}
-      />
+        />
       <Config
         style={{display: this.state.tab === 'Config' ? 'block' : 'none'}}
         height={this.props.height - 67}
         redis={this.props.redis}
-        connectionKey={ this.props.connectionKey }
-      />
+        connectionKey={this.props.connectionKey}
+        />
       <Footer
         keyName={this.props.keyName}
         keyType={this.state.keyType}
         version={this.state.version}
         redis={this.props.redis}
-      />
-    </div>
+        />
+    </div>)
   }
 }
 

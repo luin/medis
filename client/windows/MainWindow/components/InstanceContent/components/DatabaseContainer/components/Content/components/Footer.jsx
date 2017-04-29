@@ -73,14 +73,14 @@ class Footer extends React.Component {
     const desc = ['size', 'encoding', 'ttl']
     .map(key => ({key, value: this.state[key]}))
     .filter(item => typeof item.value === 'string')
-    return <footer className="toolbar toolbar-footer">
+    return (<footer className="toolbar toolbar-footer">
       {
         desc.map(({key, value}) => <span
           key={key}
-          style={ {margin: '0 5px'} }
-        >{value}</span>)
+          style={{margin: '0 5px'}}
+          >{value}</span>)
       }
-    </footer>
+    </footer>)
   }
 }
 

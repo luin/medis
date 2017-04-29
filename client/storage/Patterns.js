@@ -1,6 +1,5 @@
 'use strict'
 
-import Immutable from 'immutable'
 import {ipcRenderer} from 'electron'
 
 export function get() {

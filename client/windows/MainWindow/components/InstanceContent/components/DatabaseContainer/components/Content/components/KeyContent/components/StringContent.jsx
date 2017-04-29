@@ -28,10 +28,11 @@ class StringContent extends BaseContent {
   }
 
   render() {
-    return <Editor style={{height: this.props.height}}
+    return (<Editor
+      style={{height: this.props.height}}
       buffer={this.state.buffer}
       onSave={this.save.bind(this)}
-    />
+      />)
   }
 }
 

@@ -18,33 +18,33 @@ class Content extends React.Component {
   }
 
   render() {
-    return <div className="TabBar">
+    return (<div className="TabBar">
       {
         this.tabs.map(tab => {
-          return <div
-            className={ 'item' + (tab === this.state.activeTab ? ' is-active' : '') }
+          return (<div
+            className={'item' + (tab === this.state.activeTab ? ' is-active' : '')}
             key={tab}
-            onClick={ () => {
+            onClick={() => {
               this.setState({activeTab: tab})
               this.props.onSelectTab(tab)
-            } }
-          >
+            }}
+            >
             {
               (() => {
                 if (tab === 'Content') {
-                  return <span className="icon icon-book" />
+                  return <span className="icon icon-book"/>
                 } else if (tab === 'Terminal') {
-                  return <span className="icon icon-window" />
+                  return <span className="icon icon-window"/>
                 } else if (tab === 'Config') {
-                  return <span className="icon icon-cog" />
+                  return <span className="icon icon-cog"/>
                 }
               })()
             }
             {tab}
-          </div>
+          </div>)
         })
       }
-    </div>
+    </div>)
   }
 }
 

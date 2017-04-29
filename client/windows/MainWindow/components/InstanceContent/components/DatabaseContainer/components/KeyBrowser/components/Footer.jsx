@@ -89,35 +89,35 @@ class Footer extends React.Component {
         keys = match[1]
       }
     }
-    return <footer className="toolbar toolbar-footer">
-      <span style={ {marginLeft: 6} }>Keys: {keys}</span>
-      <div style={ {float: 'right'} }>
+    return (<footer className="toolbar toolbar-footer">
+      <span style={{marginLeft: 6}}>Keys: {keys}</span>
+      <div style={{float: 'right'}}>
         <span>DB:</span>
         <select
           onChange={this.handleChange.bind(this)}
-          value={this.props.db} className="form-control" style={ {
+          value={this.props.db} className="form-control" style={{
             width: 50,
             marginTop: 2,
             marginRight: 2,
             marginLeft: 3,
             fontSize: 10,
             float: 'right'
-          } }
-        >
-        {
+          }}
+                                                         >
+          {
           (max => {
             const items = []
             for (let i = 0; i < max; i++) {
               items.push(<option
                 key={i} value={i}
-              >{i}</option>)
+                        >{i}</option>)
             }
             return items
           })(this.state.databases || 1)
         }
-      </select>
-    </div>
-  </footer>
+        </select>
+      </div>
+    </footer>)
   }
 }
 

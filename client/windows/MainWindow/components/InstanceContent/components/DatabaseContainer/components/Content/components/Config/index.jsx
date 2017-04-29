@@ -257,13 +257,13 @@ class Config extends React.Component {
   }
 
   renderGroup(group) {
-    return <div
+    return (<div
       key={group.name}
       className="config-group"
-    >
+      >
       <h3>{group.name}</h3>
       { group.configs.map(this.renderConfig, this) }
-    </div>
+    </div>)
   }
 
   change({name, value}) {
@@ -282,36 +282,44 @@ class Config extends React.Component {
     props.disabled = props.readOnly
     if (config.type === 'boolean' &&
         (config.value === 'yes' || config.value === 'no')) {
-      input = <input type="checkbox" checked={config.value === 'yes'} onChange={e => {
-        config.value = e.target.checked ? 'yes' : 'no'
-        this.change(config)
-      }} {...props} />
+      input = (<input
+        type="checkbox" checked={config.value === 'yes'} onChange={e => {
+          config.value = e.target.checked ? 'yes' : 'no'
+          this.change(config)
+        }} {...props}
+           />)
     } else if (config.type === 'number' && String(parseInt(config.value, 10)) === config.value) {
-      input = <input type="number" value={config.value} onChange={e => {
-        config.value = e.target.value
-        this.change(config)
-      }} {...props} />
+      input = (<input
+        type="number" value={config.value} onChange={e => {
+          config.value = e.target.value
+          this.change(config)
+        }} {...props}
+           />)
     } else if (Array.isArray(config.type) && config.type.indexOf(config.value) !== -1) {
-      input = <select value={config.value} onChange={e => {
-        config.value = e.target.value
-        this.change(config)
-      }} {...props}>
+      input = (<select
+        value={config.value} onChange={e => {
+          config.value = e.target.value
+          this.change(config)
+        }} {...props}
+           >
         {config.type.map(option => <option key={option}>{option}</option>)}
-      </select>
+      </select>)
     } else {
-      input = <input type="text" value={config.value} onChange={e => {
-        config.value = e.target.value
-        this.change(config)
-      }} {...props} />
+      input = (<input
+        type="text" value={config.value} onChange={e => {
+          config.value = e.target.value
+          this.change(config)
+        }} {...props}
+           />)
     }
-    return <div
+    return (<div
       className="nt-form-row"
       key={config.name}
-    >
+      >
       <label htmlFor={config.name}>{config.name}</label>
       { input }
       <div className="description">{config.description}</div>
-    </div>
+    </div>)
   }
 
   isChanged(rewrite) {
@@ -367,7 +375,7 @@ class Config extends React.Component {
   }
 
   render() {
-    return <div style={this.props.style} className="Config">
+    return (<div style={this.props.style} className="Config">
       <div className="wrapper">
         <form>
           {
@@ -379,24 +387,24 @@ class Config extends React.Component {
             ref="submit"
             className="nt-button"
             onClick={this.handleReload.bind(this)}
-          >Reload</button>
-        <button
-          ref="submit"
-          className="nt-button"
-          disabled={!this.isChanged(true)}
-          onClick={this.handleSave.bind(this)}
-          >Save To Config File</button>
-        <button
-          ref="cancel"
-          className="nt-button nt-button--primary"
-          disabled={!this.isChanged()}
-          onClick={() => {
-            this.handleApply()
-          }}
-          >Apply</button>
+            >Reload</button>
+          <button
+            ref="submit"
+            className="nt-button"
+            disabled={!this.isChanged(true)}
+            onClick={this.handleSave.bind(this)}
+            >Save To Config File</button>
+          <button
+            ref="cancel"
+            className="nt-button nt-button--primary"
+            disabled={!this.isChanged()}
+            onClick={() => {
+              this.handleApply()
+            }}
+            >Apply</button>
+        </div>
       </div>
-      </div>
-    </div>
+    </div>)
   }
 }
 

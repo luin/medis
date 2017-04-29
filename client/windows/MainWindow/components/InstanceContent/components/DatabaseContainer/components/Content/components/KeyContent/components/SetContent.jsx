@@ -132,7 +132,7 @@ class SetContent extends BaseContent {
   }
 
   render() {
-    return <SplitPane
+    return (<SplitPane
       className="pane-group"
       minSize="80"
       split="vertical"
@@ -145,7 +145,7 @@ class SetContent extends BaseContent {
         tabIndex="0"
         ref="table"
         className={'base-content ' + this.randomClass}
-      >
+        >
         <Table
           rowHeight={24}
           rowsCount={this.state.length}
@@ -158,59 +158,61 @@ class SetContent extends BaseContent {
           >
           <Column
             header={
-              <AddButton title="member" onClick={() => {
-                showModal({
-                  button: 'Insert Member',
-                  form: {
-                    type: 'object',
-                    properties: {
-                      'Value:': {
-                        type: 'string'
+              <AddButton
+                title="member" onClick={() => {
+                  showModal({
+                    button: 'Insert Member',
+                    form: {
+                      type: 'object',
+                      properties: {
+                        'Value:': {
+                    type: 'string'
+                  }
                       }
                     }
-                  }
-                }).then(res => {
-                  const data = res['Value:']
-                  return this.props.redis.sismember(this.state.keyName, data).then(exists => {
-                    if (exists) {
-                      const error = 'Member already exists'
-                      alert(error)
-                      throw new Error(error)
-                    }
-                    return data
-                  })
-                }).then(data => {
-                  this.props.redis.sadd(this.state.keyName, data).then(() => {
-                    this.state.members.push(data)
-                    this.setState({
-                      members: this.state.members,
-                      length: this.state.length + 1
-                    }, () => {
-                      this.props.onKeyContentChange()
-                      this.handleSelect(null, this.state.members.length - 1)
+                  }).then(res => {
+                    const data = res['Value:']
+                    return this.props.redis.sismember(this.state.keyName, data).then(exists => {
+                      if (exists) {
+                  const error = 'Member already exists'
+                  alert(error)
+                  throw new Error(error)
+                }
+                      return data
                     })
+                  }).then(data => {
+                    this.props.redis.sadd(this.state.keyName, data).then(() => {
+                this.state.members.push(data)
+                this.setState({
+                members: this.state.members,
+                length: this.state.length + 1
+              }, () => {
+                this.props.onKeyContentChange()
+                this.handleSelect(null, this.state.members.length - 1)
+              })
+              })
                   })
-                })
-              }} />
+                }}
+                               />
             }
             width={this.props.sidebarWidth}
-            cell={ ({rowIndex}) => {
+            cell={({rowIndex}) => {
               const member = this.state.members[rowIndex]
               if (typeof member === 'undefined') {
                 this.load(rowIndex)
                 return 'Loading...'
               }
               return <div className="overflow-wrapper"><span>{member}</span></div>
-            } }
-          />
+            }}
+            />
         </Table>
-        </div>
-        <Editor
-          style={{height: this.props.height}}
-          buffer={typeof this.state.content === 'string' && Buffer.from(this.state.content)}
-          onSave={this.save.bind(this)}
+      </div>
+      <Editor
+        style={{height: this.props.height}}
+        buffer={typeof this.state.content === 'string' && Buffer.from(this.state.content)}
+        onSave={this.save.bind(this)}
         />
-      </SplitPane>
+    </SplitPane>)
   }
 }
 

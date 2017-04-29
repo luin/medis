@@ -19,6 +19,7 @@
     "tomedis": "./bin/tomedis"
   },
   "xo": {
+    "extends": "xo-react/space",
     "semicolon": false,
     "ignore": [
       "client/vendors/**",
@@ -26,6 +27,9 @@
     ],
     "envs": [
       "browser"
+    ],
+    "globals": [
+      "showModal"
     ],
     "rules": {
       "indent": [
@@ -44,6 +48,7 @@
         }
       ],
       "new-cap": "off",
+      "import/no-unassigned-import": "off",
       "import/default": "off",
       "import/prefer-default-export": "off"
     }
@@ -73,7 +78,9 @@
     "electron": "^1.6.2",
     "electron-osx-sign": "^0.4.4",
     "electron-packager": "^8.6.0",
-    "eslint-plugin-react": "^3.15.0",
+    "eslint-config-xo": "^0.18.1",
+    "eslint-config-xo-react": "^0.11.1",
+    "eslint-plugin-react": "^6.10.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "form-generator-react": "^1.0.5",
     "github": "^0.2.4",

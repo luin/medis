@@ -137,7 +137,7 @@ class HashContent extends BaseContent {
   }
 
   render() {
-    return <SplitPane
+    return (<SplitPane
       className="pane-group"
       minSize="80"
       split="vertical"
@@ -145,12 +145,12 @@ class HashContent extends BaseContent {
       onChange={this.onChangeSiderbarWidth.bind(this)}
       >
       <div
-        style={ {marginTop: -1} }
+        style={{marginTop: -1}}
         onKeyDown={this.handleKeyDown.bind(this)}
         tabIndex="0"
         ref="table"
         className={'base-content ' + this.randomClass}
-      >
+        >
         <Table
           rowHeight={24}
           rowsCount={this.state.length}
@@ -167,45 +167,47 @@ class HashContent extends BaseContent {
           >
           <Column
             header={
-              <AddButton title="key" onClick={() => {
-                showModal({
-                  button: 'Insert Member',
-                  form: {
-                    type: 'object',
-                    properties: {
-                      'Key:': {
-                        type: 'string'
+              <AddButton
+                title="key" onClick={() => {
+                  showModal({
+                    button: 'Insert Member',
+                    form: {
+                      type: 'object',
+                      properties: {
+                        'Key:': {
+                    type: 'string'
+                  }
                       }
                     }
-                  }
-                }).then(res => {
-                  const data = res['Key:']
-                  const value = 'New Member'
-                  this.props.redis.hsetnx(this.state.keyName, data, value).then(inserted => {
-                    if (!inserted) {
-                      alert('The field already exists')
-                      return
-                    }
-                    this.state.members.push([data, Buffer.from(value)])
-                    this.setState({
-                      members: this.state.members,
-                      length: this.state.length + 1
-                    }, () => {
-                      this.props.onKeyContentChange()
-                      this.handleSelect(null, this.state.members.length - 1)
+                  }).then(res => {
+                    const data = res['Key:']
+                    const value = 'New Member'
+                    this.props.redis.hsetnx(this.state.keyName, data, value).then(inserted => {
+                      if (!inserted) {
+                  alert('The field already exists')
+                  return
+                }
+                      this.state.members.push([data, Buffer.from(value)])
+                      this.setState({
+                  members: this.state.members,
+                  length: this.state.length + 1
+                }, () => {
+                  this.props.onKeyContentChange()
+                  this.handleSelect(null, this.state.members.length - 1)
+                })
                     })
                   })
-                })
-              }} />
+                }}
+                            />
             }
             width={this.props.sidebarWidth}
-            cell={ ({rowIndex}) => {
+            cell={({rowIndex}) => {
               const member = this.state.members[rowIndex]
               if (!member) {
                 this.load(rowIndex)
                 return 'Loading...'
               }
-              return <ContentEditable
+              return (<ContentEditable
                 className="ContentEditable overflow-wrapper"
                 enabled={rowIndex === this.state.editableIndex}
                 onChange={target => {
@@ -217,22 +219,22 @@ class HashContent extends BaseContent {
                     this.props.redis.hexists(keyName, target).then(exists => {
                       if (exists) {
                         return showModal({
-                          title: 'Overwrite the field?',
-                          button: 'Overwrite',
-                          content: `Field "${target}" already exists. Are you sure you want to overwrite this field?`
-                        }).then(() => {
-                          let found
-                          for (let i = 0; i < members.length; i++) {
-                            if (members[i][0] === target) {
-                              found = i
-                              break
-                            }
-                          }
-                          if (typeof found === 'number') {
-                            members.splice(found, 1)
-                            this.setState({length: this.state.length - 1})
-                          }
-                        })
+                    title: 'Overwrite the field?',
+                    button: 'Overwrite',
+                    content: `Field "${target}" already exists. Are you sure you want to overwrite this field?`
+                  }).then(() => {
+                  let found
+                  for (let i = 0; i < members.length; i++) {
+                  if (members[i][0] === target) {
+                  found = i
+                  break
+                }
+                }
+                  if (typeof found === 'number') {
+                  members.splice(found, 1)
+                  this.setState({length: this.state.length - 1})
+                }
+                })
                       }
                     }).then(() => {
                       member[0] = target
@@ -246,17 +248,17 @@ class HashContent extends BaseContent {
                   ReactDOM.findDOMNode(this).focus()
                 }}
                 html={member[0]}
-              />
-            } }
-          />
+                />)
+            }}
+            />
         </Table>
-        </div>
-        <Editor
-          style={{height: this.props.height}}
-          buffer={this.state.content}
-          onSave={this.save.bind(this)}
+      </div>
+      <Editor
+        style={{height: this.props.height}}
+        buffer={this.state.content}
+        onSave={this.save.bind(this)}
         />
-      </SplitPane>
+    </SplitPane>)
   }
 }
 

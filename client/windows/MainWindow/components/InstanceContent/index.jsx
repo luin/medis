@@ -47,26 +47,28 @@ class InstanceContent extends React.Component {
     const {instances, activeInstanceKey} = this.props
     const contents = instances.map(instance => <div
       key={instance.get('key')}
-      style={{display: instance.get('key') === activeInstanceKey ? 'block' : 'none'}}>
+      style={{display: instance.get('key') === activeInstanceKey ? 'block' : 'none'}}
+      >
       {
         instance.get('redis')
-          ? <DatabaseContainer instance={instance} />
-          : <ConnectionSelectorContainer instance={instance} />
+          ? <DatabaseContainer instance={instance}/>
+          : <ConnectionSelectorContainer instance={instance}/>
       }
     </div>)
 
-    return <div className="main">
+    return (<div className="main">
       <ReactCSSTransitionGroup transitionName="modal" transitionEnterTimeout={150} transitionLeaveTimeout={150}>
         {
-          this.state.modal && <Modal key="modal"
+          this.state.modal && <Modal
+            key="modal"
             {...this.state.modal}
             onSubmit={this.modalSubmit.bind(this)}
             onCancel={this.modalCancel.bind(this)}
-          />
+            />
         }
       </ReactCSSTransitionGroup>
       { contents }
-    </div>
+    </div>)
   }
 }
 
