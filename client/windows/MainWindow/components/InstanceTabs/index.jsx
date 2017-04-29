@@ -1,8 +1,6 @@
 'use strict';
 
 import React from 'react';
-import action from '../../../../actions';
-import store from '../../../../store';
 import { Tab, Tabs } from './components/draggable-tab';
 
 class InstanceTabs extends React.Component {
@@ -19,30 +17,28 @@ class InstanceTabs extends React.Component {
         $(window).trigger('resize');
       }, 0);
     }
+
+    const {activeInstanceKey, onCreateInstance, onSelectInstance,
+      onDelInstance, onMoveInstance} = this.props
     return <div style={ { display: this.style, zIndex: '1000' } }>
       <Tabs
         onTabAddButtonClick={() => {
-          if ($('.Modal').length) {
-            return;
+          if (!$('.Modal').length) {
+            onCreateInstance()
           }
-          store.dispatch(action('addInstance'))
         }}
         onTabSelect={(key) => {
-          if ($('.Modal').length) {
-            return;
+          if (!$('.Modal').length) {
+            onSelectInstance(key)
           }
-          store.dispatch(action('selectInstance', key))
         }}
         onTabClose={(key) => {
-          if ($('.Modal').length) {
-            return;
+          if (!$('.Modal').length) {
+            onDelInstance(key)
           }
-          store.dispatch(action('delInstance', key))
         }}
-        onTabPositionChange={(from, to) =>
-          store.dispatch(action('moveInstance', { from, to }))
-        }
-        selectedTab={ this.props.activeInstanceKey }
+        onTabPositionChange={onMoveInstance}
+        selectedTab={activeInstanceKey}
         tabs={
           this.props.instances.map(instance => {
             return (<Tab key={instance.get('key')} title={instance.get('title')} ></Tab>);

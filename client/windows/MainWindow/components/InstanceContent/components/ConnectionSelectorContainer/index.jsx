@@ -5,8 +5,9 @@ import {Provider, connect} from 'react-redux';
 import Favorite from './components/Favorite';
 import { createSelector } from 'reselect';
 import Config from './components/Config';
-import store from '../../../../../../store';
-import {updateFavorite, addFavorite} from '../../../../../../actions';
+import store from 'Redux/store';
+import {connectToRedis} from 'Redux/actions';
+import {removeFavorite, updateFavorite, addFavorite, reorderFavorites} from 'Redux/actions';
 
 class ConnectionSelector extends React.Component {
   constructor() {
@@ -19,14 +20,19 @@ class ConnectionSelector extends React.Component {
   }
 
   render() {
+    console.log(this.state, this.props)
     const selectedFavorite = this.state.key && this.props.favorites.find(item => item.get('key') === this.state.key);
-    const {onUpdateFavorite, onAddFavorite} = this.props
+    const {updateFavorite, addFavorite} = this.props
     return <div className="pane-group">
       <aside className="pane pane-sm sidebar">
         <Favorite
           favorites={this.props.favorites}
           onSelect={this.handleSelectFavorite.bind(this, false)}
           onRequireConnecting={this.handleSelectFavorite.bind(this, true)}
+          updateFavorite={updateFavorite}
+          addFavorite={addFavorite}
+          removeFavorite={removeFavorite}
+          reorderFavorites={reorderFavorites}
         />
       </aside>
       <div className="pane">
@@ -34,8 +40,11 @@ class ConnectionSelector extends React.Component {
           favorite={selectedFavorite}
           connectStatus={this.props.connectStatus}
           connect={this.state.connect}
-          onSave={onUpdateFavorite.bind(null, selectedFavorite.get('key'))}
-          onDuplicate={onAddFavorite}
+          connectToRedis={this.props.connectToRedis}
+          onSave={(data) => {
+            updateFavorite(selectedFavorite.get('key'), data)
+          }}
+          onDuplicate={addFavorite}
         />
       </div>
     </div>;
@@ -43,7 +52,7 @@ class ConnectionSelector extends React.Component {
 }
 
 const selector = createSelector(
-  state => state.get('favorites'),
+  state => state.favorites,
   (state, props) => props.instance,
   (favorites, instance) => {
     return {
@@ -54,14 +63,9 @@ const selector = createSelector(
 );
 
 const mapDispatchToProps = {
-  onUpdateFavorite: updateFavorite,
-  onAddFavorite: addFavorite
+  updateFavorite,
+  addFavorite,
+  connectToRedis
 }
 
-const ConnectionSelectorContainer = connect(selector, mapDispatchToProps)(ConnectionSelector);
-
-export default (props) => {
-  return <Provider store={store}>
-    <ConnectionSelectorContainer {...props} />
-  </Provider>
-}
+export default connect(selector, mapDispatchToProps)(ConnectionSelector);

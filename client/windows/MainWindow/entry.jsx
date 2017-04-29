@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MainWindow from './';
 import {ipcRenderer} from 'electron';
-import store from '../../store';
+import store from 'Redux/store';
 
 require('../../styles/global.scss');
 

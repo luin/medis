@@ -167,10 +167,10 @@ if (process.platform == 'darwin') {
 
 const menu = Menu.buildFromTemplate(menuTemplate);
 
-if (process.env.NODE_ENV !== 'debug') {
-  menu.items[baseIndex + 2].submenu.items[0].visible = false;
-  menu.items[baseIndex + 2].submenu.items[2].visible = false;
-}
+// if (process.env.NODE_ENV !== 'debug') {
+//   menu.items[baseIndex + 2].submenu.items[0].visible = false;
+//   menu.items[baseIndex + 2].submenu.items[2].visible = false;
+// }
 
 windowManager.on('blur', function () {
   menu.items[baseIndex + 0].submenu.items[3].enabled = false;

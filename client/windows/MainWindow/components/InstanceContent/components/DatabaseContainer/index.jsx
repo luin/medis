@@ -6,7 +6,6 @@ import { createSelector } from 'reselect';
 import SplitPane from 'react-split-pane';
 import KeyBrowser from './components/KeyBrowser';
 import Content from './components/Content';
-import store from '../../../../../../store';
 require('./index.scss');
 
 class Database extends React.Component {
@@ -55,7 +54,7 @@ class Database extends React.Component {
       }}
       >
       <KeyBrowser
-        patternStore={ this.props.patternStore }
+        patterns={ this.props.patterns }
         pattern={ this.state.pattern }
         height={ this.state.clientHeight }
         width= { this.state.sidebarWidth }
@@ -82,18 +81,15 @@ class Database extends React.Component {
 }
 
 const selector = createSelector(
-  state => state.get('patternStore'),
+  state => state.patterns,
   (state, props) => props.instance,
-  (patternStore, instance) => {
+  (patterns, instance) => {
     return {
-      patternStore,
+      patterns,
       redis: instance.get('redis'),
       connectionKey: instance.get('connectionKey')
     };
   }
 );
 
-const DatabaseContainer = connect(selector)(Database);
-export default (props) => <Provider store={store}>
-  <DatabaseContainer {...props} />
-</Provider>
+export default connect(selector)(Database);

@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import Immutable from 'immutable';
+import {List} from 'immutable';
 import PatternList from './components/PatternList';
 import KeyList from './components/KeyList';
 import Footer from './components/Footer';
@@ -21,11 +21,10 @@ class KeyBrowser extends React.Component {
   }
 
   render() {
-    const { patternStore, connectionKey } = this.props;
-    const patterns = patternStore.get(`${connectionKey}|${this.props.db}`) || Immutable.List();
+    const { patterns, connectionKey } = this.props;
     return <div className="pane sidebar">
       <PatternList
-        patterns={ patterns }
+        patterns={patterns.get(`${connectionKey}|${this.props.db}`, List())}
         height={ this.props.height - this.footerHeight }
         connectionKey={ this.props.connectionKey }
         db={ this.props.db }

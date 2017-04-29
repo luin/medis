@@ -1,11 +1,8 @@
-'use strict';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createSelector } from 'reselect';
-import { connect } from 'react-redux';
-import store from '../../store';
-import actions from '../../actions';
+import {createSelector} from 'reselect';
+import {connect} from 'react-redux';
+import {addPattern, reorderPatterns, updatePattern, removePattern} from 'Redux/actions';
 import Sortable from 'sortablejs';
 
 require('./app.scss');
@@ -36,7 +33,11 @@ class App extends React.Component {
       },
       onUpdate: evt => {
         this._updateSortableKey();
-        store.dispatch(actions('reorderPatternStores', { store: connectionKey, from: evt.oldIndex, to: evt.newIndex }));
+        this.props.reorderPatterns({
+          conn: connectionKey,
+          from: evt.oldIndex,
+          to: evt.newIndex
+        })
       }
     });
   }
@@ -103,16 +104,16 @@ class App extends React.Component {
         <footer>
           <button
             onClick={() => {
-              store.dispatch(actions('addPattern', { store: connectionKey }, pattern => {
-                this.select(pattern.toJS());
-              }));
+              this.props.addPattern({conn: connectionKey})
+              // TODO: auto select
+              // this.select(pattern.toJS());
             }}
           >+</button>
           <button
             className={activePattern ? '' : 'is-disabled'}
             onClick={() => {
               if (activePattern) {
-                store.dispatch(actions('removePatternStore', { store: connectionKey, key: activePattern.key }));
+                this.props.removePattern({ conn: connectionKey, key: activePattern.key })
                 if (activeIndex >= 1) {
                   this.select(this.props.patterns[activeIndex - 1]);
                 } else if (this.props.patterns.length > 1) {
@@ -152,11 +153,11 @@ class App extends React.Component {
           <button
             className="nt-button nt-button--primary"
             onClick={() => {
-              store.dispatch(actions('updatePattern', {
-                store: connectionKey,
+              this.props.updatePattern({
+                conn: connectionKey,
                 index: activeIndex,
                 data: { name: this.state.name, value: this.state.value }
-              }));
+              })
               alert('Save Successfully');
             }}
           >Save</button>
@@ -167,13 +168,18 @@ class App extends React.Component {
 }
 
 const selector = createSelector(
-  state => state.get('patternStore'),
-    (patternStore) => {
-      let patterns = patternStore.get(connectionKey);
-      patterns = patterns ? patterns.toJS() : [];
-      return { patterns };
-    }
-);
+  state => state.patterns,
+  (patterns) => {
+    return { patterns: patterns.get(connectionKey, List()).toJS() };
+  }
+)
+
+const mapDispatchToProps = {
+  updatePattern,
+  reorderPatterns,
+  addPattern,
+  removePattern
+}
 
 export default connect(selector)(App);
 
