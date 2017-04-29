@@ -1,8 +1,7 @@
 'use strict';
 
-const app = require('app');
+const {app, Menu} = require('electron');
 const windowManager = require('./windowManager');
-const Menu = require('menu');
 
 const menuTemplate = [{
   label: 'File',
