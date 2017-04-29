@@ -1,5 +1,6 @@
-import {createAction} from 'redux-actions'
+import {createAction} from 'Utils';
 import {remote} from 'electron'
+import {getId} from 'Utils'
 
 export const createInstance = createAction('CREATE_INSTANCE', data => (
   Object.assign({}, data, {key: getId('instance')})

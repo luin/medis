@@ -1,6 +1,6 @@
 'use strict';
 
-import {createAction} from 'redux-actions';
+import {createAction} from 'Utils';
 import {Client} from 'ssh2';
 import net from 'net';
 import Redis from 'ioredis';

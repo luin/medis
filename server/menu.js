@@ -15,7 +15,7 @@ const menuTemplate = [{
     label: 'New Connection Tab',
     accelerator: 'CmdOrCtrl+T',
     click() {
-      windowManager.current.webContents.send('action', 'addInstance');
+      windowManager.current.webContents.send('action', 'createInstance');
     }
   }, {
     type: 'separator'

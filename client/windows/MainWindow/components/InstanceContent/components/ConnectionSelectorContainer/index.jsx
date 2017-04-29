@@ -20,19 +20,17 @@ class ConnectionSelector extends React.Component {
   }
 
   render() {
-    console.log(this.state, this.props)
     const selectedFavorite = this.state.key && this.props.favorites.find(item => item.get('key') === this.state.key);
-    const {updateFavorite, addFavorite} = this.props
     return <div className="pane-group">
       <aside className="pane pane-sm sidebar">
         <Favorite
           favorites={this.props.favorites}
           onSelect={this.handleSelectFavorite.bind(this, false)}
           onRequireConnecting={this.handleSelectFavorite.bind(this, true)}
-          updateFavorite={updateFavorite}
-          addFavorite={addFavorite}
-          removeFavorite={removeFavorite}
-          reorderFavorites={reorderFavorites}
+          updateFavorite={this.props.updateFavorite}
+          addFavorite={this.props.addFavorite}
+          removeFavorite={this.props.removeFavorite}
+          reorderFavorites={this.props.reorderFavorites}
         />
       </aside>
       <div className="pane">
@@ -65,7 +63,9 @@ const selector = createSelector(
 const mapDispatchToProps = {
   updateFavorite,
   addFavorite,
-  connectToRedis
+  connectToRedis,
+  reorderFavorites,
+  removeFavorite
 }
 
 export default connect(selector, mapDispatchToProps)(ConnectionSelector);
