@@ -3,6 +3,9 @@
 import * as Favorite from '../backend/favorite';
 import Immutable from 'immutable';
 
+export default (state ) => {
+}
+
 export function addFavorite(data, callback) {
   const favorite = Immutable.Map(Object.assign({}, {
     key: `favorite-${Math.round(Math.random() * 100000)}`,

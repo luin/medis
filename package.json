@@ -27,6 +27,7 @@
     "jquery": "^2.1.4",
     "lodash": "^3.10.1",
     "redis-commands": "^1.0.1",
+    "redux-actions": "^2.0.2",
     "ssh2": "^0.5.4"
   },
   "devDependencies": {
@@ -42,6 +43,7 @@
     "electron-osx-sign": "^0.4.4",
     "electron-packager": "^8.6.0",
     "eslint-plugin-react": "^3.15.0",
+    "extract-text-webpack-plugin": "^1.0.1",
     "form-generator-react": "^1.0.5",
     "github": "^0.2.4",
     "human-format": "^0.5.0",

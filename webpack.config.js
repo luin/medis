@@ -2,8 +2,8 @@
 
 module.exports = {
   entry: {
-    main: './client/main.jsx',
-    'pattern-manager': './client/pattern-manager.jsx'
+    main: './client/windows/MainWindow/entry.jsx',
+    patternManager: './client/windows/PatternManagerWindow/entry.jsx'
   },
   node: {
     Buffer: false,
@@ -11,7 +11,6 @@ module.exports = {
   },
   output: {
     filename: '[name].js'
-    // publicPath: 'http://localhost:8090/assets'
   },
   module: {
     loaders: [{
