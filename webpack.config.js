@@ -1,5 +1,7 @@
 'use strict';
 
+const path = require('path')
+
 module.exports = {
   entry: {
     main: './client/windows/MainWindow/entry.jsx',
@@ -48,6 +50,10 @@ module.exports = {
     'file': '{}'
   },
   resolve: {
+    alias: {
+      Redux: path.resolve(__dirname, 'client/redux/'),
+      Utils: path.resolve(__dirname, 'client/utils/'),
+    },
     extensions: ['', '.js', '.jsx']
   }
-};
+}

@@ -1,8 +1,6 @@
 'use strict';
 
 import React from 'react';
-import store from '../../../../../../../store';
-import actions from '../../../../../../../actions';
 import Sortable from 'sortablejs';
 
 class Favorite extends React.Component {
@@ -29,7 +27,7 @@ class Favorite extends React.Component {
       },
       onUpdate: evt => {
         this._updateSortableKey();
-        store.dispatch(actions('reorderFavorites', { from: evt.oldIndex, to: evt.newIndex }));
+        this.props.reorderFavorites({ from: evt.oldIndex, to: evt.newIndex })
       }
     });
   }
@@ -94,11 +92,11 @@ class Favorite extends React.Component {
         }</div>
       </nav>
       <footer className="toolbar toolbar-footer">
-        <button onClick={
-          store.dispatch.bind(null, actions('addFavorite', favorite => {
-            this.select(favorite);
-          }))
-        }>+</button>
+        <button onClick={() => {
+          this.props.addFavorite()
+          // TODO: auto select
+          // this.select(favorite);
+        }}>+</button>
         <button onClick={
           () => {
             const key = this.state.activeKey;
@@ -110,9 +108,9 @@ class Favorite extends React.Component {
               button: 'Delete',
               content: 'Are you sure you want to delete the selected bookmark? This action cannot be undone.'
             }).then(() => {
-              const index = this.props.favorites.findIndex(favorite => key === favorite.get('key'));
-              store.dispatch(actions('removeFavorite', { key }));
-              this.selectIndex(index - 1);
+              const index = this.props.favorites.findIndex(favorite => key === favorite.get('key'))
+              this.props.removeFavorite(key)
+              this.selectIndex(index - 1)
             });
           }
         }>-</button>

@@ -6,10 +6,20 @@ import net from 'net';
 import Redis from 'ioredis';
 import _ from 'lodash';
 
-export const updateConnectStatus = createAction('UPDATE_CONNECT_STATUS')
-export const disconnect = createAction('DISCONNECT')
-export const connectSuccessfully = createAction('CONNECT_SUCCESSFULLY')
-export const connect = createAction('CONNECT', config => ({dispatch}) => {
+function getIndex(getState) {
+  const {activeInstanceKey, instances} = getState()
+  return instances.findIndex(instance => instance.get('key') === activeInstanceKey)
+}
+
+export const updateConnectStatus = createAction('UPDATE_CONNECT_STATUS', status => ({getState, next}) => {
+  next({status, index: getIndex(getState)})
+})
+
+export const disconnect = createAction('DISCONNECT', () => ({getState, next}) => {
+  next({index: getIndex(getState)})
+})
+
+export const connectToRedis = createAction('CONNECT', config => ({getState, dispatch, next}) => {
   let sshErrorThrown = false
   let redisErrorThrown = false
   let redisErrorMessage
@@ -106,7 +116,7 @@ export const connect = createAction('CONNECT', config => ({dispatch}) => {
             return;
           }
         }
-        dispatch(connectSuccessfully({redis, config}));
+        next({redis, config, index: getIndex(getState)});
       })
     });
     redis.once('error', function (error) {

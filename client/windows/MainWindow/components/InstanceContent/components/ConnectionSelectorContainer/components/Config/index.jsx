@@ -1,8 +1,7 @@
 'use strict';
 
 import React from 'react';
-import store from '../../../../../../../../store';
-import actions from '../../../../../../../../actions';
+import store from 'Redux/store';
 import Immutable from 'immutable';
 import {remote} from 'electron';
 import fs from 'fs';
@@ -45,12 +44,13 @@ class Config extends React.Component {
   }
 
   connect() {
+    const {favorite, connectToRedis} = this.props
     const data = this.state.data;
-    const config = this.props.favorite ? this.props.favorite.merge(data).toJS() : data.toJS();
+    const config = favorite ? favorite.merge(data).toJS() : data.toJS();
     config.host = config.host || 'localhost';
     config.port = config.port || '6379';
     config.sshPort = config.sshPort || '22';
-    store.dispatch(actions('connect', config));
+    connectToRedis(config)
     this.save();
   }
 
