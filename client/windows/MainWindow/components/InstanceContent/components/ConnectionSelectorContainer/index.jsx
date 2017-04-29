@@ -1,26 +1,26 @@
-'use strict';
+'use strict'
 
-import React from 'react';
-import {Provider, connect} from 'react-redux';
-import Favorite from './components/Favorite';
-import { createSelector } from 'reselect';
-import Config from './components/Config';
-import store from 'Redux/store';
-import {connectToRedis} from 'Redux/actions';
-import {removeFavorite, updateFavorite, addFavorite, reorderFavorites} from 'Redux/actions';
+import React from 'react'
+import {Provider, connect} from 'react-redux'
+import Favorite from './components/Favorite'
+import {createSelector} from 'reselect'
+import Config from './components/Config'
+import store from 'Redux/store'
+import {connectToRedis} from 'Redux/actions'
+import {removeFavorite, updateFavorite, addFavorite, reorderFavorites} from 'Redux/actions'
 
 class ConnectionSelector extends React.Component {
   constructor() {
-    super();
-    this.state = { connect: false, key: null };
+    super()
+    this.state = {connect: false, key: null}
   }
 
   handleSelectFavorite(connect, key) {
-    this.setState({ connect, key });
+    this.setState({connect, key})
   }
 
   render() {
-    const selectedFavorite = this.state.key && this.props.favorites.find(item => item.get('key') === this.state.key);
+    const selectedFavorite = this.state.key && this.props.favorites.find(item => item.get('key') === this.state.key)
     return <div className="pane-group">
       <aside className="pane pane-sm sidebar">
         <Favorite
@@ -39,13 +39,13 @@ class ConnectionSelector extends React.Component {
           connectStatus={this.props.connectStatus}
           connect={this.state.connect}
           connectToRedis={this.props.connectToRedis}
-          onSave={(data) => {
+          onSave={data => {
             updateFavorite(selectedFavorite.get('key'), data)
           }}
           onDuplicate={addFavorite}
         />
       </div>
-    </div>;
+    </div>
   }
 }
 
@@ -56,9 +56,9 @@ const selector = createSelector(
     return {
       favorites,
       connectStatus: instance.get('connectStatus')
-    };
+    }
   }
-);
+)
 
 const mapDispatchToProps = {
   updateFavorite,
@@ -68,4 +68,4 @@ const mapDispatchToProps = {
   removeFavorite
 }
 
-export default connect(selector, mapDispatchToProps)(ConnectionSelector);
+export default connect(selector, mapDispatchToProps)(ConnectionSelector)

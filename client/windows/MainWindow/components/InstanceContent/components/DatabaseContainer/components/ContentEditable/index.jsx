@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-require('./index.scss');
+require('./index.scss')
 
 export default class ContentEditable extends React.Component {
   constructor() {
-    super();
+    super()
   }
 
   render() {
@@ -20,58 +20,57 @@ export default class ContentEditable extends React.Component {
         ref="text"
         dangerouslySetInnerHTML={{__html: this.props.html}}
       />
-    </div>;
+    </div>
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.html !== this.props.html || //ReactDOM.findDOMNode(this.refs.text).innerHTML ||
-      nextProps.enabled !== this.props.enabled;
+    return nextProps.html !== this.props.html || // ReactDOM.findDOMNode(this.refs.text).innerHTML ||
+      nextProps.enabled !== this.props.enabled
   }
 
-  componentDidMount(){
+  componentDidMount() {
     if (this.props.enabled) {
-      ReactDOM.findDOMNode(this.refs.text).focus();
+      ReactDOM.findDOMNode(this.refs.text).focus()
     }
   }
 
   componentDidUpdate() {
-    const node = ReactDOM.findDOMNode(this.refs.text);
+    const node = ReactDOM.findDOMNode(this.refs.text)
     if (this.props.html !== node.innerHTML) {
-      node.innerHTML = this.props.html;
+      node.innerHTML = this.props.html
     }
     if (this.props.enabled) {
-      const range = document.createRange();
-      range.selectNodeContents(node);
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
+      const range = document.createRange()
+      range.selectNodeContents(node)
+      const sel = window.getSelection()
+      sel.removeAllRanges()
+      sel.addRange(range)
     }
   }
 
   handleKeyDown(evt) {
     if (evt.keyCode === 13) {
-      ReactDOM.findDOMNode(this.refs.text).blur();
-      evt.preventDefault();
-      evt.stopPropagation();
-      return;
+      ReactDOM.findDOMNode(this.refs.text).blur()
+      evt.preventDefault()
+      evt.stopPropagation()
+      return
     }
     if (evt.keyCode === 27) {
-      this.props.onChange(this.props.html);
-      evt.preventDefault();
-      evt.stopPropagation();
-      return;
+      this.props.onChange(this.props.html)
+      evt.preventDefault()
+      evt.stopPropagation()
     }
   }
 
   handleChange(evt) {
-    var html = ReactDOM.findDOMNode(this.refs.text).innerHTML;
+    const html = ReactDOM.findDOMNode(this.refs.text).innerHTML
     if (html !== this.lastHtml) {
-      evt.target = { value: html };
+      evt.target = {value: html}
     }
-    this.lastHtml = html;
+    this.lastHtml = html
   }
 
   handleSubmit() {
-    this.props.onChange(ReactDOM.findDOMNode(this.refs.text).textContent);
+    this.props.onChange(ReactDOM.findDOMNode(this.refs.text).textContent)
   }
 }

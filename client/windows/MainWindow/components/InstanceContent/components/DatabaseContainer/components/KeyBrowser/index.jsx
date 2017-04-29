@@ -1,27 +1,27 @@
-'use strict';
+'use strict'
 
-import React from 'react';
-import {List} from 'immutable';
-import PatternList from './components/PatternList';
-import KeyList from './components/KeyList';
-import Footer from './components/Footer';
+import React from 'react'
+import {List} from 'immutable'
+import PatternList from './components/PatternList'
+import KeyList from './components/KeyList'
+import Footer from './components/Footer'
 
 class KeyBrowser extends React.Component {
   constructor(props) {
-    super();
-    this.footerHeight = 66;
+    super()
+    this.footerHeight = 66
 
-    this.state = { pattern: props.pattern };
+    this.state = {pattern: props.pattern}
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.pattern !== this.props.pattern) {
-      this.setState({ pattern: nextProps.pattern });
+      this.setState({pattern: nextProps.pattern})
     }
   }
 
   render() {
-    const { patterns, connectionKey } = this.props;
+    const {patterns, connectionKey} = this.props
     return <div className="pane sidebar">
       <PatternList
         patterns={patterns.get(`${connectionKey}|${this.props.db}`, List())}
@@ -30,7 +30,7 @@ class KeyBrowser extends React.Component {
         db={ this.props.db }
         pattern={ this.state.pattern }
         onChange={pattern => {
-          this.setState({ pattern });
+          this.setState({pattern})
         }}
       />
       <KeyList
@@ -48,8 +48,8 @@ class KeyBrowser extends React.Component {
         db={ this.props.db }
         redis={ this.props.redis }
       />
-    </div>;
+    </div>
   }
 }
 
-export default KeyBrowser;
+export default KeyBrowser

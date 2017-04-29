@@ -1,74 +1,76 @@
-'use strict';
+'use strict'
 
-import React from 'react';
-import TabBar from './components/TabBar';
-import KeyContent from './components/KeyContent';
-import Terminal from './components/Terminal';
-import Config from './components/Config';
-import Footer from './components/Footer';
+import React from 'react'
+import TabBar from './components/TabBar'
+import KeyContent from './components/KeyContent'
+import Terminal from './components/Terminal'
+import Config from './components/Config'
+import Footer from './components/Footer'
 
 class Content extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       pattern: '',
       db: 0,
       version: 0,
       tab: 'Content'
-    };
+    }
   }
 
   init(keyName) {
-    this.setState({ keyType: null });
+    this.setState({keyType: null})
     if (keyName !== null) {
-      this.setState({ keyType: null });
+      this.setState({keyType: null})
       this.props.redis.type(keyName).then(keyType => {
         if (keyName === this.props.keyName) {
-          this.setState({ keyType });
+          this.setState({keyType})
         }
-      });
+      })
     }
   }
 
   componentDidMount() {
-    this.init(this.props.keyName);
+    this.init(this.props.keyName)
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.keyName !== this.props.keyName || nextProps.version !== this.props.version) {
-      this.init(nextProps.keyName);
+      this.init(nextProps.keyName)
     }
     if (nextProps.metaVersion !== this.props.metaVersion) {
-      this.setState({ version: this.state.version + 1 });
+      this.setState({version: this.state.version + 1})
     }
   }
 
   handleTabChange(tab) {
-    this.setState({ tab });
+    this.setState({tab})
   }
 
   render() {
-    return <div className="pane sidebar" style={ { height: '100%' } }>
+    return <div className="pane sidebar" style={ {height: '100%'} }>
       <TabBar
         onSelectTab={this.handleTabChange.bind(this)}
       />
       <KeyContent
-        style={{ display: this.state.tab === 'Content' ? 'flex' : 'none' }}
+        style={{display: this.state.tab === 'Content' ? 'flex' : 'none'}}
         keyName={this.props.keyName}
         keyType={this.state.keyType}
         height={this.props.height - 66}
         redis={this.props.redis}
-        onKeyContentChange={() => { this.setState({ version: this.state.version + 1 })}}
+        onKeyContentChange={() => {
+          this.setState({version: this.state.version + 1})
+        }}
       />
       <Terminal
-        style={{ display: this.state.tab === 'Terminal' ? 'block' : 'none' }}
+        style={{display: this.state.tab === 'Terminal' ? 'block' : 'none'}}
         height={this.props.height - 67}
         redis={this.props.redis}
         connectionKey={ this.props.connectionKey }
         onDatabaseChange={this.props.onDatabaseChange}
       />
       <Config
-        style={{ display: this.state.tab === 'Config' ? 'block' : 'none' }}
+        style={{display: this.state.tab === 'Config' ? 'block' : 'none'}}
         height={this.props.height - 67}
         redis={this.props.redis}
         connectionKey={ this.props.connectionKey }
@@ -79,8 +81,8 @@ class Content extends React.Component {
         version={this.state.version}
         redis={this.props.redis}
       />
-    </div>;
+    </div>
   }
 }
 
-export default Content;
+export default Content

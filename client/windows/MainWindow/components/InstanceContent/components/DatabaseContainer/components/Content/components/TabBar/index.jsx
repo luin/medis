@@ -1,20 +1,20 @@
-'use strict';
+'use strict'
 
-import React from 'react';
+import React from 'react'
 
-require('./index.scss');
+require('./index.scss')
 
 class Content extends React.Component {
   constructor() {
-    super();
+    super()
 
     this.tabs = [
       'Content',
       'Terminal',
       'Config'
-    ];
+    ]
 
-    this.state = { activeTab: 'Content' };
+    this.state = {activeTab: 'Content'}
   }
 
   render() {
@@ -25,27 +25,27 @@ class Content extends React.Component {
             className={ 'item' + (tab === this.state.activeTab ? ' is-active' : '') }
             key={tab}
             onClick={ () => {
-              this.setState({ activeTab: tab });
-              this.props.onSelectTab(tab);
+              this.setState({activeTab: tab})
+              this.props.onSelectTab(tab)
             } }
           >
             {
               (() => {
                 if (tab === 'Content') {
-                  return <span className="icon icon-book" />;
+                  return <span className="icon icon-book" />
                 } else if (tab === 'Terminal') {
-                  return <span className="icon icon-window" />;
+                  return <span className="icon icon-window" />
                 } else if (tab === 'Config') {
-                  return <span className="icon icon-cog" />;
+                  return <span className="icon icon-cog" />
                 }
               })()
             }
             {tab}
-          </div>;
+          </div>
         })
       }
-    </div>;
+    </div>
   }
 }
 
-export default Content;
+export default Content

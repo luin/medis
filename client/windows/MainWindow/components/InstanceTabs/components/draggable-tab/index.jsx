@@ -1,8 +1,8 @@
-'use strict';
+'use strict'
 
-import Tab from './components/Tab';
-import Tabs from './components/Tabs';
+import Tab from './components/Tab'
+import Tabs from './components/Tabs'
 
-require('./styles/main.scss');
+require('./styles/main.scss')
 
-export { Tab, Tabs };
+export {Tab, Tabs}

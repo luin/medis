@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-require('./index.scss');
+require('./index.scss')
 
 export default class AddButton extends React.Component {
   constructor() {
-    super();
+    super()
   }
 
   render() {
@@ -15,6 +15,6 @@ export default class AddButton extends React.Component {
         this.props.reload && <span className="reload icon icon-cw" onClick={this.props.onReload}></span>
       }
       <span className="plus" onClick={this.props.onClick}>+</span>
-    </div>;
+    </div>
   }
 }

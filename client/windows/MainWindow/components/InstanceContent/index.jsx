@@ -1,46 +1,46 @@
-'use strict';
+'use strict'
 
-import React from 'react';
-import ConnectionSelectorContainer from './components/ConnectionSelectorContainer';
-import DatabaseContainer from './components/DatabaseContainer';
-import Modal from '../../components/InstanceContent/components/Modal';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import React from 'react'
+import ConnectionSelectorContainer from './components/ConnectionSelectorContainer'
+import DatabaseContainer from './components/DatabaseContainer'
+import Modal from '../../components/InstanceContent/components/Modal'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 class InstanceContent extends React.Component {
   constructor() {
-    super();
-    this.state = {};
+    super()
+    this.state = {}
   }
 
   componentDidMount() {
-    window.showModal = (modal) => {
-      this.activeElement = document.activeElement;
-      this.setState({ modal });
+    window.showModal = modal => {
+      this.activeElement = document.activeElement
+      this.setState({modal})
 
       return new Promise((resolve, reject) => {
-        this.promise = { resolve, reject };
-      });
-    };
+        this.promise = {resolve, reject}
+      })
+    }
   }
 
   modalSubmit(result) {
-    this.promise.resolve(result);
-    this.setState({ modal: null });
+    this.promise.resolve(result)
+    this.setState({modal: null})
     if (this.activeElement) {
-      this.activeElement.focus();
+      this.activeElement.focus()
     }
   }
 
   modalCancel() {
-    this.promise.reject();
-    this.setState({ modal: null });
+    this.promise.reject()
+    this.setState({modal: null})
     if (this.activeElement) {
-      this.activeElement.focus();
+      this.activeElement.focus()
     }
   }
 
   componentWillUnmount() {
-    delete window.showModal;
+    delete window.showModal
   }
 
   render() {
@@ -66,8 +66,8 @@ class InstanceContent extends React.Component {
         }
       </ReactCSSTransitionGroup>
       { contents }
-    </div>;
+    </div>
   }
 }
 
-export default InstanceContent;
+export default InstanceContent
