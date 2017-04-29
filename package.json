@@ -11,7 +11,7 @@
     "run": "webpack --progress --colors && electron .",
     "start": "NODE_ENV=debug electron .",
     "dev": "./bin/dev",
-    "xo": "xo client",
+    "xo": "xo --fix client/**/*.{js,jsx}",
     "deploy": "NODE_ENV=production ./bin/deploy",
     "release": "NODE_ENV=production ./bin/release",
     "sign": "./bin/sign",
@@ -20,6 +20,10 @@
   },
   "xo": {
     "semicolon": false,
+    "ignore": [
+      "client/vendors/**",
+      "client/photon/**"
+    ],
     "envs": [
       "browser"
     ],

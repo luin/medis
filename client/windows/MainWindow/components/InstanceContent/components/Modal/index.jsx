@@ -1,29 +1,29 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-require('json-editor');
+import React from 'react'
+import ReactDOM from 'react-dom'
+require('json-editor')
 
-require('./index.scss');
+require('./index.scss')
 
 export default class Modal extends React.Component {
   constructor() {
-    super();
+    super()
   }
 
   handleSubmit() {
     if (this.editor) {
-      const errors = this.editor.validate();
+      const errors = this.editor.validate()
       if (errors.length) {
-        $('.ui-state-error', ReactDOM.findDOMNode(this.refs.form)).css('opacity', 1);
-        return;
+        $('.ui-state-error', ReactDOM.findDOMNode(this.refs.form)).css('opacity', 1)
+        return
       }
-      this.props.onSubmit(this.editor.getValue());
+      this.props.onSubmit(this.editor.getValue())
     } else {
-      this.props.onSubmit(1);
+      this.props.onSubmit(1)
     }
   }
 
   handleCancel() {
-    this.props.onCancel();
+    this.props.onCancel()
   }
 
   componentDidMount() {
@@ -39,48 +39,48 @@ export default class Modal extends React.Component {
         schema: this.props.form,
         show_errors: 'always',
         theme: 'jqueryui'
-      });
+      })
 
-      $('.row input, .row select', ReactDOM.findDOMNode(this.refs.form)).first().focus();
+      $('.row input, .row select', ReactDOM.findDOMNode(this.refs.form)).first().focus()
     } else {
-      $('.nt-button', ReactDOM.findDOMNode(this)).first().focus();
+      $('.nt-button', ReactDOM.findDOMNode(this)).first().focus()
     }
   }
 
   handleKeyDown(evt) {
     if (evt.keyCode === 9) {
-      const $all = $('.row input, .row select, .nt-button', ReactDOM.findDOMNode(this));
-      const focused = $(':focus')[0];
-      let i;
+      const $all = $('.row input, .row select, .nt-button', ReactDOM.findDOMNode(this))
+      const focused = $(':focus')[0]
+      let i
       for (i = 0; i < $all.length - 1; ++i) {
         if ($all[i] != focused) {
-          continue;
+          continue
         }
-        $all[i + 1].focus();
-        break;
+        $all[i + 1].focus()
+        break
       }
       // Must have been focused on the last one or none of them.
-      if(i == $all.length - 1)
-          $all[0].focus();
-      evt.stopPropagation();
-      evt.preventDefault();
-      return;
+      if (i == $all.length - 1) {
+        $all[0].focus()
+      }
+      evt.stopPropagation()
+      evt.preventDefault()
+      return
     }
     if (evt.keyCode === 27) {
-      this.handleCancel();
-      evt.stopPropagation();
-      evt.preventDefault();
-      return;
+      this.handleCancel()
+      evt.stopPropagation()
+      evt.preventDefault()
+      return
     }
     if (evt.keyCode === 13) {
-      const node = ReactDOM.findDOMNode(this.props.form ? this.refs.cancel: this.refs.submit);
-      node.focus();
+      const node = ReactDOM.findDOMNode(this.props.form ? this.refs.cancel : this.refs.submit)
+      node.focus()
       setTimeout(() => {
-        node.click();
-      }, 10);
-      evt.stopPropagation();
-      evt.preventDefault();
-      return;
+        node.click()
+      }, 10)
+      evt.stopPropagation()
+      evt.preventDefault()
     }
   }
 
@@ -114,6 +114,6 @@ export default class Modal extends React.Component {
             >{this.props.button || 'OK'}</button>
         </div>
       </div>
-    </div>;
+    </div>
   }
 }

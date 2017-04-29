@@ -1,8 +1,8 @@
-'use strict';
+'use strict'
 
-import React from 'react';
+import React from 'react'
 
-require('./index.scss');
+require('./index.scss')
 
 const getDefaultState = function () {
   return {
@@ -11,27 +11,27 @@ const getDefaultState = function () {
     desc: false,
     length: 0,
     members: []
-  };
-};
+  }
+}
 
 class BaseContent extends React.Component {
   constructor() {
-    super();
-    this.state = getDefaultState();
-    this.state.sidebarWidth = 200;
-    this.maxRow = 0;
-    this.cursor = 0;
-    this.randomClass = 'base-content-' + (Math.random() * 100000 | 0);
+    super()
+    this.state = getDefaultState()
+    this.state.sidebarWidth = 200
+    this.maxRow = 0
+    this.cursor = 0
+    this.randomClass = 'base-content-' + (Math.random() * 100000 | 0)
   }
 
   init(keyName, keyType) {
     if (!keyName || !keyType) {
-      return;
+      return
     }
-    this.loading = false;
-    this.setState(getDefaultState());
+    this.loading = false
+    this.setState(getDefaultState())
 
-    const { redis } = this.props;
+    const {redis} = this.props
 
     const method = {
       string: 'strlen',
@@ -39,55 +39,55 @@ class BaseContent extends React.Component {
       set: 'scard',
       zset: 'zcard',
       hash: 'hlen'
-    }[keyType];
+    }[keyType]
 
     redis[method](keyName).then(length => {
-      this.setState({ keyName, length: length || 0 });
-    });
+      this.setState({keyName, length: length || 0})
+    })
   }
 
   load(index) {
     if (index > this.maxRow) {
-      this.maxRow = index;
+      this.maxRow = index
     }
     if (this.loading) {
-      return;
+      return
     }
-    this.loading = true;
-    return true;
+    this.loading = true
+    return true
   }
 
   rowClassGetter(index) {
-    const item = this.state.members[index];
+    const item = this.state.members[index]
     if (typeof item === 'undefined') {
-      return 'type-list is-loading';
+      return 'type-list is-loading'
     }
     if (index === this.state.selectedIndex) {
-      return 'type-list is-selected';
+      return 'type-list is-selected'
     }
-    return 'type-list';
+    return 'type-list'
   }
 
   componentDidMount() {
-    this.init(this.props.keyName, this.props.keyType);
+    this.init(this.props.keyName, this.props.keyType)
   }
 
   componentDidUpdate() {
     if (typeof this.state.scrollToRow === 'number') {
-      this.setState({ scrollToRow: null });
+      this.setState({scrollToRow: null})
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.keyName !== this.props.keyName ||
         nextProps.keyType !== this.props.keyType) {
-      this.init(nextProps.keyName, nextProps.keyType);
+      this.init(nextProps.keyName, nextProps.keyType)
     }
   }
 
   componentWillUnmount() {
-    this.setState = function () {};
+    this.setState = function () {}
   }
 }
 
-export default BaseContent;
+export default BaseContent

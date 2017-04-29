@@ -1,106 +1,106 @@
-'use strict';
+'use strict'
 
-import React from 'react';
-import BaseContent from './BaseContent';
-import SplitPane from 'react-split-pane';
-import { Table, Column } from 'fixed-data-table-contextmenu';
-import Editor from './Editor';
-import AddButton from '../../../../AddButton';
-import ContentEditable from '../../../../ContentEditable';
-import ReactDOM from 'react-dom';
-import { clipboard } from 'electron';
+import React from 'react'
+import BaseContent from './BaseContent'
+import SplitPane from 'react-split-pane'
+import {Table, Column} from 'fixed-data-table-contextmenu'
+import Editor from './Editor'
+import AddButton from '../../../../AddButton'
+import ContentEditable from '../../../../ContentEditable'
+import ReactDOM from 'react-dom'
+import {clipboard} from 'electron'
 
 class HashContent extends BaseContent {
   save(value, callback) {
     if (typeof this.state.selectedIndex === 'number') {
-      const [key] = this.state.members[this.state.selectedIndex];
-      this.state.members[this.state.selectedIndex][1] = new Buffer(value);
-      this.setState({ members: this.state.members });
+      const [key] = this.state.members[this.state.selectedIndex]
+      this.state.members[this.state.selectedIndex][1] = Buffer.from(value)
+      this.setState({members: this.state.members})
       this.props.redis.hset(this.state.keyName, key, value, (err, res) => {
-        this.props.onKeyContentChange();
-        callback(err, res);
-      });
+        this.props.onKeyContentChange()
+        callback(err, res)
+      })
     } else {
-      alert('Please wait for data been loaded before saving.');
+      alert('Please wait for data been loaded before saving.')
     }
   }
 
   load(index) {
     if (!super.load(index)) {
-      return;
+      return
     }
-    const count = Number(this.cursor) ? 10000 : 500;
+    const count = Number(this.cursor) ? 10000 : 500
     this.props.redis.hscanBuffer(this.state.keyName, this.cursor, 'MATCH', '*', 'COUNT', count, (_, [cursor, result]) => {
       for (let i = 0; i < result.length - 1; i += 2) {
-        this.state.members.push([result[i].toString(), result[i + 1]]);
+        this.state.members.push([result[i].toString(), result[i + 1]])
       }
-      this.cursor = cursor;
-      this.setState({ members: this.state.members }, () => {
+      this.cursor = cursor
+      this.setState({members: this.state.members}, () => {
         if (typeof this.state.selectedIndex !== 'number' && this.state.members.length) {
-          this.handleSelect(null, 0);
+          this.handleSelect(null, 0)
         }
-        this.loading = false;
+        this.loading = false
         if (this.state.members.length - 1 < this.maxRow && Number(cursor)) {
-          this.load();
+          this.load()
         }
-      });
-    });
+      })
+    })
   }
 
   handleSelect(evt, selectedIndex) {
-    const item = this.state.members[selectedIndex];
+    const item = this.state.members[selectedIndex]
     if (item) {
-      this.setState({ selectedIndex, content: item[1] });
+      this.setState({selectedIndex, content: item[1]})
     }
   }
 
   handleKeyDown(e) {
     if (typeof this.state.selectedIndex === 'number' && typeof this.state.editableIndex !== 'number') {
       if (e.keyCode === 8) {
-        this.deleteSelectedMember();
-        return false;
+        this.deleteSelectedMember()
+        return false
       }
       if (e.keyCode === 38) {
         if (this.state.selectedIndex > 0) {
-          this.handleSelect(null, this.state.selectedIndex - 1);
+          this.handleSelect(null, this.state.selectedIndex - 1)
         }
-        return false;
+        return false
       }
       if (e.keyCode === 40) {
         if (this.state.selectedIndex < this.state.members.length - 1) {
-          this.handleSelect(null, this.state.selectedIndex + 1);
+          this.handleSelect(null, this.state.selectedIndex + 1)
         }
-        return false;
+        return false
       }
     }
   }
 
   deleteSelectedMember() {
     if (typeof this.state.selectedIndex !== 'number') {
-      return;
+      return
     }
     showModal({
       title: 'Delete selected item?',
       button: 'Delete',
       content: 'Are you sure you want to delete the selected item? This action cannot be undone.'
     }).then(() => {
-      const members = this.state.members;
-      const deleted = members.splice(this.state.selectedIndex, 1);
+      const members = this.state.members
+      const deleted = members.splice(this.state.selectedIndex, 1)
       if (deleted.length) {
-        this.props.redis.hdel(this.state.keyName, deleted[0]);
+        this.props.redis.hdel(this.state.keyName, deleted[0])
         if (this.state.selectedIndex >= members.length - 1) {
-          this.state.selectedIndex -= 1;
+          this.state.selectedIndex -= 1
         }
-        this.setState({ members, length: this.state.length - 1 }, () => {
-          this.props.onKeyContentChange();
-          this.handleSelect(null, this.state.selectedIndex);
-        });
+        this.setState({members, length: this.state.length - 1}, () => {
+          this.props.onKeyContentChange()
+          this.handleSelect(null, this.state.selectedIndex)
+        })
       }
-    });
+    })
   }
 
   componentDidMount() {
-    super.componentDidMount();
+    super.componentDidMount()
     $.contextMenu({
       context: ReactDOM.findDOMNode(this.refs.table),
       selector: '.' + this.randomClass,
@@ -109,31 +109,31 @@ class HashContent extends BaseContent {
       callback: (key, opt) => {
         setTimeout(() => {
           if (key === 'delete') {
-            this.deleteSelectedMember();
+            this.deleteSelectedMember()
           } else if (key === 'copy') {
-            clipboard.writeText(this.state.members[this.state.selectedIndex][0]);
+            clipboard.writeText(this.state.members[this.state.selectedIndex][0])
           } else if (key === 'rename') {
-            this.setState({ editableIndex: this.state.selectedIndex});
+            this.setState({editableIndex: this.state.selectedIndex})
           }
-        }, 0);
-        ReactDOM.findDOMNode(this.refs.table).focus();
+        }, 0)
+        ReactDOM.findDOMNode(this.refs.table).focus()
       },
       items: {
-        copy: { name: 'Copy to Clipboard'},
+        copy: {name: 'Copy to Clipboard'},
         sep1: '---------',
-        rename: { name: 'Rename Key'},
-        delete: { name: 'Delete' }
+        rename: {name: 'Rename Key'},
+        delete: {name: 'Delete'}
       }
-    });
+    })
   }
 
   showContextMenu(e, row) {
-    this.handleSelect(null, row);
+    this.handleSelect(null, row)
     $(ReactDOM.findDOMNode(this.refs.table)).contextMenu({
       x: e.pageX,
       y: e.pageY,
       zIndex: 99999
-    });
+    })
   }
 
   render() {
@@ -145,7 +145,7 @@ class HashContent extends BaseContent {
       onChange={this.onChangeSiderbarWidth.bind(this)}
       >
       <div
-        style={ { 'marginTop': -1 } }
+        style={ {marginTop: -1} }
         onKeyDown={this.handleKeyDown.bind(this)}
         tabIndex="0"
         ref="table"
@@ -158,8 +158,8 @@ class HashContent extends BaseContent {
           onRowContextMenu={this.showContextMenu.bind(this)}
           onRowClick={this.handleSelect.bind(this)}
           onRowDoubleClick={(evt, index) => {
-            this.handleSelect(evt, index);
-            this.setState({ editableIndex: index });
+            this.handleSelect(evt, index)
+            this.setState({editableIndex: index})
           }}
           width={this.props.sidebarWidth}
           height={this.props.height}
@@ -179,40 +179,40 @@ class HashContent extends BaseContent {
                     }
                   }
                 }).then(res => {
-                  const data = res['Key:'];
-                  const value = 'New Member';
+                  const data = res['Key:']
+                  const value = 'New Member'
                   this.props.redis.hsetnx(this.state.keyName, data, value).then(inserted => {
                     if (!inserted) {
-                      alert('The field already exists');
-                      return;
+                      alert('The field already exists')
+                      return
                     }
-                    this.state.members.push([data, new Buffer(value)])
+                    this.state.members.push([data, Buffer.from(value)])
                     this.setState({
                       members: this.state.members,
-                      length: this.state.length + 1,
+                      length: this.state.length + 1
                     }, () => {
-                      this.props.onKeyContentChange();
-                      this.handleSelect(null, this.state.members.length - 1);
-                    });
-                  });
-                });
+                      this.props.onKeyContentChange()
+                      this.handleSelect(null, this.state.members.length - 1)
+                    })
+                  })
+                })
               }} />
             }
             width={this.props.sidebarWidth}
-            cell={ ({ rowIndex }) => {
-              const member = this.state.members[rowIndex];
+            cell={ ({rowIndex}) => {
+              const member = this.state.members[rowIndex]
               if (!member) {
-                this.load(rowIndex);
-                return 'Loading...';
+                this.load(rowIndex)
+                return 'Loading...'
               }
               return <ContentEditable
                 className="ContentEditable overflow-wrapper"
                 enabled={rowIndex === this.state.editableIndex}
                 onChange={target => {
-                  const members = this.state.members;
-                  const member = members[rowIndex];
-                  const keyName = this.state.keyName;
-                  const source = member[0];
+                  const members = this.state.members
+                  const member = members[rowIndex]
+                  const keyName = this.state.keyName
+                  const source = member[0]
                   if (source !== target && target) {
                     this.props.redis.hexists(keyName, target).then(exists => {
                       if (exists) {
@@ -221,43 +221,43 @@ class HashContent extends BaseContent {
                           button: 'Overwrite',
                           content: `Field "${target}" already exists. Are you sure you want to overwrite this field?`
                         }).then(() => {
-                          let found;
+                          let found
                           for (let i = 0; i < members.length; i++) {
                             if (members[i][0] === target) {
-                              found = i;
-                              break;
+                              found = i
+                              break
                             }
                           }
                           if (typeof found === 'number') {
-                            members.splice(found, 1);
-                            this.setState({ length: this.state.length - 1 });
+                            members.splice(found, 1)
+                            this.setState({length: this.state.length - 1})
                           }
-                        });
+                        })
                       }
                     }).then(() => {
-                      member[0] = target;
+                      member[0] = target
                       this.props.redis.multi()
                       .hdel(keyName, source)
-                      .hset(keyName, target, member[1]).exec();
-                      this.setState({ members });
-                    }).catch(() => {});
+                      .hset(keyName, target, member[1]).exec()
+                      this.setState({members})
+                    }).catch(() => {})
                   }
-                  this.setState({ editableIndex: null });
-                  ReactDOM.findDOMNode(this).focus();
+                  this.setState({editableIndex: null})
+                  ReactDOM.findDOMNode(this).focus()
                 }}
                 html={member[0]}
-              />;
+              />
             } }
           />
         </Table>
         </div>
         <Editor
-          style={{ height: this.props.height }}
+          style={{height: this.props.height}}
           buffer={this.state.content}
           onSave={this.save.bind(this)}
         />
-      </SplitPane>;
+      </SplitPane>
   }
 }
 
-export default HashContent;
+export default HashContent

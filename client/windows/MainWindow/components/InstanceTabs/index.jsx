@@ -1,38 +1,38 @@
-'use strict';
+'use strict'
 
-import React from 'react';
-import { Tab, Tabs } from './components/draggable-tab';
+import React from 'react'
+import {Tab, Tabs} from './components/draggable-tab'
 
 class InstanceTabs extends React.Component {
   constructor() {
-    super();
-    this.style = 'block';
+    super()
+    this.style = 'block'
   }
 
   render() {
-    const style = this.props.instances.count() === 1 ? 'none' : 'block';
+    const style = this.props.instances.count() === 1 ? 'none' : 'block'
     if (this.style !== style) {
-      this.style = style;
-      setTimeout(function () {
-        $(window).trigger('resize');
-      }, 0);
+      this.style = style
+      setTimeout(() => {
+        $(window).trigger('resize')
+      }, 0)
     }
 
     const {activeInstanceKey, onCreateInstance, onSelectInstance,
       onDelInstance, onMoveInstance} = this.props
-    return <div style={ { display: this.style, zIndex: '1000' } }>
+    return <div style={ {display: this.style, zIndex: '1000'} }>
       <Tabs
         onTabAddButtonClick={() => {
           if (!$('.Modal').length) {
             onCreateInstance()
           }
         }}
-        onTabSelect={(key) => {
+        onTabSelect={key => {
           if (!$('.Modal').length) {
             onSelectInstance(key)
           }
         }}
-        onTabClose={(key) => {
+        onTabClose={key => {
           if (!$('.Modal').length) {
             onDelInstance(key)
           }
@@ -41,12 +41,12 @@ class InstanceTabs extends React.Component {
         selectedTab={activeInstanceKey}
         tabs={
           this.props.instances.map(instance => {
-            return (<Tab key={instance.get('key')} title={instance.get('title')} ></Tab>);
+            return (<Tab key={instance.get('key')} title={instance.get('title')} ></Tab>)
           }).toJS()
         }
       />
-    </div>;
+    </div>
   }
 }
 
-export default InstanceTabs;
+export default InstanceTabs

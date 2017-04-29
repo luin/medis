@@ -1,14 +1,14 @@
-'use strict';
+'use strict'
 
-import React from 'react';
-import commands from 'redis-commands';
-import { clone } from 'lodash';
+import React from 'react'
+import commands from 'redis-commands'
+import {clone} from 'lodash'
 
-require('./index.scss');
+require('./index.scss')
 
 class Config extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.writeableFields = [
       'dbfilename',
       'requirepass',
@@ -69,191 +69,191 @@ class Config extends React.Component {
       'loglevel',
       'maxmemory-policy',
       'appendfsync'
-    ];
+    ]
     this.groups = [
       {
         name: 'General',
         configs: [
-          { name: 'port', type: 'number' },
-          { name: 'bind' },
-          { name: 'unixsocket' },
-          { name: 'unixsocketperm', type: 'number' },
-          { name: 'daemonize', type: 'boolean' },
-          { name: 'pidfile' },
-          { name: 'tcp-backlog', type: 'number' },
-          { name: 'tcp-keepalive', type: 'number' },
-          { name: 'timeout', type: 'number' },
-          { name: 'databases', type: 'number' }
+          {name: 'port', type: 'number'},
+          {name: 'bind'},
+          {name: 'unixsocket'},
+          {name: 'unixsocketperm', type: 'number'},
+          {name: 'daemonize', type: 'boolean'},
+          {name: 'pidfile'},
+          {name: 'tcp-backlog', type: 'number'},
+          {name: 'tcp-keepalive', type: 'number'},
+          {name: 'timeout', type: 'number'},
+          {name: 'databases', type: 'number'}
         ]
       },
       {
         name: 'Logging',
         configs: [
-          { name: 'loglevel', type: ['debug', 'verbose', 'notice', 'warning'] },
-          { name: 'logfile' },
-          { name: 'syslog-enabled', type: 'boolean' },
-          { name: 'syslog-ident' },
-          { name: 'syslog-facility' },
+          {name: 'loglevel', type: ['debug', 'verbose', 'notice', 'warning']},
+          {name: 'logfile'},
+          {name: 'syslog-enabled', type: 'boolean'},
+          {name: 'syslog-ident'},
+          {name: 'syslog-facility'}
         ]
       },
       {
         name: 'Snap Shotting',
         configs: [
-          { name: 'dbfilename' },
-          { name: 'dir' },
-          { name: 'save' },
-          { name: 'stop-writes-on-bgsave-error', type: 'boolean' },
-          { name: 'rdbcompression', type: 'boolean' },
-          { name: 'rdbchecksum', type: 'boolean' }
+          {name: 'dbfilename'},
+          {name: 'dir'},
+          {name: 'save'},
+          {name: 'stop-writes-on-bgsave-error', type: 'boolean'},
+          {name: 'rdbcompression', type: 'boolean'},
+          {name: 'rdbchecksum', type: 'boolean'}
         ]
       },
       {
         name: 'Replication',
         configs: [
-          { name: 'slaveof' },
-          { name: 'masterauth' },
-          { name: 'slave-serve-stale-data', type: 'boolean' },
-          { name: 'slave-read-only', type: 'boolean' },
-          { name: 'repl-diskless-sync', type: 'boolean' },
-          { name: 'repl-diskless-sync-delay', type: 'number' },
-          { name: 'repl-ping-slave-period', type: 'number' },
-          { name: 'repl-timeout', type: 'number' },
-          { name: 'repl-disable-tcp-nodelay', type: 'boolean' },
-          { name: 'repl-backlog-size' },
-          { name: 'repl-backlog-ttl', type: 'number' },
-          { name: 'slave-priority', type: 'number' },
-          { name: 'min-slaves-to-write', type: 'number'},
-          { name: 'min-slaves-max-lag', type: 'number'},
+          {name: 'slaveof'},
+          {name: 'masterauth'},
+          {name: 'slave-serve-stale-data', type: 'boolean'},
+          {name: 'slave-read-only', type: 'boolean'},
+          {name: 'repl-diskless-sync', type: 'boolean'},
+          {name: 'repl-diskless-sync-delay', type: 'number'},
+          {name: 'repl-ping-slave-period', type: 'number'},
+          {name: 'repl-timeout', type: 'number'},
+          {name: 'repl-disable-tcp-nodelay', type: 'boolean'},
+          {name: 'repl-backlog-size'},
+          {name: 'repl-backlog-ttl', type: 'number'},
+          {name: 'slave-priority', type: 'number'},
+          {name: 'min-slaves-to-write', type: 'number'},
+          {name: 'min-slaves-max-lag', type: 'number'}
         ]
       },
       {
         name: 'Security',
         configs: [
-          { name: 'requirepass' },
-          { name: 'rename-command' }
+          {name: 'requirepass'},
+          {name: 'rename-command'}
         ]
       },
       {
         name: 'Limits',
         configs: [
-          { name: 'maxclients' },
-          { name: 'maxmemory' },
-          { name: 'maxmemory-policy', type: ['noeviction', 'volatile-lru', 'allkeys-lru', 'volatile-random', 'allkeys-random', 'volatile-ttl'] },
-          { name: 'maxmemory-samples', type: 'number' }
+          {name: 'maxclients'},
+          {name: 'maxmemory'},
+          {name: 'maxmemory-policy', type: ['noeviction', 'volatile-lru', 'allkeys-lru', 'volatile-random', 'allkeys-random', 'volatile-ttl']},
+          {name: 'maxmemory-samples', type: 'number'}
         ]
       },
       {
         name: 'Append Only Mode',
         configs: [
-          { name: 'appendonly', type: 'boolean' },
-          { name: 'appendfilename' },
-          { name: 'appendfsync', type: ['everysec', 'always', 'no'] },
-          { name: 'no-appendfsync-on-rewrite', type: 'boolean' },
-          { name: 'auto-aof-rewrite-percentage', type: 'number' },
-          { name: 'auto-aof-rewrite-min-size' },
-          { name: 'aof-load-truncated', type: 'number' }
+          {name: 'appendonly', type: 'boolean'},
+          {name: 'appendfilename'},
+          {name: 'appendfsync', type: ['everysec', 'always', 'no']},
+          {name: 'no-appendfsync-on-rewrite', type: 'boolean'},
+          {name: 'auto-aof-rewrite-percentage', type: 'number'},
+          {name: 'auto-aof-rewrite-min-size'},
+          {name: 'aof-load-truncated', type: 'number'}
         ]
       },
       {
         name: 'LUA Scripting',
         configs: [
-          { name: 'lua-time-limit', type: 'number' }
+          {name: 'lua-time-limit', type: 'number'}
         ]
       },
       {
         name: 'Cluster',
         configs: [
-          { name: 'cluster-enabled', type: 'boolean' },
-          { name: 'cluster-config-file' },
-          { name: 'cluster-node-timeout', type: 'number' },
-          { name: 'cluster-slave-validity-factor', type: 'nubmer' },
-          { name: 'cluster-migration-barrier', type: 'number' },
-          { name: 'cluster-require-full-coverage', type: 'boolean' },
+          {name: 'cluster-enabled', type: 'boolean'},
+          {name: 'cluster-config-file'},
+          {name: 'cluster-node-timeout', type: 'number'},
+          {name: 'cluster-slave-validity-factor', type: 'nubmer'},
+          {name: 'cluster-migration-barrier', type: 'number'},
+          {name: 'cluster-require-full-coverage', type: 'boolean'}
         ]
       },
       {
         name: 'Slow Log',
         configs: [
-          { name: 'slowlog-log-slower-than', type: 'number' },
-          { name: 'slowlog-max-len', type: 'number' }
+          {name: 'slowlog-log-slower-than', type: 'number'},
+          {name: 'slowlog-max-len', type: 'number'}
         ]
       },
       {
         name: 'Latency Monitor',
         configs: [
-          { name: 'latency-monitor-threshold',type: 'number' }
+          {name: 'latency-monitor-threshold', type: 'number'}
         ]
       },
       {
         name: 'Event Notification',
         configs: [
-          { name: 'notify-keyspace-events' }
+          {name: 'notify-keyspace-events'}
         ]
       },
       {
         name: 'Advanced Config',
         configs: [
-          { name: 'hash-max-ziplist-entries', type: 'number' },
-          { name: 'hash-max-ziplist-value', type: 'number' },
-          { name: 'list-max-ziplist-entries', type: 'number' },
-          { name: 'list-max-ziplist-value', type: 'number' },
-          { name: 'set-max-intset-entries', type: 'number' },
-          { name: 'zset-max-ziplist-entries', type: 'number' },
-          { name: 'zset-max-ziplist-value', type: 'number' },
-          { name: 'hll-sparse-max-bytes', type: 'number' },
-          { name: 'activerehashing', type: 'boolean' },
-          { name: 'client-output-buffer-limit' },
-          { name: 'hz', type: 'number' },
-          { name: 'aof-rewrite-incremental-fsync', type: 'boolean' }
+          {name: 'hash-max-ziplist-entries', type: 'number'},
+          {name: 'hash-max-ziplist-value', type: 'number'},
+          {name: 'list-max-ziplist-entries', type: 'number'},
+          {name: 'list-max-ziplist-value', type: 'number'},
+          {name: 'set-max-intset-entries', type: 'number'},
+          {name: 'zset-max-ziplist-entries', type: 'number'},
+          {name: 'zset-max-ziplist-value', type: 'number'},
+          {name: 'hll-sparse-max-bytes', type: 'number'},
+          {name: 'activerehashing', type: 'boolean'},
+          {name: 'client-output-buffer-limit'},
+          {name: 'hz', type: 'number'},
+          {name: 'aof-rewrite-incremental-fsync', type: 'boolean'}
         ]
       }
-    ];
+    ]
     this.state = {
       groups: [],
       unsavedRewrites: {},
       unsavedConfigs: {}
-    };
-    this.load();
+    }
+    this.load()
   }
 
   load() {
     this.props.redis.config('get', '*').then(config => {
-      const configs = {};
+      const configs = {}
 
-      for (let i = 0; i < config.length -1; i += 2) {
-        configs[config[i]] = config[i + 1];
+      for (let i = 0; i < config.length - 1; i += 2) {
+        configs[config[i]] = config[i + 1]
       }
 
       const groups = clone(this.groups, true).map(g => {
         g.configs = g.configs.map(c => {
           if (typeof configs[c.name] !== 'undefined') {
-            c.value = configs[c.name];
-            delete configs[c.name];
+            c.value = configs[c.name]
+            delete configs[c.name]
           }
-          return c;
-        }).filter(c => typeof c.value !== 'undefined');
-        return g;
-      }).filter(g => g.configs.length);
+          return c
+        }).filter(c => typeof c.value !== 'undefined')
+        return g
+      }).filter(g => g.configs.length)
 
       if (Object.keys(configs).length) {
-        groups.push({ name: 'Other', configs: Object.keys(configs).map(key => {
+        groups.push({name: 'Other', configs: Object.keys(configs).map(key => {
           return {
             name: key,
             value: configs[key]
           }
-        }) });
+        })})
       }
 
       this.setState({
         groups,
         unsavedConfigs: {},
         unsavedRewrites: {}
-      });
-    });
+      })
+    })
   }
 
   componentWillUnmount() {
-    this.props.redis.removeAllListeners('select', this.onSelectBinded);
+    this.props.redis.removeAllListeners('select', this.onSelectBinded)
   }
 
   renderGroup(group) {
@@ -266,43 +266,43 @@ class Config extends React.Component {
     </div>
   }
 
-  change({ name, value }) {
-    this.state.unsavedConfigs[name] = value;
-    this.state.unsavedRewrites[name] = value;
+  change({name, value}) {
+    this.state.unsavedConfigs[name] = value
+    this.state.unsavedRewrites[name] = value
     this.setState({
       groups: this.state.groups,
       unsavedConfigs: this.state.unsavedConfigs,
-      unsavedRewrites: this.state.unsavedRewrites,
-    });
+      unsavedRewrites: this.state.unsavedRewrites
+    })
   }
 
   renderConfig(config) {
-    let input;
-    const props = { readOnly: this.writeableFields.indexOf(config.name) === -1 };
-    props.disabled = props.readOnly;
+    let input
+    const props = {readOnly: this.writeableFields.indexOf(config.name) === -1}
+    props.disabled = props.readOnly
     if (config.type === 'boolean' &&
         (config.value === 'yes' || config.value === 'no')) {
       input = <input type="checkbox" checked={config.value === 'yes'} onChange={e => {
-        config.value = e.target.checked ? 'yes' : 'no';
-        this.change(config);
-      }} {...props}  />;
+        config.value = e.target.checked ? 'yes' : 'no'
+        this.change(config)
+      }} {...props} />
     } else if (config.type === 'number' && String(parseInt(config.value, 10)) === config.value) {
       input = <input type="number" value={config.value} onChange={e => {
-        config.value = e.target.value;
-        this.change(config);
-      }} {...props} />;
+        config.value = e.target.value
+        this.change(config)
+      }} {...props} />
     } else if (Array.isArray(config.type) && config.type.indexOf(config.value) !== -1) {
       input = <select value={config.value} onChange={e => {
-        config.value = e.target.value;
-        this.change(config);
+        config.value = e.target.value
+        this.change(config)
       }} {...props}>
         {config.type.map(option => <option key={option}>{option}</option>)}
-      </select>;
+      </select>
     } else {
       input = <input type="text" value={config.value} onChange={e => {
-        config.value = e.target.value;
-        this.change(config);
-      }} {...props} />;
+        config.value = e.target.value
+        this.change(config)
+      }} {...props} />
     }
     return <div
       className="nt-form-row"
@@ -315,7 +315,7 @@ class Config extends React.Component {
   }
 
   isChanged(rewrite) {
-    return Object.keys(this.state[rewrite ? 'unsavedRewrites' : 'unsavedConfigs']).length > 0;
+    return Object.keys(this.state[rewrite ? 'unsavedRewrites' : 'unsavedConfigs']).length > 0
   }
 
   handleReload() {
@@ -325,10 +325,10 @@ class Config extends React.Component {
         content: 'Are you sure you want to reload the config? Your changes will be lost if you reload the config.',
         button: 'Reload'
       }).then(() => {
-        this.load();
-      });
+        this.load()
+      })
     } else {
-      this.load();
+      this.load()
     }
   }
 
@@ -338,14 +338,14 @@ class Config extends React.Component {
       content: 'Are you sure you want to apply the changes and save the changes to the config file?',
       button: 'Save'
     }).then(() => {
-      return this.handleApply(true);
-    }).then((res) => {
-      return this.props.redis.config('rewrite');
+      return this.handleApply(true)
     }).then(res => {
-      this.setState({ unsavedRewrites: {} })
+      return this.props.redis.config('rewrite')
+    }).then(res => {
+      this.setState({unsavedRewrites: {}})
     }).catch(err => {
-      alert(err.message);
-    });
+      alert(err.message)
+    })
   }
 
   handleApply(embed) {
@@ -353,17 +353,17 @@ class Config extends React.Component {
       title: 'Apply the changes',
       content: 'Are you sure you want to apply the changes? The changes are only valid for the current session and will be lost when Redis restarts.',
       button: 'Apply'
-    });
+    })
     return confirm.then(() => {
-      const pipeline = this.props.redis.pipeline();
-      const unsavedConfigs = this.state.unsavedConfigs;
+      const pipeline = this.props.redis.pipeline()
+      const unsavedConfigs = this.state.unsavedConfigs
       Object.keys(unsavedConfigs).forEach(config => {
-        pipeline.config('set', config, unsavedConfigs[config]);
-      });
-      return pipeline.exec();
-    }).then((res) => {
-      this.setState({ unsavedConfigs: {} })
-    });
+        pipeline.config('set', config, unsavedConfigs[config])
+      })
+      return pipeline.exec()
+    }).then(res => {
+      this.setState({unsavedConfigs: {}})
+    })
   }
 
   render() {
@@ -390,12 +390,14 @@ class Config extends React.Component {
           ref="cancel"
           className="nt-button nt-button--primary"
           disabled={!this.isChanged()}
-          onClick={() => { this.handleApply() }}
+          onClick={() => {
+            this.handleApply()
+          }}
           >Apply</button>
       </div>
       </div>
-    </div>;
+    </div>
   }
 }
 
-export default Config;
+export default Config

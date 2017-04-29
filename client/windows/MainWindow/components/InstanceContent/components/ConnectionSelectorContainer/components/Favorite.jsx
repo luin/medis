@@ -1,19 +1,19 @@
-'use strict';
+'use strict'
 
-import React from 'react';
-import Sortable from 'sortablejs';
+import React from 'react'
+import Sortable from 'sortablejs'
 
 class Favorite extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       activeKey: null
-    };
-    this._updateSortableKey();
+    }
+    this._updateSortableKey()
   }
 
   _updateSortableKey() {
-    this.sortableKey = `sortable-${Math.round(Math.random() * 10000)}`;
+    this.sortableKey = `sortable-${Math.round(Math.random() * 10000)}`
   }
 
   _bindSortable() {
@@ -21,52 +21,52 @@ class Favorite extends React.Component {
     this.sortable = Sortable.create(this.refs.sortable, {
       animation: 100,
       onStart: evt => {
-        this.nextSibling = evt.item.nextElementSibling;
+        this.nextSibling = evt.item.nextElementSibling
       },
       onAdd: () => {
-        this._updateSortableKey();
+        this._updateSortableKey()
       },
       onUpdate: evt => {
-        this._updateSortableKey();
-        reorderFavorites({ from: evt.oldIndex, to: evt.newIndex })
+        this._updateSortableKey()
+        reorderFavorites({from: evt.oldIndex, to: evt.newIndex})
       }
-    });
+    })
   }
 
   componentDidMount() {
-    this._bindSortable();
+    this._bindSortable()
   }
 
   componentDidUpdate() {
-    this._bindSortable();
+    this._bindSortable()
   }
 
   onClick(index, evt) {
-    evt.preventDefault();
-    this.selectIndex(index);
+    evt.preventDefault()
+    this.selectIndex(index)
   }
 
   onDoubleClick(index, evt) {
-    evt.preventDefault();
-    this.selectIndex(index, true);
+    evt.preventDefault()
+    this.selectIndex(index, true)
   }
 
   selectIndex(index, connect) {
-    this.select(index === -1 ? null : this.props.favorites.get(index), connect);
+    this.select(index === -1 ? null : this.props.favorites.get(index), connect)
   }
 
   select(favorite, connect) {
-    const activeKey = favorite ? favorite.get('key') : null;
-    this.setState({ activeKey });
+    const activeKey = favorite ? favorite.get('key') : null
+    this.setState({activeKey})
     if (connect) {
-      this.props.onRequireConnecting(activeKey);
+      this.props.onRequireConnecting(activeKey)
     } else {
-      this.props.onSelect(activeKey);
+      this.props.onSelect(activeKey)
     }
   }
 
   render() {
-    return <div style={ { flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'hidden' } }>
+    return <div style={ {flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'hidden'} }>
       <nav className="nav-group">
         <h5 className="nav-group-title"></h5>
         <a
@@ -88,7 +88,7 @@ class Favorite extends React.Component {
             >
               <span className="icon icon-home"></span>
               <span>{favorite.get('name')}</span>
-            </a>;
+            </a>
           })
         }</div>
       </nav>
@@ -100,9 +100,9 @@ class Favorite extends React.Component {
         }}>+</button>
         <button onClick={
           () => {
-            const key = this.state.activeKey;
+            const key = this.state.activeKey
             if (!key) {
-              return;
+              return
             }
             showModal({
               title: 'Delete the bookmark?',
@@ -112,16 +112,16 @@ class Favorite extends React.Component {
               const index = this.props.favorites.findIndex(favorite => key === favorite.get('key'))
               this.props.removeFavorite(key)
               this.selectIndex(index - 1)
-            });
+            })
           }
         }>-</button>
       </footer>
-    </div>;
+    </div>
   }
 
   componentWillUnmount() {
-    this.sortable.destroy();
+    this.sortable.destroy()
   }
 }
 
-export default Favorite;
+export default Favorite

@@ -1,49 +1,49 @@
-'use strict';
+'use strict'
 
-import React from 'react';
-import {createSelector} from 'reselect';
-import {Provider, connect} from 'react-redux';
-import InstanceTabs from './components/InstanceTabs';
-import InstanceContent from './components/InstanceContent';
-import DocumentTitle from 'react-document-title';
-import {createInstance, selectInstance, delInstance, moveInstance} from 'Redux/actions';
-import store from 'Redux/store';
+import React from 'react'
+import {createSelector} from 'reselect'
+import {Provider, connect} from 'react-redux'
+import InstanceTabs from './components/InstanceTabs'
+import InstanceContent from './components/InstanceContent'
+import DocumentTitle from 'react-document-title'
+import {createInstance, selectInstance, delInstance, moveInstance} from 'Redux/actions'
+import store from 'Redux/store'
 
 class MainWindow extends React.Component {
   componentDidMount() {
-    $(window).on('keydown.redis', this.onHotKey.bind(this));
+    $(window).on('keydown.redis', this.onHotKey.bind(this))
   }
 
   componentWillUnmount() {
-    $(window).off('keydown.redis');
+    $(window).off('keydown.redis')
   }
 
   onHotKey(e) {
     const {instances, selectInstance} = this.props
     if (!e.ctrlKey && e.metaKey) {
-      const code = e.keyCode;
+      const code = e.keyCode
       if (code >= 49 && code <= 57) {
-        const number = code - 49;
+        const number = code - 49
         if (number === 8) {
-          const instance = instances.get(instances.count() - 1);
+          const instance = instances.get(instances.count() - 1)
           if (instance) {
-            selectInstance(instance.get('key'));
-            return false;
+            selectInstance(instance.get('key'))
+            return false
           }
         } else {
-          const instance = instances.get(number);
+          const instance = instances.get(number)
           if (instance) {
-            selectInstance(instance.get('key'));
-            return false;
+            selectInstance(instance.get('key'))
+            return false
           }
         }
       }
     }
-    return true;
+    return true
   }
 
   getTitle() {
-    const {activeInstance} = this.props;
+    const {activeInstance} = this.props
     const version = activeInstance.get('version')
       ? `(Redis ${activeInstance.get('version')}) `
       : ''
@@ -52,8 +52,8 @@ class MainWindow extends React.Component {
   }
 
   render() {
-    const { instances, activeInstance, createInstance,
-      selectInstance, delInstance, moveInstance } = this.props;
+    const {instances, activeInstance, createInstance,
+      selectInstance, delInstance, moveInstance} = this.props
     return <DocumentTitle title={this.getTitle()}>
       <div className="window">
         <InstanceTabs
@@ -69,7 +69,7 @@ class MainWindow extends React.Component {
           activeInstanceKey={activeInstance.get('key')}
         />
       </div>
-    </DocumentTitle>;
+    </DocumentTitle>
   }
 }
 
@@ -80,9 +80,9 @@ const selector = createSelector(
     return {
       instances,
       activeInstance: instances.find(instance => instance.get('key') === activeInstanceKey)
-    };
+    }
   }
-);
+)
 
 const mapDispatchToProps = {
   createInstance,
@@ -91,7 +91,7 @@ const mapDispatchToProps = {
   moveInstance
 }
 
-const MainWindowContainer = connect(selector, mapDispatchToProps)(MainWindow);
+const MainWindowContainer = connect(selector, mapDispatchToProps)(MainWindow)
 
 export default <Provider store={store}>
   <MainWindowContainer />
