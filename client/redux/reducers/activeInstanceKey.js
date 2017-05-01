@@ -19,6 +19,7 @@ export const activeInstanceKey = handleActions(defaultInstanceKey, {
     return activeInstanceKey
   },
   [delInstance](state, {activeInstanceKey}) {
+    console.log('==delInstance', activeInstanceKey)
     return activeInstanceKey
   }
 })

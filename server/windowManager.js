@@ -28,11 +28,11 @@ class WindowManager extends EventEmitter {
       option.show = false;
       option.minWidth = 840;
       option.minHeight = 400;
-    } else if (type === 'pattern-manager') {
+    } else if (type === 'patternManager') {
       option.width = 600;
       option.height = 300;
       option.title = 'Manage Patterns';
-      option.resizable = false;
+      option.resizable = true;
       option.fullscreen = false;
     }
 

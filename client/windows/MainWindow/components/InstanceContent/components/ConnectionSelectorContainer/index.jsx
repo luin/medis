@@ -40,7 +40,7 @@ class ConnectionSelector extends React.Component {
           connect={this.state.connect}
           connectToRedis={this.props.connectToRedis}
           onSave={data => {
-            updateFavorite(selectedFavorite.get('key'), data)
+            this.props.updateFavorite(selectedFavorite.get('key'), data)
           }}
           onDuplicate={addFavorite}
           />

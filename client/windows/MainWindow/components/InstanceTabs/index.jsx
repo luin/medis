@@ -10,16 +10,15 @@ class InstanceTabs extends React.Component {
   }
 
   render() {
-    const style = this.props.instances.count() === 1 ? 'none' : 'block'
+    const {instances, activeInstanceKey, onCreateInstance, onSelectInstance,
+      onDelInstance, onMoveInstance} = this.props
+
+    const style = instances.count() === 1 ? 'none' : 'block'
     if (this.style !== style) {
       this.style = style
-      setTimeout(() => {
-        $(window).trigger('resize')
-      }, 0)
+      setTimeout(() => $(window).trigger('resize'), 0)
     }
 
-    const {activeInstanceKey, onCreateInstance, onSelectInstance,
-      onDelInstance, onMoveInstance} = this.props
     return (<div style={{display: this.style, zIndex: '1000'}}>
       <Tabs
         onTabAddButtonClick={() => {
@@ -39,11 +38,7 @@ class InstanceTabs extends React.Component {
         }}
         onTabPositionChange={onMoveInstance}
         selectedTab={activeInstanceKey}
-        tabs={
-          this.props.instances.map(instance => {
-            return (<Tab key={instance.get('key')} title={instance.get('title')}/>)
-          }).toJS()
-        }
+        tabs={instances.map(instance => <Tab key={instance.get('key')} title={instance.get('title')}/>).toJS()}
         />
     </div>)
   }

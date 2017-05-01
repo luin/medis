@@ -14,7 +14,9 @@ ipcRenderer.on('action', (evt, action) => {
     return
   }
 
+  store.skipPersist = true
   store.dispatch(actions[action]())
+  store.skipPersist = false
 })
 
 ReactDOM.render(MainWindow, document.getElementById('content'))

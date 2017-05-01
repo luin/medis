@@ -44,6 +44,9 @@ class MainWindow extends React.Component {
 
   getTitle() {
     const {activeInstance} = this.props
+    if (!activeInstance) {
+      return ''
+    }
     const version = activeInstance.get('version')
       ? `(Redis ${activeInstance.get('version')}) `
       : ''
@@ -54,6 +57,7 @@ class MainWindow extends React.Component {
   render() {
     const {instances, activeInstance, createInstance,
       selectInstance, delInstance, moveInstance} = this.props
+
     return (<DocumentTitle title={this.getTitle()}>
       <div className="window">
         <InstanceTabs

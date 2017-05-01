@@ -8,6 +8,6 @@ export function get() {
 
 export function set(patterns) {
   localStorage.setItem('patternStore', JSON.stringify(patterns))
-  ipcRenderer.send('dispatch', 'reloadPatternStore')
+  ipcRenderer.send('dispatch', 'reloadPatterns')
   return patterns
 }

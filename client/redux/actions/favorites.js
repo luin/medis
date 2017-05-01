@@ -10,5 +10,5 @@ export const createFavorite = createAction('CREATE_FAVORITE', (data) => {
 
 export const reloadFavorites = createAction('RELOAD_FAVORITES', Favorites.get)
 export const removeFavorite = createAction('REMOVE_FAVORITE')
-export const reorderFavorite = createAction('REORDER_FAVORITE')
+export const reorderFavorites = createAction('REORDER_FAVORITES')
 export const updateFavorite = createAction('UPDATE_FAVORITE', (key, data) => ({key, data}))

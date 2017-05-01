@@ -65,7 +65,7 @@ class PatternList extends React.Component {
           <li
             className="manage-pattern-button"
             onClick={() => {
-              ipcRenderer.send('create pattern-manager', `${this.props.connectionKey}|${this.props.db}`)
+              ipcRenderer.send('create patternManager', `${this.props.connectionKey}|${this.props.db}`)
             }}
             >
             <span className="icon icon-cog"/>
