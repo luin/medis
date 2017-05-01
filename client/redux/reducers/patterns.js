@@ -14,14 +14,14 @@ function PatternFactory(data) {
 }
 
 export const patterns = handleActions(fromJS(Patterns.get()), {
-  [createPattern](state, {conn, data}) {
-    return state.update(conn, List(), patterns => patterns.push(PatternFactory(data)))
+  [createPattern](state, {conn, key}) {
+    return state.update(conn, List(), patterns => patterns.push(PatternFactory({key})))
   },
-  [removePattern](state, {conn, key}) {
-    return state.update(conn, List(), patterns => patterns.filterNot(item => item.get('key') === key))
+  [removePattern](state, {conn, index}) {
+    return state.update(conn, List(), patterns => patterns.remove(index))
   },
-  [updatePattern](state, {conn, key, data}) {
-    return state.update(conn, List(), patterns => patterns.map(item => item.get('key') === key ? item.merge(data) : item))
+  [updatePattern](state, {conn, index, data}) {
+    return state.update(conn, List(), patterns => patterns.update(index, item => item.merge(data)))
   },
   [reorderPatterns](state, {conn, from, to}) {
     return state.update(conn, List(), patterns => {

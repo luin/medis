@@ -2,125 +2,53 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {createSelector} from 'reselect'
 import {connect} from 'react-redux'
-import {addPattern, reorderPatterns, updatePattern, removePattern} from 'Redux/actions'
-import Sortable from 'sortablejs'
+import {createPattern, reorderPatterns, updatePattern, removePattern} from 'Redux/actions'
+import {List} from 'immutable'
 
 require('./app.scss')
 
 const connectionKey = getParameterByName('arg')
 
 class App extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      indexKey: 'init'
-    }
-    this._updateSortableKey()
-  }
-
-  _updateSortableKey() {
-    this.sortableKey = `sortable-${Math.round(Math.random() * 10000)}`
-  }
-
-  _bindSortable() {
-    this.sortable = Sortable.create(this.refs.sortable, {
-      animation: 100,
-      onStart: evt => {
-        this.nextSibling = evt.item.nextElementSibling
-      },
-      onAdd: () => {
-        this._updateSortableKey()
-      },
-      onUpdate: evt => {
-        this._updateSortableKey()
-        this.props.reorderPatterns({
-          conn: connectionKey,
-          from: evt.oldIndex,
-          to: evt.newIndex
-        })
-      }
-    })
+  constructor(props, context) {
+    super(props, context)
+    this.state = {index: 0}
   }
 
   handleChange(property, e) {
     this.setState({[property]: e.target.value})
   }
 
-  componentDidMount() {
-    this._bindSortable()
-    if (this.props.patterns.length) {
-      this.select(this.props.patterns[0])
-    }
-  }
-
-  componentDidUpdate() {
-    this._bindSortable()
-  }
-
-  onClick(index, evt) {
-    evt.preventDefault()
-    this.select(this.props.patterns[index])
-  }
-
-  select(pattern) {
-    this.setState({
-      activeKey: pattern && pattern.key,
-      indexKey: 'index' + Math.round(Math.random() * 1000),
-      name: pattern && pattern.name,
-      value: pattern && pattern.value
-    })
-  }
-
-  getActivePattern() {
-    let activePattern
-    let activeIndex
-    for (let i = 0; i < this.props.patterns.length; i++) {
-      if (this.props.patterns[i].key === this.state.activeKey) {
-        activePattern = this.props.patterns[i]
-        activeIndex = i
-        break
-      }
-    }
-
-    return [activeIndex, activePattern]
-  }
-
   render() {
-    const [activeIndex, activePattern] = this.getActivePattern()
-
+    const {patterns, createPattern, removePattern} = this.props
+    const activePattern = patterns.get(this.state.index)
     return (<div className="window">
       <div className="patternList">
-        <div ref="sortable" key={this.sortableKey}>{
-          this.props.patterns.map((pattern, index) => {
+        <div>{
+          patterns.map((pattern, index) => {
             return (<a
-              key={pattern.key}
-              className={'nav-group-item' + (pattern.key === this.state.activeKey ? ' is-active' : '')}
-              onClick={this.onClick.bind(this, index)}
+              key={pattern.get('key')}
+              className={'nav-group-item' + (index === this.state.index ? ' is-active' : '')}
+              onClick={() => this.setState({index})}
               >
-              <span>{pattern.name}</span>
+              <span>{pattern.get('name')}</span>
             </a>)
           })
         }</div>
         <footer>
           <button
             onClick={() => {
-              this.props.addPattern({conn: connectionKey})
-              // TODO: auto select
-              // this.select(pattern.toJS());
+              const index = patterns.size
+              this.props.createPattern(connectionKey)
+              this.setState({index})
             }}
             >+</button>
           <button
             className={activePattern ? '' : 'is-disabled'}
             onClick={() => {
               if (activePattern) {
-                this.props.removePattern({conn: connectionKey, key: activePattern.key})
-                if (activeIndex >= 1) {
-                  this.select(this.props.patterns[activeIndex - 1])
-                } else if (this.props.patterns.length > 1) {
-                  this.select(this.props.patterns[1])
-                } else {
-                  this.select(null)
-                }
+                this.props.removePattern(connectionKey, this.state.index)
+                this.setState({index: this.state.index > 0 ? this.state.index - 1 : 0})
               }
             }}
             >-</button>
@@ -136,7 +64,7 @@ class App extends React.Component {
           <input
             type="text" id="name"
             readOnly={!activePattern}
-            value={this.state.name}
+            value={this.state.name || activePattern.get('name')}
             onChange={this.handleChange.bind(this, 'name')}
             />
         </div>
@@ -145,7 +73,7 @@ class App extends React.Component {
           <input
             type="text" id="value"
             readOnly={!activePattern}
-            value={this.state.value}
+            value={this.state.value || activePattern.get('value')}
             onChange={this.handleChange.bind(this, 'value')}
             />
         </div>
@@ -153,10 +81,9 @@ class App extends React.Component {
           <button
             className="nt-button nt-button--primary"
             onClick={() => {
-              this.props.updatePattern({
-                conn: connectionKey,
-                index: activeIndex,
-                data: {name: this.state.name, value: this.state.value}
+              this.props.updatePattern(connectionKey, this.state.index, {
+                name: this.state.name || activePattern.get('name'),
+                value: this.state.value || activePattern.get('value')
               })
               alert('Save Successfully')
             }}
@@ -167,21 +94,20 @@ class App extends React.Component {
   }
 }
 
-const selector = createSelector(
-  state => state.patterns,
-  patterns => {
-    return {patterns: patterns.get(connectionKey, List()).toJS()}
+function mapStateToProps(state) {
+  return {
+    patterns: state.patterns.get(connectionKey, List())
   }
-)
+}
 
 const mapDispatchToProps = {
   updatePattern,
   reorderPatterns,
-  addPattern,
+  createPattern,
   removePattern
 }
 
-export default connect(selector)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 
 function getParameterByName(name) {
   name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')

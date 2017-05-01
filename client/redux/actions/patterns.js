@@ -3,12 +3,11 @@ import {fromJS} from 'immutable'
 import {Patterns} from '../../storage'
 
 
-export const createPattern = createAction('CREATE_pattern', (data) => {
+export const createPattern = createAction('CREATE_PATTERN', (conn) => {
   const key = `pattern-${Math.round(Math.random() * 100000)}`
-  return Object.assign({key}, data)
+  return Object.assign({key, conn})
 })
 
-export const reloadPatterns = createAction('RELOAD_patternS', Patterns.get)
-export const removePattern = createAction('REMOVE_pattern')
-export const reorderPattern = createAction('REORDER_pattern')
-export const updatePattern = createAction('UPDATE_pattern', (conn, key, data) => ({conn, key, data}))
+export const reloadPatterns = createAction('RELOAD_PATTERNS', Patterns.get)
+export const removePattern = createAction('REMOVE_PATTERN', (conn, index) => ({conn, index}))
+export const updatePattern = createAction('UPDATE_PATTERN', (conn, index, data) => ({conn, index, data}))

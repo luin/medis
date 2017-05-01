@@ -28,8 +28,9 @@ export const delInstance = createAction('DEL_INSTANCE', key => ({getState, next}
   const ret = {activeInstanceKey, targetIndex}
 
   if (key === activeInstanceKey) {
-    const item = instances.get(targetIndex) || instances.get(targetIndex - 1)
+    const item = instances.get(targetIndex + 1) || (targetIndex > 0 && instances.get(targetIndex - 1))
 
+    console.log('still', item, targetIndex, instances.size)
     if (item) {
       ret.activeInstanceKey = item.get('key')
     } else {
