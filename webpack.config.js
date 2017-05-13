@@ -1,9 +1,11 @@
 'use strict';
 
+const path = require('path')
+
 module.exports = {
   entry: {
-    main: './client/main.jsx',
-    'pattern-manager': './client/pattern-manager.jsx'
+    main: './client/windows/MainWindow/entry.jsx',
+    patternManager: './client/windows/PatternManagerWindow/entry.jsx'
   },
   node: {
     Buffer: false,
@@ -11,7 +13,6 @@ module.exports = {
   },
   output: {
     filename: '[name].js'
-    // publicPath: 'http://localhost:8090/assets'
   },
   module: {
     loaders: [{
@@ -49,6 +50,10 @@ module.exports = {
     'file': '{}'
   },
   resolve: {
+    alias: {
+      Redux: path.resolve(__dirname, 'client/redux/'),
+      Utils: path.resolve(__dirname, 'client/utils/'),
+    },
     extensions: ['', '.js', '.jsx']
   }
-};
+}

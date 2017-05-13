@@ -1,6 +1,0 @@
-#!/bin/bash
-
-export PATH=node_modules/.bin:$PATH
-
-webpack -p --config webpack.production.config.js
-node bin/pack.js

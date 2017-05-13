@@ -19,23 +19,29 @@ class WindowManager extends EventEmitter {
     if (!type) {
       type = 'main';
     }
-    const option = {};
+    const option = {
+      backgroundColor: '#ececec'
+    };
     if (type === 'main') {
       option.width = 960;
       option.height = 600;
       option.show = false;
       option.minWidth = 840;
-      option.minHeight = 200;
-    } else if (type === 'pattern-manager') {
+      option.minHeight = 400;
+    } else if (type === 'patternManager') {
       option.width = 600;
       option.height = 300;
       option.title = 'Manage Patterns';
-      option.resizable = false;
+      option.resizable = true;
       option.fullscreen = false;
-      option.show = false;
     }
 
     const newWindow = new BrowserWindow(option);
+    if (!option.show) {
+      newWindow.once('ready-to-show', () => {
+        newWindow.show()
+      })
+    }
     newWindow.loadURL(`file://${__dirname}/windows/${type}.html${arg ? '?arg=' + arg : ''}`);
 
     this._register(newWindow);
