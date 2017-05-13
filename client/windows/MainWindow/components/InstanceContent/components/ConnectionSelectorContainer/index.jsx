@@ -6,7 +6,7 @@ import Favorite from './components/Favorite'
 import Config from './components/Config'
 import store from 'Redux/store'
 import {connectToRedis} from 'Redux/actions'
-import {removeFavorite, updateFavorite, addFavorite, reorderFavorites} from 'Redux/actions'
+import {removeFavorite, updateFavorite, createFavorite, reorderFavorites} from 'Redux/actions'
 
 class ConnectionSelector extends PureComponent {
   constructor() {
@@ -27,7 +27,7 @@ class ConnectionSelector extends PureComponent {
           onSelect={this.handleSelectFavorite.bind(this, false)}
           onRequireConnecting={this.handleSelectFavorite.bind(this, true)}
           updateFavorite={this.props.updateFavorite}
-          addFavorite={this.props.addFavorite}
+          createFavorite={this.props.createFavorite}
           removeFavorite={this.props.removeFavorite}
           reorderFavorites={this.props.reorderFavorites}
           />
@@ -41,7 +41,7 @@ class ConnectionSelector extends PureComponent {
           onSave={data => {
             this.props.updateFavorite(selectedFavorite.get('key'), data)
           }}
-          onDuplicate={addFavorite}
+          onDuplicate={this.props.createFavorite}
           />
       </div>
     </div>)
@@ -56,7 +56,7 @@ function mapStateToProps(state, {instance}) {
 }
 const mapDispatchToProps = {
   updateFavorite,
-  addFavorite,
+  createFavorite,
   connectToRedis,
   reorderFavorites,
   removeFavorite

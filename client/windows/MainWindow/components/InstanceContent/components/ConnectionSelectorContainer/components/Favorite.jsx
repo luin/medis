@@ -96,7 +96,7 @@ class Favorite extends React.Component {
       <footer className="toolbar toolbar-footer">
         <button
           onClick={() => {
-            this.props.addFavorite()
+            this.props.createFavorite()
           // TODO: auto select
           // this.select(favorite);
           }}
