@@ -1,6 +1,6 @@
 'use strict';
 
-const { Menu, app, shell } = require('electron');
+const {app, Menu} = require('electron');
 const windowManager = require('./windowManager');
 
 const menuTemplate = [{
@@ -15,7 +15,7 @@ const menuTemplate = [{
     label: 'New Connection Tab',
     accelerator: 'CmdOrCtrl+T',
     click() {
-      windowManager.current.webContents.send('action', 'addInstance');
+      windowManager.current.webContents.send('action', 'createInstance');
     }
   }, {
     type: 'separator'
@@ -116,12 +116,12 @@ const menuTemplate = [{
   submenu: [{
     label: 'Report an Issue...',
     click() {
-      shell.openExternal('mailto:medis@zihua.li');
+      require('shell').openExternal('mailto:medis@zihua.li');
     }
   }, {
     label: 'Learn More',
     click() {
-      shell.openExternal('http://getmedis.com');
+      require('shell').openExternal('http://getmedis.com');
     }
   }]
 }]

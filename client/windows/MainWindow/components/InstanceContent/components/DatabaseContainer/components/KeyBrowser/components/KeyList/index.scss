@@ -1,0 +1,91 @@
+.context-menu-item.context-menu-hover {
+  background: #116cd6;
+  color: #fff;
+}
+
+.pattern-table {
+  position: relative;
+  overflow: hidden;
+  &:focus {
+    outline: 0;
+  }
+
+  footer {
+    height: 24px;
+  }
+}
+
+.public_fixedDataTable_main {
+  // border-bottom-color: transparent;
+}
+
+.public_fixedDataTable_bottomShadow {
+  display: none;
+}
+
+.key-type {
+  margin: 4px 0 0;
+  padding: 0 !important;
+  text-transform: uppercase;
+  width: 32px;
+  height: 16px;
+  font-size: 11px !important;
+  line-height: 17px !important;
+  display: block;
+  text-align: center;
+  background: #60d4ca;
+  color: #fff;
+
+  &.str { background: #5dc936; }
+  &.list { background: #fca32a; }
+  &.hash { background: #b865d0; }
+  &.zset { background: #fa5049; }
+  &.set { background: #239ff2; }
+}
+
+.public_fixedDataTable_header, .public_fixedDataTableRow_main.is-loading {
+  .public_fixedDataTableCell_main {
+    font-family: system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif !important;
+  }
+}
+
+.public_fixedDataTableCell_cellContent {
+  padding: 0;
+}
+
+.public_fixedDataTableCell_main {
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  line-height: 24px;
+  padding: 0 8px;
+}
+
+.public_fixedDataTableRow_main {
+  color: #606061;
+}
+
+:focus .public_fixedDataTableRow_main.is-selected {
+  background: #116cd6;
+  color: #fff;
+
+  .public_fixedDataTableCell_main {
+    background: transparent;
+  }
+}
+
+.public_fixedDataTableRow_main.is-selected {
+  background: #dcdcdc;
+
+  .public_fixedDataTableCell_main {
+    background: transparent;
+  }
+}
+
+.public_fixedDataTableCell_main {
+  border: none;
+}
+
+.public_fixedDataTable_main {
+  border-right: none;
+  border-left-color: transparent;
+}

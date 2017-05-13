@@ -1,0 +1,48 @@
+.BaseContent {
+  flex: 1;
+  position: relative;
+
+  .type-list {
+    .index-label {
+      background: #ccc;
+      margin: 4px 4px 0 0;
+      font-family: Consolas, monospace !important;
+      padding: 0 4px !important;
+      height: 16px;
+      font-size: 11px !important;
+      line-height: 16px !important;
+      display: block;
+      text-align: center;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .SortHeaderCell {
+    position: relative;
+
+    a {
+      display: block;
+    }
+
+    img {
+      position: absolute;
+      right: -15px;
+      top: 5px;
+    }
+
+    &.is-asc img {
+      transform: rotate(180deg);
+    }
+  }
+  .base-content {
+    margin-top: -1px;
+    position: relative;
+    overflow: hidden;
+    &:focus {
+      outline: 0;
+    }
+  }
+}

@@ -1,0 +1,79 @@
+.pattern-input {
+  position: relative;
+  padding: 6px;
+  .icon-search {
+    position: absolute;
+    left: 14px;
+    top: 12px;
+    opacity: 0.5;
+  }
+  .icon-down-open {
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0.5;
+    transition: 0.1s;
+    display: inline-block;
+    width: 40px;
+    text-align: center;
+    height: 42px;
+    line-height: 42px;
+
+    &.is-active {
+      transform: rotate(180deg);
+    }
+  }
+
+  input {
+    padding-left: 22px;
+  }
+}
+
+.pattern-dropdown {
+  position: absolute;
+  z-index: 999;
+  background: #fff;
+  margin-top: 6px;
+  left: 0;
+  width: 100%;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.21);
+  transition: transform 125ms cubic-bezier(0.18, 0.89, 0.32, 1.12), opacity 100ms linear;
+  transform-origin: top;
+  transform: scale(1, 0.2);
+  pointer-events: none;
+  opacity: 0;
+
+  &.is-active {
+    pointer-events: initial;
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+
+  ul {
+    height: 100%;
+    overflow: auto;
+  }
+
+  li {
+    display: block;
+    padding: 8px 12px;
+    font-family: Consolas, monospace;
+    border-top: 1px solid #f5f5f4;
+
+    &:hover {
+      background: #116cd6;
+      color: #fff;
+    }
+
+    &:last-child {
+      font-family: system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
+    }
+  }
+}
+.manage-pattern-button {
+  color: #116cd6;
+
+  span.icon {
+    margin-right: 5px;
+  }
+}

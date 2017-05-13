@@ -1,11 +1,11 @@
 'use strict';
 
-const { app, ipcMain, Menu } = require('electron');
-const windowManager = require('./windowManager');
-const menu = require('./menu');
+const {app, Menu, ipcMain} = require('electron')
+const windowManager = require('./windowManager')
+const menu = require('./menu')
 
-ipcMain.on('create pattern-manager', function (event, arg) {
-  windowManager.create('pattern-manager', arg);
+ipcMain.on('create patternManager', function (event, arg) {
+  windowManager.create('patternManager', arg);
 });
 
 ipcMain.on('dispatch', function (event, action, arg) {
@@ -16,6 +16,12 @@ ipcMain.on('dispatch', function (event, action, arg) {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit();
+  }
+});
+
+app.on('activate', function (e, hasVisibleWindows) {
+  if (!hasVisibleWindows) {
+    windowManager.create();
   }
 });
 

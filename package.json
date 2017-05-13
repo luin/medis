@@ -2,71 +2,112 @@
   "name": "medis",
   "description": "GUI for Redis",
   "productName": "Medis",
-  "version": "0.3.1",
+  "version": "0.6.1",
+  "electronVersion": "1.6.2",
   "license": "MIT",
   "author": "luin <i@zihua.li> (http://zihua.li)",
   "main": "server/main.js",
   "scripts": {
-    "start": "NODE_ENV=debug $(node bin/package.js)/Medis.app/Contents/MacOS/Medis",
-    "dev": "./bin/dev",
-    "deploy": "NODE_ENV=production ./bin/build && node bin/package.js --deploy && rm -rf deploy",
-    "release": "NODE_ENV=production ./bin/release",
-    "deploy:sign": "npm run deploy && ./bin/sign",
-    "sign": "electron-osx-sign ./dist-deploy/Medis-mas-x64/Medis.app --entitlements=mas.entitlements --entitlements-inherit=mas.inherit.entitlements --gatekeeper-assess && electron-osx-flat ./dist-deploy/Medis-mas-x64/Medis.app"
+    "build": "webpack --progress --colors",
+    "watch": "npm run build -- --watch",
+    "electron": "electron .",
+    "lint": "xo client/**/*.{js,jsx}",
+    "pack": "NODE_ENV=production npm run build -- -p --config webpack.production.config.js && node bin/pack.js",
+    "release": "NODE_ENV=production ./bin/release"
+  },
+  "xo": {
+    "extends": "xo-react/space",
+    "semicolon": false,
+    "ignore": [
+      "client/vendors/**",
+      "client/photon/**"
+    ],
+    "envs": [
+      "browser"
+    ],
+    "globals": [
+      "showModal"
+    ],
+    "rules": {
+      "indent": [
+        "error",
+        2
+      ],
+      "unicorn/filename-case": "off",
+      "operator-linebreak": [
+        "error",
+        "after",
+        {
+          "overrides": {
+            "?": "before",
+            ":": "before"
+          }
+        }
+      ],
+      "new-cap": "off",
+      "import/no-unassigned-import": "off",
+      "import/default": "off",
+      "import/prefer-default-export": "off"
+    }
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/luin/medis.git"
   },
   "dependencies": {
-    "codemirror": "^5.10.0",
-    "fixed-data-table-contextmenu": "^0.6.3",
-    "form-generator-react": "^1.0.5",
-    "human-format": "^0.5.0",
-    "immutable": "^3.7.5",
-    "ioredis": "^1.11.1",
+    "fixed-data-table-contextmenu": "^1.6.5",
+    "ioredis": "^2.4.2",
     "jquery": "^2.1.4",
-    "json-editor": "^0.7.23",
-    "jsonlint": "^1.6.2",
-    "lint": "^1.1.2",
     "lodash": "^3.10.1",
-    "msgpack5": "^3.3.0",
-    "react": "^0.14.0",
-    "react-addons-css-transition-group": "^0.14.3",
-    "react-codemirror": "^0.2.0",
-    "react-document-title": "^2.0.1",
-    "react-dom": "^0.14.0",
-    "react-draggable": "^1.1.3",
-    "react-redux": "^4.0.0",
-    "react-split-pane": "0.1.16",
     "redis-commands": "^1.0.1",
-    "redis-splitargs": "^1.0.0",
-    "redux": "^3.0.2",
-    "redux-thunk": "^1.0.0",
-    "reselect": "^2.0.0",
-    "sortablejs": "^1.4.1",
-    "ssh2": "^0.4.12",
-    "url-loader": "^0.5.7"
+    "ssh2": "^0.5.4"
   },
   "devDependencies": {
     "asar": "^0.8.3",
     "babel-core": "^5.8.25",
     "babel-eslint": "^4.1.6",
     "babel-loader": "^5.3.2",
-    "commander": "^2.9.0",
+    "codemirror": "^5.18.0",
     "conventional-github-releaser": "^0.5.3",
     "css-loader": "^0.19.0",
     "cz-conventional-changelog": "^1.1.5",
-    "electron-osx-sign": "^0.4.1",
-    "electron-packager": "^8.3.0",
-    "eslint-plugin-react": "^3.15.0",
+    "electron": "^1.6.2",
+    "electron-osx-sign": "^0.4.4",
+    "electron-packager": "^8.6.0",
+    "eslint-config-xo": "^0.18.1",
+    "eslint-config-xo-react": "^0.11.1",
+    "eslint-plugin-react": "^6.10.3",
+    "extract-text-webpack-plugin": "^1.0.1",
     "github": "^0.2.4",
+    "human-format": "^0.5.0",
+    "immutable": "^3.8.1",
+    "json-editor": "^0.7.23",
+    "jsonlint": "^1.6.2",
     "jsx-loader": "^0.13.2",
+    "lint": "^1.1.2",
+    "minimatch": "^3.0.4",
+    "msgpack5": "^3.3.0",
     "node-sass": "^3.3.3",
+    "prop-types": "^15.5.10",
+    "react": "^15.5.4",
+    "react-addons-css-transition-group": "^15.5.2",
+    "react-codemirror": "^0.3.0",
+    "react-document-title": "^2.0.1",
+    "react-dom": "^15.5.4",
+    "react-draggable": "^2.2.6",
+    "react-redux": "^5.0.4",
+    "react-split-pane": "^0.1.63",
+    "redis-splitargs": "^1.0.0",
+    "redux": "^3.6.0",
+    "redux-actions": "^2.0.3",
+    "reselect": "^3.0.1",
     "sass-loader": "^3.0.0",
+    "sortablejs": "^1.4.1",
     "style-loader": "^0.12.4",
+    "url-loader": "^0.5.7",
     "webpack": "^1.12.2",
-    "webpack-dev-server": "^1.12.0"
+    "webpack-dev-server": "^1.12.0",
+    "xo": "^0.18.1"
   },
   "config": {
     "commitizen": {
