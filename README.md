@@ -6,7 +6,6 @@ Medis is a beautiful, easy-to-use Redis management application built on the mode
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Join the chat at https://gitter.im/luin/medis](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/luin/medis?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Dependency Status](https://david-dm.org/luin/medis.svg)](https://david-dm.org/luin/medis)
 
 Medis starts with all the basic features you need:
 
@@ -29,17 +28,23 @@ You can download compiled versions of Medis for Mac OS X from [the release page]
 
 ## Running Locally
 
+1. Compile assets:
+
+    $ npm run build
+
+2. Run with Electron:
+
+    $ npm run electron
+
+## Connect to Heroku
+Medis can connect to Heroku Redis addon to manage your data. You just need to call `heroku redis:credentials --app APP` to get your redis credential:
+
 ```shell
-$ npm install
-$ npm run dev
+$ heroku redis:credentials --app YOUR_APP
+redis://x:PASSWORD@HOST:PORT
 ```
 
-## Build Medis
-
-```shell
-$ npm install
-$ npm run deploy
-```
+And then input `HOST`, `PORT` and `PASSWORD` to the connection tab.
 
 ## I Love This. How do I Help?
 
@@ -50,7 +55,7 @@ $ npm run deploy
 
 ## Roadmap
 
-* [Windows and Linux version (with electron-packager)](https://github.com/luin/medis/pull/21)
+* Windows and Linux version (with electron-packager)
 * Support for SaaS Redis services
 * Lua script editor
 * Cluster management

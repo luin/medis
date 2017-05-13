@@ -7,7 +7,5 @@ main.js
 pattern-manager.js
 npm-debug.log
 *.zip
-dist
-dist-deploy
-cache
-deploy
+out
+*.provisionprofile
