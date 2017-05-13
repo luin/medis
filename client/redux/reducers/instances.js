@@ -29,8 +29,12 @@ export const instances = handleActions(List([InstanceFactory({key: defaultInstan
     return state.setIn([index, 'connectStatus'], status)
   },
   [disconnect](state, {index}) {
+    const properties = ['connectStatus', 'redis', 'config', 'version']
     return state.update(index, instance => (
-      instance.removeAll(['connectStatus', 'redis', 'config', 'version']).set('title', 'Medis')
+      instance.withMutations(map => {
+        properties.forEach(key => map.remove(key))
+        map.set('title', 'Medis')
+      })
     ))
   },
   [connectToRedis](state, {index, config, redis}) {

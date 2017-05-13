@@ -1,8 +1,7 @@
 'use strict'
 
 import React from 'react'
-import {Provider, connect} from 'react-redux'
-import {createSelector} from 'reselect'
+import {connect} from 'react-redux'
 import SplitPane from 'react-split-pane'
 import KeyBrowser from './components/KeyBrowser'
 import Content from './components/Content'
@@ -80,16 +79,12 @@ class Database extends React.Component {
   }
 }
 
-const selector = createSelector(
-  state => state.patterns,
-  (state, props) => props.instance,
-  (patterns, instance) => {
-    return {
-      patterns,
-      redis: instance.get('redis'),
-      connectionKey: instance.get('connectionKey')
-    }
+function mapStateToProps(state, {instance}) {
+  return {
+    patterns: state.patterns,
+    redis: instance.get('redis'),
+    connectionKey: instance.get('connectionKey')
   }
-)
+}
 
-export default connect(selector)(Database)
+export default connect(mapStateToProps)(Database)

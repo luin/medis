@@ -1,12 +1,12 @@
 'use strict'
 
-import React from 'react'
+import React, {PureComponent} from 'react'
 import ConnectionSelectorContainer from './components/ConnectionSelectorContainer'
 import DatabaseContainer from './components/DatabaseContainer'
 import Modal from '../../components/InstanceContent/components/Modal'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
-class InstanceContent extends React.Component {
+class InstanceContent extends PureComponent {
   constructor() {
     super()
     this.state = {}
@@ -49,8 +49,8 @@ class InstanceContent extends React.Component {
       <div
         key={instance.get('key')}
         style={{display: instance.get('key') === activeInstanceKey ? 'block' : 'none'}}
-      >
-      {
+        >
+        {
         instance.get('redis')
           ? <DatabaseContainer instance={instance}/>
           : <ConnectionSelectorContainer instance={instance}/>
@@ -64,15 +64,15 @@ class InstanceContent extends React.Component {
           transitionName="modal"
           transitionEnterTimeout={150}
           transitionLeaveTimeout={150}
-        >
-        {
+          >
+          {
           this.state.modal &&
           <Modal
             key="modal"
             {...this.state.modal}
             onSubmit={this.modalSubmit.bind(this)}
             onCancel={this.modalCancel.bind(this)}
-          />
+            />
         }
         </ReactCSSTransitionGroup>
         {contents}

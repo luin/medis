@@ -1,9 +1,9 @@
 'use strict'
 
-import React from 'react'
+import React, {PureComponent} from 'react'
 import {Cell} from 'fixed-data-table-contextmenu'
 
-export default class SortHeaderCell extends React.Component {
+export default class SortHeaderCell extends PureComponent {
   handleClick(evt) {
     this.props.onOrderChange(!this.props.desc)
     evt.preventDefault()

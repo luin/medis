@@ -1,7 +1,0 @@
-#!/bin/bash
-
-echo "***************************************************"
-echo "run 'npm start' after webpack building successfully"
-echo "***************************************************"
-
-webpack --progress --colors --watch

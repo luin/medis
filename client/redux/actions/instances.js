@@ -8,7 +8,7 @@ export const createInstance = createAction('CREATE_INSTANCE', data => (
 
 export const selectInstance = createAction('SELECT_INSTANCE')
 
-export const moveInstance = createAction('MOVE_INSTANCE', ({from, to}) => ({getState, next}) => {
+export const moveInstance = createAction('MOVE_INSTANCE', (from, to) => ({getState, next}) => {
   const {instances} = getState()
 
   const [fromIndex, instance] = instances.findEntry(v => v.get('key') === from);

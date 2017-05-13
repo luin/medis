@@ -138,11 +138,11 @@ class HashContent extends BaseContent {
 
   render() {
     return (<SplitPane
-      className="pane-group"
-      minSize="80"
-      split="vertical"
-      defaultSize={200}
-      onChange={this.onChangeSiderbarWidth.bind(this)}
+        minSize="80"
+        split="vertical"
+        ref="node"
+        defaultSize={this.props.contentBarWidth}
+        onChange={this.props.setSize.bind(null, 'content')}
       >
       <div
         style={{marginTop: -1}}
@@ -175,8 +175,8 @@ class HashContent extends BaseContent {
                       type: 'object',
                       properties: {
                         'Key:': {
-                    type: 'string'
-                  }
+                          type: 'string'
+                        }
                       }
                     }
                   }).then(res => {
@@ -184,23 +184,23 @@ class HashContent extends BaseContent {
                     const value = 'New Member'
                     this.props.redis.hsetnx(this.state.keyName, data, value).then(inserted => {
                       if (!inserted) {
-                  alert('The field already exists')
-                  return
-                }
+                        alert('The field already exists')
+                        return
+                      }
                       this.state.members.push([data, Buffer.from(value)])
                       this.setState({
-                  members: this.state.members,
-                  length: this.state.length + 1
-                }, () => {
-                  this.props.onKeyContentChange()
-                  this.handleSelect(null, this.state.members.length - 1)
-                })
+                        members: this.state.members,
+                        length: this.state.length + 1
+                      }, () => {
+                        this.props.onKeyContentChange()
+                        this.handleSelect(null, this.state.members.length - 1)
+                      })
                     })
                   })
                 }}
                             />
             }
-            width={this.props.sidebarWidth}
+            width={this.props.contentBarWidth}
             cell={({rowIndex}) => {
               const member = this.state.members[rowIndex]
               if (!member) {
@@ -219,22 +219,22 @@ class HashContent extends BaseContent {
                     this.props.redis.hexists(keyName, target).then(exists => {
                       if (exists) {
                         return showModal({
-                    title: 'Overwrite the field?',
-                    button: 'Overwrite',
-                    content: `Field "${target}" already exists. Are you sure you want to overwrite this field?`
-                  }).then(() => {
-                  let found
-                  for (let i = 0; i < members.length; i++) {
-                  if (members[i][0] === target) {
-                  found = i
-                  break
-                }
-                }
-                  if (typeof found === 'number') {
-                  members.splice(found, 1)
-                  this.setState({length: this.state.length - 1})
-                }
-                })
+                          title: 'Overwrite the field?',
+                          button: 'Overwrite',
+                          content: `Field "${target}" already exists. Are you sure you want to overwrite this field?`
+                        }).then(() => {
+                          let found
+                          for (let i = 0; i < members.length; i++) {
+                            if (members[i][0] === target) {
+                              found = i
+                              break
+                            }
+                          }
+                          if (typeof found === 'number') {
+                            members.splice(found, 1)
+                            this.setState({length: this.state.length - 1})
+                          }
+                        })
                       }
                     }).then(() => {
                       member[0] = target
