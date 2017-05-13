@@ -14,11 +14,21 @@ class SetContent extends BaseContent {
   save(value, callback) {
     if (typeof this.state.selectedIndex === 'number') {
       const oldValue = this.state.members[this.state.selectedIndex]
-      this.state.members[this.state.selectedIndex] = value.toString()
-      this.setState({members: this.state.members})
-      this.props.redis.multi().srem(this.state.keyName, oldValue).sadd(this.state.keyName, value).exec((err, res) => {
-        this.props.onKeyContentChange()
-        callback(err, res)
+
+      const key = this.state.keyName
+      this.props.redis.sismember(key, value).then(exists => {
+        if (exists) {
+          callback(new Error('The value already exists in the set'))
+          return
+        }
+        this.props.redis.multi().srem(key, oldValue).sadd(key, value).exec((err, res) => {
+          if (!err) {
+            this.state.members[this.state.selectedIndex] = value.toString()
+            this.setState({members: this.state.members})
+          }
+          this.props.onKeyContentChange()
+          callback(err, res)
+        })
       })
     } else {
       alert('Please wait for data been loaded before saving.')
