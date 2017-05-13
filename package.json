@@ -78,7 +78,6 @@
     "eslint-config-xo-react": "^0.11.1",
     "eslint-plugin-react": "^6.10.3",
     "extract-text-webpack-plugin": "^1.0.1",
-    "form-generator-react": "^1.0.5",
     "github": "^0.2.4",
     "human-format": "^0.5.0",
     "immutable": "^3.8.1",
