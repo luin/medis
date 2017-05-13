@@ -203,7 +203,7 @@ class Editor extends React.Component {
       viewer = <div/>
     }
     return (<div
-      style={{flex: 1, display: 'flex', width: '100%', flexDirection: 'column'}}
+      style={{flex: 1, display: 'flex', width: this.props.width, flexDirection: 'column'}}
       className="Editor"
       onKeyDown={this.handleKeyDown.bind(this)}
       >
