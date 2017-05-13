@@ -1,6 +1,8 @@
 'use strict'
 
-import React from 'react'
+import React, {PureComponent} from 'react'
+import {connect} from 'react-redux'
+import {setSize} from 'Redux/actions'
 import StringContent from './components/StringContent'
 import ListContent from './components/ListContent'
 import SetContent from './components/SetContent'
@@ -9,7 +11,7 @@ import ZSetContent from './components/ZSetContent'
 
 require('./index.scss')
 
-class KeyContent extends React.Component {
+class KeyContent extends PureComponent {
   constructor() {
     super()
     this.state = {}
@@ -35,4 +37,16 @@ class KeyContent extends React.Component {
   }
 }
 
-export default KeyContent
+function mapStateToProps(state) {
+  return {
+    contentBarWidth: state.sizes.get('contentBarWidth') || 200,
+    scoreBarWidth: state.sizes.get('scoreBarWidth') || 60,
+    indexBarWidth: state.sizes.get('indexBarWidth') || 60
+  }
+}
+
+const mapDispatchToProps = {
+  setSize
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(KeyContent)

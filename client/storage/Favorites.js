@@ -3,7 +3,8 @@
 import {ipcRenderer} from 'electron'
 
 export function get() {
-  return JSON.parse(localStorage.getItem('favorites')) || []
+  const data = localStorage.getItem('favorites')
+  return data ? JSON.parse(data) : []
 }
 
 export function set(favorites) {

@@ -1,6 +1,7 @@
 'use strict';
 
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import React from 'react';
 import Draggable from 'react-draggable';
 
@@ -163,14 +164,14 @@ Tabs.defaultProps = {
 };
 
 Tabs.propTypes = {
-  tabs: React.PropTypes.arrayOf(React.PropTypes.element),
+  tabs: PropTypes.arrayOf(PropTypes.element),
 
-  selectedTab: React.PropTypes.string,
-  tabAddButton: React.PropTypes.element,
-  onTabSelect: React.PropTypes.func,
-  onTabClose: React.PropTypes.func,
-  onTabAddButtonClick: React.PropTypes.func,
-  onTabPositionChange: React.PropTypes.func
+  selectedTab: PropTypes.string,
+  tabAddButton: PropTypes.element,
+  onTabSelect: PropTypes.func,
+  onTabClose: PropTypes.func,
+  onTabAddButtonClick: PropTypes.func,
+  onTabPositionChange: PropTypes.func
 
 };
 

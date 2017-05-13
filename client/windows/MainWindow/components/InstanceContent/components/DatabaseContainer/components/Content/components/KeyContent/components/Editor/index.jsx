@@ -26,7 +26,7 @@ class Editor extends React.Component {
   constructor() {
     super()
     this.state = {
-      currentMode: null,
+      currentMode: '',
       wrapping: true,
       changed: false,
       modes: {
@@ -65,7 +65,7 @@ class Editor extends React.Component {
 
   init(buffer) {
     if (!buffer) {
-      this.setState({currentMode: null, changed: false})
+      this.setState({currentMode: '', changed: false})
       return
     }
     const content = buffer.toString()

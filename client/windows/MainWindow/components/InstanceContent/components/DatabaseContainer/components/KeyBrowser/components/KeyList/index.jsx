@@ -412,13 +412,13 @@ class KeyList extends React.Component {
                     type: 'object',
                     properties: {
                       'Key Name:': {
-                  type: 'string',
-                  minLength: 1
-                },
+                        type: 'string',
+                        minLength: 1
+                      },
                       'Type:': {
-                  type: 'string',
-                  enum: ['string', 'hash', 'list', 'set', 'zset']
-                }
+                        type: 'string',
+                        enum: ['string', 'hash', 'list', 'set', 'zset']
+                      }
                     }
                   }
                 }).then(res => {
@@ -427,15 +427,15 @@ class KeyList extends React.Component {
                   return this.props.redis.exists(key).then(exists => {
                     const error = 'The key already exists'
                     if (exists) {
-                alert(error)
-                throw new Error(error)
-              }
+                      alert(error)
+                      throw new Error(error)
+                    }
                     return {key, type}
                   })
                 }).then(({key, type}) => {
                   this.createKey(key, type).then(() => {
-              this.props.onCreateKey(key)
-            })
+                    this.props.onCreateKey(key)
+                  })
                 })
               }}
                  />
@@ -479,18 +479,18 @@ class KeyList extends React.Component {
                     let found
                     for (let i = 0; i < keys.length; i++) {
                       if (i !== rowIndex && keys[i][0] === newKeyName) {
-                  keys.splice(i, 1)
-                  found = i
-                  break
-                }
+                        keys.splice(i, 1)
+                        found = i
+                        break
+                      }
                     }
                     if (typeof found === 'number') {
                       if (this.index >= found) {
-                  this.index -= 1
-                }
+                        this.index -= 1
+                      }
                       this.setState({keys}, () => {
-                  this.handleSelect(this.index, true)
-                })
+                        this.handleSelect(this.index, true)
+                      })
                     } else {
                       this.setState({keys})
                     }

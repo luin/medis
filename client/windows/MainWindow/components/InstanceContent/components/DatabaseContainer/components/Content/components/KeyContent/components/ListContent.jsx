@@ -10,11 +10,6 @@ import AddButton from '../../../../AddButton'
 import ReactDOM from 'react-dom'
 
 class ListContent extends BaseContent {
-  constructor() {
-    super()
-    this.state.indexWidth = 60
-  }
-
   save(value, callback) {
     if (typeof this.state.selectedIndex === 'number') {
       this.state.members[this.state.selectedIndex] = value.toString()
@@ -153,12 +148,11 @@ class ListContent extends BaseContent {
 
   render() {
     return (<SplitPane
-      className="pane-group"
-      minSize="80"
-      split="vertical"
-      defaultSize={200}
-      ref="node"
-      onChange={this.onChangeSiderbarWidth.bind(this)}
+        minSize="80"
+        split="vertical"
+        ref="node"
+        defaultSize={this.props.contentBarWidth}
+        onChange={this.props.setSize.bind(null, 'content')}
       >
       <div
         tabIndex="0"
@@ -173,10 +167,8 @@ class ListContent extends BaseContent {
           onRowClick={this.handleSelect.bind(this)}
           onRowContextMenu={this.showContextMenu.bind(this)}
           isColumnResizing={false}
-          onColumnResizeEndCallback={indexWidth => {
-            this.setState({indexWidth})
-          }}
-          width={this.props.sidebarWidth}
+          onColumnResizeEndCallback={this.props.setSize.bind(null, 'index')}
+          width={this.props.contentBarWidth}
           height={this.props.height}
           headerHeight={24}
           >
@@ -191,7 +183,7 @@ class ListContent extends BaseContent {
                 desc={this.state.desc}
                 />
             }
-            width={this.state.indexWidth}
+            width={this.props.indexBarWidth}
             isResizable
             cell={({rowIndex}) => {
               return <div className="index-label">{ this.state.desc ? this.state.length - 1 - rowIndex : rowIndex }</div>
@@ -207,9 +199,9 @@ class ListContent extends BaseContent {
                       type: 'object',
                       properties: {
                         'Insert To:': {
-                    type: 'string',
-                    enum: ['head', 'tail']
-                  }
+                          type: 'string',
+                          enum: ['head', 'tail']
+                        }
                       }
                     }
                   }).then(res => {
@@ -217,20 +209,20 @@ class ListContent extends BaseContent {
                   }).then(method => {
                     const data = 'New Item'
                     this.props.redis[method](this.state.keyName, data).then(() => {
-                this.state.members[method === 'lpush' ? 'unshift' : 'push'](data)
-                this.setState({
-                members: this.state.members,
-                length: this.state.length + 1
-              }, () => {
-                this.props.onKeyContentChange()
-                this.handleSelect(null, method === 'lpush' ? 0 : this.state.members.length - 1)
-              })
-              })
+                      this.state.members[method === 'lpush' ? 'unshift' : 'push'](data)
+                      this.setState({
+                        members: this.state.members,
+                        length: this.state.length + 1
+                      }, () => {
+                        this.props.onKeyContentChange()
+                        this.handleSelect(null, method === 'lpush' ? 0 : this.state.members.length - 1)
+                      })
+                    })
                   })
                 }}
                              />
             }
-            width={this.props.sidebarWidth - this.state.indexWidth}
+            width={this.props.contentBarWidth - this.props.indexBarWidth}
             cell={({rowIndex}) => {
               const data = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex]
               if (typeof data === 'undefined') {

@@ -3,7 +3,8 @@
 import {ipcRenderer} from 'electron'
 
 export function get() {
-  return JSON.parse(localStorage.getItem('patternStore')) || {}
+  const data = localStorage.getItem('patternStore')
+  return data ? JSON.parse(data) : {}
 }
 
 export function set(patterns) {

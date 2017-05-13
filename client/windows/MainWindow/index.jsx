@@ -1,6 +1,6 @@
 'use strict'
 
-import React from 'react'
+import React, {PureComponent} from 'react'
 import {createSelector} from 'reselect'
 import {Provider, connect} from 'react-redux'
 import InstanceTabs from './components/InstanceTabs'
@@ -9,7 +9,7 @@ import DocumentTitle from 'react-document-title'
 import {createInstance, selectInstance, delInstance, moveInstance} from 'Redux/actions'
 import store from 'Redux/store'
 
-class MainWindow extends React.Component {
+class MainWindow extends PureComponent {
   componentDidMount() {
     $(window).on('keydown.redis', this.onHotKey.bind(this))
   }

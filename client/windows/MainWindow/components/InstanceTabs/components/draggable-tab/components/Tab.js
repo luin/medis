@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Tab extends React.Component {
   constructor(props) {
@@ -20,11 +21,11 @@ Tab.defaultProps = {
 };
 
 Tab.propTypes = {
-  title: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.element
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
   ]).isRequired,
-  disableClose: React.PropTypes.bool
+  disableClose: PropTypes.bool
 };
 
 export default Tab;

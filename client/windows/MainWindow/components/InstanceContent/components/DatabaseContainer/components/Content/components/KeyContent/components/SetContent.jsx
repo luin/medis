@@ -136,9 +136,9 @@ class SetContent extends BaseContent {
       className="pane-group"
       minSize="80"
       split="vertical"
-      defaultSize={200}
       ref="node"
-      onChange={this.onChangeSiderbarWidth.bind(this)}
+      defaultSize={this.props.contentBarWidth}
+      onChange={this.props.setSize.bind(null, 'content')}
       >
       <div
         onKeyDown={this.handleKeyDown.bind(this)}
@@ -152,11 +152,20 @@ class SetContent extends BaseContent {
           rowClassNameGetter={this.rowClassGetter.bind(this)}
           onRowContextMenu={this.showContextMenu.bind(this)}
           onRowClick={this.handleSelect.bind(this)}
-          width={this.props.sidebarWidth}
+          width={this.props.contentBarWidth}
           height={this.props.height}
           headerHeight={24}
           >
           <Column
+            width={this.props.contentBarWidth}
+            cell={({rowIndex}) => {
+              const member = this.state.members[rowIndex]
+              if (typeof member === 'undefined') {
+                this.load(rowIndex)
+                return 'Loading...'
+              }
+              return <div className="overflow-wrapper"><span>{member}</span></div>
+            }}
             header={
               <AddButton
                 title="member" onClick={() => {
@@ -166,45 +175,36 @@ class SetContent extends BaseContent {
                       type: 'object',
                       properties: {
                         'Value:': {
-                    type: 'string'
-                  }
+                          type: 'string'
+                        }
                       }
                     }
                   }).then(res => {
                     const data = res['Value:']
                     return this.props.redis.sismember(this.state.keyName, data).then(exists => {
                       if (exists) {
-                  const error = 'Member already exists'
-                  alert(error)
-                  throw new Error(error)
-                }
+                        const error = 'Member already exists'
+                        alert(error)
+                        throw new Error(error)
+                      }
                       return data
                     })
                   }).then(data => {
                     this.props.redis.sadd(this.state.keyName, data).then(() => {
-                this.state.members.push(data)
-                this.setState({
-                members: this.state.members,
-                length: this.state.length + 1
-              }, () => {
-                this.props.onKeyContentChange()
-                this.handleSelect(null, this.state.members.length - 1)
-              })
-              })
+                      this.state.members.push(data)
+                      this.setState({
+                        members: this.state.members,
+                        length: this.state.length + 1
+                      }, () => {
+                        this.props.onKeyContentChange()
+                        this.handleSelect(null, this.state.members.length - 1)
+                      })
+                    })
                   })
                 }}
                                />
             }
-            width={this.props.sidebarWidth}
-            cell={({rowIndex}) => {
-              const member = this.state.members[rowIndex]
-              if (typeof member === 'undefined') {
-                this.load(rowIndex)
-                return 'Loading...'
-              }
-              return <div className="overflow-wrapper"><span>{member}</span></div>
-            }}
-            />
+          />
         </Table>
       </div>
       <Editor

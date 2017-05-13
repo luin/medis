@@ -1,8 +1,9 @@
 import * as Storage from '../storage'
 
 const whiteList = [
-  { key: 'patterns', storage: 'Patterns' },
-  { key: 'favorites', storage: 'Favorites' },
+  {key: 'patterns', storage: 'Patterns'},
+  {key: 'favorites', storage: 'Favorites'},
+  {key: 'sizes', storage: 'Sizes'}
 ]
 
 export default function (store) {

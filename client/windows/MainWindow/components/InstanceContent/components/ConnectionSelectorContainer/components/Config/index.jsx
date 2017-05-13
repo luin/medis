@@ -196,17 +196,19 @@ class Config extends React.Component {
           className="nt-button" style={{float: 'left'}} onClick={() => {
             this.duplicate()
           }}
-        >{ this.props.favorite ? 'Duplicate' : 'Add to Favorite' }</button>
+                                                        >{ this.props.favorite ? 'Duplicate' : 'Add to Favorite' }</button>
         <button
           className="nt-button"
           style={{display: this.state.changed ? 'inline-block' : 'none'}}
-          onClick={() => { this.save() }}
-        >Save Changes</button>
+          onClick={() => {
+            this.save()
+          }}
+          >Save Changes</button>
         <button
           disabled={Boolean(this.props.connectStatus)} ref="connectButton" className="nt-button nt-button--primary" onClick={() => {
             this.connect()
           }}
-        >{this.props.connectStatus || (this.state.changed ? 'Save and Connect' : 'Connect')}</button>
+                                                                                                                    >{this.props.connectStatus || (this.state.changed ? 'Save and Connect' : 'Connect')}</button>
       </div>
     </div>)
   }

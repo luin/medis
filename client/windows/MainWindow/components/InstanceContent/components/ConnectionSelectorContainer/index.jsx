@@ -1,15 +1,14 @@
 'use strict'
 
-import React from 'react'
+import React, {PureComponent} from 'react'
 import {Provider, connect} from 'react-redux'
 import Favorite from './components/Favorite'
-import {createSelector} from 'reselect'
 import Config from './components/Config'
 import store from 'Redux/store'
 import {connectToRedis} from 'Redux/actions'
 import {removeFavorite, updateFavorite, addFavorite, reorderFavorites} from 'Redux/actions'
 
-class ConnectionSelector extends React.Component {
+class ConnectionSelector extends PureComponent {
   constructor() {
     super()
     this.state = {connect: false, key: null}
@@ -49,17 +48,12 @@ class ConnectionSelector extends React.Component {
   }
 }
 
-const selector = createSelector(
-  state => state.favorites,
-  (state, props) => props.instance,
-  (favorites, instance) => {
-    return {
-      favorites,
-      connectStatus: instance.get('connectStatus')
-    }
+function mapStateToProps(state, {instance}) {
+  return {
+    favorites: state.favorites,
+    connectStatus: instance.get('connectStatus')
   }
-)
-
+}
 const mapDispatchToProps = {
   updateFavorite,
   addFavorite,
@@ -68,4 +62,4 @@ const mapDispatchToProps = {
   removeFavorite
 }
 
-export default connect(selector, mapDispatchToProps)(ConnectionSelector)
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectionSelector)

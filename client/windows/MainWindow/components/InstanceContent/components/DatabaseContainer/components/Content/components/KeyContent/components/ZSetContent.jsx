@@ -14,11 +14,6 @@ import {clipboard} from 'electron'
 require('./BaseContent/index.scss')
 
 class ZSetContent extends BaseContent {
-  constructor() {
-    super()
-    this.state.scoreWidth = 60
-  }
-
   save(value, callback) {
     if (typeof this.state.selectedIndex === 'number') {
       const item = this.state.members[this.state.selectedIndex]
@@ -154,12 +149,11 @@ class ZSetContent extends BaseContent {
 
   render() {
     return (<SplitPane
-      className="pane-group"
-      minSize="146"
-      split="vertical"
-      defaultSize={200}
-      ref="node"
-      onChange={this.onChangeSiderbarWidth.bind(this)}
+        minSize="80"
+        split="vertical"
+        ref="node"
+        defaultSize={this.props.contentBarWidth}
+        onChange={this.props.setSize.bind(null, 'content')}
       >
       <div
         onKeyDown={this.handleKeyDown.bind(this)}
@@ -178,10 +172,8 @@ class ZSetContent extends BaseContent {
             this.setState({editableIndex: index})
           }}
           isColumnResizing={false}
-          onColumnResizeEndCallback={scoreWidth => {
-            this.setState({scoreWidth})
-          }}
-          width={this.props.sidebarWidth}
+          onColumnResizeEndCallback={this.props.setSize.bind(null, 'score')}
+          width={this.props.contentBarWidth}
           height={this.props.height}
           headerHeight={24}
           >
@@ -196,7 +188,7 @@ class ZSetContent extends BaseContent {
                 desc={this.state.desc}
                 />
             }
-            width={this.state.scoreWidth}
+            width={this.props.scoreBarWidth}
             isResizable
             cell={({rowIndex}) => {
               const member = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex]
@@ -220,9 +212,9 @@ class ZSetContent extends BaseContent {
                     }, () => {
                       for (let i = 0; i < updatedMembers.length; i++) {
                         if (updatedMembers[i][0] === member[0]) {
-                    this.handleSelect(null, i)
-                    break
-                  }
+                          this.handleSelect(null, i)
+                          break
+                        }
                       }
                     })
                   })
@@ -243,11 +235,11 @@ class ZSetContent extends BaseContent {
                       type: 'object',
                       properties: {
                         'Value:': {
-                    type: 'string'
-                  },
+                          type: 'string'
+                        },
                         'Score:': {
-                    type: 'number'
-                  }
+                          type: 'number'
+                        }
                       }
                     }
                   }).then(res => {
@@ -255,28 +247,28 @@ class ZSetContent extends BaseContent {
                     const score = res['Score:']
                     return this.props.redis.zscore(this.state.keyName, data).then(rank => {
                       if (rank !== null) {
-                  const error = 'Member already exists'
-                  alert(error)
-                  throw new Error(error)
-                }
+                        const error = 'Member already exists'
+                        alert(error)
+                        throw new Error(error)
+                      }
                       return {data, score}
                     })
                   }).then(({data, score}) => {
                     this.props.redis.zadd(this.state.keyName, score, data).then(() => {
-                this.state.members.push([data, score])
-                this.setState({
-                members: this.state.members,
-                length: this.state.length + 1
-              }, () => {
-                this.props.onKeyContentChange()
-                this.handleSelect(null, this.state.members.length - 1)
-              })
-              })
+                      this.state.members.push([data, score])
+                      this.setState({
+                        members: this.state.members,
+                        length: this.state.length + 1
+                      }, () => {
+                        this.props.onKeyContentChange()
+                        this.handleSelect(null, this.state.members.length - 1)
+                      })
+                    })
                   })
                 }}
                                />
             }
-            width={this.props.sidebarWidth - this.state.scoreWidth}
+            width={this.props.contentBarWidth - this.props.scoreBarWidth}
             cell={({rowIndex}) => {
               const member = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex]
               if (!member) {
