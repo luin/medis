@@ -95,7 +95,7 @@ class Config extends React.Component {
         className={'icon icon-dot-3 ssh-key'}
         onClick={() => {
           const win = remote.getCurrentWindow()
-          const files = remote.require('dialog').showOpenDialog(win, {
+          const files = remote.dialog.showOpenDialog(win, {
             properties: ['openFile']
           })
           if (files && files.length) {
@@ -170,8 +170,9 @@ class Config extends React.Component {
                   return
                 }
                 const win = remote.getCurrentWindow()
-                const files = remote.require('dialog').showOpenDialog(win, {
-                  properties: ['openFile']
+                const files = remote.dialog.showOpenDialog(win, {
+                  message: 'Select a private key (Most often in the ~/.ssh)',
+                  properties: ['openFile', 'showHiddenFiles']
                 })
                 if (files && files.length) {
                   const file = files[0]
