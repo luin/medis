@@ -28,10 +28,13 @@ You can download compiled versions of Medis for Mac OS X from [the release page]
 
 ## Running Locally
 
-```shell
-$ npm install
-$ npm run run
-```
+1. Compile assets:
+
+    $ npm run build
+
+2. Run with Electron:
+
+    $ npm run electron
 
 ## Connect to Heroku
 Medis can connect to Heroku Redis addon to manage your data. You just need to call `heroku redis:credentials --app APP` to get your redis credential:

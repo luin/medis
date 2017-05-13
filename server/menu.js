@@ -1,9 +1,7 @@
 'use strict';
 
-const electron = require('electron');
-const app = electron.app;
+const {app, Menu} = require('electron');
 const windowManager = require('./windowManager');
-const Menu = electron.Menu;
 
 const menuTemplate = [{
   label: 'File',
@@ -17,7 +15,7 @@ const menuTemplate = [{
     label: 'New Connection Tab',
     accelerator: 'CmdOrCtrl+T',
     click() {
-      windowManager.current.webContents.send('action', 'addInstance');
+      windowManager.current.webContents.send('action', 'createInstance');
     }
   }, {
     type: 'separator'
@@ -169,10 +167,10 @@ if (process.platform == 'darwin') {
 
 const menu = Menu.buildFromTemplate(menuTemplate);
 
-if (process.env.NODE_ENV !== 'debug') {
-  menu.items[baseIndex + 2].submenu.items[0].visible = false;
-  menu.items[baseIndex + 2].submenu.items[2].visible = false;
-}
+// if (process.env.NODE_ENV !== 'debug') {
+//   menu.items[baseIndex + 2].submenu.items[0].visible = false;
+//   menu.items[baseIndex + 2].submenu.items[2].visible = false;
+// }
 
 windowManager.on('blur', function () {
   menu.items[baseIndex + 0].submenu.items[3].enabled = false;
