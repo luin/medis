@@ -7,7 +7,7 @@ import Terminal from './components/Terminal'
 import Config from './components/Config'
 import Footer from './components/Footer'
 
-class Content extends React.Component {
+class Content extends React.PureComponent {
   constructor() {
     super()
     this.state = {

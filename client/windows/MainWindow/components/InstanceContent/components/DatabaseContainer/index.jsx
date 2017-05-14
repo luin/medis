@@ -7,7 +7,7 @@ import KeyBrowser from './components/KeyBrowser'
 import Content from './components/Content'
 require('./index.scss')
 
-class Database extends React.Component {
+class Database extends React.PureComponent {
   constructor() {
     super()
     this.$window = $(window)
@@ -46,8 +46,8 @@ class Database extends React.Component {
   render() {
     return (<SplitPane
       className="pane-group"
-      minSize="250"
       split="vertical"
+      minSize={250}
       defaultSize={260}
       ref="node"
       onChange={size => {

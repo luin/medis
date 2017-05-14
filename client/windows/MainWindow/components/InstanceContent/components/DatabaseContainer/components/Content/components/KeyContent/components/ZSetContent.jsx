@@ -149,7 +149,7 @@ class ZSetContent extends BaseContent {
 
   render() {
     return (<SplitPane
-        minSize="80"
+        minSize={80}
         split="vertical"
         ref="node"
         defaultSize={this.props.contentBarWidth}

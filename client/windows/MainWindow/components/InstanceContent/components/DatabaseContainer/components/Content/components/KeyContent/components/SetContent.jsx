@@ -144,7 +144,7 @@ class SetContent extends BaseContent {
   render() {
     return (<SplitPane
       className="pane-group"
-      minSize="80"
+      minSize={80}
       split="vertical"
       ref="node"
       defaultSize={this.props.contentBarWidth}
