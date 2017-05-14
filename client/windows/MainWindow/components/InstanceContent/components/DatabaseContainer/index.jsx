@@ -35,8 +35,7 @@ class Database extends React.Component {
 
   updateLayout() {
     this.setState({
-      clientHeight: this.$window.height() - $('.tab-group').height(),
-      clientWidth: this.$window.width()
+      clientHeight: this.$window.height() - $('.tab-group').height()
     })
   }
 
@@ -70,7 +69,6 @@ class Database extends React.Component {
         />
       <Content
         height={this.state.clientHeight}
-        width={this.state.clientWidth - this.state.sidebarWidth}
         keyName={this.state.key}
         version={this.state.version}
         metaVersion={this.state.metaVersion}

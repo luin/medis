@@ -22,7 +22,7 @@ const msgpack = require('msgpack5')()
 
 require('./index.scss')
 
-class Editor extends React.Component {
+class Editor extends React.PureComponent {
   constructor() {
     super()
     this.state = {
@@ -203,7 +203,7 @@ class Editor extends React.Component {
       viewer = <div/>
     }
     return (<div
-      style={{flex: 1, display: 'flex', width: this.props.width, flexDirection: 'column'}}
+      style={{flex: 1, display: 'flex', flexDirection: 'column'}}
       className="Editor"
       onKeyDown={this.handleKeyDown.bind(this)}
       >

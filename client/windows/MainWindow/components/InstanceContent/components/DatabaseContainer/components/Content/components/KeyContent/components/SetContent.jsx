@@ -218,7 +218,6 @@ class SetContent extends BaseContent {
         </Table>
       </div>
       <Editor
-        width={this.props.width - this.props.contentBarWidth}
         buffer={typeof this.state.content === 'string' && Buffer.from(this.state.content)}
         onSave={this.save.bind(this)}
         />
