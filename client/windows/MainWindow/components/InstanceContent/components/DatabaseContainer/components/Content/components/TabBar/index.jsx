@@ -4,7 +4,7 @@ import React from 'react'
 
 require('./index.scss')
 
-class Content extends React.Component {
+class Content extends React.PureComponent {
   constructor() {
     super()
 

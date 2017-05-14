@@ -2,7 +2,7 @@ import React from 'react'
 
 require('./index.scss')
 
-export default class AddButton extends React.Component {
+export default class AddButton extends React.PureComponent {
   render() {
     return (<div className="AddButton">
       {this.props.title}

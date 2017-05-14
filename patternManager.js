@@ -46260,7 +46260,7 @@
 	var _Utils = __webpack_require__(260);
 
 	var setSize = (0, _Utils.createAction)('SET_SIZE', function (type, value) {
-	  return { type: type, value: value };
+	  return { type: type, value: Number(value) };
 	});
 	exports.setSize = setSize;
 

@@ -3,7 +3,7 @@
 import React from 'react'
 import Sortable from 'sortablejs'
 
-class Favorite extends React.Component {
+class Favorite extends React.PureComponent {
   constructor() {
     super()
     this.state = {

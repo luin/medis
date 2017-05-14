@@ -8,7 +8,7 @@ import fs from 'fs'
 
 require('./index.scss')
 
-class Config extends React.Component {
+class Config extends React.PureComponent {
   constructor() {
     super()
     this.state = {

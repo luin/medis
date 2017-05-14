@@ -6,7 +6,7 @@ import splitargs from 'redis-splitargs'
 
 require('./index.scss')
 
-class Terminal extends React.Component {
+class Terminal extends React.PureComponent {
   constructor() {
     super()
     this.onSelectBinded = this.onSelect.bind(this)

@@ -11,7 +11,7 @@ const timeScale = new humanFormat.Scale({
   d: 86400000
 })
 
-class Footer extends React.Component {
+class Footer extends React.PureComponent {
   constructor() {
     super()
     this.resetState(true)
