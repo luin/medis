@@ -281,7 +281,6 @@ class ZSetContent extends BaseContent {
         </Table>
       </div>
       <Editor
-        style={{height: this.props.height}}
         buffer={typeof this.state.content === 'string' && Buffer.from(this.state.content)}
         onSave={this.save.bind(this)}
         />

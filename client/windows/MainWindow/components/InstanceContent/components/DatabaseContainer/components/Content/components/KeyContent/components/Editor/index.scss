@@ -1,5 +1,6 @@
 .Editor {
   position: relative;
+  min-width: 0;
   textarea {
     border: none;
     width: 100%;
@@ -15,7 +16,7 @@
   }
 
   .CodeMirror-scroll {
-    flex: 1;
+    // flex: 1;
   }
 
   .ReactCodeMirror {

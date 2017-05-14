@@ -57,7 +57,6 @@ class Content extends React.Component {
         keyName={this.props.keyName}
         keyType={this.state.keyType}
         height={this.props.height - 66}
-        width={this.props.width - 1}
         redis={this.props.redis}
         onKeyContentChange={() => {
           this.setState({version: this.state.version + 1})

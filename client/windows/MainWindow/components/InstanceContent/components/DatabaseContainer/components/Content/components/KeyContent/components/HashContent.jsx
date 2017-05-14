@@ -254,7 +254,6 @@ class HashContent extends BaseContent {
         </Table>
       </div>
       <Editor
-        style={{height: this.props.height}}
         buffer={this.state.content}
         onSave={this.save.bind(this)}
         />
