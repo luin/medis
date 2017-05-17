@@ -28,11 +28,15 @@ You can download compiled versions of Medis for Mac OS X from [the release page]
 
 ## Running Locally
 
-1. Compile assets:
+1. Install dependencies
+
+    $ npm install
+
+2. Compile assets:
 
     $ npm run build
 
-2. Run with Electron:
+3. Run with Electron:
 
     $ npm run electron
 
