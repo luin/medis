@@ -161,7 +161,7 @@ class HashContent extends BaseContent {
             this.handleSelect(evt, index)
             this.setState({editableIndex: index})
           }}
-          width={this.props.sidebarWidth}
+          width={this.props.contentBarWidth}
           height={this.props.height}
           headerHeight={24}
           >
