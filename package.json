@@ -74,7 +74,7 @@
     "conventional-github-releaser": "1.1.5",
     "css-loader": "0.28.3",
     "cz-conventional-changelog": "2.0.0",
-    "electron": "1.4.15",
+    "electron": "1.6.10",
     "electron-osx-sign": "0.4.5",
     "electron-packager": "8.7.0",
     "eslint-config-xo": "0.18.2",
