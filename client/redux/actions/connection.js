@@ -4,7 +4,7 @@ import {createAction} from 'Utils';
 import {Client} from 'ssh2';
 import net from 'net';
 import Redis from 'ioredis';
-import _ from 'lodash';
+import assign from 'lodash/assign';
 
 function getIndex(getState) {
   const {activeInstanceKey, instances} = getState()
@@ -78,7 +78,7 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
       if (config.tlskey) config.tls.key = config.tlskey;
       if (config.tlscert) config.tls.cert = config.tlscert;
     }
-    const redis = new Redis(_.assign({}, config, override, {
+    const redis = new Redis(assign({}, config, override, {
       retryStrategy() {
         return false;
       }

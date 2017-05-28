@@ -2,7 +2,7 @@
 
 import React from 'react'
 import commands from 'redis-commands'
-import {clone} from 'lodash'
+import clone from 'lodash/clone'
 
 require('./index.scss')
 

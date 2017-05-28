@@ -1,6 +1,11 @@
 'use strict';
 
-import _ from 'lodash';
+
+import findIndex from 'lodash/findIndex';
+import map from 'lodash/map';
+import each from 'lodash/each';
+
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import Draggable from 'react-draggable';
@@ -30,13 +35,13 @@ class Tabs extends React.Component {
   }
 
   _getIndexOfTabByKey(key) {
-    return _.findIndex(this.state.tabs, (tab) => {
+    return findIndex(this.state.tabs, (tab) => {
       return tab.key === key;
     });
   }
 
   _saveStartPositions() {
-    const positions = _.map(this.state.tabs, (tab) => {
+    const positions = map(this.state.tabs, (tab) => {
       const el = this.refs[tab.key];
       const pos = el ? el.getBoundingClientRect() : {};
       return { key: tab.key, pos };
@@ -64,7 +69,7 @@ class Tabs extends React.Component {
 
   handleDrag(key, e) {
     const deltaX = (e.pageX || e.clientX);
-    _.each(this.startPositions, (pos) => {
+    each(this.startPositions, (pos) => {
       const tempMoved = pos.moved || 0;
       const shoudBeSwap = key !== pos.key && pos.pos.left + tempMoved < deltaX && deltaX < pos.pos.right + tempMoved;
       if (shoudBeSwap) {
@@ -120,7 +125,7 @@ class Tabs extends React.Component {
   }
 
   render() {
-    const tabs = _.map(this.state.tabs, (tab) => {
+    const tabs = map(this.state.tabs, (tab) => {
       const tabTitle = tab.props.title;
 
       return (
