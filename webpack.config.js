@@ -15,20 +15,20 @@ module.exports = {
     filename: '[name].js'
   },
   module: {
-    loaders: [{
+    rules: [{
       test: /\.jsx$/,
       exclude: /node_modules/,
-      loader: 'jsx-loader?harmony!babel?stage=0&ignore=buffer'
+      loader: 'babel-loader?ignore=buffer'      
     }, {
       test: /\.js$/,
       exclude: /node_modules/,
-      loader: 'babel?stage=0&ignore=buffer'
+      loader: 'babel-loader?ignore=buffer'
     }, {
       test: /\.scss$/,
-      loader: 'style!css!sass'
+      loader: 'style-loader!css-loader!sass-loader'
     }, {
       test: /\.css$/,
-      loader: 'style!css'
+      loader: 'style-loader!css-loader'
     }, {
       test: /\.(png|jpg)$/,
       loader: "url-loader"
@@ -54,6 +54,6 @@ module.exports = {
       Redux: path.resolve(__dirname, 'client/redux/'),
       Utils: path.resolve(__dirname, 'client/utils/'),
     },
-    extensions: ['', '.js', '.jsx']
+    extensions: ['.js', '.jsx']
   }
 }
