@@ -65,6 +65,9 @@ And then input `HOST`, `PORT` and `PASSWORD` to the connection tab.
 * Cluster management
 * GEO keys supporting
 
+## Contributors
+<table><tr><td width="20%"><a href="https://github.com/luin"><img src="https://avatars1.githubusercontent.com/u/635902?v=3" /></a><p align="center">luin</p></td><td width="20%"><a href="https://github.com/kvnsmth"><img src="https://avatars0.githubusercontent.com/u/127?v=3" /></a><p align="center">kvnsmth</p></td><td width="20%"><a href="https://github.com/dpde"><img src="https://avatars2.githubusercontent.com/u/485645?v=3" /></a><p align="center">dpde</p></td><td width="20%"><a href="https://github.com/ogasawaraShinnosuke"><img src="https://avatars1.githubusercontent.com/u/5368888?v=3" /></a><p align="center">ogasawaraShinnosuke</p></td><td width="20%"><a href="https://github.com/naholyr"><img src="https://avatars1.githubusercontent.com/u/214067?v=3" /></a><p align="center">naholyr</p></td></tr><tr><td width="20%"><a href="https://github.com/Janpot"><img src="https://avatars1.githubusercontent.com/u/2109932?v=3" /></a><p align="center">Janpot</p></td></table>
+
 ## License
 
 MIT
