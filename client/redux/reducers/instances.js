@@ -43,10 +43,11 @@ export const instances = handleActions(List([InstanceFactory({key: defaultInstan
     const address = `${host}:${port}`
     const title = `${remote}${address}`
     const connectionKey = `${sshHost || ''}|${host}|${port}`
+    const connectionDb = config.db
     const version = redis.serverInfo && redis.serverInfo.redis_version
 
     return state.update(index, instance => (
-      instance.merge({config, title, redis, version, connectionKey}).remove('connectStatus')
+      instance.merge({config, title, redis, version, connectionKey, connectionDb}).remove('connectStatus')
     ))
   }
 })

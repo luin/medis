@@ -49,6 +49,7 @@ class Config extends React.PureComponent {
     const config = favorite ? favorite.merge(data).toJS() : data.toJS()
     config.host = config.host || 'localhost'
     config.port = config.port || '6379'
+    config.db = config.db || '0'
     config.sshPort = config.sshPort || '22'
     connectToRedis(config)
     this.save()
@@ -122,6 +123,10 @@ class Config extends React.PureComponent {
         <div className="nt-form-row">
           <label htmlFor="port">Port:</label>
           <input type="text" id="port" value={this.getProp('port')} onChange={this.handleChange.bind(this, 'port')} placeholder="6379"/>
+        </div>
+        <div className="nt-form-row">
+          <label htmlFor="db">DB:</label>
+          <input type="text" id="db" value={this.getProp('db')} onChange={this.handleChange.bind(this, 'db')} placeholder="0"/>
         </div>
         <div className="nt-form-row">
           <label htmlFor="password">Password:</label>

@@ -60,7 +60,7 @@
 
 	var _reactRedux = __webpack_require__(184);
 
-	var _ = __webpack_require__(595);
+	var _ = __webpack_require__(592);
 
 	var _2 = _interopRequireDefault(_);
 
@@ -74,7 +74,7 @@
 
 	var _electron = __webpack_require__(253);
 
-	__webpack_require__(593);
+	__webpack_require__(590);
 
 	_electron.ipcRenderer.on('action', function (evt, action) {
 	  if (type === 'delInstance') {
@@ -21866,7 +21866,7 @@
 	'use strict';
 
 	exports.__esModule = true;
-	exports.connect = exports.connectAdvanced = exports.Provider = undefined;
+	exports.connect = exports.connectAdvanced = exports.createProvider = exports.Provider = undefined;
 
 	var _Provider = __webpack_require__(185);
 
@@ -21883,6 +21883,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.Provider = _Provider2.default;
+	exports.createProvider = _Provider.createProvider;
 	exports.connectAdvanced = _connectAdvanced2.default;
 	exports.connect = _connect2.default;
 
@@ -21893,7 +21894,7 @@
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	exports.__esModule = true;
-	exports.default = undefined;
+	exports.createProvider = createProvider;
 
 	var _react = __webpack_require__(1);
 
@@ -21925,53 +21926,58 @@
 	  (0, _warning2.default)('<Provider> does not support changing `store` on the fly. ' + 'It is most likely that you see this error because you updated to ' + 'Redux 2.x and React Redux 2.x which no longer hot reload reducers ' + 'automatically. See https://github.com/reactjs/react-redux/releases/' + 'tag/v2.0.0 for the migration instructions.');
 	}
 
-	var Provider = function (_Component) {
-	  _inherits(Provider, _Component);
+	function createProvider() {
+	  var _Provider$childContex;
 
-	  Provider.prototype.getChildContext = function getChildContext() {
-	    return { store: this.store, storeSubscription: null };
-	  };
+	  var storeKey = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'store';
+	  var subKey = arguments[1];
 
-	  function Provider(props, context) {
-	    _classCallCheck(this, Provider);
+	  var subscriptionKey = subKey || storeKey + 'Subscription';
 
-	    var _this = _possibleConstructorReturn(this, _Component.call(this, props, context));
+	  var Provider = function (_Component) {
+	    _inherits(Provider, _Component);
 
-	    _this.store = props.store;
-	    return _this;
+	    Provider.prototype.getChildContext = function getChildContext() {
+	      var _ref;
+
+	      return _ref = {}, _ref[storeKey] = this[storeKey], _ref[subscriptionKey] = null, _ref;
+	    };
+
+	    function Provider(props, context) {
+	      _classCallCheck(this, Provider);
+
+	      var _this = _possibleConstructorReturn(this, _Component.call(this, props, context));
+
+	      _this[storeKey] = props.store;
+	      return _this;
+	    }
+
+	    Provider.prototype.render = function render() {
+	      return _react.Children.only(this.props.children);
+	    };
+
+	    return Provider;
+	  }(_react.Component);
+
+	  if (process.env.NODE_ENV !== 'production') {
+	    Provider.prototype.componentWillReceiveProps = function (nextProps) {
+	      if (this[storeKey] !== nextProps.store) {
+	        warnAboutReceivingStore();
+	      }
+	    };
 	  }
 
-	  Provider.prototype.render = function render() {
-	    return _react.Children.only(this.props.children);
+	  Provider.propTypes = {
+	    store: _PropTypes.storeShape.isRequired,
+	    children: _propTypes2.default.element.isRequired
 	  };
+	  Provider.childContextTypes = (_Provider$childContex = {}, _Provider$childContex[storeKey] = _PropTypes.storeShape.isRequired, _Provider$childContex[subscriptionKey] = _PropTypes.subscriptionShape, _Provider$childContex);
+	  Provider.displayName = 'Provider';
 
 	  return Provider;
-	}(_react.Component);
-
-	exports.default = Provider;
-
-
-	if (process.env.NODE_ENV !== 'production') {
-	  Provider.prototype.componentWillReceiveProps = function (nextProps) {
-	    var store = this.store;
-	    var nextStore = nextProps.store;
-
-
-	    if (store !== nextStore) {
-	      warnAboutReceivingStore();
-	    }
-	  };
 	}
 
-	Provider.propTypes = {
-	  store: _PropTypes.storeShape.isRequired,
-	  children: _propTypes2.default.element.isRequired
-	};
-	Provider.childContextTypes = {
-	  store: _PropTypes.storeShape.isRequired,
-	  storeSubscription: _PropTypes.subscriptionShape
-	};
-	Provider.displayName = 'Provider';
+	exports.default = createProvider();
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
@@ -46335,10 +46341,11 @@
 	  var address = host + ':' + port;
 	  var title = '' + remote + address;
 	  var connectionKey = (sshHost || '') + '|' + host + '|' + port;
+	  var connectionDb = config.db;
 	  var version = redis.serverInfo && redis.serverInfo.redis_version;
 
 	  return state.update(index, function (instance) {
-	    return instance.merge({ config: config, title: title, redis: redis, version: version, connectionKey: connectionKey }).remove('connectStatus');
+	    return instance.merge({ config: config, title: title, redis: redis, version: version, connectionKey: connectionKey, connectionDb: connectionDb }).remove('connectStatus');
 	  });
 	}), _handleActions));
 	exports.instances = instances;
@@ -46707,16 +46714,13 @@
 /* 587 */,
 /* 588 */,
 /* 589 */,
-/* 590 */,
-/* 591 */,
-/* 592 */,
-/* 593 */
+/* 590 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(594);
+	var content = __webpack_require__(591);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(243)(content, {});
@@ -46736,7 +46740,7 @@
 	}
 
 /***/ }),
-/* 594 */
+/* 591 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(242)();
@@ -46750,7 +46754,7 @@
 
 
 /***/ }),
-/* 595 */
+/* 592 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46785,7 +46789,7 @@
 
 	var _immutable = __webpack_require__(358);
 
-	__webpack_require__(596);
+	__webpack_require__(593);
 
 	var connectionKey = getParameterByName('arg');
 
@@ -46958,13 +46962,13 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 596 */
+/* 593 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(597);
+	var content = __webpack_require__(594);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(243)(content, {});
@@ -46984,7 +46988,7 @@
 	}
 
 /***/ }),
-/* 597 */
+/* 594 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(242)();

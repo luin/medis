@@ -24,6 +24,7 @@ class Database extends React.PureComponent {
   }
 
   componentDidMount() {
+    this.state.db = this.props.connectionDb
     this.updateLayoutBinded = this.updateLayout.bind(this)
     $(window).on('resize', this.updateLayoutBinded)
     this.updateLayout()
@@ -85,7 +86,8 @@ function mapStateToProps(state, {instance}) {
   return {
     patterns: state.patterns,
     redis: instance.get('redis'),
-    connectionKey: instance.get('connectionKey')
+    connectionKey: instance.get('connectionKey'),
+    connectionDb: instance.get('connectionDb')
   }
 }
 
