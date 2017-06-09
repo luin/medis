@@ -1,7 +1,7 @@
 .AddButton {
   position: relative;
 
-  span.plus, span.reload {
+  span.plus, span.reload, span.flush {
     position: absolute;
     right: 4px;
     top: 4px;
@@ -25,6 +25,10 @@
   }
 
   span.reload {
+    right: 44px;
+  }
+
+  span.plus {
     right: 24px;
   }
 }

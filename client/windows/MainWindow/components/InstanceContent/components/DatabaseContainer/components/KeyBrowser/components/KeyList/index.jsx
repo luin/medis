@@ -405,6 +405,13 @@ class KeyList extends React.Component {
             <AddButton
               reload="true" title="name" onReload={() => {
                 this.refresh()
+              }} onFlush={() => {
+                this.props.redis.flushdb().then(() => {
+                  this.refresh()
+                })
+                .catch(() => {
+                  alert('olmadı')
+                })
               }} onClick={() => {
                 showModal({
                   button: 'Create Key',

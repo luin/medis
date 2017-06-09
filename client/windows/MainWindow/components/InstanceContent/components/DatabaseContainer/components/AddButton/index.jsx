@@ -10,6 +10,7 @@ export default class AddButton extends React.PureComponent {
         this.props.reload && <span className="reload icon icon-cw" onClick={this.props.onReload}/>
       }
       <span className="plus" onClick={this.props.onClick}>+</span>
+      <span className="flush" onClick={this.props.onFlush}>&times;</span>
     </div>)
   }
 }
