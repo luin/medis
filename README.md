@@ -59,7 +59,7 @@ You can download compiled versions of Medis for Mac OS X from [the release page]
 
     $ npm run package
 
-You will find the packaged app in ./Medis-<platform>-<arch>/
+You will find the packaged app in `./Medis-<platform>-<arch>/`
 
 
 ## Connect to Heroku
