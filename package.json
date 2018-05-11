@@ -9,6 +9,7 @@
   "main": "server/main.js",
   "scripts": {
     "build": "webpack --progress --colors",
+    "package" : "electron-packager . Medis --ignore=node_modules/electron-*",
     "watch": "npm run build -- --watch",
     "electron": "electron .",
     "lint": "xo client/**/*.{js,jsx}",
