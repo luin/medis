@@ -2,7 +2,6 @@
 
 const {app, BrowserWindow} = require('electron');
 const EventEmitter = require('events');
-var path = require('path')
 
 class WindowManager extends EventEmitter {
   constructor() {
@@ -29,7 +28,6 @@ class WindowManager extends EventEmitter {
       option.show = false;
       option.minWidth = 840;
       option.minHeight = 400;
-      option.icon=path.join(__dirname,'../icns/Icon1024.png');
     } else if (type === 'patternManager') {
       option.width = 600;
       option.height = 300;
