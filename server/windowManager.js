@@ -20,7 +20,10 @@ class WindowManager extends EventEmitter {
       type = 'main';
     }
     const option = {
-      backgroundColor: '#ececec'
+      backgroundColor: '#ececec',
+      webPreferences: {
+        nodeIntegration: true
+      }
     };
     if (type === 'main') {
       option.width = 960;
