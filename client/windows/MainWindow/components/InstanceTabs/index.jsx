@@ -1,17 +1,36 @@
 'use strict'
 
 import React from 'react'
-import {Tab, Tabs} from './components/draggable-tab'
+import Tabs from './Tabs'
+
+require('./main.scss')
 
 class InstanceTabs extends React.Component {
-  constructor() {
+  constructor () {
     super()
     this.style = 'block'
   }
 
+  handleAddButtonClick = () => {
+    if (!$('.Modal').length) {
+      this.props.onCreateInstance()
+    }
+  }
+
+  handleTabSelect = (key) => {
+    if (!$('.Modal').length) {
+      this.props.onSelectInstance(key)
+    }
+  }
+
+  handleTabClose = (key) => {
+    if (!$('.Modal').length) {
+      this.props.onDelInstance(key)
+    }
+  }
+
   render() {
-    const {instances, activeInstanceKey, onCreateInstance, onSelectInstance,
-      onDelInstance, onMoveInstance} = this.props
+    const {instances, activeInstanceKey, onMoveInstance} = this.props
 
     const style = instances.count() === 1 ? 'none' : 'block'
     if (this.style !== style) {
@@ -19,28 +38,31 @@ class InstanceTabs extends React.Component {
       setTimeout(() => $(window).trigger('resize'), 0)
     }
 
-    return (<div style={{display: this.style, zIndex: '1000'}}>
+
+    return <div className="tab-group">
       <Tabs
-        onTabAddButtonClick={() => {
-          if (!$('.Modal').length) {
-            onCreateInstance()
+        instances={instances}
+        activeInstanceKey={activeInstanceKey}
+        axis={'x'}
+        lockAxis={'x'}
+        helperClass={"active"}
+        lockToContainerEdges={true}
+        lockOffset={[0, 0]}
+        onTabSelect={this.handleTabSelect}
+        onTabClose={this.handleTabClose}
+        onSortEnd={({oldIndex, newIndex}) => {
+          if (oldIndex !== newIndex) {
+            onMoveInstance(instances.getIn([oldIndex, 'key']), instances.getIn([newIndex, 'key']))
           }
         }}
-        onTabSelect={key => {
-          if (!$('.Modal').length) {
-            onSelectInstance(key)
-          }
+        shouldCancelStart={(e) => {
+          return e.target.nodeName.toUpperCase() === 'SPAN'
         }}
-        onTabClose={key => {
-          if (!$('.Modal').length) {
-            onDelInstance(key)
-          }
-        }}
-        onTabPositionChange={onMoveInstance}
-        selectedTab={activeInstanceKey}
-        tabs={instances.map(instance => <Tab key={instance.get('key')} title={instance.get('title')}/>).toJS()}
-        />
-    </div>)
+      />
+      <div className='tab-item tab-item-btn' onClick={this.handleAddButtonClick}>
+        <span>{'+'}</span>
+      </div>
+    </div>
   }
 }
 

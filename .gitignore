@@ -4,7 +4,7 @@ sign
 Medis.pkg
 .DS_Store
 main.js
-pattern-manager.js
+patternManager.js
 npm-debug.log
 *.zip
 out
