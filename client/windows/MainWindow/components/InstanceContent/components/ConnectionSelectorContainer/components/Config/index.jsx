@@ -1,7 +1,6 @@
 'use strict'
 
 import React from 'react'
-import store from 'Redux/store'
 import Immutable from 'immutable'
 import {remote} from 'electron'
 import fs from 'fs'
@@ -9,7 +8,7 @@ import fs from 'fs'
 require('./index.scss')
 
 class Config extends React.PureComponent {
-  constructor() {
+  constructor () {
     super()
     this.state = {
       data: new Immutable.Map()
@@ -20,7 +19,7 @@ class Config extends React.PureComponent {
     if (this.state.data.has(property)) {
       return this.state.data.get(property)
     }
-    return this.props.favorite ? this.props.favorite.get(property) : ''
+    return (this.props.favorite ? this.props.favorite.get(property) : '') || ''
   }
 
   setProp(property, value) {
@@ -90,7 +89,7 @@ class Config extends React.PureComponent {
         readOnly
         value={this.getProp(`${id}File`)}
         placeholder={`Select ${label} File (PEM)`}
-        />
+      />
       <button
         className={'icon icon-dot-3 ssh-key'}
         onClick={() => {
@@ -104,7 +103,7 @@ class Config extends React.PureComponent {
             this.setProp({[id]: content, [`${id}File`]: file})
           }
         }}
-        />
+      />
     </div>)
   }
 
@@ -113,23 +112,23 @@ class Config extends React.PureComponent {
       <div className="nt-box" style={{width: 500, margin: '60px auto 0'}}>
         <div className="nt-form-row" style={{display: this.props.favorite ? 'block' : 'none'}}>
           <label htmlFor="name">Name:</label>
-          <input type="text" id="name" value={this.getProp('name')} onChange={this.handleChange.bind(this, 'name')} placeholder="Bookmark name"/>
+          <input type="text" id="name" value={this.getProp('name')} onChange={this.handleChange.bind(this, 'name')} placeholder="Bookmark name" />
         </div>
         <div className="nt-form-row">
           <label htmlFor="host">Redis Host:</label>
-          <input type="text" id="host" value={this.getProp('host')} onChange={this.handleChange.bind(this, 'host')} placeholder="localhost"/>
+          <input type="text" id="host" value={this.getProp('host')} onChange={this.handleChange.bind(this, 'host')} placeholder="localhost" />
         </div>
         <div className="nt-form-row">
           <label htmlFor="port">Port:</label>
-          <input type="text" id="port" value={this.getProp('port')} onChange={this.handleChange.bind(this, 'port')} placeholder="6379"/>
+          <input type="text" id="port" value={this.getProp('port')} onChange={this.handleChange.bind(this, 'port')} placeholder="6379" />
         </div>
         <div className="nt-form-row">
           <label htmlFor="password">Password:</label>
-          <input type="password" id="password" onChange={this.handleChange.bind(this, 'password')} value={this.getProp('password')}/>
+          <input type="password" id="password" onChange={this.handleChange.bind(this, 'password')} value={this.getProp('password')} />
         </div>
         <div className="nt-form-row">
           <label htmlFor="ssh">SSL:</label>
-          <input type="checkbox" id="ssl" onChange={this.handleChange.bind(this, 'ssl')} checked={this.getProp('ssl')}/>
+          <input type="checkbox" id="ssl" onChange={this.handleChange.bind(this, 'ssl')} checked={this.getProp('ssl')} />
         </div>
         <div style={{display: this.getProp('ssl') ? 'block' : 'none'}}>
           {this.renderCertInput('Private Key', 'tlskey')}
@@ -138,16 +137,16 @@ class Config extends React.PureComponent {
         </div>
         <div className="nt-form-row">
           <label htmlFor="ssh">SSH Tunnel:</label>
-          <input type="checkbox" id="ssh" onChange={this.handleChange.bind(this, 'ssh')} checked={this.getProp('ssh')}/>
+          <input type="checkbox" id="ssh" onChange={this.handleChange.bind(this, 'ssh')} checked={this.getProp('ssh')} />
         </div>
         <div style={{display: this.getProp('ssh') ? 'block' : 'none'}}>
           <div className="nt-form-row">
             <label htmlFor="sshHost">SSH Host:</label>
-            <input type="text" id="sshHost" onChange={this.handleChange.bind(this, 'sshHost')} value={this.getProp('sshHost')} placeholder=""/>
+            <input type="text" id="sshHost" onChange={this.handleChange.bind(this, 'sshHost')} value={this.getProp('sshHost')} placeholder="" />
           </div>
           <div className="nt-form-row">
             <label htmlFor="sshUser">SSH User:</label>
-            <input type="text" id="sshUser" onChange={this.handleChange.bind(this, 'sshUser')} value={this.getProp('sshUser')} placeholder=""/>
+            <input type="text" id="sshUser" onChange={this.handleChange.bind(this, 'sshUser')} value={this.getProp('sshUser')} placeholder="" />
           </div>
           <div className="nt-form-row">
             <label htmlFor="sshPassword">SSH {this.getProp('sshKey') ? 'Key' : 'Password'}:</label>
@@ -158,7 +157,7 @@ class Config extends React.PureComponent {
               onChange={this.handleChange.bind(this, 'sshPassword')}
               value={this.getProp('sshKeyFile') || this.getProp('sshPassword')}
               placeholder=""
-              />
+            />
             <button
               className={'icon icon-key ssh-key' + (this.getProp('sshKey') ? ' is-active' : '')}
               onClick={() => {
@@ -180,15 +179,15 @@ class Config extends React.PureComponent {
                   this.setProp({sshKey: content, sshKeyFile: file})
                 }
               }}
-              />
+            />
           </div>
           <div className="nt-form-row" style={{display: this.getProp('sshKey') && this.getProp('sshKey').indexOf('ENCRYPTED') > -1 ? 'block' : 'none'}}>
             <label htmlFor="sshKeyPassphrase">SSH Key Passphrase:</label>
-            <input type="password" id="sshKeyPassphrase" onChange={this.handleChange.bind(this, 'sshKeyPassphrase')} value={this.getProp('sshKeyPassphrase')}/>
+            <input type="password" id="sshKeyPassphrase" onChange={this.handleChange.bind(this, 'sshKeyPassphrase')} value={this.getProp('sshKeyPassphrase')} />
           </div>
           <div className="nt-form-row">
             <label htmlFor="sshPort">SSH Port:</label>
-            <input type="text" id="sshPort" onChange={this.handleChange.bind(this, 'sshPort')} value={this.getProp('sshPort')}/>
+            <input type="text" id="sshPort" onChange={this.handleChange.bind(this, 'sshPort')} value={this.getProp('sshPort')} />
           </div>
         </div>
       </div>
@@ -197,19 +196,19 @@ class Config extends React.PureComponent {
           className="nt-button" style={{float: 'left'}} onClick={() => {
             this.duplicate()
           }}
-                                                        >{ this.props.favorite ? 'Duplicate' : 'Add to Favorite' }</button>
+        >{this.props.favorite ? 'Duplicate' : 'Add to Favorite'}</button>
         <button
           className="nt-button"
           style={{display: this.state.changed ? 'inline-block' : 'none'}}
           onClick={() => {
             this.save()
           }}
-          >Save Changes</button>
+        >Save Changes</button>
         <button
           disabled={Boolean(this.props.connectStatus)} ref="connectButton" className="nt-button nt-button--primary" onClick={() => {
             this.connect()
           }}
-                                                                                                                    >{this.props.connectStatus || (this.state.changed ? 'Save and Connect' : 'Connect')}</button>
+        >{this.props.connectStatus || (this.state.changed ? 'Save and Connect' : 'Connect')}</button>
       </div>
     </div>)
   }
