@@ -58,7 +58,7 @@
     "fixed-data-table-contextmenu": "^1.6.5",
     "ioredis": "^2.4.2",
     "jquery": "^2.1.4",
-    "lodash": "^3.10.1",
+    "lodash": "^4.17.11",
     "react-sortable-hoc": "^0.8.4",
     "redis-commands": "^1.0.1",
     "redux-logger": "^3.0.6",
