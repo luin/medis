@@ -2,7 +2,7 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Codemirror from 'react-codemirror'
+import Codemirror from 'medis-react-codemirror'
 require('codemirror/mode/javascript/javascript')
 require('codemirror/addon/lint/json-lint')
 require('codemirror/addon/lint/lint')
