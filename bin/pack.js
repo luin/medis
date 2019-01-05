@@ -5,7 +5,7 @@ const flat = require('electron-osx-sign').flat
 
 packager({
   dir: path.join(__dirname, '..'),
-  appCopyright: '© 2017, Zihua Li',
+  appCopyright: '© 2019, Zihua Li',
   asar: true,
   overwrite: true,
   electronVersion: pkg.electronVersion,
@@ -19,11 +19,7 @@ packager({
     entitlements: path.join(__dirname, '..', 'parent.plist'),
     'entitlements-inherit': path.join(__dirname, '..', 'child.plist')
   }
-}, function (err, res) {
-  if (err) {
-    throw err;
-  }
-
+}).then((res) => {
   const app = path.join(res[0], `${pkg.productName}.app`)
   console.log('flating...', app)
   flat({ app }, function done (err) {
