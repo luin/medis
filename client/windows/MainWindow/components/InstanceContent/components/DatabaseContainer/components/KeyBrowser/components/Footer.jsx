@@ -80,8 +80,8 @@ class Footer extends React.Component {
     this.props.onDatabaseChange(db)
   }
 
-  render() {
-    const db = `db${this.props.db}`
+  keyCountByDb(dbNumber){
+    const db = `db${dbNumber}`
     let keys = 0
     if (this.state[db]) {
       const match = this.state[db].match(/keys=(\d+)/)
@@ -89,6 +89,11 @@ class Footer extends React.Component {
         keys = match[1]
       }
     }
+    return keys
+  }
+
+  render() {
+    const keys = this.keyCountByDb(this.props.db)
     return (<footer className="toolbar toolbar-footer">
       <span style={{marginLeft: 6}}>Keys: {keys}</span>
       <div style={{float: 'right'}}>
@@ -103,18 +108,16 @@ class Footer extends React.Component {
             fontSize: 10,
             float: 'right'
           }}
-                                                         >
-          {
-          (max => {
-            const items = []
-            for (let i = 0; i < max; i++) {
-              items.push(<option
-                key={i} value={i}
-                        >{i}</option>)
-            }
-            return items
-          })(this.state.databases || 1)
-        }
+        >
+          {(max => {
+            return new Array(max).fill(0).map((value, db) => {
+              return (
+                <option key={db} value={db}>
+                  {db} {this.keyCountByDb(db) > 0 ? `(${this.keyCountByDb(db)})` : ''}
+                </option>
+              );
+            });
+          })(this.state.databases || 1)}
         </select>
       </div>
     </footer>)
