@@ -1,15 +1,13 @@
-import React from 'react'
+import React, {memo} from 'react'
 
 require('./index.scss')
 
-export default class AddButton extends React.PureComponent {
-  render() {
-    return (<div className="AddButton">
-      {this.props.title}
-      {
-        this.props.reload && <span className="reload icon icon-cw" onClick={this.props.onReload}/>
-      }
-      <span className="plus" onClick={this.props.onClick}>+</span>
-    </div>)
-  }
+function AddButton({title, reload, onReload, onClick}) {
+  return (<div className="AddButton">
+    {title}
+    {reload && <span className="reload icon icon-cw" onClick={onReload} />}
+    <span className="plus" onClick={onClick}>+</span>
+  </div>)
 }
+
+export default memo(AddButton)
