@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 import {Table, Column} from 'fixed-data-table-contextmenu'
 import ContentEditable from '../../../ContentEditable'
 import AddButton from '../../../AddButton'
-import _ from 'lodash'
+import zip from 'lodash.zip'
 import {clipboard} from 'electron'
 require('./index.scss')
 
@@ -125,7 +125,7 @@ class KeyList extends React.Component {
             setTimeout(this.scan.bind(this), 0)
             return
           }
-          const keys = _.zip(fetchedKeys, types.map(res => res[1]))
+          const keys = zip(fetchedKeys, types.map(res => res[1]))
 
           let needContinue = true
           if (filterKeyExists && firstTime) {

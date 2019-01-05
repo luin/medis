@@ -1,8 +1,11 @@
 'use strict';
 
 const path = require('path')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  watch: process.env.WEBPACK_WATCH === 'true',
   entry: {
     main: './client/windows/MainWindow/entry.jsx',
     patternManager: './client/windows/PatternManagerWindow/entry.jsx'
@@ -12,26 +15,45 @@ module.exports = {
     buffer: false
   },
   output: {
+    chunkFilename: '[name].chunk.js',
     filename: '[name].js'
   },
+  plugins: [
+    new BundleAnalyzerPlugin()
+  ],
   module: {
-    loaders: [{
+    rules: [{
       test: /\.jsx$/,
       exclude: /node_modules/,
-      loader: 'jsx-loader?harmony!babel?stage=0&ignore=buffer'
+      use: [{
+        loader: 'babel-loader',
+        options: {ignore: ['buffer']}
+      }]
     }, {
       test: /\.js$/,
       exclude: /node_modules/,
-      loader: 'babel?stage=0&ignore=buffer'
+      use: [{
+        loader: 'babel-loader',
+        options: {ignore: ['buffer']}
+      }]
     }, {
       test: /\.scss$/,
-      loader: 'style!css!sass'
+      use: [
+        'style-loader',
+        'css-loader',
+        'sass-loader'
+      ]
     }, {
       test: /\.css$/,
-      loader: 'style!css'
+      use: [
+        'style-loader',
+        'css-loader'
+      ]
     }, {
       test: /\.(png|jpg)$/,
-      loader: "url-loader"
+      use: [{
+        loader: "url-loader"
+      }]
     }]
   },
   externals: {
@@ -54,6 +76,6 @@ module.exports = {
       Redux: path.resolve(__dirname, 'client/redux/'),
       Utils: path.resolve(__dirname, 'client/utils/'),
     },
-    extensions: ['', '.js', '.jsx']
+    extensions: ['.js', '.jsx']
   }
 }

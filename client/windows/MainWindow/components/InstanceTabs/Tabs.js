@@ -1,6 +1,5 @@
 'use strict';
 
-import _ from 'lodash';
 import React from 'react';
 import {SortableContainer} from 'react-sortable-hoc';
 import Tab from './Tab'
