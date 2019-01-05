@@ -57,6 +57,7 @@ class Database extends React.PureComponent {
       <KeyBrowser
         patterns={this.props.patterns}
         pattern={this.state.pattern}
+        onPatternChange={pattern => this.setState({pattern})}
         height={this.state.clientHeight}
         width={this.state.sidebarWidth}
         redis={this.props.redis}
