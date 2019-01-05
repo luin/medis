@@ -11,44 +11,7 @@
     "build": "webpack",
     "watch": "WEBPACK_WATCH=true npm run build",
     "electron": "electron .",
-    "lint": "xo client/**/*.{js,jsx}",
-    "pack": "NODE_ENV=production npm run build && node bin/pack.js",
-    "release": "NODE_ENV=production ./bin/release"
-  },
-  "xo": {
-    "extends": "xo-react/space",
-    "semicolon": false,
-    "ignore": [
-      "client/vendors/**",
-      "client/photon/**"
-    ],
-    "envs": [
-      "browser"
-    ],
-    "globals": [
-      "showModal"
-    ],
-    "rules": {
-      "indent": [
-        "error",
-        2
-      ],
-      "unicorn/filename-case": "off",
-      "operator-linebreak": [
-        "error",
-        "after",
-        {
-          "overrides": {
-            "?": "before",
-            ":": "before"
-          }
-        }
-      ],
-      "new-cap": "off",
-      "import/no-unassigned-import": "off",
-      "import/default": "off",
-      "import/prefer-default-export": "off"
-    }
+    "pack": "NODE_ENV=production npm run build && node bin/pack.js"
   },
   "repository": {
     "type": "git",
@@ -69,16 +32,12 @@
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
-    "babel-eslint": "^7.2.3",
     "babel-loader": "^8.0.5",
     "codemirror": "^5.25.2",
     "css-loader": "^2.1.0",
     "electron": "^4.0.0",
     "electron-osx-sign": "^0.4.4",
     "electron-packager": "^13.0.1",
-    "eslint-config-xo": "^0.18.1",
-    "eslint-config-xo-react": "^0.11.1",
-    "eslint-plugin-react": "^6.10.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "human-format": "^0.5.0",
     "immutable": "^3.8.1",
@@ -109,12 +68,6 @@
     "url-loader": "^1.1.2",
     "webpack": "^4.28.3",
     "webpack-bundle-analyzer": "^3.0.3",
-    "webpack-cli": "^3.2.0",
-    "xo": "^0.18.1"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
+    "webpack-cli": "^3.2.0"
   }
 }
