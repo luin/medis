@@ -5,11 +5,8 @@ import Tabs from './Tabs'
 
 require('./main.scss')
 
-class InstanceTabs extends React.Component {
-  constructor () {
-    super()
-    this.style = 'block'
-  }
+class InstanceTabs extends React.PureComponent {
+  display = 'flex'
 
   handleAddButtonClick = () => {
     if (!$('.Modal').length) {
@@ -32,14 +29,14 @@ class InstanceTabs extends React.Component {
   render() {
     const {instances, activeInstanceKey, onMoveInstance} = this.props
 
-    const style = instances.count() === 1 ? 'none' : 'block'
-    if (this.style !== style) {
-      this.style = style
+    const display = instances.count() === 1 ? 'none' : 'flex'
+    if (this.display !== display) {
+      this.display = display
       setTimeout(() => $(window).trigger('resize'), 0)
     }
 
 
-    return <div className="tab-group">
+    return <div className="tab-group" style={{display: this.display}}>
       <Tabs
         instances={instances}
         activeInstanceKey={activeInstanceKey}
