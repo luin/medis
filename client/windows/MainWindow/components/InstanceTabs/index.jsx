@@ -36,28 +36,30 @@ class InstanceTabs extends React.PureComponent {
     }
 
 
-    return <div className="tab-group" style={{display: this.display}}>
-      <Tabs
-        instances={instances}
-        activeInstanceKey={activeInstanceKey}
-        axis={'x'}
-        lockAxis={'x'}
-        helperClass={"active"}
-        lockToContainerEdges={true}
-        lockOffset={[0, 0]}
-        onTabSelect={this.handleTabSelect}
-        onTabClose={this.handleTabClose}
-        onSortEnd={({oldIndex, newIndex}) => {
-          if (oldIndex !== newIndex) {
-            onMoveInstance(instances.getIn([oldIndex, 'key']), instances.getIn([newIndex, 'key']))
-          }
-        }}
-        shouldCancelStart={(e) => {
-          return e.target.nodeName.toUpperCase() === 'SPAN'
-        }}
-      />
-      <div className='tab-item tab-item-btn' onClick={this.handleAddButtonClick}>
-        <span>{'+'}</span>
+    return <div id="tabGroupWrapper">
+      <div className="tab-group" style={{display: this.display, flex: 1}}>
+        <Tabs
+          instances={instances}
+          activeInstanceKey={activeInstanceKey}
+          axis={'x'}
+          lockAxis={'x'}
+          helperClass={"active"}
+          lockToContainerEdges={true}
+          lockOffset={[0, 0]}
+          onTabSelect={this.handleTabSelect}
+          onTabClose={this.handleTabClose}
+          onSortEnd={({oldIndex, newIndex}) => {
+            if (oldIndex !== newIndex) {
+              onMoveInstance(instances.getIn([oldIndex, 'key']), instances.getIn([newIndex, 'key']))
+            }
+          }}
+          shouldCancelStart={(e) => {
+            return e.target.nodeName.toUpperCase() === 'SPAN'
+          }}
+        />
+        <div className='tab-item tab-item-btn' onClick={this.handleAddButtonClick}>
+          <span>{'+'}</span>
+        </div>
       </div>
     </div>
   }

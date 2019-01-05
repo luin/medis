@@ -50,6 +50,7 @@ class Content extends React.PureComponent {
   render() {
     return (<div className="pane sidebar" style={{height: '100%'}}>
       <TabBar
+        activeTab={this.state.tab}
         onSelectTab={this.handleTabChange.bind(this)}
         />
       <KeyContent

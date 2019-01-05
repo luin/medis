@@ -8,11 +8,8 @@ import fs from 'fs'
 require('./index.scss')
 
 class Config extends React.PureComponent {
-  constructor () {
-    super()
-    this.state = {
-      data: new Immutable.Map()
-    }
+  state = {
+    data: new Immutable.Map()
   }
 
   getProp(property) {

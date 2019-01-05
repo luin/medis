@@ -19,7 +19,7 @@ class Database extends React.PureComponent {
       version: 0,
       metaVersion: 0,
       pattern: '',
-      clientHeight: this.$window.height() - $('.tab-group').height()
+      clientHeight: this.$window.height() - $('#tabGroupWrapper').height()
     }
   }
 
@@ -35,7 +35,7 @@ class Database extends React.PureComponent {
 
   updateLayout() {
     this.setState({
-      clientHeight: this.$window.height() - $('.tab-group').height()
+      clientHeight: this.$window.height() - $('#tabGroupWrapper').height()
     })
   }
 
