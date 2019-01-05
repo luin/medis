@@ -3,8 +3,10 @@
 const path = require('path')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
+const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development'
+
 module.exports = {
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  mode,
   watch: process.env.WEBPACK_WATCH === 'true',
   entry: {
     main: './client/windows/MainWindow/entry.jsx',
@@ -18,7 +20,7 @@ module.exports = {
     chunkFilename: '[name].chunk.js',
     filename: '[name].js'
   },
-  plugins: [
+  plugins: mode === 'production' ? [] : [
     new BundleAnalyzerPlugin()
   ],
   module: {
