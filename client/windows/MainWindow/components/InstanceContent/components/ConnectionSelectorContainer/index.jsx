@@ -1,18 +1,14 @@
 'use strict'
 
 import React, {PureComponent} from 'react'
-import {Provider, connect} from 'react-redux'
+import {connect} from 'react-redux'
 import Favorite from './components/Favorite'
 import Config from './components/Config'
-import store from 'Redux/store'
 import {connectToRedis} from 'Redux/actions'
 import {removeFavorite, updateFavorite, createFavorite, reorderFavorites} from 'Redux/actions'
 
 class ConnectionSelector extends PureComponent {
-  constructor() {
-    super()
-    this.state = {connect: false, key: null}
-  }
+  state = {connect: false, key: null}
 
   handleSelectFavorite(connect, key) {
     this.setState({connect, key})

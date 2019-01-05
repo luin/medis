@@ -1,51 +1,34 @@
 'use strict'
 
-import React from 'react'
-
+import React, {memo} from 'react'
 require('./index.scss')
 
-class Content extends React.PureComponent {
-  constructor() {
-    super()
+const TABS = ['Content', 'Terminal', 'Config']
 
-    this.tabs = [
-      'Content',
-      'Terminal',
-      'Config'
-    ]
-
-    this.state = {activeTab: 'Content'}
-  }
-
-  render() {
-    return (<div className="TabBar">
-      {
-        this.tabs.map(tab => {
-          return (<div
-            className={'item' + (tab === this.state.activeTab ? ' is-active' : '')}
-            key={tab}
-            onClick={() => {
-              this.setState({activeTab: tab})
-              this.props.onSelectTab(tab)
-            }}
-            >
-            {
-              (() => {
-                if (tab === 'Content') {
-                  return <span className="icon icon-book"/>
-                } else if (tab === 'Terminal') {
-                  return <span className="icon icon-window"/>
-                } else if (tab === 'Config') {
-                  return <span className="icon icon-cog"/>
-                }
-              })()
-            }
-            {tab}
-          </div>)
-        })
-      }
-    </div>)
+function renderTabIcon(tab) {
+  switch (tab) {
+    case 'Content':
+      return <span className="icon icon-book" />
+    case 'Terminal':
+      return <span className="icon icon-window" />
+    case 'Config':
+      return <span className="icon icon-cog" />
   }
 }
 
-export default Content
+function renderTab(tab, {activeTab, onSelectTab}) {
+  return <div
+    className={'item' + (tab === activeTab ? ' is-active' : '')}
+    key={tab}
+    onClick={() => onSelectTab(tab)}
+  >
+    {renderTabIcon(tab)}
+    {tab}
+  </div>
+}
+
+function Content(props) {
+  return <div className="TabBar">{TABS.map(tab => renderTab(tab, props))}</div>
+}
+
+export default memo(Content)

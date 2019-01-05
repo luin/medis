@@ -10,16 +10,14 @@ import {clipboard} from 'electron'
 require('./index.scss')
 
 class KeyList extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      keys: [],
-      selectedKey: null,
-      sidebarWidth: 300,
-      cursor: '0'
-    }
-    this.randomClass = 'pattern-table-' + (Math.random() * 100000 | 0)
+  state = {
+    keys: [],
+    selectedKey: null,
+    sidebarWidth: 300,
+    cursor: '0'
   }
+
+  randomClass = 'pattern-table-' + (Math.random() * 100000 | 0)
 
   refresh(firstTime) {
     this.setState({

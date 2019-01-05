@@ -15,10 +15,6 @@
   }
 }
 
-.public_fixedDataTable_main {
-  // border-bottom-color: transparent;
-}
-
 .public_fixedDataTable_bottomShadow {
   display: none;
 }
@@ -87,5 +83,6 @@
 
 .public_fixedDataTable_main {
   border-right: none;
-  border-left-color: transparent;
+  border-left: none;
+  border-bottom: none;
 }
