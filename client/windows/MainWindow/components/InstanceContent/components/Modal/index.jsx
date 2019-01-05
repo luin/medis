@@ -5,10 +5,6 @@ require('json-editor')
 require('./index.scss')
 
 export default class Modal extends React.Component {
-  constructor() {
-    super()
-  }
-
   handleSubmit() {
     if (this.editor) {
       const errors = this.editor.validate()
