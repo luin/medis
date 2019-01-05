@@ -1,68 +1,65 @@
 'use strict'
 
-import React from 'react'
+import React, {memo} from 'react'
 import Tabs from './Tabs'
 
 require('./main.scss')
 
-class InstanceTabs extends React.PureComponent {
-  display = 'flex'
-
-  handleAddButtonClick = () => {
-    if (!$('.Modal').length) {
-      this.props.onCreateInstance()
-    }
-  }
-
-  handleTabSelect = (key) => {
-    if (!$('.Modal').length) {
-      this.props.onSelectInstance(key)
-    }
-  }
-
-  handleTabClose = (key) => {
-    if (!$('.Modal').length) {
-      this.props.onDelInstance(key)
-    }
-  }
-
-  render() {
-    const {instances, activeInstanceKey, onMoveInstance} = this.props
-
-    const display = instances.count() === 1 ? 'none' : 'flex'
-    if (this.display !== display) {
-      this.display = display
-      setTimeout(() => $(window).trigger('resize'), 0)
-    }
-
-
-    return <div id="tabGroupWrapper">
-      <div className="tab-group" style={{display: this.display, flex: 1}}>
-        <Tabs
-          instances={instances}
-          activeInstanceKey={activeInstanceKey}
-          axis={'x'}
-          lockAxis={'x'}
-          helperClass={"active"}
-          lockToContainerEdges={true}
-          lockOffset={[0, 0]}
-          onTabSelect={this.handleTabSelect}
-          onTabClose={this.handleTabClose}
-          onSortEnd={({oldIndex, newIndex}) => {
-            if (oldIndex !== newIndex) {
-              onMoveInstance(instances.getIn([oldIndex, 'key']), instances.getIn([newIndex, 'key']))
-            }
-          }}
-          shouldCancelStart={(e) => {
-            return e.target.nodeName.toUpperCase() === 'SPAN'
-          }}
-        />
-        <div className='tab-item tab-item-btn' onClick={this.handleAddButtonClick}>
-          <span>{'+'}</span>
-        </div>
-      </div>
-    </div>
-  }
+function isModalShown() {
+  return $('.Modal').length > 0
 }
 
-export default InstanceTabs
+let display = 'flex'
+
+function InstanceTabs({onCreateInstance, onSelectInstance, onDelInstance, instances, activeInstanceKey, onMoveInstance}) {
+  const handleAddButtonClick = () => {
+    if (!isModalShown()) {
+      onCreateInstance()
+    }
+  }
+
+  const handleTabSelect = (key) => {
+    if (!isModalShown()) {
+      onSelectInstance(key)
+    }
+  }
+
+  const handleTabClose = (key) => {
+    if (!isModalShown()) {
+      onDelInstance(key)
+    }
+  }
+
+  const currentDisplay = instances.count() === 1 ? 'none' : 'flex'
+  if (display !== currentDisplay) {
+    display = currentDisplay
+    setTimeout(() => $(window).trigger('resize'), 0)
+  }
+
+  return <div id="tabGroupWrapper">
+    <div className="tab-group" style={{display: display, flex: 1}}>
+      <Tabs
+        instances={instances}
+        activeInstanceKey={activeInstanceKey}
+        axis={'x'}
+        lockAxis={'x'}
+        helperClass={"active"}
+        lockToContainerEdges={true}
+        lockOffset={[0, 0]}
+        onTabSelect={handleTabSelect}
+        onTabClose={handleTabClose}
+        onSortEnd={({oldIndex, newIndex}) => {
+          if (oldIndex !== newIndex) {
+            onMoveInstance(instances.getIn([oldIndex, 'key']), instances.getIn([newIndex, 'key']))
+          }
+        }}
+        shouldCancelStart={(e) => e.target.nodeName.toUpperCase() === 'SPAN'}
+      />
+      <div className='tab-item tab-item-btn' onClick={handleAddButtonClick}>
+        <span>{'+'}</span>
+      </div>
+    </div>
+  </div>
+}
+
+export default memo(InstanceTabs)
