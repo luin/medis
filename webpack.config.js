@@ -28,36 +28,47 @@ const base = {
       exclude: /node_modules/,
       use: [{
         loader: 'babel-loader',
-        options: {ignore: ['buffer']}
+        options: {
+          ignore: ['buffer'],
+          plugins: [
+            '@babel/plugin-proposal-object-rest-spread',
+            '@babel/plugin-syntax-dynamic-import',
+            '@babel/plugin-proposal-class-properties'
+          ],
+          presets: [
+            ['@babel/preset-env', {targets: {chrome: '69'}}],
+            '@babel/preset-react'
+          ]
+        }
       }]
     }, {
-      test: /\.(ts|tsx)?$/,
-      use: 'ts-loader',
-      exclude: /node_modules/
-    }, {
-      test: /\.scss$/,
-      use: [
-        MiniCssExtractPlugin.loader,
-        'css-loader',
-        'sass-loader'
-      ]
-    }, {
-      test: /\.css$/,
-      use: [
-        MiniCssExtractPlugin.loader,
-        'css-loader'
-      ]
-    }, {
-      test: /\.(png|jpg)$/,
-      use: [{
-        loader: "file-loader"
+        test: /\.(ts|tsx)?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      }, {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader'
+        ]
+      }, {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader'
+        ]
+      }, {
+        test: /\.(png|jpg)$/,
+        use: [{
+          loader: "file-loader"
+        }]
+      }, {
+        test: /\.(eot|woff|ttf)$/,
+        use: [{
+          loader: "file-loader"
+        }]
       }]
-    }, {
-      test: /\.(eot|woff|ttf)$/,
-      use: [{
-        loader: "file-loader"
-      }]
-    }]
   },
   externals: {
     'system': '{}', // jsonlint
@@ -68,7 +79,7 @@ const base = {
 const renderPlugins = [
   new HtmlWebpackPlugin({title: 'Medis', chunks: ['main'], filename: 'main.html'}),
   new HtmlWebpackPlugin({title: 'Manage Patterns', chunks: ['patternManager'], filename: 'patternManager.html'}),
-  new MiniCssExtractPlugin({ filename: '[name].css' })
+  new MiniCssExtractPlugin({filename: '[name].css'})
 ]
 if (mode === 'production') {
   renderPlugins.push(new BundleAnalyzerPlugin())
