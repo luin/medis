@@ -1,0 +1,21 @@
+{
+  "ignore": [
+    "buffer"
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-proposal-class-properties"
+  ],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "chrome": "69"
+        }
+      }
+    ],
+    "@babel/preset-react"
+  ]
+}

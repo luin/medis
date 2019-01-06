@@ -1,10 +1,15 @@
-'use strict';
-
-import React, {memo} from 'react';
-import {SortableContainer} from 'react-sortable-hoc';
+import React, {memo} from 'react'
+import {SortableContainer} from 'react-sortable-hoc'
 import Tab from './Tab'
 
-function Tabs({instances, activeInstanceKey, onTabSelect, onTabClose}) {
+interface ITabsProps {
+  instances: any
+  activeInstanceKey: string
+  onTabSelect: (key: string) => void
+  onTabClose: (key: string) => void
+
+}
+function Tabs({instances, activeInstanceKey, onTabSelect, onTabClose}: ITabsProps) {
   return (
     <div style={{display: 'flex', flex: 1}}>
       {instances.map((instance, index) => {
@@ -23,4 +28,4 @@ function Tabs({instances, activeInstanceKey, onTabSelect, onTabClose}) {
   )
 }
 
-export default memo(SortableContainer(Tabs));
+export default memo(SortableContainer(Tabs))

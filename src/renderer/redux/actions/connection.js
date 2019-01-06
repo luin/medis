@@ -20,7 +20,6 @@ export const disconnect = createAction('DISCONNECT', () => ({getState, next}) =>
 
 export const connectToRedis = createAction('CONNECT', config => ({getState, dispatch, next}) => {
   let sshErrorThrown = false
-  let redisErrorThrown = false
   let redisErrorMessage
 
   if (config.ssh) {
