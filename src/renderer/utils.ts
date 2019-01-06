@@ -8,18 +8,18 @@ export function handleActions(defaultState, handlers) {
 }
 
 export const getId = (function () {
-  const ids = {};
+  const ids = {}
 
-  return function (item) {
+  return function (item: string) {
     if (!ids[item]) {
-      ids[item] = 0;
+      ids[item] = 0
     }
 
-    return `${item}-${++ids[item] + (Math.random() * 100000 | 0)}`;
+    return `${item}-${++ids[item] + (Math.random() * 100000 | 0)}`
   }
 }())
 
-export function createAction(type, payloadCreator, metaCreator) {
+export function createAction(type: string, payloadCreator, metaCreator) {
   type = `$SOS_${type}`
   const actionCreator = _createAction(type, payloadCreator, metaCreator)
   const creator = (...args) => {

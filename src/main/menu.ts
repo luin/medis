@@ -1,21 +1,19 @@
-'use strict';
+import {app, Menu, MenuItemConstructorOptions} from 'electron'
+import windowManager from './windowManager'
 
-const {app, Menu} = require('electron');
-const windowManager = require('./windowManager');
-
-const menuTemplate = [{
+const menuTemplates: MenuItemConstructorOptions[] = [{
   label: 'File',
   submenu: [{
     label: 'New Connection Window',
     accelerator: 'CmdOrCtrl+N',
     click() {
-      windowManager.create();
+      windowManager.create()
     }
   }, {
     label: 'New Connection Tab',
     accelerator: 'CmdOrCtrl+T',
     click() {
-      windowManager.current.webContents.send('action', 'createInstance');
+      windowManager.current.webContents.send('action', 'createInstance')
     }
   }, {
     type: 'separator'
@@ -23,13 +21,13 @@ const menuTemplate = [{
     label: 'Close Window',
     accelerator: 'Shift+CmdOrCtrl+W',
     click() {
-      windowManager.current.close();
+      windowManager.current.close()
     }
   }, {
     label: 'Close Tab',
     accelerator: 'CmdOrCtrl+W',
     click() {
-      windowManager.current.webContents.send('action', 'delInstance');
+      windowManager.current.webContents.send('action', 'delInstance')
     }
   }]
 }, {
@@ -68,33 +66,33 @@ const menuTemplate = [{
     accelerator: 'CmdOrCtrl+R',
     click(item, focusedWindow) {
       if (focusedWindow) {
-        focusedWindow.reload();
+        focusedWindow.reload()
       }
     }
   }, {
     label: 'Toggle Full Screen',
     accelerator: (function () {
       if (process.platform === 'darwin') {
-        return 'Ctrl+Command+F';
+        return 'Ctrl+Command+F'
       }
-      return 'F11';
+      return 'F11'
     })(),
     click(item, focusedWindow) {
       if (focusedWindow) {
-        focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+        focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
       }
     }
   }, {
     label: 'Toggle Developer Tools',
     accelerator: (function () {
       if (process.platform === 'darwin') {
-        return 'Alt+Command+I';
+        return 'Alt+Command+I'
       }
-      return 'Ctrl+Shift+I';
+      return 'Ctrl+Shift+I'
     })(),
     click(item, focusedWindow) {
       if (focusedWindow) {
-        focusedWindow.toggleDevTools();
+        focusedWindow.webContents.toggleDevTools()
       }
     }
   }]
@@ -116,20 +114,20 @@ const menuTemplate = [{
   submenu: [{
     label: 'Report an Issue...',
     click() {
-      require('shell').openExternal('mailto:medis@zihua.li');
+      require('shell').openExternal('mailto:medis@zihua.li')
     }
   }, {
     label: 'Learn More',
     click() {
-      require('shell').openExternal('http://getmedis.com');
+      require('shell').openExternal('http://getmedis.com')
     }
   }]
 }]
 
-let baseIndex = 0;
+let baseIndex = 0
 if (process.platform == 'darwin') {
-  baseIndex = 1;
-  menuTemplate.unshift({
+  baseIndex = 1
+  menuTemplates.unshift({
     label: app.getName(),
     submenu: [{
       label: 'About ' + app.getName(),
@@ -159,27 +157,29 @@ if (process.platform == 'darwin') {
       label: 'Quit',
       accelerator: 'Command+Q',
       click() {
-        app.quit();
+        app.quit()
       }
     }]
-  });
+  })
 }
 
-const menu = Menu.buildFromTemplate(menuTemplate);
+const menu = Menu.buildFromTemplate(menuTemplates)
 
 // if (process.env.NODE_ENV !== 'debug') {
-//   menu.items[baseIndex + 2].submenu.items[0].visible = false;
-//   menu.items[baseIndex + 2].submenu.items[2].visible = false;
+//   menu.items[baseIndex + 2].submenu.items[0].visible = false
+//   menu.items[baseIndex + 2].submenu.items[2].visible = false
 // }
 
+const {submenu} = (menu.items[baseIndex + 0] as any)
 windowManager.on('blur', function () {
-  menu.items[baseIndex + 0].submenu.items[3].enabled = false;
-  menu.items[baseIndex + 0].submenu.items[4].enabled = false;
-});
+  submenu.items[3].enabled = false
+  submenu.items[4].enabled = false
+})
 
 windowManager.on('focus', function () {
-  menu.items[baseIndex + 0].submenu.items[3].enabled = true;
-  menu.items[baseIndex + 0].submenu.items[4].enabled = true;
-});
+  const {submenu} = (menu.items[baseIndex + 0] as any)
+  submenu.items[3].enabled = true
+  submenu.items[4].enabled = true
+})
 
-module.exports = menu;
+export default menu

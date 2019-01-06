@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
 import {createPattern, reorderPatterns, updatePattern, removePattern} from 'Redux/actions'
 import {List} from 'immutable'
