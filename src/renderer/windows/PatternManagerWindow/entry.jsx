@@ -1,5 +1,7 @@
 'use strict'
 
+require('../../photon/css/photon.min.css')
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
@@ -9,6 +11,8 @@ import * as actions from 'Redux/actions'
 import {remote, ipcRenderer} from 'electron'
 
 require('../../styles/global.scss')
+
+window.$ = window.jQuery = require('jquery');
 
 ipcRenderer.on('action', (evt, action) => {
   if (type === 'delInstance') {
@@ -25,5 +29,5 @@ ReactDOM.render(
   <Provider store={store}>
     <PatternManagerWindow/>
   </Provider>,
-  document.getElementById('content')
+  document.body.appendChild(document.createElement('div'))
 )

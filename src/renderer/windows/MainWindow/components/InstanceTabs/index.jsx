@@ -33,7 +33,7 @@ function InstanceTabs({onCreateInstance, onSelectInstance, onDelInstance, instan
   const currentDisplay = instances.count() === 1 ? 'none' : 'flex'
   if (display !== currentDisplay) {
     display = currentDisplay
-    setTimeout(() => $(window).trigger('resize'), 0)
+    // setTimeout(() => $(window).trigger('resize'), 0)
   }
 
   return <div id="tabGroupWrapper">

@@ -1,6 +1,7 @@
 'use strict';
 
 const {app, BrowserWindow} = require('electron');
+const path = require('path')
 const EventEmitter = require('events');
 
 class WindowManager extends EventEmitter {
@@ -39,13 +40,17 @@ class WindowManager extends EventEmitter {
       option.fullscreen = false;
     }
 
+    let start
     const newWindow = new BrowserWindow(option);
     if (!option.show) {
       newWindow.once('ready-to-show', () => {
+        console.log('start time: ', Date.now() - start)
         newWindow.show()
       })
     }
-    newWindow.loadURL(`file://${__dirname}/windows/${type}.html${arg ? '?arg=' + arg : ''}`);
+
+    start = Date.now()
+    newWindow.loadFile(path.resolve(__dirname, `../renderer/${type}.html`), {query: {arg}});
 
     this._register(newWindow);
 
