@@ -71,6 +71,7 @@
     "reselect": "^4.0.0",
     "sass-loader": "^7.1.0",
     "sortablejs": "^1.4.1",
+    "typescript": "^3.2.4",
     "url-loader": "^1.1.2",
     "webpack": "^4.28.3",
     "webpack-bundle-analyzer": "^3.0.3",
