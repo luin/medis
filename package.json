@@ -9,6 +9,7 @@
   "main": "dist/main",
   "scripts": {
     "build": "rm -rf dist && webpack",
+    "webpack": "webpack",
     "watch": "WEBPACK_WATCH=true npm run build",
     "start": "electron .",
     "pack": "NODE_ENV=production npm run build && node bin/pack.js"

@@ -41,6 +41,8 @@ You can download compiled versions of Medis for Mac OS X from [the release page]
 
     $ npm run build
 
+    (on Windows, instead delete "dist" if present, then npm run webpack)
+
 3. Run with Electron:
 
     $ npm start
