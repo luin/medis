@@ -17,15 +17,15 @@ app.on('window-all-closed', function () {
   }
 })
 
-app.on('activate', function (e, hasVisibleWindows) {
-  if (!hasVisibleWindows) {
-    windowManager.create()
-  }
-})
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', function () {
   Menu.setApplicationMenu(menu)
   windowManager.create()
+
+  app.on('activate', function (_, hasVisibleWindows) {
+    if (!hasVisibleWindows) {
+      windowManager.create()
+    }
+  })
 })
