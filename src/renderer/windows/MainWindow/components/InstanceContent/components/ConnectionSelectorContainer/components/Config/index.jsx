@@ -117,7 +117,7 @@ class Config extends React.PureComponent {
         </div>
         <div className="nt-form-row">
           <label htmlFor="port">Port:</label>
-          <input type="text" id="port" value={this.getProp('port')} onChange={this.handleChange.bind(this, 'port')} placeholder="6379" />
+          <input type="number" id="port" value={this.getProp('port')} onChange={this.handleChange.bind(this, 'port')} placeholder="6379" min="0" max="65535"/>
         </div>
         <div className="nt-form-row">
           <label htmlFor="password">Password:</label>
