@@ -22,9 +22,11 @@
     "fixed-data-table-contextmenu": "^1.7.2",
     "ioredis": "^4.4.0",
     "jquery": "^3.4.1",
+    "jquery.terminal": "^2.5.1",
     "medis-react-codemirror": "^1.1.0",
     "redis-commands": "^1.4.0",
-    "ssh2": "^0.6.2"
+    "ssh2": "^0.6.2",
+    "xterm": "^3.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

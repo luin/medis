@@ -1,7 +1,14 @@
 .Terminal {
   overflow: auto;
+  flex: 1;
   * {
     -webkit-user-select: text;
+  }
+
+  &.terminal, .cmd {
+    --background: #272b34;
+    --size: 1.4;
+    font-family: Consolas, monospace;
   }
 
   .number {
@@ -9,7 +16,7 @@
   }
 
   .string {
-    color: #8f9d6a;
+    color: #d6ec9c;
   }
 
   .array-resp, .object-resp {
@@ -19,7 +26,7 @@
     li {
       display: flex;
       span {
-        color: #3d3d3d;
+        color: #848080;
         min-width: 28px;
         text-align: right;
         margin-right: 10px;

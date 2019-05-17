@@ -3,7 +3,9 @@
 import React from 'react'
 import commands from 'redis-commands'
 import splitargs from 'redis-splitargs'
+import 'jquery.terminal'
 
+require('../../../../../../../../../../../../node_modules/jquery.terminal/css/jquery.terminal.css')
 require('./index.scss')
 
 class Terminal extends React.PureComponent {

@@ -2,7 +2,6 @@
 
 require('../../photon/css/photon.min.css')
 require('../../vendors/jquery.context-menu/index.css')
-require('../../vendors/jquery.terminal/index.css')
 require('../../../../node_modules/fixed-data-table-contextmenu/dist/fixed-data-table.css')
 
 import ReactDOM from 'react-dom'
@@ -18,7 +17,6 @@ window.Buffer = global.Buffer;
 
 require('../../vendors/jquery.context-menu/jquery.ui.position')
 require('../../vendors/jquery.context-menu/index')
-require('../../vendors/jquery.terminal/index')
 
 ipcRenderer.on('action', (evt, action) => {
   if ($('.Modal').length && action.indexOf('Instance') !== -1) {
