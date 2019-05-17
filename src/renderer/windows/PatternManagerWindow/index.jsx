@@ -17,6 +17,57 @@ class App extends React.Component {
     this.setState({[property]: e.target.value})
   }
 
+  select(index) {
+    this.setState({
+      index,
+      name: null,
+      value: null
+    })
+  }
+
+  renderPatternForm(activePattern) {
+    if (!activePattern) {
+      return null
+    }
+    return <div
+    key={this.state.indexKey}
+    className="form nt-box"
+    style={{display: activePattern ? 'block' : 'none'}}
+    >
+      <div className="nt-form-row nt-form-row--vertical">
+        <label htmlFor="name">Name:</label>
+        <input
+          type="text" id="name"
+          readOnly={!activePattern}
+          value={typeof this.state.name === 'string' ? this.state.name : activePattern.get('name')}
+          onChange={this.handleChange.bind(this, 'name')}
+          />
+      </div>
+      <div className="nt-form-row nt-form-row--vertical">
+        <label htmlFor="value">Pattern:</label>
+        <input
+          type="text" id="value"
+          readOnly={!activePattern}
+          value={typeof this.state.value === 'string' ? this.state.value : activePattern.get('value')}
+          onChange={this.handleChange.bind(this, 'value')}
+          />
+      </div>
+      <div className="nt-button-group nt-button-group--pull-right" style={{margin: '10px auto 0'}}>
+        <button
+          disabled={this.state.name === '' || this.state.value === ''}
+          className="nt-button nt-button--primary"
+          onClick={() => {
+            this.props.updatePattern(connectionKey, this.state.index, {
+              name: this.state.name || activePattern.get('name'),
+              value: this.state.value || activePattern.get('value')
+            })
+            alert('Save Successfully')
+          }}
+          >Save</button>
+      </div>
+    </div>
+  }
+
   render() {
     const {patterns, createPattern, removePattern} = this.props
     const activePattern = patterns.get(this.state.index)
@@ -27,7 +78,7 @@ class App extends React.Component {
             return (<a
               key={pattern.get('key')}
               className={'nav-group-item' + (index === this.state.index ? ' is-active' : '')}
-              onClick={() => this.setState({index})}
+              onClick={() => this.select(index)}
               >
               <span>{pattern.get('name')}</span>
             </a>)
@@ -37,57 +88,22 @@ class App extends React.Component {
           <button
             onClick={() => {
               const index = patterns.size
-              this.props.createPattern(connectionKey)
-              this.setState({index})
+              createPattern(connectionKey)
+              this.select(index)
             }}
             >+</button>
           <button
             className={activePattern ? '' : 'is-disabled'}
             onClick={() => {
               if (activePattern) {
-                this.props.removePattern(connectionKey, this.state.index)
-                this.setState({index: this.state.index > 0 ? this.state.index - 1 : 0})
+                removePattern(connectionKey, this.state.index)
+                this.select(this.state.index > 0 ? this.state.index - 1 : 0)
               }
             }}
             >-</button>
         </footer>
       </div>
-      <div
-        key={this.state.indexKey}
-        className="form nt-box"
-        style={{display: activePattern ? 'block' : 'none'}}
-        >
-        <div className="nt-form-row nt-form-row--vertical">
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text" id="name"
-            readOnly={!activePattern}
-            value={this.state.name || activePattern.get('name')}
-            onChange={this.handleChange.bind(this, 'name')}
-            />
-        </div>
-        <div className="nt-form-row nt-form-row--vertical">
-          <label htmlFor="value">Pattern:</label>
-          <input
-            type="text" id="value"
-            readOnly={!activePattern}
-            value={this.state.value || activePattern.get('value')}
-            onChange={this.handleChange.bind(this, 'value')}
-            />
-        </div>
-        <div className="nt-button-group nt-button-group--pull-right" style={{margin: '10px auto 0'}}>
-          <button
-            className="nt-button nt-button--primary"
-            onClick={() => {
-              this.props.updatePattern(connectionKey, this.state.index, {
-                name: this.state.name || activePattern.get('name'),
-                value: this.state.value || activePattern.get('value')
-              })
-              alert('Save Successfully')
-            }}
-            >Save</button>
-        </div>
-      </div>
+      {this.renderPatternForm(activePattern)}
     </div>)
   }
 }
