@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {createPattern, reorderPatterns, updatePattern, removePattern} from 'Redux/actions'
+import {createPattern, updatePattern, removePattern} from 'Redux/actions'
 import {List} from 'immutable'
 
 require('./app.scss')
@@ -116,7 +116,6 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   updatePattern,
-  reorderPatterns,
   createPattern,
   removePattern
 }
