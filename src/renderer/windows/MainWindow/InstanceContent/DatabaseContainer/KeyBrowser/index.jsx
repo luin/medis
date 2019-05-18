@@ -2,9 +2,9 @@
 
 import React, {memo} from 'react'
 import {List} from 'immutable'
-import PatternList from './components/PatternList'
-import KeyList from './components/KeyList'
-import Footer from './components/Footer'
+import PatternList from './PatternList'
+import KeyList from './KeyList'
+import Footer from './Footer'
 
 const FOOTER_HEIGHT = 66
 

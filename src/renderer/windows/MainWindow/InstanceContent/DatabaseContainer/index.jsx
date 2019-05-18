@@ -3,8 +3,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import SplitPane from 'react-split-pane'
-import KeyBrowser from './components/KeyBrowser'
-import Content from './components/Content'
+import KeyBrowser from './KeyBrowser'
+import Content from './Content'
 require('./index.scss')
 
 class Database extends React.PureComponent {

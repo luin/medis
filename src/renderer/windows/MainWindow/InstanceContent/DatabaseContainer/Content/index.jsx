@@ -1,11 +1,11 @@
 'use strict'
 
 import React from 'react'
-import TabBar from './components/TabBar'
-import KeyContent from './components/KeyContent'
-import Terminal from './components/Terminal'
-import Config from './components/Config'
-import Footer from './components/Footer'
+import TabBar from './TabBar'
+import KeyContent from './KeyContent'
+import Terminal from './Terminal'
+import Config from './Config'
+import Footer from './Footer'
 
 class Content extends React.PureComponent {
   constructor() {
