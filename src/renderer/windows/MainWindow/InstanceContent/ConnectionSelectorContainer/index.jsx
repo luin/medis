@@ -2,8 +2,8 @@
 
 import React, {PureComponent} from 'react'
 import {connect} from 'react-redux'
-import Favorite from './components/Favorite'
-import Config from './components/Config'
+import Favorite from './Favorite'
+import Config from './Config'
 import {connectToRedis} from 'Redux/actions'
 import {removeFavorite, updateFavorite, createFavorite, reorderFavorites} from 'Redux/actions'
 

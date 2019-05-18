@@ -3,8 +3,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {Table, Column} from 'fixed-data-table-contextmenu'
-import ContentEditable from '../../../ContentEditable'
-import AddButton from '../../../AddButton'
+import ContentEditable from '../../ContentEditable'
+import AddButton from '../../AddButton'
 import zip from 'lodash.zip'
 import {clipboard, remote} from 'electron'
 require('./index.scss')

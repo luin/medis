@@ -1,12 +1,12 @@
 'use strict'
 
 import React from 'react'
-import BaseContent from './BaseContent'
+import BaseContent from '.'
 import SplitPane from 'react-split-pane'
 import {Table, Column} from 'fixed-data-table-contextmenu'
 import Editor from './Editor'
 import SortHeaderCell from './SortHeaderCell'
-import AddButton from '../../../../AddButton'
+import AddButton from '../../../AddButton'
 import {remote} from 'electron'
 
 class ListContent extends BaseContent {

@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react'
-import BaseContent from './BaseContent'
+import BaseContent from '.'
 import Editor from './Editor'
 
 class StringContent extends BaseContent {

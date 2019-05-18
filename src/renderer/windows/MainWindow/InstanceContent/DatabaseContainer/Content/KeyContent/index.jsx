@@ -3,11 +3,11 @@
 import React, {PureComponent} from 'react'
 import {connect} from 'react-redux'
 import {setSize} from 'Redux/actions'
-import StringContent from './components/StringContent'
-import ListContent from './components/ListContent'
-import SetContent from './components/SetContent'
-import HashContent from './components/HashContent'
-import ZSetContent from './components/ZSetContent'
+import StringContent from './BaseContent/StringContent'
+import ListContent from './BaseContent/ListContent'
+import SetContent from './BaseContent/SetContent'
+import HashContent from './BaseContent/HashContent'
+import ZSetContent from './BaseContent/ZSetContent'
 
 require('./index.scss')
 
