@@ -6,7 +6,7 @@ import {Table, Column} from 'fixed-data-table-contextmenu'
 import ContentEditable from '../../../ContentEditable'
 import AddButton from '../../../AddButton'
 import zip from 'lodash.zip'
-import {clipboard} from 'electron'
+import {clipboard, remote} from 'electron'
 require('./index.scss')
 
 class KeyList extends React.Component {
@@ -234,92 +234,67 @@ class KeyList extends React.Component {
       return true
     })
     this.scan()
-    $.contextMenu({
-      context: ReactDOM.findDOMNode(this),
-      selector: '.' + this.randomClass,
-      trigger: 'none',
-      zIndex: 99999,
-      callback: (key, opt) => {
-        setTimeout(() => {
-          if (key === 'delete') {
-            this.deleteSelectedKey()
-          } else if (key === 'rename') {
-            this.setState({editableKey: this.state.keys[this.index][0]})
-          } else if (key === 'copy') {
-            clipboard.writeText(this.state.keys[this.index][0])
-          } else if (key === 'ttl') {
-            this.props.redis.pttl(this.state.selectedKey).then(ttl => {
-              showModal({
-                button: 'Set Expiration',
-                form: {
-                  type: 'object',
-                  properties: {
-                    'PTTL (ms):': {
-                      type: 'number',
-                      minLength: 1,
-                      default: ttl
-                    }
-                  }
-                }
-              }).then(res => {
-                const ttl = Number(res['PTTL (ms):'])
-                if (ttl >= 0) {
-                  this.props.redis.pexpire(this.state.selectedKey, ttl).then(res => {
-                    if (res <= 0) {
-                      alert('Update Failed')
-                    }
-                    this.props.onKeyMetaChange()
-                  })
-                } else {
-                  this.props.redis.persist(this.state.selectedKey, () => {
-                    this.props.onKeyMetaChange()
-                  })
-                }
-              })
-            })
-          } else if (key === 'reload') {
-            this.handleSelect(this.index, true)
-          } else if (key === 'duplicate') {
-            const sourceKey = this.state.keys[this.index][0]
-            let targetKey
-            showModal({
-              button: 'Duplicate Key',
-              form: {
-                type: 'object',
-                properties: {
-                  'Target Key:': {
-                    type: 'string',
-                    minLength: 1
-                  },
-                  'Keep TTL:': {
-                    type: 'boolean'
-                  }
-                }
-              }
-            }).then(res => {
-              targetKey = res['Target Key:']
-              const duplicateTTL = res['Keep TTL:']
-              this.props.redis.duplicateKey(sourceKey, targetKey, duplicateTTL ? 'TTL' : 'NOTTL')
-            }).then(() => {
-              this.props.onCreateKey(targetKey)
-            }).catch(err => {
-              if (err && err.message) {
-                alert(err.message)
-              }
-            })
+  }
+
+  setTTLforKey() {
+    const {redis, onKeyMetaChange} = this.props
+    redis.pttl(this.state.selectedKey).then(ttl => {
+      showModal({
+        button: 'Set Expiration',
+        form: {
+          type: 'object',
+          properties: {
+            'PTTL (ms):': {
+              type: 'number',
+              minLength: 1,
+              default: ttl
+            }
           }
-        }, 0)
-        ReactDOM.findDOMNode(this).focus()
-      },
-      items: {
-        copy: {name: 'Copy to Clipboard'},
-        reload: {name: 'Reload'},
-        sep1: '---------',
-        ttl: {name: 'Set expiration...'},
-        rename: {name: 'Rename Key...'},
-        duplicate: {name: 'Duplicate Key...'},
-        sep2: '---------',
-        delete: {name: 'Delete Key'}
+        }
+      }).then(res => {
+        const ttl = Number(res['PTTL (ms):'])
+        if (ttl >= 0) {
+          redis.pexpire(this.state.selectedKey, ttl).then(res => {
+            if (res <= 0) {
+              alert('Update Failed')
+            }
+            onKeyMetaChange()
+          })
+        } else {
+          redis.persist(this.state.selectedKey, () => {
+            onKeyMetaChange()
+          })
+        }
+      })
+    })
+  }
+
+  duplicateKey() {
+    const sourceKey = this.state.keys[this.index][0]
+    let targetKey
+    showModal({
+      button: 'Duplicate Key',
+      form: {
+        type: 'object',
+        properties: {
+          'Target Key:': {
+            type: 'string',
+            minLength: 1
+          },
+          'Keep TTL:': {
+            type: 'boolean'
+          }
+        }
+      }
+    }).then(res => {
+      targetKey = res['Target Key:']
+      const duplicateTTL = res['Keep TTL:']
+      this.props.redis.duplicateKey(sourceKey, targetKey, duplicateTTL ? 'TTL' : 'NOTTL')
+    }).then(() => {
+      this.props.onCreateKey(targetKey)
+    }).catch(err => {
+      if (err && err.message) {
+        alert(err.message)
       }
     })
   }
@@ -342,11 +317,49 @@ class KeyList extends React.Component {
 
   showContextMenu(e, row) {
     this.handleSelect(row)
-    $(ReactDOM.findDOMNode(this)).contextMenu({
-      x: e.pageX,
-      y: e.pageY,
-      zIndex: 99999
-    })
+
+    const menu = remote.Menu.buildFromTemplate([
+      {
+        label: 'Copy to Clipboard',
+        click: () => {
+          clipboard.writeText(this.state.keys[row][0])
+        }
+      },
+      {
+        label: 'Reload',
+        click: () => {
+          this.handleSelect(row, true)
+        }
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Set expiration',
+        click: () => {
+          this.setTTLforKey()
+        }
+      },
+      {
+        label: 'Rename Key...',
+        click: () => {
+          this.setState({editableKey: this.state.keys[row][0]})
+        }
+      },
+      {
+        label: 'Duplicate Key...',
+        click: () => {
+          this.duplicateKey()
+        }
+      },
+      {
+        label: 'Delete',
+        click: () => {
+          this.deleteSelectedKey()
+        }
+      }
+    ])
+    menu.popup(remote.getCurrentWindow())
   }
 
   render() {
