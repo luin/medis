@@ -32,6 +32,11 @@
       }
     }
   }
+
+  .nav-group-item:active {
+    background-color: #116cd6 !important;
+    color: #fff;
+  }
 }
 
 .nav-group-item {

@@ -45,7 +45,9 @@
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 3.5px #93c2f3;
+      border-color: #6691d6;
+      box-shadow: 0 0 0 2.5px #7ba7ec;
+      border-radius: 1px;
     }
 
     &:placeholder {
@@ -82,7 +84,7 @@
   outline: none;
   border-width: 1px;
   border-style: solid;
-  border-radius: 5px;
+  border-radius: 3px;
   border-top-color: #c8c8c8;
   border-bottom-color: #acacac;
   border-left-color: #c2c2c2;
@@ -90,8 +92,8 @@
   box-shadow: 0 1px rgba(0, 0, 0, .039);
   padding-top: 0;
   padding-bottom: 0;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 13px;
+  padding-right: 13px;
   line-height: 19px;
   font-size: 13px;
 
@@ -111,11 +113,11 @@
 }
 
 .nt-button--primary {
-  background-image: -webkit-linear-gradient(top, #6cb3fa 0%, #087eff 100%);
-  border-top-color: #4ca2f9;
-  border-bottom-color: #015cff;
-  border-left-color: #267ffc;
-  border-right-color: #267ffc;
+  background-image: -webkit-linear-gradient(top, #6ca5fc 0%, #076aff 100%);
+  border-top-color: #4c93fa;
+  border-bottom-color: #0261ff;
+  border-left-color: #2d7efc;
+  border-right-color: #2d7efc;
   color: rgba(255, 255, 255, .9);
 
   &:active {
@@ -130,7 +132,8 @@
 
 .nt-button:focus {
   outline: none;
-  box-shadow: 0 0 0 3.5px #93c2f3;
+  border-color: #6691d6;
+  box-shadow: 0 0 0 2.5px #7ba7ec;
 }
 
 .nt-button[disabled], .nt-button--disabled {

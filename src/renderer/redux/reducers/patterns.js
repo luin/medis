@@ -3,7 +3,6 @@ import {
   createPattern,
   removePattern,
   updatePattern,
-  reorderPatterns,
   reloadPatterns
 } from 'Redux/actions'
 import {Patterns} from '../../storage'
@@ -23,12 +22,12 @@ export const patterns = handleActions(fromJS(Patterns.get()), {
   [updatePattern](state, {conn, index, data}) {
     return state.update(conn, List(), patterns => patterns.update(index, item => item.merge(data)))
   },
-  [reorderPatterns](state, {conn, from, to}) {
-    return state.update(conn, List(), patterns => {
-      const target = patterns.get(from);
-      return patterns.splice(from, 1).splice(to, 0, target);
-    })
-  },
+  // [reorderPatterns](state, {conn, from, to}) {
+  //   return state.update(conn, List(), patterns => {
+  //     const target = patterns.get(from);
+  //     return patterns.splice(from, 1).splice(to, 0, target);
+  //   })
+  // },
   [reloadPatterns](state, data) {
     return fromJS(data)
   }

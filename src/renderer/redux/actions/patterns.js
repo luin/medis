@@ -1,5 +1,4 @@
-import {createAction} from 'Utils';
-import {fromJS} from 'immutable'
+import {createAction} from 'Utils'
 import {Patterns} from '../../storage'
 
 
