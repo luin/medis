@@ -1,6 +1,11 @@
 import {app, Menu, ipcMain} from 'electron'
 import windowManager from './windowManager'
 import menu from './menu'
+const contextMenu = require('electron-context-menu');
+
+contextMenu({
+  // showInspectElement: true,
+})
 
 ipcMain.on('create patternManager', function (event, arg) {
   windowManager.create('patternManager', arg)

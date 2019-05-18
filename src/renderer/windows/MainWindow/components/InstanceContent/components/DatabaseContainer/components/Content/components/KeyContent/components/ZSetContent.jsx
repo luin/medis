@@ -110,41 +110,33 @@ class ZSetContent extends BaseContent {
     })
   }
 
-  componentDidMount() {
-    super.componentDidMount()
-    $.contextMenu({
-      context: ReactDOM.findDOMNode(this.refs.table),
-      selector: '.' + this.randomClass,
-      trigger: 'none',
-      zIndex: 99999,
-      callback: (key, opt) => {
-        setTimeout(() => {
-          if (key === 'delete') {
-            this.deleteSelectedMember()
-          } else if (key === 'copy') {
-            clipboard.writeText(this.state.members[this.state.selectedIndex][0])
-          } else if (key === 'edit') {
-            this.setState({editableIndex: this.state.selectedIndex})
-          }
-        }, 0)
-        ReactDOM.findDOMNode(this.refs.table).focus()
-      },
-      items: {
-        copy: {name: 'Copy Score to Clipboard'},
-        sep1: '---------',
-        edit: {name: 'Edit Score'},
-        delete: {name: 'Delete'}
-      }
-    })
-  }
-
   showContextMenu(e, row) {
     this.handleSelect(null, row)
-    $(ReactDOM.findDOMNode(this.refs.table)).contextMenu({
-      x: e.pageX,
-      y: e.pageY,
-      zIndex: 99999
-    })
+
+    const menu = remote.Menu.buildFromTemplate([
+      {
+        label: 'Copy Score to Clipboard',
+        click: () => {
+          clipboard.writeText(this.state.members[row][0])
+        }
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Edit Score',
+        click: () => {
+          this.setState({editableIndex: row})
+        }
+      },
+      {
+        label: 'Delete',
+        click: () => {
+          this.deleteSelectedMember()
+        }
+      }
+    ])
+    menu.popup(remote.getCurrentWindow())
   }
 
   render() {

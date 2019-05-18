@@ -8,7 +8,7 @@ import Editor from './Editor'
 import AddButton from '../../../../AddButton'
 import ContentEditable from '../../../../ContentEditable'
 import ReactDOM from 'react-dom'
-import {clipboard} from 'electron'
+import {clipboard, remote} from 'electron'
 
 class HashContent extends BaseContent {
   save(value, callback) {
@@ -99,41 +99,33 @@ class HashContent extends BaseContent {
     })
   }
 
-  componentDidMount() {
-    super.componentDidMount()
-    $.contextMenu({
-      context: ReactDOM.findDOMNode(this.refs.table),
-      selector: '.' + this.randomClass,
-      trigger: 'none',
-      zIndex: 99999,
-      callback: (key, opt) => {
-        setTimeout(() => {
-          if (key === 'delete') {
-            this.deleteSelectedMember()
-          } else if (key === 'copy') {
-            clipboard.writeText(this.state.members[this.state.selectedIndex][0])
-          } else if (key === 'rename') {
-            this.setState({editableIndex: this.state.selectedIndex})
-          }
-        }, 0)
-        ReactDOM.findDOMNode(this.refs.table).focus()
-      },
-      items: {
-        copy: {name: 'Copy to Clipboard'},
-        sep1: '---------',
-        rename: {name: 'Rename Key'},
-        delete: {name: 'Delete'}
-      }
-    })
-  }
-
   showContextMenu(e, row) {
     this.handleSelect(null, row)
-    $(ReactDOM.findDOMNode(this.refs.table)).contextMenu({
-      x: e.pageX,
-      y: e.pageY,
-      zIndex: 99999
-    })
+
+    const menu = remote.Menu.buildFromTemplate([
+      {
+        label: 'Copy to Clipboard',
+        click: () => {
+          clipboard.writeText(this.state.members[row][0])
+        }
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Rename Key',
+        click: () => {
+          this.setState({editableIndex: row})
+        }
+      },
+      {
+        label: 'Delete',
+        click: () => {
+          this.deleteSelectedMember()
+        }
+      }
+    ])
+    menu.popup(remote.getCurrentWindow())
   }
 
   render() {

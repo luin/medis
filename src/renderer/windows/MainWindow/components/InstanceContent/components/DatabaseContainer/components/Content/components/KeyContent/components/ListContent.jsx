@@ -7,7 +7,7 @@ import {Table, Column} from 'fixed-data-table-contextmenu'
 import Editor from './Editor'
 import SortHeaderCell from './SortHeaderCell'
 import AddButton from '../../../../AddButton'
-import ReactDOM from 'react-dom'
+import {remote} from 'electron'
 
 class ListContent extends BaseContent {
   save(value, callback) {
@@ -113,37 +113,18 @@ class ListContent extends BaseContent {
     }
   }
 
-  componentDidMount() {
-    super.componentDidMount()
-    $.contextMenu({
-      context: ReactDOM.findDOMNode(this.refs.table),
-      selector: '.' + this.randomClass,
-      trigger: 'none',
-      zIndex: 99999,
-      callback: (key, opt) => {
-        setTimeout(() => {
-          if (key === 'delete') {
-            this.deleteSelectedMember()
-          }
-        }, 0)
-        ReactDOM.findDOMNode(this.refs.table).focus()
-      },
-      items: {
-        delete: {name: 'Delete'}
-      }
-    })
-  }
-
-  insert() {
-  }
-
   showContextMenu(e, row) {
     this.handleSelect(null, row)
-    $(ReactDOM.findDOMNode(this.refs.table)).contextMenu({
-      x: e.pageX,
-      y: e.pageY,
-      zIndex: 99999
-    })
+
+    const menu = remote.Menu.buildFromTemplate([
+      {
+        label: 'Delete',
+        click: () => {
+          this.deleteSelectedMember()
+        }
+      }
+    ])
+    menu.popup(remote.getCurrentWindow())
   }
 
   render() {
