@@ -24,6 +24,7 @@
     "ioredis": "^4.9.3",
     "jquery": "^3.4.1",
     "jquery.terminal": "^2.5.1",
+    "lodash.sortedindexby": "^4.6.0",
     "medis-react-codemirror": "^1.1.1",
     "redis-commands": "^1.5.0",
     "ssh2": "^0.6.2",
