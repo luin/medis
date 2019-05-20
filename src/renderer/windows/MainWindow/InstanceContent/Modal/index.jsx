@@ -53,11 +53,13 @@ export default class Modal extends React.Component {
           continue
         }
         $all[i + 1].focus()
+        $($all[i + 1]).select()
         break
       }
       // Must have been focused on the last one or none of them.
       if (i == $all.length - 1) {
         $all[0].focus()
+        $($all[0]).select()
       }
       evt.stopPropagation()
       evt.preventDefault()
