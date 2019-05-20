@@ -71,7 +71,7 @@ class ZSetContent extends BaseContent {
   handleSelect(_, selectedIndex) {
     const item = this.state.members[selectedIndex]
     if (item) {
-      this.setState({selectedIndex, content: item[0]})
+      this.setState({selectedIndex})
     }
   }
 
@@ -272,6 +272,17 @@ class ZSetContent extends BaseContent {
     />
   }
 
+  renderEditor() {
+    const item = this.state.members[this.state.selectedIndex]
+    const buffer = item
+      ? Buffer.from(item[0])
+      : undefined
+    return <Editor
+      buffer={buffer}
+      onSave={this.save.bind(this)}
+      />
+  }
+
   render() {
     return (<SplitPane
         minSize={80}
@@ -288,10 +299,7 @@ class ZSetContent extends BaseContent {
         >
         {this.renderTable()}
       </div>
-      <Editor
-        buffer={typeof this.state.content === 'string' && Buffer.from(this.state.content)}
-        onSave={this.save.bind(this)}
-        />
+      {this.renderEditor()}
     </SplitPane>)
   }
 }

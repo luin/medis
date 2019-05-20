@@ -11,10 +11,12 @@ import {remote} from 'electron'
 
 class ListContent extends BaseContent {
   save(value, callback) {
-    if (typeof this.state.selectedIndex === 'number') {
-      this.state.members[this.state.selectedIndex] = value.toString()
-      this.setState({members: this.state.members})
-      this.props.redis.lset(this.state.keyName, this.state.selectedIndex, value, (err, res) => {
+    const {selectedIndex, keyName, desc} = this.state
+    if (typeof selectedIndex === 'number') {
+      const members = this.state.members.slice()
+      members[selectedIndex] = value.toString()
+      this.setState({members})
+      this.props.redis.lset(keyName, desc ? -1 - selectedIndex : selectedIndex, value, (err, res) => {
         this.props.onKeyContentChange()
         callback(err, res)
       })
@@ -23,26 +25,33 @@ class ListContent extends BaseContent {
     }
   }
 
-  create() {
-    return this.props.redis.lpush(this.state.keyName, '')
-  }
-
   load(index) {
     if (!super.load(index)) {
       return
     }
 
-    const from = this.state.members.length
-    const to = Math.min(from === 0 ? 200 : from + 1000, this.state.length - 1)
+    const {members, length, keyName, desc} = this.state
+    let from = members.length
+    let to = Math.min(from === 0 ? 200 : from + 1000, length - 1)
     if (to < from) {
+      this.loading = false
       return
     }
+    if (desc) {
+      [from, to] = [-1 - to, -1 - from]
+    }
 
-    this.props.redis.lrange(this.state.keyName, from, to, (_, results) => {
+    this.props.redis.lrange(keyName, from, to, (_, results) => {
+      if (this.state.desc !== desc) {
+        return
+      }
+      if (desc) {
+        results.reverse()
+      }
       const diff = to - from + 1 - results.length
       this.setState({
-        members: this.state.members.concat(results),
-        length: this.state.length - diff
+        members: members.concat(results),
+        length: length - diff
       }, () => {
         if (typeof this.state.selectedIndex !== 'number' && this.state.members.length) {
           this.handleSelect(null, 0)
@@ -55,56 +64,51 @@ class ListContent extends BaseContent {
     })
   }
 
-  handleOrderChange(desc) {
-    this.setState({desc})
-  }
-
   handleSelect(_, selectedIndex) {
-    const content = this.state.members[this.state.desc ? this.state.length - 1 - selectedIndex : selectedIndex]
-    if (typeof content !== 'undefined') {
-      this.setState({selectedIndex, content})
+    if (typeof this.state.members[selectedIndex] === 'undefined') {
+      this.setState({selectedIndex: null})
     } else {
-      this.setState({selectedIndex: null, content: null})
+      this.setState({selectedIndex})
     }
   }
 
-  deleteSelectedMember() {
+  async deleteSelectedMember() {
     if (typeof this.state.selectedIndex !== 'number') {
       return
     }
-    showModal({
+    await showModal({
       title: 'Delete selected item?',
       button: 'Delete',
       content: 'Are you sure you want to delete the selected item? This action cannot be undone.'
-    }).then(() => {
-      const members = this.state.members
-      const deleted = members.splice(this.state.selectedIndex, 1)
-      if (deleted.length) {
-        this.props.redis.lremindex(this.state.keyName, this.state.selectedIndex)
-        if (this.state.selectedIndex >= members.length - 1) {
-          this.state.selectedIndex -= 1
-        }
-        this.setState({members, length: this.state.length - 1}, () => {
-          this.props.onKeyContentChange()
-          this.handleSelect(null, this.state.selectedIndex)
-        })
-      }
     })
+    const {selectedIndex, desc, length, keyName} = this.state
+    const members = this.state.members.slice()
+    const deleted = members.splice(selectedIndex, 1)
+    if (deleted.length) {
+      this.props.redis.lremindex(keyName, desc ? -1 - selectedIndex : selectedIndex)
+
+      const nextSelectedIndex = selectedIndex >= members.length - 1
+        ? selectedIndex - 1
+        : selectedIndex
+      this.setState({members, length: length - 1}, () => {
+        this.props.onKeyContentChange()
+        this.handleSelect(null, nextSelectedIndex)
+      })
+    }
   }
 
   handleKeyDown(e) {
     if (typeof this.state.selectedIndex === 'number') {
-      if (e.keyCode === 8) {
+      switch (e.keyCode) {
+      case 8:
         this.deleteSelectedMember()
         return false
-      }
-      if (e.keyCode === 38) {
+      case 38:
         if (this.state.selectedIndex > 0) {
           this.handleSelect(null, this.state.selectedIndex - 1)
         }
         return false
-      }
-      if (e.keyCode === 40) {
+      case 40:
         if (this.state.selectedIndex < this.state.members.length - 1) {
           this.handleSelect(null, this.state.selectedIndex + 1)
         }
@@ -125,6 +129,86 @@ class ListContent extends BaseContent {
       }
     ])
     menu.popup(remote.getCurrentWindow())
+  }
+
+  renderEditor() {
+    const content = this.state.members[this.state.selectedIndex]
+    const buffer = typeof content === 'string'
+      ? Buffer.from(content)
+      : undefined
+    return <Editor
+      buffer={buffer}
+      onSave={this.save.bind(this)}
+      />
+  }
+
+  renderIndexColumn() {
+    return <Column
+      header={
+        <SortHeaderCell
+          title="index"
+          onOrderChange={desc => this.setState({
+            desc,
+            members: [],
+            selectedIndex: null
+          })}
+          desc={this.state.desc}
+          />
+      }
+      width={this.props.indexBarWidth}
+      isResizable
+      cell={({rowIndex}) => {
+        return <div className="index-label">{ this.state.desc ? this.state.length - 1 - rowIndex : rowIndex }</div>
+      }}
+      />
+  }
+
+  renderValueColumn() {
+    return <Column
+      header={
+        <AddButton
+          title="item" onClick={async () => {
+            const res = await showModal({
+              button: 'Insert Item',
+              form: {
+                type: 'object',
+                properties: {
+                  'Insert To:': {
+                    type: 'string',
+                    enum: ['head', 'tail']
+                  }
+                }
+              }
+            })
+            const insertToHead = res['Insert To:'] === 'head'
+            const method = insertToHead ? 'lpush' : 'rpush'
+            const data = 'New Item'
+            await this.props.redis[method](this.state.keyName, data)
+
+            const members = this.state.members.slice()
+            members[insertToHead ? 'unshift' : 'push'](data)
+            this.setState({
+              members,
+              length: this.state.length + 1
+            }, () => {
+              this.props.onKeyContentChange()
+              if (insertToHead) {
+                this.handleSelect(null, 0)
+              }
+            })
+          }}
+        />
+      }
+      width={this.props.contentBarWidth - this.props.indexBarWidth}
+      cell={({rowIndex}) => {
+        const data = this.state.members[rowIndex]
+        if (typeof data === 'undefined') {
+          this.load(rowIndex)
+          return 'Loading...'
+        }
+        return <div className="overflow-wrapper"><span>{data}</span></div>
+      }}
+      />
   }
 
   render() {
@@ -153,72 +237,11 @@ class ListContent extends BaseContent {
           height={this.props.height}
           headerHeight={24}
           >
-          <Column
-            header={
-              <SortHeaderCell
-                title="index"
-                onOrderChange={desc => this.setState({
-                  desc,
-                  selectedIndex: typeof this.state.selectedIndex === 'number' ? this.state.length - 1 - this.state.selectedIndex : null
-                })}
-                desc={this.state.desc}
-                />
-            }
-            width={this.props.indexBarWidth}
-            isResizable
-            cell={({rowIndex}) => {
-              return <div className="index-label">{ this.state.desc ? this.state.length - 1 - rowIndex : rowIndex }</div>
-            }}
-            />
-          <Column
-            header={
-              <AddButton
-                title="item" onClick={() => {
-                  showModal({
-                    button: 'Insert Item',
-                    form: {
-                      type: 'object',
-                      properties: {
-                        'Insert To:': {
-                          type: 'string',
-                          enum: ['head', 'tail']
-                        }
-                      }
-                    }
-                  }).then(res => {
-                    return res['Insert To:'] === 'head' ? 'lpush' : 'rpush'
-                  }).then(method => {
-                    const data = 'New Item'
-                    this.props.redis[method](this.state.keyName, data).then(() => {
-                      this.state.members[method === 'lpush' ? 'unshift' : 'push'](data)
-                      this.setState({
-                        members: this.state.members,
-                        length: this.state.length + 1
-                      }, () => {
-                        this.props.onKeyContentChange()
-                        this.handleSelect(null, method === 'lpush' ? 0 : this.state.members.length - 1)
-                      })
-                    })
-                  })
-                }}
-                             />
-            }
-            width={this.props.contentBarWidth - this.props.indexBarWidth}
-            cell={({rowIndex}) => {
-              const data = this.state.members[this.state.desc ? this.state.length - 1 - rowIndex : rowIndex]
-              if (typeof data === 'undefined') {
-                this.load(rowIndex)
-                return 'Loading...'
-              }
-              return <div className="overflow-wrapper"><span>{ data }</span></div>
-            }}
-            />
+          {this.renderIndexColumn()}
+          {this.renderValueColumn()}
         </Table>
       </div>
-      <Editor
-        buffer={typeof this.state.content === 'string' && Buffer.from(this.state.content)}
-        onSave={this.save.bind(this)}
-        />
+      {this.renderEditor()}
     </SplitPane>)
   }
 }
