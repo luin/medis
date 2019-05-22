@@ -71,7 +71,9 @@ export const connectToRedis = createAction('CONNECT', config => ({getState, disp
   function handleRedis(config, override) {
     dispatch(updateConnectStatus('Redis connecting...'))
     if (config.ssl) {
-      config.tls = {};
+      config.tls = {
+        rejectUnauthorized: false
+      };
       if (config.tlsca) config.tls.ca = config.tlsca;
       if (config.tlskey) config.tls.key = config.tlskey;
       if (config.tlscert) config.tls.cert = config.tlscert;
