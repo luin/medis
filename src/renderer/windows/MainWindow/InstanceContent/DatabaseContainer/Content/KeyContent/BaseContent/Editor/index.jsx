@@ -25,6 +25,11 @@ require('./index.scss')
 class Editor extends React.PureComponent {
   constructor() {
     super()
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.updateLayout()
+    })
+
     this.state = {
       currentMode: '',
       wrapping: true,
@@ -38,23 +43,26 @@ class Editor extends React.PureComponent {
   }
 
   updateLayout() {
+    const {wrapSelector, codemirror} = this.refs
+
     const $this = $(ReactDOM.findDOMNode(this))
     if ($this.width() < 372) {
-      $(ReactDOM.findDOMNode(this.refs.wrapSelector)).hide()
+      $(ReactDOM.findDOMNode(wrapSelector)).hide()
     } else {
-      $(ReactDOM.findDOMNode(this.refs.wrapSelector)).show()
+      $(ReactDOM.findDOMNode(wrapSelector)).show()
     }
-    this.refs.codemirror.getCodeMirror().refresh()
+    if (codemirror) {
+      codemirror.getCodeMirror().refresh()
+    }
   }
 
   componentDidMount() {
-    this.updateLayoutBinded = this.updateLayout.bind(this)
-    $(window).on('resize', this.updateLayoutBinded)
     this.init(this.props.buffer)
+    this.resizeObserver.observe(ReactDOM.findDOMNode(this))
   }
 
   componentWillUnmount() {
-    $(window).off('resize', this.updateLayoutBinded)
+    this.resizeObserver.disconnect()
   }
 
   componentWillReceiveProps(nextProps) {
