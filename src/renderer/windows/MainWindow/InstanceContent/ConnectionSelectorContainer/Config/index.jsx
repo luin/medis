@@ -184,7 +184,7 @@ class Config extends React.PureComponent {
           </div>
           <div className="nt-form-row">
             <label htmlFor="sshPort">SSH Port:</label>
-            <input type="text" id="sshPort" onChange={this.handleChange.bind(this, 'sshPort')} value={this.getProp('sshPort')} />
+            <input type="number" min="0" max="65535" id="sshPort" placeholder="22" onChange={this.handleChange.bind(this, 'sshPort')} value={this.getProp('sshPort')} />
           </div>
         </div>
       </div>
