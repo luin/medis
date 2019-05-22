@@ -466,8 +466,7 @@ class KeyList extends React.Component {
                 href="#" style={{color: '#666'}} onClick={evt => {
                   evt.preventDefault()
                   this.scan()
-                }}
-                                                 >Scan more</a>)
+                }}>Scan more</a>)
             }
             return (<ContentEditable
               className="ContentEditable overflow-wrapper"

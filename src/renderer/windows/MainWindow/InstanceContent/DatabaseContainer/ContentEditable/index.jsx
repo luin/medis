@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import escape from 'lodash.escape'
 
 require('./index.scss')
 
@@ -19,7 +20,7 @@ export default class ContentEditable extends React.Component {
         onBlur={this.handleSubmit.bind(this)}
         contentEditable={enabled}
         ref="text"
-        dangerouslySetInnerHTML={{__html: html}}
+        dangerouslySetInnerHTML={{__html: escape(html)}}
         />
     </div>)
   }
@@ -37,7 +38,7 @@ export default class ContentEditable extends React.Component {
 
   componentDidUpdate() {
     const node = ReactDOM.findDOMNode(this.refs.text)
-    if (this.props.html !== node.innerHTML) {
+    if (escape(this.props.html) !== node.innerHTML) {
       node.innerHTML = this.props.html
     }
     if (this.props.enabled) {
