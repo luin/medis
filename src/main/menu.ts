@@ -165,10 +165,11 @@ if (process.platform == 'darwin') {
 
 const menu = Menu.buildFromTemplate(menuTemplates)
 
-// if (process.env.NODE_ENV !== 'debug') {
-//   menu.items[baseIndex + 2].submenu.items[0].visible = false
-//   menu.items[baseIndex + 2].submenu.items[2].visible = false
-// }
+if (process.env.NODE_ENV === 'production') {
+  const {submenu} = (menu.items[baseIndex + 2] as any)
+  submenu.items[0].visible = false
+  submenu.items[2].visible = false
+}
 
 const {submenu} = (menu.items[baseIndex + 0] as any)
 windowManager.on('blur', function () {
