@@ -95,6 +95,7 @@ class Terminal extends React.PureComponent {
     if (args.length === 1 && args[0].toUpperCase() === 'MONITOR') {
       redis.monitor((_, monitor) => {
         term.echo('[[;#aac6e3;]Enter monitor mode. Press Ctrl+C to exit. ]')
+        term.resume()
         term.push(input => {
         }, {
           onExit() {
@@ -111,8 +112,10 @@ class Terminal extends React.PureComponent {
       const newRedis = redis.duplicate()
       newRedis.call.apply(newRedis, args).then(res => {
         term.echo('[[;#aac6e3;]Enter subscription mode. Press Ctrl+C to exit. ]')
+        term.resume()
         term.push(input => {
         }, {
+          prompt: '',
           onExit() {
             newRedis.disconnect()
           }
