@@ -43,6 +43,10 @@ class ListContent extends BaseContent {
 
     this.props.redis.lrange(keyName, from, to, (_, results) => {
       if (this.state.desc !== desc) {
+        // TODO: use a counter instead to avoid
+        // cancel multiple loading attempts.
+        // LIST & ZSET
+        this.loading = false
         return
       }
       if (desc) {

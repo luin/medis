@@ -45,6 +45,7 @@ class ZSetContent extends BaseContent {
     const commandName = desc ? 'zrevrange' : 'zrange'
     this.props.redis[commandName](keyName, from, to, 'WITHSCORES', (_, results) => {
       if (this.state.desc !== desc || this.state.members.length !== from) {
+        this.loading = false
         return
       }
       const items = []
@@ -127,7 +128,7 @@ class ZSetContent extends BaseContent {
       {
         label: 'Copy Score to Clipboard',
         click: () => {
-          clipboard.writeText(this.state.members[row][0])
+          clipboard.writeText(this.state.members[row][1])
         }
       },
       {
