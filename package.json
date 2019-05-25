@@ -2,7 +2,7 @@
   "name": "medis",
   "description": "GUI for Redis",
   "productName": "Medis",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "electronVersion": "4.0.0",
   "license": "MIT",
   "author": "luin <i@zihua.li> (http://zihua.li)",
