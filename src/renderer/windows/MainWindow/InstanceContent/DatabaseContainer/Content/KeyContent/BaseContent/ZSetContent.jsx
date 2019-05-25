@@ -197,14 +197,21 @@ class ZSetContent extends BaseContent {
         enabled={rowIndex === this.state.editableIndex}
         onChange={async (newScore) => {
           const members = this.state.members.slice()
-          await this.props.redis.zadd(this.state.keyName, newScore, members[rowIndex][0])
 
-          // Don't sort when changing scores
-          members[rowIndex][1] = newScore
-          this.setState({
-            members,
-            editableIndex: null
-          })
+          try {
+            await this.props.redis.zadd(this.state.keyName, newScore, members[rowIndex][0])
+            // Don't sort when changing scores
+            members[rowIndex][1] = newScore
+            this.setState({
+              members,
+              editableIndex: null
+            })
+          } catch (err) {
+            alert(err.message)
+            this.setState({
+              editableIndex: null
+            })
+          }
           ReactDOM.findDOMNode(this.refs.table).focus()
         }}
         html={member[1]}
