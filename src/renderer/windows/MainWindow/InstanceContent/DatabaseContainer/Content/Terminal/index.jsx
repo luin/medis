@@ -40,7 +40,7 @@ class Terminal extends React.PureComponent {
     }, {
       greetings: '',
       exit: false,
-      completion(_, command, callback) {
+      completion(command, callback) {
         const commandName = command.split(' ')[0]
         const lower = commandName.toLowerCase()
         const isUppercase = commandName.toUpperCase() === commandName
