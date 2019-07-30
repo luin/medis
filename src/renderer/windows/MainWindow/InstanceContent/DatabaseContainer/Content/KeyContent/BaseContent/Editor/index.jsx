@@ -20,6 +20,8 @@ require('codemirror/lib/codemirror.css')
 require('codemirror/addon/lint/lint.css')
 const msgpack = require('msgpack5')()
 
+import zlib from 'zlib';
+
 require('./index.scss')
 
 class Editor extends React.PureComponent {
@@ -37,7 +39,8 @@ class Editor extends React.PureComponent {
       modes: {
         raw: false,
         json: false,
-        messagepack: false
+        messagepack: false,
+        gzipjson: false
       }
     }
   }
@@ -81,6 +84,7 @@ class Editor extends React.PureComponent {
     modes.raw = content
     modes.json = tryFormatJSON(content, true)
     modes.messagepack = modes.json ? false : tryFormatMessagepack(buffer, true)
+    modes.gzipjson = modes.json ? false : tryFormatGzipjson(buffer, true)
     let currentMode = 'raw'
     if (modes.messagepack) {
       currentMode = 'messagepack'
@@ -207,6 +211,28 @@ class Editor extends React.PureComponent {
           lint: Boolean(this.state.modes.raw)
         }}
         />)
+    } else if (this.state.currentMode === 'gzipjson') {
+      viewer = (<Codemirror
+        ref="codemirror"
+        key="gzipjson"
+        value={this.state.modes.gzipjson}
+        onChange={this.updateContent.bind(this, 'gzipjson')}
+        options={{
+          mode: {
+            name: 'javascript',
+            json: true
+          },
+          tabSize: 2,
+          indentWithTabs: true,
+          styleActiveLine: true,
+          lineNumbers: true,
+          lineWrapping: this.state.wrapping,
+          gutters: ['CodeMirror-lint-markers'],
+          autoCloseBrackets: true,
+          matchTags: true,
+          lint: Boolean(this.state.modes.raw)
+        }}
+        />)
     } else {
       viewer = <div/>
     }
@@ -235,6 +261,7 @@ class Editor extends React.PureComponent {
           <option value="raw" disabled={typeof this.state.modes.raw !== 'string'}>Raw</option>
           <option value="json" disabled={typeof this.state.modes.json !== 'string'}>JSON</option>
           <option value="messagepack" disabled={typeof this.state.modes.messagepack !== 'string'}>MessagePack</option>
+          <option value="gzipjson" disabled={typeof this.state.modes.gzipjson !== 'string'}>GzippedJSON</option>
         </select>
         <button
           className="nt-button"
@@ -275,6 +302,19 @@ function tryFormatMessagepack(buffer, beautify) {
         return JSON.stringify(o, null, '\t')
       }
       return JSON.stringify(o)
+    }
+  } catch (e) { /**/ }
+
+  return false
+}
+
+function tryFormatGzipjson(buffer, beautify) {
+  try {
+    let o
+
+    if (Buffer.isBuffer(buffer)) {
+      const unzipped = zlib.gunzipSync(buffer);
+      return tryFormatJSON(unzipped, beautify);
     }
   } catch (e) { /**/ }
 
