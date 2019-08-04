@@ -1,4 +1,4 @@
-import {app, Menu, MenuItemConstructorOptions} from 'electron'
+import { app, Menu, MenuItemConstructorOptions, shell } from 'electron'
 import windowManager from './windowManager'
 
 const menuTemplates: MenuItemConstructorOptions[] = [{
@@ -114,12 +114,12 @@ const menuTemplates: MenuItemConstructorOptions[] = [{
   submenu: [{
     label: 'Report an Issue...',
     click() {
-      require('shell').openExternal('mailto:medis@zihua.li')
+      shell.openExternal('mailto:medis@zihua.li')
     }
   }, {
     label: 'Learn More',
     click() {
-      require('shell').openExternal('http://getmedis.com')
+      shell.openExternal('http://getmedis.com')
     }
   }]
 }]
