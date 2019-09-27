@@ -11,6 +11,9 @@ import ReactDOM from 'react-dom'
 import {clipboard, remote} from 'electron'
 
 class HashContent extends BaseContent {
+  constructor() {
+    super()
+  }
   save(value, callback) {
     if (typeof this.state.selectedIndex === 'number') {
       const [key] = this.state.members[this.state.selectedIndex]
@@ -24,7 +27,6 @@ class HashContent extends BaseContent {
       alert('Please wait for data been loaded before saving.')
     }
   }
-
   load(index) {
     if (!super.load(index)) {
       return
@@ -127,8 +129,9 @@ class HashContent extends BaseContent {
     ])
     menu.popup(remote.getCurrentWindow())
   }
-
   render() {
+    const filter = this.state.hasOwnProperty('filtered') && this.state.filtered;
+    const members = filter ? this.state.filtered : this.state.members
     return (<SplitPane
         minSize={80}
         split="vertical"
@@ -143,6 +146,36 @@ class HashContent extends BaseContent {
         ref="table"
         className={'base-content ' + this.randomClass}
         >
+        <input
+          className="form-control"
+          style={{padding: '1px'}}
+          type="text" 
+          onKeyDown={e => {e.stopPropagation();e.nativeEvent.stopImmediatePropagation();}}
+          onChange={e => {
+            e.preventDefault();
+            console.log(e.target.value);
+
+            if(!e.target.value || e.target.value === '') {
+              this.setState({filtered: null, members: this.state.members, length: this.state.members.length})
+              return false;
+            }
+            let search = e.target.value.replace(/[&\/\\#,+()$~%'":*?<>{}\[\]]/g, '').replace(/\./g, '.?').toLowerCase();
+
+            let filtered = [];
+            for(let i in this.state.members) {
+              if(this.state.members[i].toString().toLowerCase().search(search) < 0) {
+                continue;
+              }
+              filtered.push(this.state.members[i]);
+            }
+            if(filtered.length === 0) {
+              filtered
+            }
+            this.setState({filtered: filtered, length: filtered.length})
+            return true;
+          }}
+        />
+  
         <Table
           rowHeight={24}
           rowsCount={this.state.length}
@@ -159,42 +192,45 @@ class HashContent extends BaseContent {
           >
           <Column
             header={
-              <AddButton
-                title="key" onClick={() => {
-                  showModal({
-                    button: 'Insert Member',
-                    form: {
-                      type: 'object',
-                      properties: {
-                        'Key:': {
-                          type: 'string'
+              <div>
+                <AddButton
+                  title="key" onClick={() => {
+                    showModal({
+                      button: 'Insert Member',
+                      form: {
+                        type: 'object',
+                        properties: {
+                          'Key:': {
+                            type: 'string'
+                          }
                         }
                       }
-                    }
-                  }).then(res => {
-                    const data = res['Key:']
-                    const value = 'New Member'
-                    this.props.redis.hsetnx(this.state.keyName, data, value).then(inserted => {
-                      if (!inserted) {
-                        alert('The field already exists')
-                        return
-                      }
-                      this.state.members.push([data, Buffer.from(value)])
-                      this.setState({
-                        members: this.state.members,
-                        length: this.state.length + 1
-                      }, () => {
-                        this.props.onKeyContentChange()
-                        this.handleSelect(null, this.state.members.length - 1)
+                    }).then(res => {
+                      const data = res['Key:']
+                      const value = 'New Member'
+                      this.props.redis.hsetnx(this.state.keyName, data, value).then(inserted => {
+                        if (!inserted) {
+                          alert('The field already exists')
+                          return
+                        }
+                        this.state.members.push([data, Buffer.from(value)])
+                        this.setState({
+                          members: this.state.members,
+                          length: this.state.length + 1
+                        }, () => {
+                          this.props.onKeyContentChange()
+                          this.handleSelect(null, this.state.members.length - 1)
+                        })
                       })
                     })
-                  })
-                }}
-                            />
+                  }}
+                />
+                
+              </div>
             }
             width={this.props.contentBarWidth}
             cell={({rowIndex}) => {
-              const member = this.state.members[rowIndex]
+              const member = members[rowIndex]
               if (!member) {
                 this.load(rowIndex)
                 return 'Loading...'
@@ -203,6 +239,7 @@ class HashContent extends BaseContent {
                 className="ContentEditable overflow-wrapper"
                 enabled={rowIndex === this.state.editableIndex}
                 onChange={target => {
+                  // const filter = this.state.hasOwnProperty('filtered') && this.state.filtered;
                   const members = this.state.members
                   const member = members[rowIndex]
                   const keyName = this.state.keyName
