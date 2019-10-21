@@ -3,6 +3,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Codemirror from 'medis-react-codemirror'
+import PHPSerialize from 'php-serialize'
 require('codemirror/mode/javascript/javascript')
 require('codemirror/addon/lint/json-lint')
 require('codemirror/addon/lint/lint')
@@ -37,7 +38,8 @@ class Editor extends React.PureComponent {
       modes: {
         raw: false,
         json: false,
-        messagepack: false
+        messagepack: false,
+        php: false
       }
     }
   }
@@ -76,16 +78,21 @@ class Editor extends React.PureComponent {
       this.setState({currentMode: '', changed: false})
       return
     }
+
     const content = buffer.toString()
     const modes = {}
     modes.raw = content
     modes.json = tryFormatJSON(content, true)
     modes.messagepack = modes.json ? false : tryFormatMessagepack(buffer, true)
+    modes.php = !PHPSerialize.isSerialized(content) ? false : tryFormatJSON(JSON.stringify(PHPSerialize.unserialize(content)), true)
+
     let currentMode = 'raw'
     if (modes.messagepack) {
       currentMode = 'messagepack'
     } else if (modes.json) {
       currentMode = 'json'
+    } else if (modes.php) {
+      currentMode = 'php'
     }
     this.setState({modes, currentMode, changed: false}, () => {
       this.updateLayout()
@@ -107,6 +114,14 @@ class Editor extends React.PureComponent {
         return
       }
       content = msgpack.encode(JSON.parse(content))
+    } else if (this.state.currentMode === 'php') {
+      content = tryFormatJSON(this.state.modes.php)
+      if (!content) {
+        alert('The json is invalid. Please check again.')
+        return
+      }
+      content = PHPSerialize.serialize(JSON.parse(content))
+      content = content
     }
     this.props.onSave(content, err => {
       if (err) {
@@ -207,6 +222,28 @@ class Editor extends React.PureComponent {
           lint: Boolean(this.state.modes.raw)
         }}
         />)
+    } else if (this.state.currentMode === 'php') {
+      viewer = (<Codemirror
+        ref="codemirror"
+        key="php"
+        value={this.state.modes.php}
+        onChange={this.updateContent.bind(this, 'php')}
+        options={{
+          mode: {
+            name: 'javascript',
+            json: true
+          },
+          tabSize: 2,
+          indentWithTabs: true,
+          styleActiveLine: true,
+          lineNumbers: true,
+          lineWrapping: this.state.wrapping,
+          gutters: ['CodeMirror-lint-markers'],
+          autoCloseBrackets: true,
+          matchTags: true,
+          lint: Boolean(this.state.modes.raw)
+        }}
+        />)
     } else {
       viewer = <div/>
     }
@@ -235,6 +272,7 @@ class Editor extends React.PureComponent {
           <option value="raw" disabled={typeof this.state.modes.raw !== 'string'}>Raw</option>
           <option value="json" disabled={typeof this.state.modes.json !== 'string'}>JSON</option>
           <option value="messagepack" disabled={typeof this.state.modes.messagepack !== 'string'}>MessagePack</option>
+          <option value="php" disabled={typeof this.state.modes.php !== 'string'}>PHP</option>
         </select>
         <button
           className="nt-button"

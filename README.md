@@ -16,7 +16,7 @@ Medis starts with all the basic features you need:
 
 It also supports many advanced features:
 
-* JSON/MessagePack format viewing/editing and built-in highlighting/validator
+* JSON/MessagePack/PHPSerialize format viewing/editing and built-in highlighting/validator
 * Working with millions keys and key members without blocking the redis server
 * Pattern manager for easy selecting a sub group of keys.
 
