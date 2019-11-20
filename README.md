@@ -39,7 +39,7 @@ You can download compiled versions of Medis for Mac OS X from [the release page]
 ```
 2. Compile assets:
 ```
-    $ npm run build
+    $ npm run deploy
 ```
 3. Run with Electron:
 ```
