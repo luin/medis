@@ -11,7 +11,8 @@
     "build": "rm -rf dist && webpack",
     "watch": "WEBPACK_WATCH=true npm run build",
     "start": "electron .",
-    "pack": "NODE_ENV=production npm run build && node bin/pack.js"
+    "pack": "NODE_ENV=production npm run build && node bin/pack.js",
+    "packWin": "set NODE_ENV=production && npm run build && node bin/packWin.js"
   },
   "repository": {
     "type": "git",
