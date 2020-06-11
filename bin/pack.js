@@ -12,7 +12,7 @@ packager({
   overwrite: true,
   electronVersion: pkg.electronVersion,
   icon: path.join(resourcesPath, 'icns', 'MyIcon'),
-  out: path.join(__dirname, '..', 'dist', 'out'),
+  out: path.join(__dirname, '..', 'dist', 'out', 'mas'),
   platform: 'mas',
   appBundleId: `li.zihua.${pkg.name}`,
   appCategoryType: 'public.app-category.developer-tools',
