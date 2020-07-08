@@ -45,6 +45,15 @@ You can download compiled versions of Medis for Mac OS X from [the release page]
 ```
     $ npm start
 ```
+
+## Compiling as Mac application
+
+* After you have compile the asset in step#2 above, quit the process once webpack analyzer graph pops up.
+
+* Then you may compile the binary by issuing `node bin/pack.js`.
+
+* The Packaged App will be available at `dist/out/Medis-mas-x64/Medis.app`
+
 ## Connect to Heroku
 Medis can connect to Heroku Redis addon to manage your data. You just need to call `heroku redis:credentials --app APP` to get your redis credential:
 
