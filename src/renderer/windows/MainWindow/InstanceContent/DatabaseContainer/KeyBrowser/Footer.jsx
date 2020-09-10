@@ -110,6 +110,7 @@ class Footer extends React.Component {
           }}
         >
           {(max => {
+            const items = [];
             for (let i = 0; i < max; i++) {
               let ct = this.keyCountByDb(i);
               let text = i;
