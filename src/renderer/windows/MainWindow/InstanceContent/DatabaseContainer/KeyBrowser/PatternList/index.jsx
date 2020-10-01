@@ -10,7 +10,8 @@ class PatternList extends React.Component {
     super()
     this.state = {
       patternDropdown: false,
-      pattern: props.pattern
+      pattern: props.pattern,
+      patternHistory: []
     }
   }
 
@@ -28,6 +29,21 @@ class PatternList extends React.Component {
     this.props.onChange(value)
   }
 
+  updatePatternHistory(value) {
+    const i = this.state.patternHistory.indexOf(value)
+    if(i != -1)  this.state.patternHistory.splice(index, 1)
+    this.state.patternHistory.unshift(value)
+    this.setState({
+      patternHistory: this.state.patternHistory.slice(0,5)
+    })
+  }
+
+  handleKeyDown(evt) {
+    if (evt.key === 'Enter') {
+      this.updatePatternHistory(evt.target.value)
+    }
+  }
+
   render() {
     return (<div className="pattern-input">
       <span className="icon icon-search"/>
@@ -39,6 +55,7 @@ class PatternList extends React.Component {
         onChange={evt => {
           this.updatePattern(evt.target.value)
         }}
+        onKeyDown={evt => this.handleKeyDown(evt)}
         />
       <span
         className={'js-pattern-dropdown icon icon-down-open' + (this.state.patternDropdown ? ' is-active' : '')}
@@ -52,14 +69,34 @@ class PatternList extends React.Component {
         >
         <ul>
           {
+            this.state.patternHistory.map(pattern => {
+              return (<li
+                  key={pattern}
+                  onClick={() => {
+                    const value = pattern
+                    this.props.onChange(value)
+                    this.setState({patternDropdown: false, pattern: value})
+                    this.updatePatternHistory(value)
+                  }}
+                >{pattern}</li>)
+            })
+          }
+        </ul>
+        { this.props.pattern.length && this.state.patternHistory.length
+            && <div className='list-divider'/>
+            || null
+        }
+        <ul>
+          {
             this.props.patterns.map(pattern => {
               return (<li
-                key={pattern.get('key')} onClick={() => {
-                  const value = pattern.get('value')
-                  this.props.onChange(value)
-                  this.setState({patternDropdown: false, pattern: value})
-                }}
-                                         >{pattern.get('name')}</li>)
+                  key={pattern.get('key')}
+                  onClick={() => {
+                    const value = pattern.get('value')
+                    this.props.onChange(value)
+                    this.setState({patternDropdown: false, pattern: value})
+                  }}
+                >{pattern.get('name')}</li>)
             })
           }
           <li
