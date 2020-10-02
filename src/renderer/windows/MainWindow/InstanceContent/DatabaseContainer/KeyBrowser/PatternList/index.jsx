@@ -33,7 +33,7 @@ class PatternList extends React.Component {
   updatePatternHistory(value) {
     let history = this.state.patternHistory
     const i = history.indexOf(value)
-    if(i != -1)  history = history.remove(index)
+    if(i != -1)  history = history.remove(i)
     history = history.unshift(value)
     this.setState({
       patternHistory: history.slice(0,5)
