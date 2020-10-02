@@ -2,6 +2,7 @@
 
 import React from 'react'
 import {ipcRenderer} from 'electron'
+import {List} from "immutable"
 
 require('./index.scss')
 
@@ -11,7 +12,7 @@ class PatternList extends React.Component {
     this.state = {
       patternDropdown: false,
       pattern: props.pattern,
-      patternHistory: []
+      patternHistory: new List()
     }
   }
 
@@ -30,11 +31,12 @@ class PatternList extends React.Component {
   }
 
   updatePatternHistory(value) {
-    const i = this.state.patternHistory.indexOf(value)
-    if(i != -1)  this.state.patternHistory.splice(index, 1)
-    this.state.patternHistory.unshift(value)
+    let history = this.state.patternHistory
+    const i = history.indexOf(value)
+    if(i != -1)  history = history.remove(index)
+    history = history.unshift(value)
     this.setState({
-      patternHistory: this.state.patternHistory.slice(0,5)
+      patternHistory: history.slice(0,5)
     })
   }
 
@@ -67,6 +69,10 @@ class PatternList extends React.Component {
         className={'js-pattern-dropdown pattern-dropdown' + (this.state.patternDropdown ? ' is-active' : '')}
         style={{maxHeight: this.props.height}}
         >
+        {(this.props.patterns.size && this.state.patternHistory.size
+          ? <div className='list-header'>Recent</div>
+          : null
+        )}
         <ul>
           {
             this.state.patternHistory.map(pattern => {
@@ -82,10 +88,10 @@ class PatternList extends React.Component {
             })
           }
         </ul>
-        { this.props.pattern.length && this.state.patternHistory.length
-            && <div className='list-divider'/>
-            || null
-        }
+        {(this.props.patterns.size && this.state.patternHistory.size
+          ? <div className='list-header'>Saved</div>
+          : null
+        )}
         <ul>
           {
             this.props.patterns.map(pattern => {
