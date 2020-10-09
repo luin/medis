@@ -22,7 +22,7 @@
     "electron-context-menu": "^0.12.1",
     "fixed-data-table-contextmenu": "^1.7.2",
     "ioredis": "^4.9.3",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.1",
     "jquery.terminal": "^2.5.1",
     "lodash.escape": "^4.0.1",
     "lodash.sortedindexby": "^4.6.0",
@@ -61,7 +61,7 @@
     "mini-css-extract-plugin": "^0.6.0",
     "minimatch": "^3.0.4",
     "msgpack5": "^4.2.1",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-addons-css-transition-group": "^15.5.2",
@@ -80,6 +80,6 @@
     "url-loader": "^1.1.2",
     "webpack": "^4.31.0",
     "webpack-bundle-analyzer": "^3.3.2",
-    "webpack-cli": "^3.3.2"
+    "webpack-cli": "^3.3.12"
   }
 }
