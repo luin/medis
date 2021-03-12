@@ -22,6 +22,18 @@ It also supports many advanced features:
 
 **Note**: Medis only supports Redis >= 2.8 version because `SCAN` command was introduced since 2.8. `SCAN` is very useful to get key list without blocking the server, which is crucial to the production environment. Because the latest stable is 5.0 and 2.6 is a very old version, Medis doesn't support it.
 
+<hr />
+
+### [AD] Dockface: Everything on a Dock icon
+
+We just launched a macOS app - Dockface. It displays information from your system and the Internet in style on the Dock. Now it supports system usages, weather, crypto prices, notes, and albums. We'll keep adding more, so feel free to suggest anything!
+
+[Download from App Store for free!](https://apps.apple.com/cn/app/dockface/id1557416396?l=en&mt=12)
+
+<a href="https://apps.apple.com/cn/app/dockface/id1557416396?l=en&mt=12"><img align="center" width="520" src="resources/dockface.png" alt="Download on the App Store"></a>
+
+<hr />
+
 ## Download Medis on Windows
 
 You can download compiled installer of Medis for Windows from the below page
