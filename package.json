@@ -38,6 +38,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
+    "@electron/universal": "^1.0.4",
     "@types/jquery": "^3.3.29",
     "@types/react": "^16.8.17",
     "@types/react-dom": "^16.8.4",
