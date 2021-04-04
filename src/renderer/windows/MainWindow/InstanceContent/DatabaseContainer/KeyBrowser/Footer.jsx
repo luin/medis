@@ -117,7 +117,7 @@ class Footer extends React.Component {
                 </option>
               );
             });
-          })(this.state.databases || 1)}
+          })(parseInt(this.state.databases) || 1)}
         </select>
       </div>
     </footer>)
