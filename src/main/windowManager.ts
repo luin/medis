@@ -19,7 +19,8 @@ class WindowManager extends EventEmitter {
     const option: BrowserWindowConstructorOptions = {
       backgroundColor: '#ececec',
       webPreferences: {
-        nodeIntegration: true
+        nodeIntegration: true,
+        enableRemoteModule: true
       }
     }
     if (type === 'main') {
