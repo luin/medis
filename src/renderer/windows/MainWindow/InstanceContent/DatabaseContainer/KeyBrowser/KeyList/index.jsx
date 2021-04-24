@@ -145,6 +145,7 @@ class KeyList extends React.Component {
           }
           cursor = newCursor
 
+          // Sort hash fields by key
           let newKeys=this.state.keys.concat(keys)
           newKeys.sort((a,b)=>{
             if (a[0]<b[0]) {
