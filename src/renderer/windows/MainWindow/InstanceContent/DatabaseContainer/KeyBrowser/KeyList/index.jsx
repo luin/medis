@@ -7,6 +7,9 @@ import ContentEditable from '../../ContentEditable'
 import AddButton from '../../AddButton'
 import zip from 'lodash.zip'
 import {clipboard, remote} from 'electron'
+
+import emitter from "../../../../../../../main/ev"
+
 require('./index.scss')
 
 class KeyList extends React.Component {
@@ -14,7 +17,9 @@ class KeyList extends React.Component {
     keys: [],
     selectedKey: null,
     sidebarWidth: 300,
-    cursor: '0'
+    cursor: '0',
+    isSelectedAllRows:false,
+    selectedKeys:[],
   }
 
   randomClass = 'pattern-table-' + (Math.random() * 100000 | 0)
@@ -22,10 +27,13 @@ class KeyList extends React.Component {
   refresh(firstTime) {
     this.setState({
       cursor: '0',
-      keys: []
+      keys: [],
+      isSelectedAllRows:false,
+      selectedKeys:[],
     }, () => {
       this.handleSelect()
       this.scan(firstTime)
+      emitter.emit("updateDBCount")
     })
   }
 
@@ -137,10 +145,20 @@ class KeyList extends React.Component {
           }
           cursor = newCursor
 
+          let newKeys=this.state.keys.concat(keys)
+          newKeys.sort((a,b)=>{
+            if (a[0]<b[0]) {
+              return -1;
+            } else if (a[0]>b[0]) {
+              return 1;
+            } else {
+              return 0;
+            }
+          })
           if (needContinue) {
             this.setState({
               cursor,
-              keys: this.state.keys.concat(keys)
+              keys: newKeys
             }, () => {
               iter.call(this, count < 10 ? 5000 : (count < 50 ? 2000 : 1000), times + 1)
               if (typeof this.index !== 'number') {
@@ -151,7 +169,7 @@ class KeyList extends React.Component {
             this.setState({
               cursor,
               scanning: false,
-              keys: this.state.keys.concat(keys)
+              keys: newKeys
             }, () => {
               this.scanning = false
               if (typeof this.index !== 'number') {
@@ -181,7 +199,35 @@ class KeyList extends React.Component {
       this.props.onSelect(null)
     }
   }
+  deleteAllKeys() {
+    showModal({
+      title: 'Delete all keys?',
+      button: 'Delete',
+      content: 'Are you sure you want to delete all the keys? This action cannot be undone.'
+    }).then(() => {
+      let keys = this.state.keys
+      keys.forEach(key=>{
+        this.props.redis.del(key[0])
+      })
+      this.refresh()
+    }).catch(() => {})
+  }
+  deleteSelectedKeys() {
+    showModal({
+      title: 'Delete selected keys?',
+      button: 'Delete',
+      content: 'Are you sure you want to delete the selected keys? This action cannot be undone.'
+    }).then(() => {
+      let keys = this.state.keys
+      keys.forEach((key,i)=>{
+        if(this.state.selectedKeys[i]){
+          this.props.redis.del(this.state.selectedKeys[i][0])
+        }
+      })
+      this.refresh()
 
+    }).catch(() => {})
+  }
   deleteSelectedKey() {
     if (typeof this.index !== 'number') {
       return
@@ -357,11 +403,56 @@ class KeyList extends React.Component {
         click: () => {
           this.deleteSelectedKey()
         }
+      },
+      {
+        label: 'Delete Selected',
+        click: () => {
+          this.deleteSelectedKeys()
+        }
+      },
+      {
+        label: 'Delete All',
+        click: () => {
+          this.deleteAllKeys()
+        }
       }
     ])
     menu.popup(remote.getCurrentWindow())
   }
+  selectAllRows(isSelectedAllRows){
+    this.setState({isSelectedAllRows:isSelectedAllRows})
+    if(isSelectedAllRows){
+      this.setState({selectedKeys:this.state.keys})
+    }else{
+      this.setState({selectedKeys:[]})
+    }
+    this.forceUpdate(()=>{
+    })
+  }
 
+  selectRow(isSelected,rowIndex){
+    const item = this.state.keys[rowIndex]
+    let selectedKeys=JSON.parse(JSON.stringify(this.state.selectedKeys))
+    if(isSelected){
+      selectedKeys[rowIndex]=this.state.keys[rowIndex]
+        let isSelectedAllRows=true
+        this.state.keys.forEach((d,i)=> {
+          if (!selectedKeys[i]) {
+            isSelectedAllRows = false
+          }
+        })
+      this.setState({isSelectedAllRows:isSelectedAllRows})
+    }else{
+      selectedKeys[rowIndex]=null
+      this.setState({isSelectedAllRows:false})
+    }
+    this.setState({selectedKeys:selectedKeys})
+    // this.index = null
+    // this.setState({selectedKey: null, editableKey: null})
+    // this.props.onSelect(null)
+    this.forceUpdate(()=>{
+    })
+  }
   render() {
     return (<div
       tabIndex="0"
@@ -395,6 +486,36 @@ class KeyList extends React.Component {
         height={this.props.height}
         headerHeight={24}
         >
+        <Column
+          header={() => {
+            return <input
+              type={'checkbox'}
+              onClick={e => {e.stopPropagation()}}
+              onDoubleClick={e => {e.stopPropagation()}}
+              onChange={(e) => {
+                this.selectAllRows(e.target.checked)
+              }}
+              checked={this.state.isSelectedAllRows}
+            ></input>
+          }}
+          width={20}
+          cell={({rowIndex}) => {
+            const item = this.state.keys[rowIndex]
+            if (!item) {
+              return ''
+            }
+
+            return <input
+              type={'checkbox'}
+              onClick={e => {e.stopPropagation()}}
+              onDoubleClick={e => {e.stopPropagation()}}
+              onChange={(e) => {
+                this.selectRow(e.target.checked, rowIndex)
+              }}
+              checked={!!this.state.selectedKeys[rowIndex]}
+            ></input>
+          }}
+        />
         <Column
           header="type"
           width={40}
@@ -451,7 +572,7 @@ class KeyList extends React.Component {
               }}
                  />
           }
-          width={this.props.width - 40}
+          width={this.props.width - 60}
           cell={({rowIndex}) => {
             const item = this.state.keys[rowIndex]
             let cellData
