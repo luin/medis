@@ -74,6 +74,13 @@ And then input `HOST`, `PORT` and `PASSWORD` to the connection tab.
 * Contribute Code! We're developers! (See Roadmap below)
 * Medis is available on the Mac App Store as a paid software. I'll be very grateful if you'd like to buy it to encourage me to continue maintaining Medis. There are no additional features comparing with the open-sourced version, except the fact that you can enjoy auto updating that brought by the Mac App Store. <br> [![Download on the App Store](http://getmedis.com/download.svg)](https://itunes.apple.com/app/medis-gui-for-redis/id1063631769)
 
+
+## electron-builder
+
+npx electron-builder --mac --x64
+npx electron-builder --linux --x64
+npx electron-builder --win --x64
+
 ## Roadmap
 
 * Windows and Linux version (with electron-packager)
