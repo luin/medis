@@ -77,10 +77,11 @@ And then input `HOST`, `PORT` and `PASSWORD` to the connection tab.
 
 ## electron-builder
 
+```
 npx electron-builder --mac --x64
 npx electron-builder --linux --x64
 npx electron-builder --win --x64
-
+```
 ## Roadmap
 
 * Windows and Linux version (with electron-packager)
