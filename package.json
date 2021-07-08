@@ -2,8 +2,8 @@
   "name": "medis",
   "description": "GUI for Redis",
   "productName": "Medis",
-  "version": "1.0.3",
-  "electronVersion": "4.0.0",
+  "version": "1.0.4",
+  "electronVersion": "11.4.1",
   "license": "MIT",
   "author": "luin <i@zihua.li> (http://zihua.li)",
   "main": ".webpack/main",
@@ -25,7 +25,7 @@
     "xterm": "^3.13.1"
   },
   "devDependencies": {
-    "electron": "^4.2.2",
+    "electron": "^11.4.1",
     "electron-context-menu": "^0.12.1",
     "fixed-data-table-contextmenu": "^1.7.2",
     "jquery": "^3.4.1",

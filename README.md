@@ -77,10 +77,18 @@ And then input `HOST`, `PORT` and `PASSWORD` to the connection tab.
 
 ## electron-builder
 
+Switch node to v14
 ```
+yarn install
+yarn run build
 npx electron-builder --mac --x64
 npx electron-builder --linux --x64
 npx electron-builder --win --x64
+```
+
+Switch node to v16
+```
+npx electron-builder --mac --arm64
 ```
 ## Roadmap
 
