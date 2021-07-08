@@ -4,3 +4,4 @@ dist
 npm-debug.log
 *.provisionprofile
 .awcache
+appSign.js
