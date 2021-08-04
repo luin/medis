@@ -1,6 +1,18 @@
 # Medis
 
+### Notice: We just released Medis 2! 🚀🚀🚀
+
+Compared to Medis (this repo), Medis 2 provides more delightful features, such as **tree view** (yes, finally!), streams, alert mode, **dark mode**, and more. Besides that, Medis 2 is rewritten from the beginning with native technology, making it more morden, beautiful, and fast!
+
+What's more, **Medis 2 is free 💰 to download**! Don't hesitate, download it from the App Store now and try it out!
+
+[![Download on the App Store](http://getmedis.com/download.svg)](https://apps.apple.com/us/app/medis-2-gui-for-redis/id1579200037?mt=12)
+
+*(or searching "Medis 2" on macOS App Store if the above link doesn't work for you.)*
+
 ![Medis](http://getmedis.com/screen.png)
+
+------
 
 Medis is a beautiful, easy-to-use Redis management application built on the modern web with [Electron](https://github.com/atom/electron), [React](https://facebook.github.io/react/), and [Redux](https://github.com/rackt/redux). It's powered by many awesome Node.js modules, especially [ioredis](https://github.com/luin/ioredis) and [ssh2](https://github.com/mscdex/ssh2).
 
@@ -22,15 +34,6 @@ It also supports many advanced features:
 
 **Note**: Medis only supports Redis >= 2.8 version because `SCAN` command was introduced since 2.8. `SCAN` is very useful to get key list without blocking the server, which is crucial to the production environment. Because the latest stable is 5.0 and 2.6 is a very old version, Medis doesn't support it.
 
-<hr />
-
-### [AD] Dockface: Everything on a Dock icon
-
-We just launched a macOS app - Dockface. It displays information from your system and the Internet in style on the Dock. Now it supports system usages, weather, crypto prices, notes, and albums. We'll keep adding more, so feel free to suggest anything!
-
-[Download from App Store for free!](https://apps.apple.com/cn/app/dockface/id1557416396?l=en&mt=12)
-
-<a href="https://apps.apple.com/cn/app/dockface/id1557416396?l=en&mt=12"><img align="center" width="520" src="resources/dockface.png" alt="Download on the App Store"></a>
 
 <hr />
 
@@ -72,7 +75,7 @@ And then input `HOST`, `PORT` and `PASSWORD` to the connection tab.
 * Simply star this repository :-)
 * Help us spread the world on Facebook and Twitter
 * Contribute Code! We're developers! (See Roadmap below)
-* Medis is available on the Mac App Store as a paid software. I'll be very grateful if you'd like to buy it to encourage me to continue maintaining Medis. There are no additional features comparing with the open-sourced version, except the fact that you can enjoy auto updating that brought by the Mac App Store. <br> [![Download on the App Store](http://getmedis.com/download.svg)](https://itunes.apple.com/app/medis-gui-for-redis/id1063631769)
+* Medis is available on the Mac App Store as a paid software. I'll be very grateful if you'd like to buy it to encourage me to continue maintaining Medis. There are no additional features comparing with the open-sourced version, except the fact that you can enjoy auto updating that brought by the Mac App Store. <br> [![Download on the App Store](http://getmedis.com/download.svg)](https://apps.apple.com/us/app/medis-2-gui-for-redis/id1579200037?mt=12)
 
 ## Roadmap
 
