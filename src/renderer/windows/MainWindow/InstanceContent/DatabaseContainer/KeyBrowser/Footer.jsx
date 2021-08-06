@@ -1,6 +1,7 @@
 'use strict'
 
-import React from 'react'
+import React   from 'react'
+import emitter from "../../../../../../main/ev";
 
 class Footer extends React.Component {
   constructor() {
@@ -12,6 +13,10 @@ class Footer extends React.Component {
     this.updateInfo()
     this.updateDBCount()
     this.interval = setInterval(this.updateInfo.bind(this), 10000)
+    this.eventEmitter = emitter.addListener("updateDBCount",()=>{
+      this.updateInfo()
+      this.updateDBCount()
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -73,6 +78,11 @@ class Footer extends React.Component {
   componentWillUnmount() {
     clearInterval(this.interval)
     this.interval = null
+    this.eventEmitter = emitter.removeListener("updateDBCount",()=>{
+      this.updateInfo()
+      this.updateDBCount()
+    })
+
   }
 
   handleChange(evt) {
@@ -106,7 +116,10 @@ class Footer extends React.Component {
             marginRight: 2,
             marginLeft: 3,
             fontSize: 10,
-            float: 'right'
+            float: 'right',
+            padding: '0 0 1px 2px',
+            minHeight: 17,
+            height: 17
           }}
         >
           {(max => {

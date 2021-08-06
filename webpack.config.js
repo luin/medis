@@ -10,7 +10,7 @@ const webpack = require('webpack')
 const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development'
 const watch = process.env.WEBPACK_WATCH === 'true'
 
-const distPath = resolve(__dirname, 'dist')
+const distPath = resolve(__dirname, '.webpack')
 
 const base = {
   mode, watch,
@@ -109,6 +109,9 @@ const main = Object.assign({}, base, {
   }),
   entry: {
     index: resolve(__dirname, 'src/main/index.ts')
+  },
+  devServer: {
+    open: false
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx']
