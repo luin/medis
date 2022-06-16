@@ -18,7 +18,7 @@
     "url": "git://github.com/luin/medis.git"
   },
   "dependencies": {
-    "electron": "^4.2.2",
+    "electron": "^15.5.5",
     "electron-context-menu": "^0.12.1",
     "fixed-data-table-contextmenu": "^1.7.2",
     "ioredis": "^4.9.3",
