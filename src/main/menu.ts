@@ -57,7 +57,7 @@ const menuTemplates: MenuItemConstructorOptions[] = [{
   }, {
     label: 'Select All',
     accelerator: 'CmdOrCtrl+A',
-    role: 'selectall'
+    role: 'selectAll'
   }]
 }, {
   label: 'View',
@@ -147,7 +147,7 @@ if (process.platform == 'darwin') {
     }, {
       label: 'Hide Others',
       accelerator: 'Command+Shift+H',
-      role: 'hideothers'
+      role: 'hideOthers'
     }, {
       label: 'Show All',
       role: 'unhide'
