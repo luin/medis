@@ -15,7 +15,7 @@ class HashContent extends BaseContent {
     if (typeof this.state.selectedIndex === 'number') {
       const [key] = this.state.members[this.state.selectedIndex]
       this.state.members[this.state.selectedIndex][1] = Buffer.from(value)
-      this.setState({members: this.state.members})
+      this.setState({members: sortByKey(this.state.members)})
       this.props.redis.hset(this.state.keyName, key, value, (err, res) => {
         this.props.onKeyContentChange()
         callback(err, res)
@@ -35,7 +35,7 @@ class HashContent extends BaseContent {
         this.state.members.push([result[i].toString(), result[i + 1]])
       }
       this.cursor = cursor
-      this.setState({members: this.state.members}, () => {
+      this.setState({members: sortByKey(this.state.members)}, () => {
         if (typeof this.state.selectedIndex !== 'number' && this.state.members.length) {
           this.handleSelect(null, 0)
         }
@@ -181,7 +181,7 @@ class HashContent extends BaseContent {
                       }
                       this.state.members.push([data, Buffer.from(value)])
                       this.setState({
-                        members: this.state.members,
+                        members: sortByKey(this.state.members),
                         length: this.state.length + 1
                       }, () => {
                         this.props.onKeyContentChange()
@@ -251,6 +251,10 @@ class HashContent extends BaseContent {
         />
     </SplitPane>)
   }
+}
+
+function sortByKey(members) {
+  return members.sort(([k1], [k2]) => (k1 > k2 && 1) || (k1 < k2 && -1) || 0);
 }
 
 export default HashContent
