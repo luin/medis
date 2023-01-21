@@ -3,6 +3,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Codemirror from 'medis-react-codemirror'
+import zlib from 'zlib'
 require('codemirror/mode/javascript/javascript')
 require('codemirror/addon/lint/json-lint')
 require('codemirror/addon/lint/lint')
@@ -37,8 +38,10 @@ class Editor extends React.PureComponent {
       modes: {
         raw: false,
         json: false,
-        messagepack: false
-      }
+        messagepack: false,
+        zlib: false,
+        zlibmsgpack: false,
+      },
     }
   }
 
@@ -81,9 +84,18 @@ class Editor extends React.PureComponent {
     modes.raw = content
     modes.json = tryFormatJSON(content, true)
     modes.messagepack = modes.json ? false : tryFormatMessagepack(buffer, true)
+    modes.zlibmsgpack = modes.json
+      ? false
+      : tryFormatZlibMessagepack(buffer, true)
+    modes.zlib = modes.zlibmsgpack ? false : tryFormatZlib(buffer, true)
+
     let currentMode = 'raw'
     if (modes.messagepack) {
       currentMode = 'messagepack'
+    } else if (modes.zlibmsgpack) {
+      currentMode = 'zlibmsgpack'
+    } else if (modes.zlib) {
+      currentMode = 'zlib'
     } else if (modes.json) {
       currentMode = 'json'
     }
@@ -107,8 +119,22 @@ class Editor extends React.PureComponent {
         return
       }
       content = msgpack.encode(JSON.parse(content))
+    } else if (this.state.currentMode === 'zlib') {
+      content = tryFormatZlib(this.state.modes.zlib)
+      if (!content) {
+        alert('The json is invalid. Please check again.')
+        return
+      }
+      content = zlib.deflateSync(content)
+    } else if (this.state.currentMode === 'zlibmsgpack') {
+      content = tryFormatZlibMessagepack(this.state.modes.zlibmsgpack)
+      if (!content) {
+        alert('The json is invalid. Please check again.')
+        return
+      }
+      content = zlib.deflateSync(msgpack.encode(JSON.parse(content)))
     }
-    this.props.onSave(content, err => {
+    this.props.onSave(content, (err) => {
       if (err) {
         alert(`Redis save failed: ${err.message}`)
       } else {
@@ -156,9 +182,9 @@ class Editor extends React.PureComponent {
         value={this.state.modes.raw}
         onChange={this.updateContent.bind(this, 'raw')}
         options={{
-          mode: 'none',
-          styleActiveLine: true,
-          lineWrapping: this.state.wrapping,
+            mode: 'none',
+            styleActiveLine: true,
+            lineWrapping: this.state.wrapping,
           gutters: ['CodeMirror-lint-markers'],
           lineNumbers: true
         }}
@@ -176,36 +202,84 @@ class Editor extends React.PureComponent {
           },
           tabSize: 2,
           indentWithTabs: true,
-          styleActiveLine: true,
-          lineNumbers: true,
-          lineWrapping: this.state.wrapping,
-          gutters: ['CodeMirror-lint-markers'],
-          autoCloseBrackets: true,
-          matchTags: true,
+            styleActiveLine: true,
+            lineNumbers: true,
+            lineWrapping: this.state.wrapping,
+            gutters: ['CodeMirror-lint-markers'],
+            autoCloseBrackets: true,
+            matchTags: true,
           lint: Boolean(this.state.modes.raw)
-        }}
+          }}
         />)
     } else if (this.state.currentMode === 'messagepack') {
       viewer = (<Codemirror
         ref="codemirror"
         key="messagepack"
-        value={this.state.modes.messagepack}
-        onChange={this.updateContent.bind(this, 'messagepack')}
-        options={{
-          mode: {
-            name: 'javascript',
-            json: true
-          },
-          tabSize: 2,
-          indentWithTabs: true,
-          styleActiveLine: true,
-          lineNumbers: true,
-          lineWrapping: this.state.wrapping,
-          gutters: ['CodeMirror-lint-markers'],
-          autoCloseBrackets: true,
-          matchTags: true,
+          value={this.state.modes.messagepack}
+          onChange={this.updateContent.bind(this, 'messagepack')}
+          options={{
+            mode: {
+              name: 'javascript',
+              json: true,
+            },
+            tabSize: 2,
+            indentWithTabs: true,
+            styleActiveLine: true,
+            lineNumbers: true,
+            lineWrapping: this.state.wrapping,
+            gutters: ['CodeMirror-lint-markers'],
+            autoCloseBrackets: true,
+            matchTags: true,
+            lint: Boolean(this.state.modes.raw),
+          }}
+        />
+      )
+    } else if (this.state.currentMode === 'zlibmsgpack') {
+      viewer = (
+        <Codemirror
+          ref='codemirror'
+          key='zlibmsgpack'
+          value={this.state.modes.zlibmsgpack}
+          onChange={this.updateContent.bind(this, 'zlibmsgpack')}
+          options={{
+            mode: {
+              name: 'javascript',
+              json: true,
+            },
+            tabSize: 2,
+            indentWithTabs: true,
+            styleActiveLine: true,
+            lineNumbers: true,
+            lineWrapping: this.state.wrapping,
+            gutters: ['CodeMirror-lint-markers'],
+            autoCloseBrackets: true,
+            matchTags: true,
+            lint: Boolean(this.state.modes.raw),
+          }}
+        />
+      )
+    } else if (this.state.currentMode === 'zlib') {
+      viewer = (
+        <Codemirror
+          ref='codemirror'
+          key='zlib'
+          value={this.state.modes.zlib}
+          onChange={this.updateContent.bind(this, 'zlib')}
+          options={{
+            mode: {
+              name: 'javascript',
+              json: true,
+            },
+            tabSize: 2,
+            indentWithTabs: true,
+            styleActiveLine: true,
+            lineNumbers: true,
+            lineWrapping: this.state.wrapping,
+            gutters: ['CodeMirror-lint-markers'],
+            autoCloseBrackets: true,
+            matchTags: true,
           lint: Boolean(this.state.modes.raw)
-        }}
+          }}
         />)
     } else {
       viewer = <div/>
@@ -227,21 +301,48 @@ class Editor extends React.PureComponent {
             />
           <span>Wrapping</span>
         </label>
-        <select
+          <select
           className="mode-selector"
-          value={this.state.currentMode}
-          onChange={this.updateMode.bind(this)}
+            value={this.state.currentMode}
+            onChange={this.updateMode.bind(this)}
           >
-          <option value="raw" disabled={typeof this.state.modes.raw !== 'string'}>Raw</option>
-          <option value="json" disabled={typeof this.state.modes.json !== 'string'}>JSON</option>
-          <option value="messagepack" disabled={typeof this.state.modes.messagepack !== 'string'}>MessagePack</option>
-        </select>
-        <button
+            <option
+              value='raw'
+              disabled={typeof this.state.modes.raw !== 'string'}
+            >
+              Raw
+            </option>
+            <option
+              value='json'
+              disabled={typeof this.state.modes.json !== 'string'}
+            >
+              JSON
+            </option>
+            <option
+              value='messagepack'
+              disabled={typeof this.state.modes.messagepack !== 'string'}
+            >
+              MessagePack
+            </option>
+            <option
+              value='zlib'
+              disabled={typeof this.state.modes.zlib !== 'string'}
+            >
+              zlib
+            </option>
+            <option
+              value='zlibmsgpack'
+              disabled={typeof this.state.modes.zlibmsgpack !== 'string'}
+            >
+              ZlibMessagePack
+            </option>
+          </select>
+          <button
           className="nt-button"
-          disabled={!this.state.changed}
-          onClick={this.save.bind(this)}
+            disabled={!this.state.changed}
+            onClick={this.save.bind(this)}
           >Save Changes</button>
-      </div>
+        </div>
     </div>)
   }
 }
@@ -277,6 +378,50 @@ function tryFormatMessagepack(buffer, beautify) {
       return JSON.stringify(o)
     }
   } catch (e) { /**/ }
+
+  return false
+}
+
+function tryFormatZlibMessagepack(buffer, beautify) {
+  try {
+    let o
+    if (typeof buffer === 'string') {
+      o = JSON.parse(buffer)
+    } else {
+      let msgData = zlib.unzipSync(buffer)
+      o = msgpack.decode(msgData)
+    }
+    if (o && typeof o === 'object' && o !== null) {
+      if (beautify) {
+        return JSON.stringify(o, null, '\t')
+      }
+      return JSON.stringify(o)
+    }
+  } catch (e) {
+    /**/
+  }
+
+  return false
+}
+
+function tryFormatZlib(buffer, beautify) {
+  try {
+    let o
+    if (typeof buffer === 'string') {
+      o = JSON.parse(buffer)
+    } else {
+      const uncompressed = zlib.unzipSync(buffer).toString()
+      o = JSON.parse(uncompressed)
+    }
+    if (o && typeof o === 'object' && o !== null) {
+      if (beautify) {
+        return JSON.stringify(o, null, '\t')
+      }
+      return JSON.stringify(o)
+    }
+  } catch (e) {
+    /**/
+  }
 
   return false
 }
