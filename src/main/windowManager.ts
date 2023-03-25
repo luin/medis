@@ -23,8 +23,8 @@ class WindowManager extends EventEmitter {
       }
     }
     if (type === 'main') {
-      option.width = 960
-      option.height = 600
+      option.width = 2560
+      option.height = 1440
       option.show = false
       option.minWidth = 840
       option.minHeight = 400
