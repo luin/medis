@@ -39,7 +39,7 @@ class KeyContent extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    contentBarWidth: state.sizes.get('contentBarWidth') || 200,
+    contentBarWidth: state.sizes.get('contentBarWidth') || 400,
     scoreBarWidth: state.sizes.get('scoreBarWidth') || 60,
     indexBarWidth: state.sizes.get('indexBarWidth') || 60
   }

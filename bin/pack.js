@@ -23,7 +23,6 @@ packager({
   }
 }).then((res) => {
   const app = path.join(res[0], `${pkg.productName}.app`)
-  console.log('flating...', app)
   flat({ app }, function done (err) {
     if (err) {
       throw err

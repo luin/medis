@@ -13,7 +13,7 @@ class Database extends React.PureComponent {
     this.$window = $(window)
 
     this.state = {
-      sidebarWidth: 260,
+      sidebarWidth: 660,
       key: null,
       db: 0,
       version: 0,
@@ -48,7 +48,7 @@ class Database extends React.PureComponent {
       className="pane-group"
       split="vertical"
       minSize={250}
-      defaultSize={260}
+      defaultSize={660}
       ref="node"
       onChange={size => {
         this.setState({sidebarWidth: size})
