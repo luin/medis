@@ -97,6 +97,15 @@ const menuTemplates: MenuItemConstructorOptions[] = [{
     }
   }]
 }, {
+  label: 'Language',
+  submenu: [{
+    label: 'Chinese',
+    role: ''
+  }, {
+    label: 'English',
+    role: ''
+  }]
+},{
   label: 'Window',
   role: 'window',
   submenu: [{
