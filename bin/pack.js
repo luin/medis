@@ -5,7 +5,7 @@ const flat = require('electron-osx-sign').flat
 
 const resourcesPath = path.join(__dirname, '..', 'resources')
 
-console.log(pkg)
+// console.log(pkg)
 
 packager({
   dir: path.join(__dirname, '..'),

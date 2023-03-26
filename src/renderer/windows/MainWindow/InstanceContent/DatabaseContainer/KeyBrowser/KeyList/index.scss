@@ -26,6 +26,7 @@
   text-align: center;
   background: #60d4ca;
   color: #fff;
+  border-radius: 3px;
 
   &.str { background: #5dc936; }
   &.list { background: #fca32a; }
@@ -52,12 +53,14 @@
 }
 
 .public_fixedDataTableRow_main {
-  color: #606061;
+  //color: #fff;
 }
 
+.public_fixedDataTableRow_highlighted.is-selected,
+.public_fixedDataTableRow_highlighted.is-selected .public_fixedDataTableCell_main,
 :focus .public_fixedDataTableRow_main.is-selected {
-  background: #116cd6;
-  color: #fff;
+  background: #0a9363;
+  color: #fff!important;
 
   .public_fixedDataTableCell_main {
     background: transparent;
@@ -65,7 +68,7 @@
 }
 
 .public_fixedDataTableRow_main.is-selected {
-  background: #dcdcdc;
+  //background: #dcdcdc;
 
   .public_fixedDataTableCell_main {
     background: transparent;
@@ -82,5 +85,5 @@
   border-bottom: none;
 }
 input[type=checkbox], input[type=radio]{
-  margin: 5px 0 0;
+  margin: 6px 0 0;
 }

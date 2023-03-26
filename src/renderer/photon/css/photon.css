@@ -499,11 +499,11 @@ h6 {
 
 .toolbar {
   min-height: 22px;
-  box-shadow: inset 0 1px 0 #f5f4f5;
-  background-color: #e8e6e8;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e8e6e8), color-stop(100%, #d1cfd1));
-  background-image: -webkit-linear-gradient(top, #e8e6e8 0%, #d1cfd1 100%);
-  background-image: linear-gradient(to bottom, #e8e6e8 0%, #d1cfd1 100%);
+  /* box-shadow: inset 0 1px 0 #f5f4f5; */
+  background-color: #000;
+  /* background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e8e6e8), color-stop(100%, #d1cfd1)); */
+  /* background-image: -webkit-linear-gradient(top, #e8e6e8 0%, #d1cfd1 100%); */
+  /* background-image: linear-gradient(to bottom, #e8e6e8 0%, #d1cfd1 100%); */
 }
 .toolbar:before, .toolbar:after {
   display: table;
@@ -595,8 +595,8 @@ input[type="checkbox"] {
   padding: 5px 10px;
   font-size: 13px;
   line-height: 1.6;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: #000;
+  border: 1px solid #333;
   border-radius: 4px;
   outline: none;
 }
@@ -656,7 +656,8 @@ textarea {
   position: relative;
   overflow-y: auto;
   flex: 1;
-  border-left: 1px solid #ddd;
+  border-left: 1px solid #333;
+  color: #fff
 }
 .pane:first-child {
   border-left: 0;
@@ -747,14 +748,14 @@ img {
 .nav-group-item {
   padding: 2px 10px 2px 25px;
   display: block;
-  color: #333;
+  color: #fff;
   text-decoration: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .nav-group-item:active, .nav-group-item.active {
-  background-color: #dcdfe1;
+  background-color: #10121D;
 }
 .nav-group-item .icon {
   width: 19px;
@@ -2280,19 +2281,20 @@ td:last-child {
   font-size: 12px;
   text-align: center;
   border-left: 1px solid #989698;
-  background-color: #b8b6b8;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #b8b6b8), color-stop(100%, #b0aeb0));
-  background-image: -webkit-linear-gradient(top, #b8b6b8 0%, #b0aeb0 100%);
-  background-image: linear-gradient(to bottom, #b8b6b8 0%, #b0aeb0 100%);
+  background-color: #10121C;
+  /* background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #b8b6b8), color-stop(100%, #b0aeb0)); */
+  /* background-image: -webkit-linear-gradient(top, #b8b6b8 0%, #b0aeb0 100%); */
+  /* background-image: linear-gradient(to bottom, #b8b6b8 0%, #b0aeb0 100%); */
+  color:#fff;
 }
 .tab-item:first-child {
   border-left: 0;
 }
 .tab-item.active {
-  background-color: #d4d2d4;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d4d2d4), color-stop(100%, #cccacc));
-  background-image: -webkit-linear-gradient(top, #d4d2d4 0%, #cccacc 100%);
-  background-image: linear-gradient(to bottom, #d4d2d4 0%, #cccacc 100%);
+  background-color: #2c2c3b;
+  /* background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d4d2d4), color-stop(100%, #cccacc)); */
+  /* background-image: -webkit-linear-gradient(top, #d4d2d4 0%, #cccacc 100%); */
+  /* background-image: linear-gradient(to bottom, #d4d2d4 0%, #cccacc 100%); */
 }
 .tab-item .icon-close-tab {
   position: absolute;

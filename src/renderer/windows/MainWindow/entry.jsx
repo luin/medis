@@ -1,7 +1,7 @@
 'use strict'
 
 require('../../photon/css/photon.min.css')
-require('../../../../node_modules/fixed-data-table-contextmenu/dist/fixed-data-table.css')
+require('../../photon/css/fixed-data-table.css')
 
 import ReactDOM from 'react-dom'
 import MainWindow from './'

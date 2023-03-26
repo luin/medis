@@ -20,6 +20,9 @@ import jsonlint   from 'jsonlint'
 window.jsonlint = jsonlint.parser
 require('codemirror/lib/codemirror.css')
 require('codemirror/addon/lint/lint.css')
+let codeMirrorTheme='material-palenight';//erlang-dark
+
+require('codemirror/theme/'+codeMirrorTheme+'.css')
 const msgpack = require('msgpack5')()
 
 /**
@@ -340,7 +343,8 @@ class Editor extends React.PureComponent {
           styleActiveLine: true,
           lineWrapping   : this.state.wrapping,
           gutters        : ['CodeMirror-lint-markers'],
-          lineNumbers    : true
+          lineNumbers    : true,
+          theme:codeMirrorTheme,
         }}
       />)
     } else if (this.state.currentMode === 'json') {
@@ -362,7 +366,9 @@ class Editor extends React.PureComponent {
           gutters          : ['CodeMirror-lint-markers'],
           autoCloseBrackets: true,
           matchTags        : true,
-          lint             : Boolean(this.state.modes.raw)
+          lint             : Boolean(this.state.modes.raw),
+          theme:codeMirrorTheme,
+
         }}
       />)
     } else if (this.state.currentMode === 'serializer') {
@@ -385,7 +391,8 @@ class Editor extends React.PureComponent {
           gutters          : ['CodeMirror-lint-markers'],
           autoCloseBrackets: true,
           matchTags        : true,
-          lint             : Boolean(this.state.modes.raw)
+          lint             : Boolean(this.state.modes.raw),
+          theme:codeMirrorTheme,
         }}
       />)
     } else if (this.state.currentMode === 'messagepack') {
@@ -407,7 +414,8 @@ class Editor extends React.PureComponent {
           gutters          : ['CodeMirror-lint-markers'],
           autoCloseBrackets: true,
           matchTags        : true,
-          lint             : Boolean(this.state.modes.raw)
+          lint             : Boolean(this.state.modes.raw),
+          theme:codeMirrorTheme,
         }}
       />)
     } else {

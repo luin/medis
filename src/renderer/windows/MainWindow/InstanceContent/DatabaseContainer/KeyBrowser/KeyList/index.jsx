@@ -493,7 +493,7 @@ class KeyList extends React.Component {
       className={'pattern-table ' + this.randomClass}
       >
       <Table
-        rowHeight={24}
+        rowHeight={48}
         rowsCount={this.state.keys.length + (this.state.cursor === '0' ? 0 : 1)}
         onScrollStart={() => {
           if (this.state.editableKey) {

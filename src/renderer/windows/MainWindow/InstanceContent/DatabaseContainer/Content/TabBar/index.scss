@@ -1,6 +1,6 @@
 .TabBar {
   text-align: right;
-  border-bottom: 1px solid #d3d3d3;
+  border-bottom: 1px solid #333;
   .item {
     display: inline-block;
     padding: 12px;
@@ -10,7 +10,7 @@
     }
 
     &.is-active {
-      background: #dbdfe1;
+      background: #2c2c3b;
     }
   }
 }

@@ -12,7 +12,12 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    font-family: Consolas, monospace;
+    //font-family: Consolas, monospace;
+    //background: #10121C;
+    //color:#fff;
+  }
+  .CodeMirror-activeline-background{
+    //background: #2c2c3b;
   }
 
   .ReactCodeMirror {
@@ -29,8 +34,8 @@
       top: 0;
       width: 45px;
       z-index: 1;
-      background: #f7f7f7;
-      border-right: 1px solid #ddd;
+      background: #2c2c3b;
+      border-right: 1px solid #333;
       height: 100%;
     }
   }

@@ -25,15 +25,19 @@
   input, textarea, select {
     margin-left: 10px;
   }
+  input[type="checkbox"]{
+    background-color: #000;
+    color:#fff;
+  }
   input[type="text"], input[type="number"], input[type="password"], select {
     width: 250px;
     -webkit-user-select: text;
     border-width: 1px;
     border-style: solid;
-    border-color: #b0b0b0;
-    border-left-color: #b1b1b1;
-    border-right-color: #b1b1b1;
-    box-shadow: inset 0 0 0 1px #f0f0f0;
+    border-color: #000;
+    border-left-color: #000;
+    border-right-color: #000;
+    box-shadow: inset 0 0 0 1px #000;
     padding-top: 4px;
     padding-bottom: 4px;
     padding-left: 3.5px;
@@ -41,7 +45,8 @@
     line-height: 14px;
     font-family: "San Francisco", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
     font-size: 13px;
-    background: #fff;
+    background: #000;
+    color:#fff;
 
     &:focus {
       outline: none;
@@ -55,7 +60,8 @@
     }
 
     &[disabled] {
-      background: #f8f8f8;
+      background: #000;
+      color:#aaa;
     }
   }
 
@@ -81,6 +87,7 @@
 .nt-button {
   cursor: default;
   background-color: #ffffff;
+  color: #000;
   outline: none;
   border-width: 1px;
   border-style: solid;
