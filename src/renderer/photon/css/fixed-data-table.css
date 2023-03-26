@@ -1,7 +1,7 @@
 /**
- * FixedDataTable v1.7.2
+ * FixedDataTable v1.2.17
  *
- * Copyright (c) 2015, Facebook, Inc.
+ * Copyright Schrodinger, LLC
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2015, Facebook, Inc.
+ * Copyright Schrodinger, LLC
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -30,6 +30,11 @@
   white-space: nowrap;
 }
 
+.fixedDataTable_isRTL .fixedDataTableCellGroupLayout_cellGroup {
+  right: 0;
+  left: auto;
+}
+
 .fixedDataTableCellGroupLayout_cellGroup > .public_fixedDataTableCell_main {
   display: inline-block;
   vertical-align: top;
@@ -41,7 +46,7 @@
   top: 0;
 }
 /**
- * Copyright (c) 2015, Facebook, Inc.
+ * Copyright Schrodinger, LLC
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -62,6 +67,12 @@
   white-space: normal;
 }
 
+.fixedDataTable_isRTL .fixedDataTableCellLayout_main {
+  border-right-width: 0;
+  border-left-style: solid;
+  border-left-width: 1px;
+}
+
 .fixedDataTableCellLayout_lastChild {
   border-width: 0 1px 1px 0;
 }
@@ -72,6 +83,12 @@
 
 .fixedDataTableCellLayout_alignCenter {
   text-align: center;
+}
+
+.fixedDataTableCellLayout_wrap {
+  display: table-cell;
+  vertical-align: middle;
+  box-sizing: border-box;
 }
 
 .fixedDataTableCellLayout_wrap1 {
@@ -94,6 +111,11 @@
   z-index: 1;
 }
 
+.fixedDataTable_isRTL .fixedDataTableCellLayout_columnResizerContainer {
+  left: 0px;
+  right: auto;
+}
+
 .fixedDataTableCellLayout_columnResizerContainer:hover {
   cursor: ew-resize;
 }
@@ -108,8 +130,13 @@
   visibility: hidden;
   width: 4px;
 }
+
+.fixedDataTable_isRTL .fixedDataTableCellLayout_columnResizerKnob {
+  left: 0px;
+  right: auto;
+}
 /**
- * Copyright (c) 2015, Facebook, Inc.
+ * Copyright Schrodinger, LLC
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -126,27 +153,31 @@
   width: 12px;
 }
 
+.fixedDataTable_isRTL .fixedDataTableColumnResizerLineLayout_mouseArea  {
+  right: auto;
+  left: -5px;
+}
+
 .fixedDataTableColumnResizerLineLayout_main {
   border-right-style: solid;
   border-right-width: 1px;
   box-sizing: border-box;
   position: absolute;
   z-index: 10;
+  pointer-events: none;
 }
 
-body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
-  /* the resizer line is in the wrong position in RTL with no easy fix.
-   * Disabling is more useful than displaying it.
-   * #167 (github) should look into this and come up with a permanent fix.
-   */
-  display: none !important;
+.fixedDataTable_isRTL .fixedDataTableColumnResizerLineLayout_main {
+  border-right-width: 0;
+  border-left-style: solid;
+  border-left-width: 1px;
 }
 
 .fixedDataTableColumnResizerLineLayout_hiddenElem {
   display: none !important;
 }
 /**
- * Copyright (c) 2015, Facebook, Inc.
+ * Copyright Schrodinger, LLC
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -192,13 +223,8 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
   overflow: hidden;
   position: relative;
 }
-
-.fixedDataTableLayout_horizontalScrollbar {
-  bottom: 0;
-  position: absolute;
-}
 /**
- * Copyright (c) 2015, Facebook, Inc.
+ * Copyright Schrodinger, LLC
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -217,8 +243,15 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
 
 .fixedDataTableRowLayout_body {
   left: 0;
+  right: 0;
   position: absolute;
   top: 0;
+}
+
+.fixedDataTableRowLayout_rowExpanded {
+  box-sizing: border-box;
+  left: 0;
+  position: absolute;
 }
 
 .fixedDataTableRowLayout_fixedColumnsDivider {
@@ -232,8 +265,24 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
   width: 0;
 }
 
+.fixedDataTable_isRTL .fixedDataTableRowLayout_fixedColumnsDivider {
+  border-left-width: 0;
+  border-right-style: solid;
+  border-right-width: 1px;
+}
+
 .fixedDataTableRowLayout_columnsShadow {
+  position: absolute;
   width: 4px;
+}
+
+.fixedDataTableRowLayout_columnsRightShadow {
+  right: 1px;
+}
+
+.fixedDataTable_isRTL .fixedDataTableRowLayout_columnsRightShadow {
+  left: 1px;
+  right: auto;
 }
 
 .fixedDataTableRowLayout_rowWrapper {
@@ -241,7 +290,7 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
   top: 0;
 }
 /**
- * Copyright (c) 2015, Facebook, Inc.
+ * Copyright Schrodinger, LLC
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -256,8 +305,6 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
   outline: none;
   overflow: hidden;
   position: absolute;
-  transition-duration: 250ms;
-  transition-timing-function: ease;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -268,17 +315,10 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
   bottom: 0;
   right: 0;
   top: 0;
-  transition-property: background-color width;
   width: 15px;
 }
 
-.ScrollbarLayout_mainVertical.public_Scrollbar_mainActive,
-.ScrollbarLayout_mainVertical:hover {
-  width: 17px;
-}
-
 .ScrollbarLayout_mainHorizontal {
-  bottom: 0;
   height: 15px;
   left: 0;
   transition-property: background-color height;
@@ -295,6 +335,9 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
   overflow: hidden;
   position: absolute;
   z-index: 1;
+  transition-duration: 250ms;
+  transition-timing-function: ease;
+  transition-property: width;
 }
 
 /**
@@ -324,6 +367,17 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
   width: 100%;
 }
 
+.fixedDataTable_isRTL .ScrollbarLayout_faceHorizontal,
+.fixedDataTable_isRTL .ScrollbarLayout_faceHorizontal:after {
+  right: 0;
+  left: auto;
+}
+
+.ScrollbarLayout_faceHorizontal.public_Scrollbar_faceActive:after,
+.ScrollbarLayout_main:hover .ScrollbarLayout_faceHorizontal:after {
+  bottom: calc(4px/2);
+}
+
 .ScrollbarLayout_faceVertical {
   left: 0;
   right: 0;
@@ -336,8 +390,14 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
   right: 4px;
   top: 0;
 }
+
+.ScrollbarLayout_main:hover .ScrollbarLayout_faceVertical:after,
+.ScrollbarLayout_faceVertical.public_Scrollbar_faceActive:after {
+  left: calc(4px/2);
+  right: calc(4px/2);
+}
 /**
- * Copyright (c) 2015, Facebook, Inc.
+ * Copyright Schrodinger, LLC
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -365,11 +425,17 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
 }
 
 .public_fixedDataTable_header,
+.public_fixedDataTable_scrollbarSpacer,
 .public_fixedDataTable_header .public_fixedDataTableCell_main {
-  background-color: #10121C;
+  background-color: #10121c;
   /* background-image: linear-gradient(#fff, #efefef); */
-  color: #fff;
+  color: #ffffff;
+}
 
+.public_fixedDataTable_scrollbarSpacer {
+  position: absolute;
+  z-index: 99;
+  top: 0;
 }
 
 .public_fixedDataTable_footer .public_fixedDataTableCell_main {
@@ -378,18 +444,18 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
 }
 
 .public_fixedDataTable_topShadow {
-  background: 0 0 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAECAYAAABP2FU6AAAAF0lEQVR4AWPUkNeSBhHCjJoK2twgFisAFagCCp3pJlAAAAAASUVORK5CYII=) repeat-x;
+  background-image: linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0));
 }
 
 .public_fixedDataTable_bottomShadow {
-  background: 0 0 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAECAYAAABP2FU6AAAAHElEQVQI12MwNjZmZdAT1+Nm0JDWEGZQk1GTBgAWkwIeAEp52AAAAABJRU5ErkJggg==) repeat-x;
+  background-image: linear-gradient(0deg, rgba(0,0,0,0.1), rgba(0,0,0,0));
 }
 
 .public_fixedDataTable_horizontalScrollbar .public_Scrollbar_mainHorizontal {
   background-color: #fff;
 }
 /**
- * Copyright (c) 2015, Facebook, Inc.
+ * Copyright Schrodinger, LLC
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -418,8 +484,54 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
 .public_fixedDataTableCell_columnResizerKnob {
   background-color: #0284ff;
 }
+
+.public_fixedDataTableCell_hasReorderHandle .public_fixedDataTableCell_wrap1 .public_fixedDataTableCell_cellContent {
+  margin-left: 12px;
+}
+.public_fixedDataTableCell_hasReorderHandle .public_fixedDataTableCell_wrap.public_fixedDataTableCell_cellContent {
+  padding-left: 20px;
+}
+
+.fixedDataTable_isRTL .public_fixedDataTableCell_hasReorderHandle .public_fixedDataTableCell_wrap1 .public_fixedDataTableCell_cellContent {
+  margin-left: auto;
+  margin-right: 12px;
+}
+
+.fixedDataTable_isRTL .public_fixedDataTableCell_hasReorderHandle .public_fixedDataTableCell_wrap.public_fixedDataTableCell_cellContent {
+  padding-right: 20px;
+}
 /**
- * Copyright (c) 2015, Facebook, Inc.
+ * Column reorder goodies.
+ */
+.fixedDataTableCellLayout_columnReorderContainer {
+  border-color: #0284ff;
+  background-color: rgba(0,0,0,0.1);
+  width: 12px;
+  margin-right: -12px;
+  float: left;
+  cursor: move;
+}
+
+.fixedDataTable_isRTL .fixedDataTableCellLayout_columnReorderContainer {
+  margin-right: auto;
+  margin-left: -12px;
+  float: right;
+}
+
+.fixedDataTableCellLayout_columnReorderContainer:after {
+  content: '::';
+  position: absolute;
+  top: 50%;
+  left: 1px;
+  transform: translateY(-50%);
+}
+
+.fixedDataTable_isRTL .fixedDataTableCellLayout_columnReorderContainer:after {
+  left: auto;
+  right: 1px;
+}
+/**
+ * Copyright Schrodinger, LLC
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -437,7 +549,7 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
   border-color: #0284ff;
 }
 /**
- * Copyright (c) 2015, Facebook, Inc.
+ * Copyright Schrodinger, LLC
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -466,10 +578,18 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
 }
 
 .public_fixedDataTableRow_columnsShadow {
-  background: 0 0 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAABCAYAAAD5PA/NAAAAFklEQVQIHWPSkNeSBmJhTQVtbiDNCgASagIIuJX8OgAAAABJRU5ErkJggg==) repeat-y;
+  background-image: linear-gradient(90deg, rgba(0,0,0,0.1), rgba(0,0,0,0));
+}
+
+.fixedDataTable_isRTL .public_fixedDataTableRow_columnsShadow {
+  background-image: linear-gradient(270deg, rgba(0,0,0,0.1), rgba(0,0,0,0));
+}
+
+.public_fixedDataTableRow_columnsRightShadow {
+  transform: rotate(180deg);
 }
 /**
- * Copyright (c) 2015, Facebook, Inc.
+ * Copyright Schrodinger, LLC
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -486,8 +606,15 @@ body[dir="rtl"] .fixedDataTableColumnResizerLineLayout_main {
 
 /* Touching the scroll-track directly makes the scroll-track bolder */
 .public_Scrollbar_main.public_Scrollbar_mainActive,
-.public_Scrollbar_main:hover {
+.public_Scrollbar_main {
   background-color: rgba(0, 0, 0, 0.8);
+  border-left: 1px solid #333;
+}
+
+.fixedDataTable_isRTL .public_Scrollbar_main.public_Scrollbar_mainActive,
+.fixedDataTable_isRTL .public_Scrollbar_main {
+  border-right: 1px solid #333;
+  border-left-width: 0;
 }
 
 .public_Scrollbar_mainOpaque,

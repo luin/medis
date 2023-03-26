@@ -606,7 +606,7 @@ class KeyList extends React.Component {
               }}
                  />
           }
-          width={this.props.width - 64}
+          width={this.props.width - 79}
           cell={({rowIndex}) => {
             const item = this.state.keys[rowIndex]
             let cellData
