@@ -1,7 +1,7 @@
 'use strict'
 
 import React, {memo} from 'react'
-import {Cell} from 'fixed-data-table-contextmenu'
+import {Cell} from 'fixed-data-table-2'
 
 function SortHeaderCell({onOrderChange, desc, title}) {
   function handleOnClick(evt) {

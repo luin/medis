@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "electron-context-menu": "^0.12.1",
-    "fixed-data-table-contextmenu": "^1.7.2",
+    "fixed-data-table-2": "^1.2.17",
     "ioredis": "^4.9.3",
     "jquery": "^3.4.1",
     "jquery.terminal": "^2.5.1",

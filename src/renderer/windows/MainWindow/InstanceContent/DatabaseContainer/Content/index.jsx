@@ -34,7 +34,7 @@ class Content extends React.PureComponent {
     this.init(this.props.keyName)
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.keyName !== this.props.keyName || nextProps.version !== this.props.version) {
       this.init(nextProps.keyName)
     }

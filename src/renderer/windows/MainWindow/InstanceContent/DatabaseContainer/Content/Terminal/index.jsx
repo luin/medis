@@ -138,7 +138,7 @@ class Terminal extends React.PureComponent {
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.style.display === 'none' && nextProps.style.display === 'block') {
       this.terminal.focus()
     }

@@ -77,7 +77,7 @@ class BaseContent extends React.Component {
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.keyName !== this.props.keyName ||
         nextProps.keyType !== this.props.keyType) {
       this.init(nextProps.keyName, nextProps.keyType)

@@ -14,7 +14,7 @@ class PatternList extends React.Component {
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.db !== this.props.db) {
       this.updatePattern('')
     }

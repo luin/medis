@@ -1,6 +1,7 @@
 .BaseContent {
   flex: 1;
   position: relative;
+  overflow: hidden;
 
   .type-list {
     .index-label {

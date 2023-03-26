@@ -42,18 +42,23 @@
 
   .operation-pannel {
     z-index: 99;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: stretch;
   }
 
   .mode-selector {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
+    //position: absolute;
+    //bottom: 10px;
+    //right: 10px;
+    background: #000;
   }
 
   .wrap-selector {
-    position: absolute;
-    bottom: 5px;
-    right: 120px;
+    //position: absolute;
+    //bottom: 5px;
+    //right: 120px;
     padding: 0 10px;
     span {
       margin-left: 4px;
@@ -61,9 +66,9 @@
   }
 
   button {
-    position: absolute;
-    bottom: 10px;
-    left: 54px;
-    z-index: 99;
+    //position: absolute;
+    //bottom: 10px;
+    //left: 54px;
+    //z-index: 99;
   }
 }

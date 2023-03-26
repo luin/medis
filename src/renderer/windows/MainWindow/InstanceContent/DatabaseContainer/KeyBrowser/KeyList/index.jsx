@@ -2,7 +2,7 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Table, Column} from 'fixed-data-table-contextmenu'
+import {Table, Column} from 'fixed-data-table-2'
 import ContentEditable from '../../ContentEditable'
 import AddButton from '../../AddButton'
 import zip from 'lodash.zip'
@@ -38,7 +38,7 @@ class KeyList extends React.Component {
     })
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.db !== this.props.db) {
       this.props.redis.select(nextProps.db)
     }
