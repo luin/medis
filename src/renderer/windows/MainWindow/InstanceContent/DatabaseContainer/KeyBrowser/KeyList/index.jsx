@@ -148,47 +148,49 @@ class KeyList extends React.Component {
 
           // Sort hash fields by key
           let newKeys=this.state.keys.concat(keys)
-          newKeys.sort((a,b)=>{
+          if(Array.isArray(this.state.members)) {
+            newKeys.sort((a, b) => {
 
-            let is_number = (value) => {
-              if (typeof (value) === 'string') {
-                value = value * 1
+              let is_number = (value) => {
+                if (typeof (value) === 'string') {
+                  value = value * 1
+                }
+                return typeof value === 'number' && !isNaN(value);
               }
-              return typeof value === 'number' && !isNaN(value);
-            }
 
-            let aAttr = a[0]
-            let bAttr = b[0]
-            const isAsc = 'asc'
-            let isArray = Array.isArray(aAttr)
-            let isObject = typeof aAttr === 'object'
+              let aAttr = a[0]
+              let bAttr = b[0]
+              const isAsc = 'asc'
+              let isArray = Array.isArray(aAttr)
+              let isObject = typeof aAttr === 'object'
 
 
-            // console.log( aAttr)
-            if (isArray || isObject) {
-              aAttr = JSON.stringify(aAttr)
-              bAttr = JSON.stringify(bAttr)
-            }
+              // console.log( aAttr)
+              if (isArray || isObject) {
+                aAttr = JSON.stringify(aAttr)
+                bAttr = JSON.stringify(bAttr)
+              }
 
-            let isString = typeof aAttr === 'string'
-            let isNumber = typeof aAttr === 'number' || is_number(aAttr)
+              let isString = typeof aAttr === 'string'
+              let isNumber = typeof aAttr === 'number' || is_number(aAttr)
 
-            if (!aAttr && !isNumber) {
-              return 1;
-            }
+              if (!aAttr && !isNumber) {
+                return 1;
+              }
 
-            if (!bAttr && !isNumber) {
-              return -1
-            }
+              if (!bAttr && !isNumber) {
+                return -1
+              }
 
-            if (isNumber) {
-              return isAsc ? (aAttr - bAttr) : (bAttr - aAttr)
-            }
+              if (isNumber) {
+                return isAsc ? (aAttr - bAttr) : (bAttr - aAttr)
+              }
 
-            return isAsc ?
-                   aAttr.localeCompare(bAttr) :
-                   bAttr.localeCompare(aAttr)
-          })
+              return isAsc ?
+                     aAttr.localeCompare(bAttr) :
+                     bAttr.localeCompare(aAttr)
+            })
+          }
           if (needContinue) {
             this.setState({
               cursor,
