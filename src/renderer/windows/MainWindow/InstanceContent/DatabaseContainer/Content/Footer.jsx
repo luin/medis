@@ -51,7 +51,7 @@ class Footer extends React.PureComponent {
     this.init(this.props.keyName, this.props.keyType)
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.keyName !== this.props.keyName ||
       nextProps.keyType !== this.props.keyType ||
       nextProps.version !== this.props.version) {

@@ -38,7 +38,7 @@ class KeyList extends React.Component {
     })
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.db !== this.props.db) {
       this.props.redis.select(nextProps.db)
     }
@@ -148,7 +148,7 @@ class KeyList extends React.Component {
 
           // Sort hash fields by key
           let newKeys=this.state.keys.concat(keys)
-          if(Array.isArray(this.state.members)) {
+          if(Array.isArray(newKeys)) {
             newKeys.sort((a, b) => {
 
               let is_number = (value) => {
