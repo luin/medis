@@ -5,6 +5,8 @@ const flat = require('electron-osx-sign').flat
 
 const resourcesPath = path.join(__dirname, '..', 'resources')
 
+console.log(pkg)
+
 packager({
   dir: path.join(__dirname, '..'),
   appCopyright: '© 2019, Zihua Li',
@@ -14,7 +16,7 @@ packager({
   icon: path.join(resourcesPath, 'icns', 'MyIcon'),
   out: path.join(__dirname, '..', 'dist', 'out'),
   platform: 'mas',
-  appBundleId: `li.zihua.${pkg.name}`,
+  appBundleId: `election-redis-util.${pkg.name}`,
   appCategoryType: 'public.app-category.developer-tools',
   osxSign: {
     type: process.env.NODE_ENV === 'production' ? 'distribution' : 'development',

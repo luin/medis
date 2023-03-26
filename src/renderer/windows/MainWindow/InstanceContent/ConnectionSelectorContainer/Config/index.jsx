@@ -2,7 +2,9 @@
 
 import React from 'react'
 import Immutable from 'immutable'
-import {remote} from 'electron'
+// import {remote} from 'electron'
+import * as remote from '@electron/remote';
+
 import fs from 'fs'
 
 require('./index.scss')
@@ -65,7 +67,7 @@ class Config extends React.PureComponent {
       this.props.onDuplicate(data)
     } else {
       const data = this.state.data.toJS()
-      data.name = 'Quick Connect'
+      data.name = '快速连接'
       this.props.onDuplicate(data)
     }
   }
@@ -112,15 +114,15 @@ class Config extends React.PureComponent {
           <input type="text" id="name" value={this.getProp('name')} onChange={this.handleChange.bind(this, 'name')} placeholder="Bookmark name" />
         </div>
         <div className="nt-form-row">
-          <label htmlFor="host">Redis Host:</label>
+          <label htmlFor="host">Redis 地址:</label>
           <input type="text" id="host" value={this.getProp('host')} onChange={this.handleChange.bind(this, 'host')} placeholder="localhost" />
         </div>
         <div className="nt-form-row">
-          <label htmlFor="port">Port:</label>
+          <label htmlFor="port">端口:</label>
           <input type="number" id="port" value={this.getProp('port')} onChange={this.handleChange.bind(this, 'port')} placeholder="6379" min="0" max="65535"/>
         </div>
         <div className="nt-form-row">
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="password">密码:</label>
           <input type="password" id="password" onChange={this.handleChange.bind(this, 'password')} value={this.getProp('password')} />
         </div>
         <div className="nt-form-row">
@@ -133,20 +135,20 @@ class Config extends React.PureComponent {
           {this.renderCertInput('CA', 'tlsca')}
         </div>
         <div className="nt-form-row">
-          <label htmlFor="ssh">SSH Tunnel:</label>
+          <label htmlFor="ssh">SSH 隧道:</label>
           <input type="checkbox" id="ssh" onChange={this.handleChange.bind(this, 'ssh')} checked={this.getProp('ssh')} />
         </div>
         <div style={{display: this.getProp('ssh') ? 'block' : 'none'}}>
           <div className="nt-form-row">
-            <label htmlFor="sshHost">SSH Host:</label>
+            <label htmlFor="sshHost">SSH 地址:</label>
             <input type="text" id="sshHost" onChange={this.handleChange.bind(this, 'sshHost')} value={this.getProp('sshHost')} placeholder="" />
           </div>
           <div className="nt-form-row">
-            <label htmlFor="sshUser">SSH User:</label>
+            <label htmlFor="sshUser">SSH 用户:</label>
             <input type="text" id="sshUser" onChange={this.handleChange.bind(this, 'sshUser')} value={this.getProp('sshUser')} placeholder="" />
           </div>
           <div className="nt-form-row">
-            <label htmlFor="sshPassword">SSH {this.getProp('sshKey') ? 'Key' : 'Password'}:</label>
+            <label htmlFor="sshPassword">SSH {this.getProp('sshKey') ? '秘钥' : '密码'}:</label>
             <input
               type={this.getProp('sshKeyFile') ? 'text' : 'password'}
               id="sshPassword"
@@ -179,11 +181,11 @@ class Config extends React.PureComponent {
             />
           </div>
           <div className="nt-form-row" style={{display: this.getProp('sshKey') && this.getProp('sshKey').indexOf('ENCRYPTED') > -1 ? 'block' : 'none'}}>
-            <label htmlFor="sshKeyPassphrase">SSH Key Passphrase:</label>
+            <label htmlFor="sshKeyPassphrase">SSH 秘钥的密码:</label>
             <input type="password" id="sshKeyPassphrase" onChange={this.handleChange.bind(this, 'sshKeyPassphrase')} value={this.getProp('sshKeyPassphrase')} />
           </div>
           <div className="nt-form-row">
-            <label htmlFor="sshPort">SSH Port:</label>
+            <label htmlFor="sshPort">SSH 端口:</label>
             <input type="number" min="0" max="65535" id="sshPort" placeholder="22" onChange={this.handleChange.bind(this, 'sshPort')} value={this.getProp('sshPort')} />
           </div>
         </div>
@@ -193,7 +195,7 @@ class Config extends React.PureComponent {
           className="nt-button" style={{float: 'left'}} onClick={() => {
             this.duplicate()
           }}
-        >{this.props.favorite ? 'Duplicate' : 'Add to Favorite'}</button>
+        >{this.props.favorite ? '复制' : '加入收藏夹'}</button>
         <button
           className="nt-button"
           style={{display: this.state.changed ? 'inline-block' : 'none'}}
@@ -205,7 +207,7 @@ class Config extends React.PureComponent {
           disabled={Boolean(this.props.connectStatus)} ref="connectButton" className="nt-button nt-button--primary" onClick={() => {
             this.connect()
           }}
-        >{this.props.connectStatus || (this.state.changed ? 'Save and Connect' : 'Connect')}</button>
+        >{this.props.connectStatus || (this.state.changed ? '保存并连接' : '连接')}</button>
       </div>
     </div>)
   }

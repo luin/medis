@@ -1,5 +1,6 @@
 import {createAction} from 'Utils';
-import {remote} from 'electron'
+// import {remote} from 'electron'
+import * as remote from '@electron/remote';
 import {getId} from 'Utils'
 
 export const createInstance = createAction('CREATE_INSTANCE', data => (

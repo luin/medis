@@ -76,9 +76,9 @@ class Favorite extends React.PureComponent {
           onDoubleClick={this.onDoubleClick.bind(this, -1)}
           >
           <span className="icon icon-flash"/>
-          QUICK CONNECT
+          快速连接
         </a>
-        <h5 className="nav-group-title">FAVORITES</h5>
+        <h5 className="nav-group-title">收藏夹</h5>
         <div ref="sortable" key={this.sortableKey}>{
           this.props.favorites.map((favorite, index) => {
             return (<a
@@ -109,9 +109,9 @@ class Favorite extends React.PureComponent {
               return
             }
             showModal({
-              title: 'Delete the bookmark?',
-              button: 'Delete',
-              content: 'Are you sure you want to delete the selected bookmark? This action cannot be undone.'
+              title: '删除这个收藏？',
+              button: '删除',
+              content: '您确定要删除所选收藏吗？此操作无法撤消。'
             }).then(() => {
               const index = this.props.favorites.findIndex(favorite => key === favorite.get('key'))
               this.props.removeFavorite(key)

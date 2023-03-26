@@ -6,7 +6,7 @@ import PatternList from './PatternList'
 import KeyList from './KeyList'
 import Footer from './Footer'
 
-const FOOTER_HEIGHT = 66
+const FOOTER_HEIGHT = 66 // PatternList + Footer 的高度
 
 function KeyBrowser({
   pattern, patterns, connectionKey, db, height, width, redis,
@@ -14,6 +14,7 @@ function KeyBrowser({
 }) {
   const clientHeight = height - FOOTER_HEIGHT
   return (<div className="pane sidebar">
+    <Footer onDatabaseChange={onDatabaseChange} db={db} redis={redis} />
     <PatternList
       patterns={patterns.get(`${connectionKey}|${db}`, List())}
       height={clientHeight}
@@ -32,7 +33,6 @@ function KeyBrowser({
       onKeyMetaChange={onKeyMetaChange}
       onSelect={onSelectKey}
     />
-    <Footer onDatabaseChange={onDatabaseChange} db={db} redis={redis} />
   </div>)
 }
 

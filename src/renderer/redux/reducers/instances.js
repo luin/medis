@@ -11,7 +11,7 @@ import {Map, List} from 'immutable'
 import {defaultInstanceKey} from './activeInstanceKey'
 
 function InstanceFactory({key, data}) {
-  return Map(Object.assign({key, title: 'Medis'}, data))
+  return Map(Object.assign({key, title: 'ElectronRedisUtil'}, data))
 }
 
 export const instances = handleActions(List([InstanceFactory({key: defaultInstanceKey})]), {
@@ -33,7 +33,7 @@ export const instances = handleActions(List([InstanceFactory({key: defaultInstan
     return state.update(index, instance => (
       instance.withMutations(map => {
         properties.forEach(key => map.remove(key))
-        map.set('title', 'Medis')
+        map.set('title', 'ElectronRedisUtil')
       })
     ))
   },

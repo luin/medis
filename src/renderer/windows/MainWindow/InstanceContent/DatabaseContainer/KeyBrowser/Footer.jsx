@@ -111,8 +111,13 @@ class Footer extends React.Component {
         <select
           onChange={this.handleChange.bind(this)}
           value={this.props.db} className="form-control" style={{
-            width: 50,
-            marginTop: 2,
+            width: 150,
+          paddingTop:0,
+          paddingBottom:0,
+          height:21,
+          minHeight:21,
+          maxHeight:21,
+            // marginTop: 2,
             marginRight: 2,
             marginLeft: 3,
             fontSize: 10,

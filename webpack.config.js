@@ -74,7 +74,7 @@ const base = {
 }
 
 const renderPlugins = [
-  new HtmlWebpackPlugin({title: 'Medis', chunks: ['main'], filename: 'main.html'}),
+  new HtmlWebpackPlugin({title: 'ElectronRedisUtil', chunks: ['main'], filename: 'main.html'}),
   new HtmlWebpackPlugin({title: 'Manage Patterns', chunks: ['patternManager'], filename: 'patternManager.html'}),
   new MiniCssExtractPlugin({filename: '[name].css'}),
   new CheckerPlugin(),

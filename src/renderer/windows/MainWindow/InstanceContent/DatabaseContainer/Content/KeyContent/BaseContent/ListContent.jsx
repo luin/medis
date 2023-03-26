@@ -7,7 +7,8 @@ import {Table, Column} from 'fixed-data-table-contextmenu'
 import Editor from './Editor'
 import SortHeaderCell from './SortHeaderCell'
 import AddButton from '../../../AddButton'
-import {remote} from 'electron'
+// import {remote} from 'electron'
+import * as remote from '@electron/remote';
 
 class ListContent extends BaseContent {
   save(value, callback) {

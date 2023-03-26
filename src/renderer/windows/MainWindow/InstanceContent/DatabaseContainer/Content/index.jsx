@@ -49,6 +49,12 @@ class Content extends React.PureComponent {
 
   render() {
     return (<div className="pane sidebar" style={{height: '100%'}}>
+      <Footer
+        keyName={this.props.keyName}
+        keyType={this.state.keyType}
+        version={this.state.version}
+        redis={this.props.redis}
+      />
       <TabBar
         activeTab={this.state.tab}
         onSelectTab={this.handleTabChange.bind(this)}
@@ -76,12 +82,7 @@ class Content extends React.PureComponent {
         redis={this.props.redis}
         connectionKey={this.props.connectionKey}
         />
-      <Footer
-        keyName={this.props.keyName}
-        keyType={this.state.keyType}
-        version={this.state.version}
-        redis={this.props.redis}
-        />
+
     </div>)
   }
 }

@@ -9,7 +9,7 @@ interface ITabProps {
   onTabCloseButtonClick: (key: string) => void
 }
 
-function Tab({instanceKey, onTabClick, onTabCloseButtonClick, active, title = 'Quick Connect'}: ITabProps) {
+function Tab({instanceKey, onTabClick, onTabCloseButtonClick, active, title = '快速连接'}: ITabProps) {
   return <div
     onMouseDown={() => {
       onTabClick(instanceKey)

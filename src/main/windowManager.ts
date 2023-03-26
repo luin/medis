@@ -1,4 +1,7 @@
 import {app, BrowserWindow, BrowserWindowConstructorOptions} from 'electron'
+import * as remoteMain from '@electron/remote/main';
+remoteMain.initialize();
+
 import path from 'path'
 import EventEmitter from 'events'
 
@@ -19,7 +22,12 @@ class WindowManager extends EventEmitter {
     const option: BrowserWindowConstructorOptions = {
       backgroundColor: '#ececec',
       webPreferences: {
-        nodeIntegration: true
+        nodeIntegration: true,
+        contextIsolation:false,
+        plugins: true,
+        backgroundThrottling: false,
+        // nativeWindowOpen: false,
+        // webSecurity: false
       }
     }
     if (type === 'main') {
@@ -38,6 +46,7 @@ class WindowManager extends EventEmitter {
 
     let start: number
     const newWindow = new BrowserWindow(option)
+    remoteMain.enable(newWindow.webContents);
     if (!option.show) {
       newWindow.once('ready-to-show', () => {
         console.log('start time: ', Date.now() - start)

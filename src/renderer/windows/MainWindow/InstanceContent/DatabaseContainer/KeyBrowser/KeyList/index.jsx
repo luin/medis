@@ -6,7 +6,8 @@ import {Table, Column} from 'fixed-data-table-contextmenu'
 import ContentEditable from '../../ContentEditable'
 import AddButton from '../../AddButton'
 import zip from 'lodash.zip'
-import {clipboard, remote} from 'electron'
+import {clipboard} from 'electron'
+import * as remote from '@electron/remote';
 
 import emitter from "../../../../../../../main/ev"
 
@@ -97,11 +98,11 @@ class KeyList extends React.Component {
               return
             }
           }
-          iter.call(this, 100, 1)
+          iter.call(this, 1000, 1)
         })
       }
     } else {
-      iter.call(this, 100, 1)
+      iter.call(this, 1000, 1)
     }
 
     function iter(fetchCount, times) {
@@ -148,13 +149,45 @@ class KeyList extends React.Component {
           // Sort hash fields by key
           let newKeys=this.state.keys.concat(keys)
           newKeys.sort((a,b)=>{
-            if (a[0]<b[0]) {
-              return -1;
-            } else if (a[0]>b[0]) {
-              return 1;
-            } else {
-              return 0;
+
+            let is_number = (value) => {
+              if (typeof (value) === 'string') {
+                value = value * 1
+              }
+              return typeof value === 'number' && !isNaN(value);
             }
+
+            let aAttr = a[0]
+            let bAttr = b[0]
+            const isAsc = 'asc'
+            let isArray = Array.isArray(aAttr)
+            let isObject = typeof aAttr === 'object'
+
+
+            // console.log( aAttr)
+            if (isArray || isObject) {
+              aAttr = JSON.stringify(aAttr)
+              bAttr = JSON.stringify(bAttr)
+            }
+
+            let isString = typeof aAttr === 'string'
+            let isNumber = typeof aAttr === 'number' || is_number(aAttr)
+
+            if (!aAttr && !isNumber) {
+              return 1;
+            }
+
+            if (!bAttr && !isNumber) {
+              return -1
+            }
+
+            if (isNumber) {
+              return isAsc ? (aAttr - bAttr) : (bAttr - aAttr)
+            }
+
+            return isAsc ?
+                   aAttr.localeCompare(bAttr) :
+                   bAttr.localeCompare(aAttr)
           })
           if (needContinue) {
             this.setState({
@@ -499,7 +532,7 @@ class KeyList extends React.Component {
               checked={this.state.isSelectedAllRows}
             ></input>
           }}
-          width={20}
+          width={24}
           cell={({rowIndex}) => {
             const item = this.state.keys[rowIndex]
             if (!item) {
@@ -518,7 +551,7 @@ class KeyList extends React.Component {
           }}
         />
         <Column
-          header="type"
+          header="类型"
           width={40}
           cell={({rowIndex}) => {
             const item = this.state.keys[rowIndex]
@@ -536,7 +569,7 @@ class KeyList extends React.Component {
         <Column
           header={
             <AddButton
-              reload="true" title="name" onReload={() => {
+              reload="true" title={'键名 已加载'+ this.state.keys.length } onReload={() => {
                 this.refresh()
               }} onClick={() => {
                 showModal({
@@ -573,7 +606,7 @@ class KeyList extends React.Component {
               }}
                  />
           }
-          width={this.props.width - 60}
+          width={this.props.width - 64}
           cell={({rowIndex}) => {
             const item = this.state.keys[rowIndex]
             let cellData
@@ -582,13 +615,13 @@ class KeyList extends React.Component {
             }
             if (typeof cellData === 'undefined') {
               if (this.state.scanning) {
-                return <span style={{color: '#ccc'}}>Scanning...(cursor {this.state.cursor})</span>
+                return <span style={{color: '#ccc'}}>加载中...(cursor {this.state.cursor})</span>
               }
               return (<a
                 href="#" style={{color: '#666'}} onClick={evt => {
                   evt.preventDefault()
                   this.scan()
-                }}>Scan more</a>)
+                }}>加载更多 已加载{this.state.keys.length} </a>)
             }
             return (<ContentEditable
               className="ContentEditable overflow-wrapper"

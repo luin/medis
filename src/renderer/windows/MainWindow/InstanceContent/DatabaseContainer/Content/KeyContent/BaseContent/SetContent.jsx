@@ -6,7 +6,8 @@ import SplitPane from 'react-split-pane'
 import {Table, Column} from 'fixed-data-table-contextmenu'
 import Editor from './Editor'
 import AddButton from '../../../AddButton'
-import {remote} from 'electron'
+// import {remote} from 'electron'
+import * as remote from '@electron/remote';
 
 require('./index.scss')
 

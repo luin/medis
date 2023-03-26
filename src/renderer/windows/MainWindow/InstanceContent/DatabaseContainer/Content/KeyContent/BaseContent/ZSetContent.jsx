@@ -9,7 +9,9 @@ import SortHeaderCell from './SortHeaderCell'
 import AddButton from '../../../AddButton'
 import ContentEditable from '../../../ContentEditable'
 import ReactDOM from 'react-dom'
-import {clipboard, remote} from 'electron'
+import {clipboard} from 'electron'
+import * as remote from '@electron/remote';
+
 import sortedIndexBy from 'lodash.sortedindexby'
 
 require('./index.scss')

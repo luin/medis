@@ -2,15 +2,15 @@ import {app, Menu, MenuItemConstructorOptions} from 'electron'
 import windowManager from './windowManager'
 
 const menuTemplates: MenuItemConstructorOptions[] = [{
-  label: 'File',
+  label: '文件',
   submenu: [{
-    label: 'New Connection Window',
+    label: '打开新的连接',
     accelerator: 'CmdOrCtrl+N',
     click() {
       windowManager.create()
     }
   }, {
-    label: 'New Connection Tab',
+    label: '打开新的标签页',
     accelerator: 'CmdOrCtrl+T',
     click() {
       windowManager.current.webContents.send('action', 'createInstance')
@@ -18,51 +18,51 @@ const menuTemplates: MenuItemConstructorOptions[] = [{
   }, {
     type: 'separator'
   }, {
-    label: 'Close Window',
+    label: '关闭窗口',
     accelerator: 'Shift+CmdOrCtrl+W',
     click() {
       windowManager.current.close()
     }
   }, {
-    label: 'Close Tab',
+    label: '关闭标签页',
     accelerator: 'CmdOrCtrl+W',
     click() {
       windowManager.current.webContents.send('action', 'delInstance')
     }
   }]
 }, {
-  label: 'Edit',
+  label: '编辑',
   submenu: [{
-    label: 'Undo',
+    label: '撤销',
     accelerator: 'CmdOrCtrl+Z',
     role: 'undo'
   }, {
-    label: 'Redo',
+    label: '重做',
     accelerator: 'Shift+CmdOrCtrl+Z',
     role: 'redo'
   }, {
     type: 'separator'
   }, {
-    label: 'Cut',
+    label: '剪切',
     accelerator: 'CmdOrCtrl+X',
     role: 'cut'
   }, {
-    label: 'Copy',
+    label: '拷贝',
     accelerator: 'CmdOrCtrl+C',
     role: 'copy'
   }, {
-    label: 'Paste',
+    label: '粘贴',
     accelerator: 'CmdOrCtrl+V',
     role: 'paste'
   }, {
-    label: 'Select All',
+    label: '选择全部',
     accelerator: 'CmdOrCtrl+A',
-    role: 'selectall'
+    // role: 'selectall'
   }]
 }, {
-  label: 'View',
+  label: '窗口',
   submenu: [{
-    label: 'Reload',
+    label: '重新加载此页',
     accelerator: 'CmdOrCtrl+R',
     click(item, focusedWindow) {
       if (focusedWindow) {
@@ -70,7 +70,7 @@ const menuTemplates: MenuItemConstructorOptions[] = [{
       }
     }
   }, {
-    label: 'Toggle Full Screen',
+    label: '切换全屏',
     accelerator: (function () {
       if (process.platform === 'darwin') {
         return 'Ctrl+Command+F'
@@ -83,7 +83,7 @@ const menuTemplates: MenuItemConstructorOptions[] = [{
       }
     }
   }, {
-    label: 'Toggle Developer Tools',
+    label: '打开开发者工具',
     accelerator: (function () {
       if (process.platform === 'darwin') {
         return 'Alt+Command+I'
@@ -96,42 +96,50 @@ const menuTemplates: MenuItemConstructorOptions[] = [{
       }
     }
   }]
-}, {
-  label: 'Language',
-  submenu: [{
-    label: 'Chinese',
-    role: ''
-  }, {
-    label: 'English',
-    role: ''
-  }]
-},{
-  label: 'Window',
+},
+
+//   {
+//   label: 'Language',
+//   submenu: [{
+//     label: 'Chinese',
+//     // role: ''
+//   }, {
+//     label: 'English',
+//     // role: ''
+//   }]
+// },
+
+  {
+  label: '窗口',
   role: 'window',
   submenu: [{
-    label: 'Minimize',
+    label: '最小号',
     accelerator: 'CmdOrCtrl+M',
     role: 'minimize'
   }, {
-    label: 'Close',
+    label: '关闭',
     accelerator: 'CmdOrCtrl+W',
     role: 'close'
   }]
-}, {
-  label: 'Help',
-  role: 'help',
-  submenu: [{
-    label: 'Report an Issue...',
-    click() {
-      require('shell').openExternal('mailto:medis@zihua.li')
-    }
-  }, {
-    label: 'Learn More',
-    click() {
-      require('shell').openExternal('http://getmedis.com')
-    }
-  }]
-}]
+},
+  // {
+  // label: 'Help',
+  // role: 'help',
+  // submenu: [{
+  //   label: 'Report an Issue...',
+  //   click() {
+  //     require('shell').openExternal('mailto:medis@zihua.li')
+  //   }
+  // },
+  //   {
+  //   label: 'Learn More',
+  //   click() {
+  //     require('shell').openExternal('http://getmedis.com')
+  //   }
+  // }
+  // ]
+// }
+]
 
 let baseIndex = 0
 if (process.platform == 'darwin') {
@@ -156,7 +164,7 @@ if (process.platform == 'darwin') {
     }, {
       label: 'Hide Others',
       accelerator: 'Command+Shift+H',
-      role: 'hideothers'
+      // role: 'hideothers'
     }, {
       label: 'Show All',
       role: 'unhide'
