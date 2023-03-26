@@ -38,7 +38,7 @@ class KeyList extends React.Component {
     })
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.db !== this.props.db) {
       this.props.redis.select(nextProps.db)
     }

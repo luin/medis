@@ -242,7 +242,7 @@ class Editor extends React.PureComponent {
     this.resizeObserver.disconnect()
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.buffer !== this.props.buffer) {
       this.init(nextProps.buffer)
     }

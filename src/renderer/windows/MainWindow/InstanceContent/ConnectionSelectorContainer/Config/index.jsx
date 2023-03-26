@@ -28,7 +28,7 @@ class Config extends React.PureComponent {
     })
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!this.props.connect && nextProps.connect) {
       this.connect()
     }
