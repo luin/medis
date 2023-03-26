@@ -28,8 +28,8 @@ class Config extends React.PureComponent {
     })
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.connect && nextProps.connect) {
+  componentDidUpdate(nextProps, prevState, snapshot) {
+    if (this.props.connect && !nextProps.connect) {
       this.connect()
     }
     if (this.props.favorite || nextProps.favorite) {
