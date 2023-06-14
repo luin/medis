@@ -34,6 +34,17 @@ It also supports many advanced features:
 
 **Note**: Medis only supports Redis >= 2.8 version because `SCAN` command was introduced since 2.8. `SCAN` is very useful to get key list without blocking the server, which is crucial to the production environment. Because the latest stable is 5.0 and 2.6 is a very old version, Medis doesn't support it.
 
+<hr />
+
+# Sponsors
+
+### Upstash: Serverless Database for Redis
+
+<a href="https://upstash.com/?utm_source=ioredis"><img align="right" width="320" src="resources/upstash.png" alt="Upstash"></a>
+
+Upstash is a Serverless Database with Redis/REST API and durable storage. It is the perfect database for your applications thanks to its per request pricing and low latency data.
+
+[Start for free in 30 seconds!](https://upstash.com/?utm_source=ioredis)
 
 <hr />
 
