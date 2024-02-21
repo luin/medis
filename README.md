@@ -8,7 +8,7 @@ What's more, **Medis 2 is free 💰 to download**! Don't hesitate, download it f
 
 [![Download on the App Store](http://getmedis.com/download.svg)](https://apps.apple.com/us/app/medis-2-gui-for-redis/id1579200037?mt=12)
 
-_(or searching "Medis 2" on macOS App Store if the above link doesn't work for you.)_
+_(or searching "Medis 2" on macOS App Store if the above link doesn't work for you. Also, you can download the app directly from the [official website](https://getmedis.com/))_
 
 ![Medis](http://getmedis.com/screen.png)
 
