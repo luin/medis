@@ -110,13 +110,16 @@ class Footer extends React.Component {
           }}
         >
           {(max => {
-            return new Array(max).fill(0).map((value, db) => {
-              return (
-                <option key={db} value={db}>
-                  {db} {this.keyCountByDb(db) > 0 ? `(${this.keyCountByDb(db)})` : ''}
-                </option>
-              );
-            });
+            const items = [];
+            for (let i = 0; i < max; i++) {
+              let ct = this.keyCountByDb(i);
+              let text = i;
+              if (ct > 0) {
+                text += " (" + ct + ")";
+              }
+              items.push(<option key={i} value={i}>{text}</option>);
+            }
+            return items;
           })(this.state.databases || 1)}
         </select>
       </div>
