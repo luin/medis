@@ -106,7 +106,10 @@ class Footer extends React.Component {
             marginRight: 2,
             marginLeft: 3,
             fontSize: 10,
-            float: 'right'
+            float: 'right',
+            padding: '0 0 1px 2px',
+            minHeight: 17,
+            height: 17
           }}
         >
           {(max => {
