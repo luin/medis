@@ -65,15 +65,22 @@
       color: #fff;
     }
 
-    &:last-child {
-      font-family: system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
-    }
   }
 }
 .manage-pattern-button {
   color: #116cd6;
+  font-family: inherit !important;
 
   span.icon {
     margin-right: 5px;
   }
+}
+
+.list-header{
+  padding: 2px 12px;
+  background: #f5f5f4;
+  color: #606061;
+  font-weight: bold;
+  font-size: .75rem;
+  opacity: .6;
 }
