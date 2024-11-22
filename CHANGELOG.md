@@ -88,7 +88,7 @@
 
 ### Features
 
-* support inputing spaces in terminal ([04e7bcf](https://github.com/luin/medis/commit/04e7bcf)), closes [#24](https://github.com/luin/medis/issues/24)
+* support inputting spaces in terminal ([04e7bcf](https://github.com/luin/medis/commit/04e7bcf)), closes [#24](https://github.com/luin/medis/issues/24)
 
 
 
